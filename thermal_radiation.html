@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thermal Radiation &mdash; Why Hot Things Glow</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --eve: #c084f7;
+    --hot: #ff7b3a;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; font-weight: 600; color: var(--accent); }
+  h3 { margin: 0 0 8px; font-weight: 600; color: var(--text); }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .case {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 22px 0;
+  }
+  .case.good { border-left-color: var(--good); }
+  .case.bad  { border-left-color: var(--bad); }
+  .case.warn { border-left-color: var(--warn); }
+  .case.hot  { border-left-color: var(--hot); }
+  .case.eve  { border-left-color: var(--eve); }
+  canvas {
+    display: block;
+    width: 100%;
+    background: #06080f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 12px 0 6px;
+  }
+  canvas.scene { height: 280px; }
+  canvas.plot  { height: 620px; }
+  canvas.tall  { height: 320px; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin: 12px 0;
+  }
+  @media (max-width: 820px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .slider-row {
+    margin: 10px 0;
+  }
+  .slider-row label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    font-size: 13.5px;
+  }
+  .slider-row input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .readout { font-family: ui-monospace, Menlo, monospace; color: var(--accent); font-size: 13px; }
+  .preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .preset-buttons button {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .preset-buttons button:hover { border-color: var(--accent); color: var(--accent); }
+  .preset-buttons button.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .meters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .meter {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meter-label {
+    font-size: 10.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .meter-val {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 15.5px;
+    color: var(--accent);
+  }
+  .meter.warn .meter-val { color: var(--warn); }
+  .meter.hot  .meter-val { color: var(--hot); }
+  .meter.bad  .meter-val { color: var(--bad); }
+  .meter.good .meter-val { color: var(--good); }
+  .toggle-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .toggle-row input { cursor: pointer; accent-color: var(--accent); }
+  .nums {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    background: var(--panel-2);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    margin: 12px 0;
+  }
+  .nums div span { color: var(--muted); }
+  .verdict {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: var(--panel-2);
+    font-size: 14px;
+  }
+  .verdict.good { color: var(--good); }
+  .verdict.bad  { color: var(--bad); }
+  .verdict.warn { color: var(--warn); }
+  .verdict.hot  { color: var(--hot); }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 6px 0 0;
+  }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 6px; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--warn); }
+  mjx-container { color: var(--text) !important; }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="president_giuse.PNG" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Thermal Radiation &mdash; Why Hot Things Glow</h1>
+<p class="lead">Every object above absolute zero glows. Turn up the temperature and the glow gets brighter, bluer, and its spectrum shifts toward shorter wavelengths. Here are the three laws that describe it &mdash; and the mystery those laws eventually solved.</p>
+
+<!-- ==================== SETUP ==================== -->
+<div class="panel">
+  <h2>The Setup</h2>
+  <p>
+    Radiation is one of the three ways heat gets from A to B (the other two being conduction and convection). Unlike the other two, it doesn't need a medium &mdash; the Sun heats the Earth through 150 million km of empty space. The hot body emits electromagnetic waves, the cold body absorbs them, and energy flows from hot to cold. This is the topic of <em>Physics&nbsp;25, chapter&nbsp;14.7</em>.
+  </p>
+  <p>
+    An object that is perfect at absorbing and re-emitting EM radiation at every wavelength is called a <strong>blackbody</strong>. It has emissivity \(\varepsilon = 1\). Real objects are worse: polished silver is a poor emitter (\(\varepsilon \approx 0.02\)), tungsten filaments sit around \(\varepsilon \approx 0.5\), human skin in the infrared is almost ideal (\(\varepsilon \approx 0.97\)), and carbon black is essentially a blackbody (\(\varepsilon \approx 0.99\)).
+  </p>
+  <p>Three famous laws govern thermal radiation from a hot surface. They fit together like this:</p>
+  <p><strong>Stefan&ndash;Boltzmann law</strong> &mdash; how <em>total</em> radiated power scales with temperature:</p>
+  $$ P \;=\; \sigma\,\varepsilon\,A\,T^{4}, \qquad \sigma = 5.67 \times 10^{-8}\;\tfrac{\mathrm{W}}{\mathrm{m^{2}K^{4}}}. $$
+  <p><strong>Wien's displacement law</strong> &mdash; where the <em>peak</em> of the spectrum sits:</p>
+  $$ \lambda_\text{max}\, T \;=\; b, \qquad b = 2.898 \times 10^{-3}\;\mathrm{m\cdot K}. $$
+  <p><strong>Planck's law</strong> &mdash; the <em>shape</em> of the whole spectrum:</p>
+  $$ B(\lambda, T) \;=\; \frac{2hc^{2}}{\lambda^{5}}\;\frac{1}{e^{hc/(\lambda k_B T)}-1}. $$
+  <p>And for an object at temperature \(T\) surrounded by a cooler environment at \(T_\text{surr}\), the net rate of heat flow out of the object is</p>
+  $$ \frac{Q_\text{net}}{t} \;=\; \sigma\,\varepsilon\,A\,\bigl(T^{4} - T_\text{surr}^{4}\bigr). $$
+  <p>
+    Each interactive block below lets you play with one of these laws. Stefan&ndash;Boltzmann tells you <em>how much</em> energy leaves. Wien tells you <em>what color</em> the glow is. Planck tells you <em>the whole story</em> &mdash; and in doing so, launched quantum mechanics.
+  </p>
+</div>
+
+<!-- ==================== BLOCK 1: STEFAN-BOLTZMANN ==================== -->
+<div class="case hot">
+  <h3>Block 1 &mdash; Stefan&ndash;Boltzmann: Total Radiated Power \(P = \sigma\varepsilon AT^{4}\)</h3>
+  <p>
+    Move the three sliders. The sphere on the left is a chunk of matter with surface area \(A\), emissivity \(\varepsilon\), and absolute temperature \(T\). Watch what \(P\) does as you change each one. The fourth-power dependence is dramatic: <strong>double the temperature and power jumps by a factor of 16</strong>. That's why the Sun (5800 K) shines so much more fiercely than a red-hot iron (1000 K), even though the surface temperature ratio is only six.
+  </p>
+  <div class="grid-2">
+    <div>
+      <canvas id="cv-sb" class="scene"></canvas>
+      <div class="legend">
+        <div><span class="swatch" style="background:#ff7b3a"></span>Radiated power \(P\)</div>
+        <div><span class="swatch" style="background:#66d9ef"></span>Temperature slider</div>
+      </div>
+    </div>
+    <div>
+      <div class="slider-row">
+        <label><span>Temperature \(T\)</span><span id="sbTReadout" class="readout">3000 K</span></label>
+        <input type="range" id="sbT" min="300" max="10000" step="50" value="3000">
+      </div>
+      <div class="slider-row">
+        <label><span>Surface area \(A\)</span><span id="sbAReadout" class="readout">1.00 m²</span></label>
+        <input type="range" id="sbA" min="0.1" max="10" step="0.1" value="1.0">
+      </div>
+      <div class="slider-row">
+        <label><span>Emissivity \(\varepsilon\)</span><span id="sbEReadout" class="readout">1.00 (blackbody)</span></label>
+        <input type="range" id="sbE" min="0.02" max="1.0" step="0.01" value="1.0">
+        <div class="preset-buttons" id="sbPresets">
+          <button data-eps="0.02">Polished silver (0.02)</button>
+          <button data-eps="0.05">Polished Al (0.05)</button>
+          <button data-eps="0.5">Tungsten (0.5)</button>
+          <button data-eps="0.97">Skin (0.97)</button>
+          <button data-eps="0.99" class="active">Blackbody (0.99)</button>
+        </div>
+      </div>
+      <div class="meters">
+        <div class="meter hot">
+          <span class="meter-label">Radiated power \(P = \sigma\varepsilon AT^4\)</span>
+          <span class="meter-val" id="sbPwr">— W</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Equiv. # of 60 W bulbs</span>
+          <span class="meter-val" id="sbBulbs">—</span>
+        </div>
+        <div class="meter warn">
+          <span class="meter-label">If T doubled, new P would be</span>
+          <span class="meter-val" id="sbDouble">— W</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Peak wavelength (Wien)</span>
+          <span class="meter-val" id="sbLam">— nm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="verdict hot">The total power rises as \(T^{4}\). Drag the T-slider from 1000 K to 2000 K and the bulb count multiplies by 16. Cut \(\varepsilon\) in half and power halves. Double the area and power doubles. Temperature is a much more powerful knob than area or emissivity.</div>
+</div>
+
+<!-- ==================== BLOCK 2: PLANCK + RAYLEIGH-JEANS + WIEN ==================== -->
+<div class="case">
+  <h3>Block 2 &mdash; The Spectrum: Planck vs. Rayleigh&ndash;Jeans (and the Ultraviolet Catastrophe)</h3>
+  <p>
+    How is the radiated power spread across wavelengths? Late-19th-century physicists tried to answer this using classical electromagnetism, dividing the EM modes inside a hot cavity evenly among wavelengths. That approach (the <strong>Rayleigh&ndash;Jeans law</strong>) gave
+  </p>
+  $$ B_\text{RJ}(\lambda, T) \;=\; \frac{2ckT}{\lambda^{4}}. $$
+  <p>
+    Fine at long wavelengths &mdash; it matched the experiments &mdash; but as \(\lambda \to 0\), it blows up to infinity. <strong>Why does Rayleigh&ndash;Jeans fail at short wavelengths?</strong> Classical <em>equipartition</em> hands every electromagnetic mode in the cavity the same average thermal energy \(k_BT\), no matter its frequency. But the number of available modes per unit wavelength grows as \(1/\lambda^{4}\) &mdash; squeeze to shorter \(\lambda\) and you get vastly more modes, each still carrying \(k_BT\). Summed up, the classical prediction sends the short-wavelength intensity to infinity. Real hot bodies obviously don't radiate infinite ultraviolet, so something was badly wrong with classical physics. This embarrassment was christened the <strong>ultraviolet catastrophe</strong>.
+  </p>
+  <p>
+    The quantum fix, as you'll see below, is that a short-wavelength mode costs a discrete photon of energy \(hc/\lambda\). When \(hc/\lambda \gg k_BT\), the Boltzmann factor \(e^{-hc/\lambda k_BT}\) becomes tiny &mdash; thermal kicks simply can't afford to populate those modes, so Planck's curve plunges toward zero instead of diverging.
+  </p>
+  <p>
+    Max Planck fixed it in 1900 by forcing the oscillators inside the body to have <em>quantized</em> energies \(E_n = nhf\). The extra rule suppresses the short-wavelength modes (a photon \(hc/\lambda\) becomes too energetic for the body's thermal kicks to excite), and out pops the correct spectrum:
+  </p>
+  $$ B(\lambda, T) \;=\; \frac{2hc^{2}}{\lambda^{5}}\;\frac{1}{e^{hc/(\lambda k_B T)}-1}. $$
+  <p>
+    This was the first appearance of the quantum constant \(h\) in physics. Planck did not believe his own result at first; it took Einstein's photoelectric paper five years later to convince him (and everyone else) that energy quantization was real, not a bookkeeping trick.
+  </p>
+  <p>
+    Drag the slider to change the temperature. Toggle the Rayleigh&ndash;Jeans overlay and watch it launch off the top of the chart at short wavelengths while Planck's curve politely tapers to zero. The vertical dashed line marks <strong>Wien's peak</strong> \(\lambda_\text{max} = b/T\), which slides toward shorter wavelengths as \(T\) rises.
+  </p>
+  <canvas id="cv-plot" class="plot"></canvas>
+  <div class="slider-row">
+    <label><span>Temperature \(T\)</span><span id="plotTReadout" class="readout">3000 K</span></label>
+    <input type="range" id="plotT" min="1000" max="6000" step="25" value="3000">
+    <div class="preset-buttons" id="plotPresets">
+      <button data-t="1000">Red-hot iron (1000 K)</button>
+      <button data-t="2500">Candle flame (2500 K)</button>
+      <button data-t="2800">Lightbulb filament (2800 K)</button>
+      <button data-t="3800">Cool star (3800 K)</button>
+      <button data-t="5800" class="active">Sun's surface (5800 K)</button>
+    </div>
+  </div>
+  <div class="toggle-row">
+    <label><input type="checkbox" id="showRJ" checked> Show Rayleigh&ndash;Jeans classical curve</label>
+    <label><input type="checkbox" id="showWien" checked> Mark Wien peak \(\lambda_\text{max}\)</label>
+    <label><input type="checkbox" id="showVisible" checked> Shade visible band</label>
+  </div>
+  <div class="meters">
+    <div class="meter">
+      <span class="meter-label">Wien peak \(\lambda_\text{max} = b/T\)</span>
+      <span class="meter-val" id="plotLam">— nm</span>
+    </div>
+    <div class="meter good">
+      <span class="meter-label">Relative peak intensity \(\propto T^5\)</span>
+      <span class="meter-val" id="plotPeak">—</span>
+    </div>
+    <div class="meter hot">
+      <span class="meter-label">Total power \(\propto T^4\) (Stefan–Boltzmann)</span>
+      <span class="meter-val" id="plotTot">—</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label">Fraction in visible 380–780 nm</span>
+      <span class="meter-val" id="plotVis">—</span>
+    </div>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#66d9ef"></span>Planck \(B(\lambda,T)\)</div>
+    <div><span class="swatch" style="background:repeating-linear-gradient(90deg,#ff5f6d 0 4px,transparent 4px 9px)"></span>Rayleigh&ndash;Jeans (classical, fails)</div>
+    <div><span class="swatch" style="background:#ffd166"></span>Wien peak \(\lambda_\text{max}\)</div>
+    <div><span class="swatch" style="background:linear-gradient(90deg,#ff3b2f,#ffb347,#ffef6b,#6ce67c,#66d9ef,#6f3bff)"></span>Visible spectrum (380&ndash;780 nm)</div>
+  </div>
+  <div class="verdict warn">As \(T\) grows, the whole Planck curve swells (<em>Stefan–Boltzmann</em>: area under curve ~ \(T^4\)) AND its peak slides left (<em>Wien</em>: \(\lambda_\text{max} \propto 1/T\)). Both happen at once because hotter bodies put more total energy into higher-frequency (shorter-wavelength) modes. The Rayleigh–Jeans line stays glued to Planck at long \(\lambda\) but launches to infinity at short \(\lambda\) — the ultraviolet catastrophe Planck's quantization cured.</div>
+</div>
+
+<!-- ==================== BLOCK 3: GLOWING ROCK + WIEN'S LAW ==================== -->
+<div class="case warn">
+  <h3>Block 3 &mdash; Wien's Law in Color: The Glowing Rock</h3>
+  <p>
+    Wien's displacement law connects the <em>peak</em> of the Planck spectrum to temperature:
+  </p>
+  $$ \lambda_\text{max} \;=\; \frac{b}{T}, \qquad b = 2.898 \times 10^{-3}\;\mathrm{m\cdot K}. $$
+  <p>
+    That's why the color of a glowing object tells you its temperature. A room-temperature rock (\(T = 300\) K) has \(\lambda_\text{max} \approx 9.7\;\mu\text{m}\), deep in the thermal infrared — invisible to our eyes. Put it in a forge and it starts to emit visible photons: first a dull red around 900 K, brightening to orange near 1400 K, yellow near 2500 K, and white by 5000 K. Past about 6500 K the peak slides into the blue end of the spectrum and the object looks <em>blue-white</em>, like a hot star.
+  </p>
+  <p>
+    Drag the temperature slider below. The rock's surface color is computed from the Planck spectrum at that \(T\) (converted to RGB); it's the same color a real blackbody of that temperature would look to your eye.
+  </p>
+  <div class="grid-2">
+    <div>
+      <canvas id="cv-rock" class="scene"></canvas>
+      <div class="legend">
+        <div><span class="swatch" style="background:#ff7b3a"></span>Rock surface color matches blackbody at \(T\)</div>
+        <div><span class="swatch" style="background:#ffd166"></span>Wien peak \(\lambda_\text{max}\)</div>
+      </div>
+    </div>
+    <div>
+      <div class="slider-row">
+        <label><span>Temperature \(T\)</span><span id="rockTReadout" class="readout">1200 K</span></label>
+        <input type="range" id="rockT" min="300" max="12000" step="25" value="1200">
+        <div class="preset-buttons" id="rockPresets">
+          <button data-t="300">Room (300 K)</button>
+          <button data-t="900">Dull red (900 K)</button>
+          <button data-t="1200" class="active">Cherry red (1200 K)</button>
+          <button data-t="1800">Orange (1800 K)</button>
+          <button data-t="2700">Bulb (2700 K)</button>
+          <button data-t="5800">Sun (5800 K)</button>
+          <button data-t="10000">Blue star (10 000 K)</button>
+        </div>
+      </div>
+      <div class="meters">
+        <div class="meter">
+          <span class="meter-label">Wien peak \(\lambda_\text{max}\)</span>
+          <span class="meter-val" id="rockLam">— nm</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Peak wavelength band</span>
+          <span class="meter-val" id="rockBand">—</span>
+        </div>
+        <div class="meter good">
+          <span class="meter-label">Apparent color name</span>
+          <span class="meter-val" id="rockColor">—</span>
+        </div>
+        <div class="meter hot">
+          <span class="meter-label">Relative brightness (\(\propto T^4\))</span>
+          <span class="meter-val" id="rockBright">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="verdict warn">Below about 900 K almost all the radiation is infrared — the rock is radiating hard, but we don't <em>see</em> any of it. Once the Planck curve starts leaking into the visible (~500 nm tail), the rock begins to glow red. The peak only slides INTO the visible around 4000 K and crosses it around 7000 K. Blue stars aren't "just hotter reds" — their peaks are shorter than visible light entirely, so their blue tint is actually the cool <em>tail</em> of their spectrum.</div>
+</div>
+
+<!-- ==================== BLOCK 4: SUN RADIATING ON EARTH ==================== -->
+<div class="case good">
+  <h3>Block 4 &mdash; Radiation in Action: Sun &rarr; Rock on Earth</h3>
+  <p>
+    Every object radiates <em>and</em> absorbs. Put a small rock in sunlight. The Sun pumps energy into it at some rate \(P_\text{in}\). The rock, at its own temperature \(T\), radiates energy back into space at \(\sigma\varepsilon A T^{4}\). The rock warms up until those two rates balance:
+  </p>
+  $$ P_\text{in} \;=\; \sigma\,\varepsilon\,A\,T_\text{eq}^{4} \;\;\Rightarrow\;\; T_\text{eq} \;=\; \left(\frac{P_\text{in}}{\sigma\,\varepsilon\,A}\right)^{1/4}. $$
+  <p>
+    That steady-state temperature \(T_\text{eq}\) is the one at which emission and absorption just cancel. If you boost the Sun's intensity, the rock has to get hotter (since \(P_\text{out}\) is steep in \(T\)) to match it. If you lower the rock's emissivity, it's worse at dumping heat, so again \(T_\text{eq}\) climbs. This is exactly the energy-balance argument behind greenhouse warming, pottery kilns, and the equilibrium temperature of planets.
+  </p>
+  <p style="font-size:14px;color:var(--muted);">
+    <strong>Real numbers for a sanity check (Giancoli <em>Physics&nbsp;23</em>, &sect;14&ndash;8).</strong> At the top of Earth's atmosphere the Sun delivers the <em>solar constant</em> \(S \approx 1350\,\mathrm{W/m^{2}}\); on a clear day about \(1000\,\mathrm{W/m^{2}}\) reaches the ground. An object that faces the Sun at angle \(\theta\) from vertical intercepts \(P_\text{in} = S\,A\cos\theta\). A 0.1 m² rock in full sun at noon (\(\cos\theta \approx 1\)) therefore gets \(\sim 100\,\mathrm{W}\). Try plugging that in below: with \(\varepsilon = 0.9\) and \(A = 0.1\) m², \(T_\text{eq} \approx 370\) K — about right for asphalt on a hot day.
+  </p>
+  <div class="panel" style="font-size:14px;background:rgba(102,217,239,0.06);border-left:3px solid var(--accent);margin:10px 0;">
+    <strong>Where the intensity \(S\) comes from — the inverse-square law.</strong>
+    The Sun radiates a total luminosity \(L_\odot\) in every direction. By the time that energy reaches the rock at distance \(r\) from the Sun, it is spread uniformly over the <em>entire imaginary sphere</em> of radius \(r\) centered on the Sun. The surface area of that sphere is \(4\pi r^{2}\), so the intensity (power per area) hitting the rock is
+    $$ S(r) \;=\; \frac{L_\odot}{4\pi r^{2}}. $$
+    In other words, when you compute the intensity landing on the rock, the radius of that "artificial sphere" is the Sun-to-rock distance, not the rock's own radius or the Sun's radius. The rock then intercepts \(P_\text{in} = S(r)\,A\cos\theta\) from that flux — only the cross-section it presents to the Sun collects energy. This is why Mercury bakes and Neptune is frozen: they're at very different \(r\), so their \(4\pi r^{2}\) denominators differ by a huge factor even though \(L_\odot\) is the same.
+  </div>
+  <p>
+    The animation shows photons streaming from the Sun onto the rock and the rock's own (cooler, redder) re-emitted photons heading back to space. Toggle <em>Let it reach equilibrium</em> to run a slow simulation where the rock's temperature relaxes to \(T_\text{eq}\). Change the Sun's luminosity or the rock's emissivity to see the balance shift.
+  </p>
+  <canvas id="cv-earth" class="tall"></canvas>
+  <div class="grid-2" style="margin-top:12px;">
+    <div>
+      <div class="slider-row">
+        <label><span>Incident sunlight \(P_\text{in}\) on rock</span><span id="earthPReadout" class="readout">1400 W</span></label>
+        <input type="range" id="earthP" min="100" max="6000" step="50" value="1400">
+      </div>
+      <div class="slider-row">
+        <label><span>Rock emissivity \(\varepsilon\)</span><span id="earthEReadout" class="readout">0.90</span></label>
+        <input type="range" id="earthE" min="0.1" max="1.0" step="0.01" value="0.9">
+      </div>
+      <div class="slider-row">
+        <label><span>Rock surface area \(A\)</span><span id="earthAReadout" class="readout">0.10 m²</span></label>
+        <input type="range" id="earthA" min="0.01" max="1.0" step="0.01" value="0.1">
+      </div>
+      <div class="toggle-row">
+        <label><input type="checkbox" id="earthEq" checked> Let rock relax toward \(T_\text{eq}\)</label>
+      </div>
+    </div>
+    <div>
+      <div class="meters">
+        <div class="meter">
+          <span class="meter-label">\(P_\text{in}\) (absorbed from Sun)</span>
+          <span class="meter-val" id="earthPin">— W</span>
+        </div>
+        <div class="meter hot">
+          <span class="meter-label">Current rock temperature \(T\)</span>
+          <span class="meter-val" id="earthT">— K</span>
+        </div>
+        <div class="meter good">
+          <span class="meter-label">Equilibrium \(T_\text{eq}\)</span>
+          <span class="meter-val" id="earthTeq">— K</span>
+        </div>
+        <div class="meter warn">
+          <span class="meter-label">\(P_\text{out}\) (rock re-emits)</span>
+          <span class="meter-val" id="earthPout">— W</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#ffd84a"></span>Incoming sunlight photons</div>
+    <div><span class="swatch" style="background:#ff7b3a"></span>Rock's own re-emitted photons</div>
+    <div><span class="swatch" style="background:#66d9ef"></span>Earth / rock surface</div>
+  </div>
+  <div class="verdict good">When \(P_\text{in} = P_\text{out}\) (steady state), the rock sits at \(T_\text{eq}\). Shove more power in — the temperature has to climb, but only slowly, because \(P_\text{out}\) scales like \(T^4\). That's why planets don't run away to infinite temperature when given a bit more sunlight: the fourth-power emission is a very strong thermostat.</div>
+</div>
+
+<!-- ==================== SUMMARY ==================== -->
+<div class="panel">
+  <h2>Takeaways</h2>
+  <ul>
+    <li><strong>Stefan&ndash;Boltzmann:</strong> total radiated power \(P = \sigma\varepsilon A T^{4}\). Temperature is the dominant knob.</li>
+    <li><strong>Wien's displacement law:</strong> peak wavelength \(\lambda_\text{max} = b/T\). Hotter → bluer peak.</li>
+    <li><strong>Planck's law</strong> gives the full spectral shape \(B(\lambda, T)\), which underpins the other two (Stefan&ndash;Boltzmann is the area under it; Wien is its maximum).</li>
+    <li><strong>Rayleigh&ndash;Jeans</strong> matches experiment only at long wavelengths. Its divergence at small \(\lambda\) — the <em>ultraviolet catastrophe</em> — forced Planck to quantize oscillator energies \(E_n = nhf\), launching quantum mechanics.</li>
+    <li><strong>Net radiation</strong> between object and surroundings: \(Q_\text{net}/t = \sigma\varepsilon A(T^4 - T_\text{surr}^4)\). Hot to cold, like every other form of heat transfer.</li>
+    <li><strong>Why peak shifts left AND up as \(T\) increases:</strong> the Planck curve at higher \(T\) is everywhere above the curve at lower \(T\) (more energy at every wavelength) AND its maximum slides to smaller \(\lambda\) (shorter wavelengths get cheap enough for thermal motion to populate them). These are not two separate effects — they're both consequences of the same exponential cutoff \(\exp(hc/\lambda k_B T)\) softening as \(T\) rises.</li>
+  </ul>
+</div>
+
+</div>
+
+<script>
+// ============================================================
+// Physical constants (SI)
+// ============================================================
+const SIGMA = 5.670374419e-8;  // W/m²·K⁴
+const H     = 6.62607015e-34;  // J·s
+const C     = 299792458;       // m/s
+const KB    = 1.380649e-23;    // J/K
+const B_WIEN = 2.8977719e-3;   // m·K
+
+// Colors
+const COL_TEXT   = '#cfd3df';
+const COL_MUTE   = '#7a8095';
+const COL_ACCENT = '#66d9ef';
+const COL_GOOD   = '#a6e22e';
+const COL_BAD    = '#ff5f6d';
+const COL_WARN   = '#ffd166';
+const COL_HOT    = '#ff7b3a';
+const COL_SUN    = '#ffd84a';
+
+// ============================================================
+// Starfield (positions fixed; brightness twinkles)
+// ============================================================
+function makeStars(w, h, density = 2400) {
+  const stars = [];
+  const n = Math.max(45, Math.floor(w * h / density));
+  for (let i = 0; i < n; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      base: 0.15 + Math.random() * 0.75,
+      size: 0.35 + Math.random() * 1.5,
+      freq: 0.3 + Math.random() * 2.8,
+      phase: Math.random() * Math.PI * 2,
+      color: Math.random() < 0.85 ? [220, 230, 255]
+           : Math.random() < 0.5  ? [255, 220, 190]
+           :                        [180, 210, 255]
+    });
+  }
+  return stars;
+}
+function drawStars(ctx, stars, t) {
+  for (const s of stars) {
+    const tw = Math.max(0, s.base * (0.45 + 0.55 * Math.sin(t * s.freq + s.phase)));
+    const [r, g, b] = s.color;
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${tw.toFixed(3)})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+    if (s.base > 0.65) {
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${(tw * 0.15).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function setupCanvas(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  cv.width  = Math.floor(rect.width  * dpr);
+  cv.height = Math.floor(rect.height * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height, stars: makeStars(rect.width, rect.height) };
+}
+
+// ============================================================
+// Blackbody color (Tanner Helland approximation)
+// Returns [r, g, b] in 0..255
+// ============================================================
+function blackbodyRGB(T) {
+  const t = T / 100;
+  let r, g, b;
+  if (t <= 66) {
+    r = 255;
+    g = 99.4708025861 * Math.log(Math.max(t, 1)) - 161.1195681661;
+  } else {
+    r = 329.698727446 * Math.pow(t - 60, -0.1332047592);
+    g = 288.1221695283 * Math.pow(t - 60, -0.0755148492);
+  }
+  if (t >= 66)       b = 255;
+  else if (t <= 19)  b = 0;
+  else               b = 138.5177312231 * Math.log(t - 10) - 305.0447927307;
+  return [
+    Math.max(0, Math.min(255, r)),
+    Math.max(0, Math.min(255, g)),
+    Math.max(0, Math.min(255, b))
+  ];
+}
+
+// Wavelength → approximate RGB (for the visible band gradient)
+function wavelengthRGB(nm) {
+  let r = 0, g = 0, b = 0;
+  if (nm >= 380 && nm < 440)      { r = -(nm - 440) / 60; g = 0; b = 1; }
+  else if (nm < 490)              { r = 0; g = (nm - 440) / 50; b = 1; }
+  else if (nm < 510)              { r = 0; g = 1; b = -(nm - 510) / 20; }
+  else if (nm < 580)              { r = (nm - 510) / 70; g = 1; b = 0; }
+  else if (nm < 645)              { r = 1; g = -(nm - 645) / 65; b = 0; }
+  else if (nm <= 780)             { r = 1; g = 0; b = 0; }
+  // intensity fade at edges
+  let factor = 1;
+  if (nm < 420)      factor = 0.3 + 0.7 * (nm - 380) / 40;
+  else if (nm > 700) factor = 0.3 + 0.7 * (780 - nm) / 80;
+  r = Math.round(Math.max(0, Math.min(1, r * factor)) * 255);
+  g = Math.round(Math.max(0, Math.min(1, g * factor)) * 255);
+  b = Math.round(Math.max(0, Math.min(1, b * factor)) * 255);
+  return [r, g, b];
+}
+
+// Name-of-color for the "glowing rock" readout
+function colorLabel(T) {
+  if (T < 600)   return 'Thermal IR (invisible)';
+  if (T < 900)   return 'Dull cherry red';
+  if (T < 1200)  return 'Cherry red';
+  if (T < 1500)  return 'Bright red';
+  if (T < 1800)  return 'Red-orange';
+  if (T < 2200)  return 'Orange';
+  if (T < 2700)  return 'Yellow-orange';
+  if (T < 3500)  return 'Yellow-white';
+  if (T < 5000)  return 'Pale yellow';
+  if (T < 6500)  return 'White';
+  if (T < 9000)  return 'Bluish white';
+  return 'Blue-white';
+}
+function bandOfLambda(lam_nm) {
+  if (lam_nm < 10)       return 'X-ray / EUV';
+  if (lam_nm < 380)      return 'Ultraviolet';
+  if (lam_nm < 450)      return 'Violet';
+  if (lam_nm < 490)      return 'Blue';
+  if (lam_nm < 560)      return 'Green';
+  if (lam_nm < 590)      return 'Yellow';
+  if (lam_nm < 620)      return 'Orange';
+  if (lam_nm < 780)      return 'Red';
+  if (lam_nm < 3000)     return 'Near-IR';
+  if (lam_nm < 30000)    return 'Mid-IR';
+  return 'Far-IR';
+}
+
+// ============================================================
+// Planck / Rayleigh-Jeans spectral radiance (SI, per meter)
+// ============================================================
+function planck(lambda_m, T) {
+  const x = (H * C) / (lambda_m * KB * T);
+  if (x > 700) return 0;    // avoid Infinity from exp()
+  return (2 * H * C * C) / (Math.pow(lambda_m, 5) * (Math.exp(x) - 1));
+}
+function rayleighJeans(lambda_m, T) {
+  return (2 * C * KB * T) / Math.pow(lambda_m, 4);
+}
+
+// ============================================================
+// BLOCK 1 — Stefan-Boltzmann
+// ============================================================
+function buildStefanBoltzmann() {
+  const cv     = document.getElementById('cv-sb');
+  const env    = setupCanvas(cv);
+  const sliderT = document.getElementById('sbT');
+  const sliderA = document.getElementById('sbA');
+  const sliderE = document.getElementById('sbE');
+  const presets = document.getElementById('sbPresets');
+
+  const readT  = document.getElementById('sbTReadout');
+  const readA  = document.getElementById('sbAReadout');
+  const readE  = document.getElementById('sbEReadout');
+  const outPwr = document.getElementById('sbPwr');
+  const outBulbs = document.getElementById('sbBulbs');
+  const outDouble = document.getElementById('sbDouble');
+  const outLam = document.getElementById('sbLam');
+
+  function formatPower(p) {
+    if (p < 1)      return p.toExponential(2) + ' W';
+    if (p < 1e3)    return p.toFixed(1) + ' W';
+    if (p < 1e6)    return (p / 1e3).toFixed(2) + ' kW';
+    if (p < 1e9)    return (p / 1e6).toFixed(2) + ' MW';
+    if (p < 1e12)   return (p / 1e9).toFixed(2) + ' GW';
+    return p.toExponential(2) + ' W';
+  }
+
+  let tReal = 0;
+  function redraw() {
+    const T = +sliderT.value;
+    const A = +sliderA.value;
+    const E = +sliderE.value;
+    const P = SIGMA * E * A * Math.pow(T, 4);
+    const lam = B_WIEN / T * 1e9;  // nm
+    const Pdouble = SIGMA * E * A * Math.pow(2*T, 4);
+
+    readT.textContent = T.toFixed(0) + ' K';
+    readA.textContent = A.toFixed(2) + ' m²';
+    readE.textContent = E.toFixed(2);
+    outPwr.textContent = formatPower(P);
+    outBulbs.textContent = (P / 60).toFixed(P < 600 ? 2 : 1);
+    outDouble.textContent = formatPower(Pdouble) + ' (×' + (Pdouble/P).toFixed(0) + ')';
+    outLam.textContent = lam >= 1e3 ? (lam/1e3).toFixed(2) + ' μm' : lam.toFixed(0) + ' nm';
+
+    // --- Draw glowing sphere scene ---
+    const { ctx, w, h, stars } = env;
+    ctx.clearRect(0, 0, w, h);
+    drawStars(ctx, stars, tReal);
+
+    const cx = w * 0.38, cy = h * 0.5;
+    const rSphere = 58;
+    const [rr, gg, bb] = blackbodyRGB(T);
+
+    // outer glow scales with log of power (so low T still shows something)
+    const glowR = rSphere + 8 + 50 * Math.min(1, Math.log10(P + 1) / 8) * E;
+    const halo = ctx.createRadialGradient(cx, cy, rSphere * 0.5, cx, cy, glowR);
+    halo.addColorStop(0, `rgba(${rr}, ${gg}, ${bb}, ${(0.55 * E).toFixed(3)})`);
+    halo.addColorStop(1, `rgba(${rr}, ${gg}, ${bb}, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // sphere
+    const sphereGrad = ctx.createRadialGradient(cx - rSphere * 0.35, cy - rSphere * 0.35, 4, cx, cy, rSphere);
+    sphereGrad.addColorStop(0, `rgb(${Math.min(255, rr+40)}, ${Math.min(255, gg+40)}, ${Math.min(255, bb+40)})`);
+    sphereGrad.addColorStop(0.65, `rgb(${rr}, ${gg}, ${bb})`);
+    sphereGrad.addColorStop(1, `rgb(${Math.round(rr*0.5)}, ${Math.round(gg*0.5)}, ${Math.round(bb*0.5)})`);
+    ctx.fillStyle = sphereGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, rSphere, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#0a0c12';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Animated outward arrows representing radiated power (count scales with log P)
+    const arrowCount = Math.max(4, Math.min(36, Math.floor(8 * Math.log10(P + 10))));
+    for (let i = 0; i < arrowCount; i++) {
+      const ang = (i / arrowCount) * Math.PI * 2 + tReal * 0.4;
+      const r0 = rSphere + 5;
+      const phase = (tReal * 0.8 + i * 0.37) % 1;
+      const r1 = r0 + phase * (glowR - rSphere - 5);
+      const alpha = (1 - phase) * 0.85 * E;
+      if (alpha < 0.02) continue;
+      const x0 = cx + Math.cos(ang) * r0;
+      const y0 = cy + Math.sin(ang) * r0;
+      const x1 = cx + Math.cos(ang) * r1;
+      const y1 = cy + Math.sin(ang) * r1;
+      ctx.strokeStyle = `rgba(${rr}, ${gg}, ${bb}, ${alpha.toFixed(3)})`;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(x0, y0); ctx.lineTo(x1, y1);
+      ctx.stroke();
+    }
+
+    // label
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('T = ' + T.toFixed(0) + ' K', cx, cy + rSphere + 24);
+    ctx.fillStyle = COL_HOT;
+    ctx.font = 'bold 15px ui-monospace, Menlo, monospace';
+    ctx.fillText(formatPower(P), cx, cy + rSphere + 46);
+
+    // bar chart on the right: "what if T were halved or doubled?" — visualizes the T^4 law.
+    // The 2T bar is always 16× taller than T, and T/2 is always 1/16. Same shape every time;
+    // that's the whole point of the T^4 scaling.
+    const labels   = ['T/2', 'T (now)', '2T'];
+    const mults    = ['×1/16', '×1', '×16'];
+    const Ts       = [T/2, T, 2*T];
+    const Ps       = Ts.map(Ti => SIGMA * E * A * Math.pow(Ti, 4));
+    const Pmax     = Ps[2]; // 2T bar is tallest
+
+    const rightPad = 14;
+    const gap      = 14;
+    const maxBarsW = Math.min(160, w * 0.45);
+    const barW     = Math.max(22, (maxBarsW - 2 * gap) / 3);
+    const totalW   = 3 * barW + 2 * gap;
+    const baseX    = w - rightPad - totalW;
+    const topY     = 56;                       // room above for title
+    const barH     = h - topY - 60;            // room below for 3 label rows
+
+    // title
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 13px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('P ∝ T⁴', baseX + totalW / 2, topY - 28);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.fillText('if T were halved or doubled', baseX + totalW / 2, topY - 12);
+
+    for (let i = 0; i < 3; i++) {
+      const px = baseX + i * (barW + gap);
+      const hBar = Math.max(1.5, (Ps[i] / Pmax) * barH);
+      const [br, bg, bb_] = blackbodyRGB(Ts[i]);
+      const grad = ctx.createLinearGradient(0, topY + barH - hBar, 0, topY + barH);
+      grad.addColorStop(0, `rgba(${br}, ${bg}, ${bb_}, 0.95)`);
+      grad.addColorStop(1, `rgba(${br}, ${bg}, ${bb_}, 0.35)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(px, topY + barH - hBar, barW, hBar);
+      ctx.strokeStyle = i === 1 ? COL_ACCENT : '#3a4365';
+      ctx.lineWidth = i === 1 ? 1.5 : 1;
+      ctx.strokeRect(px, topY + barH - hBar, barW, hBar);
+
+      // labels below the bar baseline (always visible, even for the tiny T/2 bar)
+      ctx.textAlign = 'center';
+      ctx.fillStyle = COL_MUTE;
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      ctx.fillText(labels[i], px + barW / 2, topY + barH + 14);
+      ctx.fillStyle = i === 1 ? COL_ACCENT : COL_HOT;
+      ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+      ctx.fillText(mults[i], px + barW / 2, topY + barH + 28);
+      ctx.fillStyle = COL_MUTE;
+      ctx.font = '10px ui-monospace, Menlo, monospace';
+      ctx.fillText(Ts[i].toFixed(0) + ' K', px + barW / 2, topY + barH + 42);
+    }
+  }
+
+  sliderT.addEventListener('input', redraw);
+  sliderA.addEventListener('input', redraw);
+  sliderE.addEventListener('input', () => {
+    // clear preset-active because user moved slider manually
+    presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    redraw();
+  });
+  presets.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sliderE.value = btn.dataset.eps;
+      readE.textContent = (+btn.dataset.eps).toFixed(2) + ' (' + btn.textContent.split(' (')[0] + ')';
+      redraw();
+    });
+  });
+
+  function tick(now) {
+    tReal = now / 1000;
+    redraw();
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ============================================================
+// BLOCK 2 — Planck / Rayleigh–Jeans / Wien plot
+// ============================================================
+function buildPlot() {
+  const cv  = document.getElementById('cv-plot');
+  const env = setupCanvas(cv);
+  const sliderT = document.getElementById('plotT');
+  const readT   = document.getElementById('plotTReadout');
+  const cbRJ    = document.getElementById('showRJ');
+  const cbWien  = document.getElementById('showWien');
+  const cbVis   = document.getElementById('showVisible');
+  const presets = document.getElementById('plotPresets');
+
+  const mLam  = document.getElementById('plotLam');
+  const mPeak = document.getElementById('plotPeak');
+  const mTot  = document.getElementById('plotTot');
+  const mVis  = document.getElementById('plotVis');
+
+  const LAM_MIN_NM = 100;
+  const LAM_MAX_NM = 3000;
+
+  // Anchor vertical scale to Planck peak at the slider's max T, plus headroom,
+  // so the blue Planck curve always fits on the plot. Lower-T curves shrink
+  // toward the x-axis, showing the T^5 peak-growth lesson.
+  const T_REF = +sliderT.max;
+  const Y_MAX_FIXED = planck(B_WIEN / T_REF, T_REF) * 1.08;
+
+  // Pre-sample a table of Planck values used to integrate
+  function integrateBand(T, lamMinM, lamMaxM, N = 500) {
+    let total = 0;
+    const dl = (lamMaxM - lamMinM) / N;
+    for (let i = 0; i < N; i++) {
+      const lam = lamMinM + (i + 0.5) * dl;
+      total += planck(lam, T) * dl;
+    }
+    return total;
+  }
+
+  let animRAF = null;
+  function cancelAnim() {
+    if (animRAF) { cancelAnimationFrame(animRAF); animRAF = null; }
+  }
+  function animateTo(target, ms = 700) {
+    cancelAnim();
+    const start = +sliderT.value;
+    if (start === target) { redraw(); return; }
+    const t0 = performance.now();
+    function step(now) {
+      const p = Math.min(1, (now - t0) / ms);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      sliderT.value = start + (target - start) * eased;
+      redraw();
+      if (p < 1) animRAF = requestAnimationFrame(step);
+      else animRAF = null;
+    }
+    animRAF = requestAnimationFrame(step);
+  }
+
+  function redraw() {
+    const T = +sliderT.value;
+    readT.textContent = T.toFixed(0) + ' K';
+
+    const { ctx, w, h } = env;
+    ctx.clearRect(0, 0, w, h);
+
+    // plot area
+    const padL = 64, padR = 18, padT = 20, padB = 44;
+    const pw = w - padL - padR;
+    const ph = h - padT - padB;
+
+    // sample Planck curve in wavelength
+    const N = 500;
+    const planckY = new Float64Array(N);
+    const rjY     = new Float64Array(N);
+    const lamNM   = new Float64Array(N);
+    for (let i = 0; i < N; i++) {
+      const nm = LAM_MIN_NM + (i / (N - 1)) * (LAM_MAX_NM - LAM_MIN_NM);
+      const m = nm * 1e-9;
+      lamNM[i] = nm;
+      planckY[i] = planck(m, T);
+      rjY[i] = rayleighJeans(m, T);
+    }
+    const yMax = Y_MAX_FIXED;
+    const xFromNM = nm => padL + (nm - LAM_MIN_NM) / (LAM_MAX_NM - LAM_MIN_NM) * pw;
+    const yFromP  = p  => padT + ph - (p / yMax) * ph;
+
+    // -- Background visible-spectrum band (label drawn after curves, see below) --
+    const VS_L = 380, VS_R = 780;
+    if (cbVis.checked) {
+      for (let nm = VS_L; nm <= VS_R; nm += 2) {
+        const [r, g, b] = wavelengthRGB(nm);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.22)`;
+        ctx.fillRect(xFromNM(nm), padT, xFromNM(nm + 2) - xFromNM(nm) + 0.5, ph);
+      }
+    }
+
+    // -- Axes --
+    ctx.strokeStyle = '#2a2f43';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + ph);
+    ctx.lineTo(padL + pw, padT + ph);
+    ctx.stroke();
+    // x ticks every 500 nm
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10.5px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    for (let nm = 0; nm <= LAM_MAX_NM; nm += 500) {
+      if (nm < LAM_MIN_NM) continue;
+      const x = xFromNM(nm);
+      ctx.beginPath(); ctx.moveTo(x, padT + ph); ctx.lineTo(x, padT + ph + 4); ctx.stroke();
+      ctx.fillText(nm + ' nm', x, padT + ph + 16);
+    }
+    ctx.textAlign = 'center';
+    ctx.fillText('wavelength  λ  (nm)', padL + pw / 2, padT + ph + 32);
+
+    // y axis label
+    ctx.save();
+    ctx.translate(14, padT + ph / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('spectral radiance  B(λ, T)  (a.u.)', 0, 0);
+    ctx.restore();
+
+    // -- Rayleigh–Jeans curve (dotted red) --
+    if (cbRJ.checked) {
+      ctx.strokeStyle = COL_BAD;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 5]);
+      ctx.beginPath();
+      let started = false;
+      for (let i = 0; i < N; i++) {
+        const y = yFromP(rjY[i]);
+        if (y < padT - 4) {
+          if (started) { ctx.stroke(); }
+          started = false;
+          continue;
+        }
+        if (!started) { ctx.moveTo(xFromNM(lamNM[i]), y); started = true; }
+        else          { ctx.lineTo(xFromNM(lamNM[i]), y); }
+      }
+      if (started) ctx.stroke();
+      ctx.setLineDash([]);
+      // off-screen arrow at the top-left to indicate divergence
+      ctx.fillStyle = COL_BAD;
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('Rayleigh–Jeans →∞ (UV catastrophe)', padL + 8, padT + 14);
+    }
+
+    // -- Planck curve (clipped to plot rect so off-chart peaks cut cleanly at top) --
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(padL, padT, pw, ph);
+    ctx.clip();
+
+    ctx.strokeStyle = COL_ACCENT;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+      const x = xFromNM(lamNM[i]);
+      const y = yFromP(planckY[i]);
+      if (i === 0) ctx.moveTo(x, y);
+      else         ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // fill under Planck
+    ctx.fillStyle = `rgba(102, 217, 239, 0.10)`;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT + ph);
+    for (let i = 0; i < N; i++) {
+      ctx.lineTo(xFromNM(lamNM[i]), yFromP(planckY[i]));
+    }
+    ctx.lineTo(padL + pw, padT + ph);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // -- Wien peak marker --
+    const lamMaxM  = B_WIEN / T;
+    const lamMaxNM = lamMaxM * 1e9;
+    if (cbWien.checked && lamMaxNM >= LAM_MIN_NM && lamMaxNM <= LAM_MAX_NM) {
+      const x = xFromNM(lamMaxNM);
+      ctx.strokeStyle = COL_WARN;
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, padT + ph);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = COL_WARN;
+      ctx.beginPath();
+      ctx.arc(x, yFromP(planck(lamMaxM, T)), 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      ctx.textAlign = x > padL + pw - 120 ? 'right' : 'left';
+      const pad = x > padL + pw - 120 ? -6 : 6;
+      ctx.fillText('λ_max ≈ ' + (lamMaxNM >= 1000 ? (lamMaxNM/1000).toFixed(2) + ' μm' : lamMaxNM.toFixed(0) + ' nm'),
+                   x + pad, padT + 24);
+    } else if (cbWien.checked && lamMaxNM < LAM_MIN_NM) {
+      ctx.fillStyle = COL_WARN;
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('λ_max = ' + lamMaxNM.toFixed(0) + ' nm — off chart (← UV)', padL + 8, padT + 32);
+    } else if (cbWien.checked && lamMaxNM > LAM_MAX_NM) {
+      ctx.fillStyle = COL_WARN;
+      ctx.font = '11px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('λ_max = ' + (lamMaxNM/1000).toFixed(2) + ' μm — off chart (IR →)', padL + pw - 8, padT + 32);
+    }
+
+    // -- "visible" label: drawn last so no curve covers it --
+    if (cbVis.checked) {
+      const cx = xFromNM((VS_L + VS_R) / 2);
+      const cy = padT + ph - 10;
+      ctx.font = '10px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const tw = ctx.measureText('visible').width;
+      ctx.fillStyle = 'rgba(14,16,26,0.72)';
+      ctx.fillRect(cx - tw / 2 - 5, cy - 8, tw + 10, 14);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillText('visible', cx, cy);
+      ctx.textBaseline = 'alphabetic';
+    }
+
+    // -- Temperature label (top right) --
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 13px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('T = ' + T.toFixed(0) + ' K', padL + pw - 6, padT + 14);
+
+    // -- Meters --
+    mLam.textContent  = lamMaxNM >= 1000 ? (lamMaxNM/1000).toFixed(2) + ' μm' : lamMaxNM.toFixed(0) + ' nm';
+    // Reference everything to T = 3000 K
+    const Tref = 3000;
+    const peakRatio = Math.pow(T / Tref, 5);
+    const totRatio  = Math.pow(T / Tref, 4);
+    mPeak.textContent = '×' + peakRatio.toFixed(peakRatio < 10 ? 2 : 0) + '  vs 3000 K';
+    mTot.textContent  = '×' + totRatio.toFixed(totRatio  < 10 ? 2 : 0) + '  vs 3000 K';
+    // Fraction of total in visible band
+    const totalAll = integrateBand(T, 1e-9, 100e-6, 600);
+    const totalVis = integrateBand(T, 380e-9, 780e-9, 200);
+    mVis.textContent = (100 * totalVis / totalAll).toFixed(1) + ' %';
+  }
+
+  sliderT.addEventListener('input', () => {
+    cancelAnim();
+    presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    redraw();
+  });
+  cbRJ.addEventListener('change', redraw);
+  cbWien.addEventListener('change', redraw);
+  cbVis.addEventListener('change', redraw);
+  presets.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      animateTo(+btn.dataset.t);
+    });
+  });
+  redraw();
+}
+
+// ============================================================
+// BLOCK 3 — Glowing rock (Wien + color)
+// ============================================================
+function buildRock() {
+  const cv  = document.getElementById('cv-rock');
+  const env = setupCanvas(cv);
+  const sliderT = document.getElementById('rockT');
+  const readT   = document.getElementById('rockTReadout');
+  const presets = document.getElementById('rockPresets');
+
+  const mLam    = document.getElementById('rockLam');
+  const mBand   = document.getElementById('rockBand');
+  const mColor  = document.getElementById('rockColor');
+  const mBright = document.getElementById('rockBright');
+
+  // Deterministic rock silhouette — lumpy closed curve
+  const NBUMP = 20;
+  const bumps = [];
+  for (let i = 0; i < NBUMP; i++) {
+    // seeded randomness: use sine combinations
+    const a = i / NBUMP * Math.PI * 2;
+    const r = 1 + 0.18 * Math.sin(i * 1.7) + 0.10 * Math.cos(i * 2.9) + 0.06 * Math.sin(i * 4.2);
+    bumps.push({ a, r });
+  }
+
+  let tReal = 0;
+  function redraw() {
+    const T = +sliderT.value;
+    readT.textContent = T.toFixed(0) + ' K';
+    const lamNM = (B_WIEN / T) * 1e9;
+    mLam.textContent  = lamNM >= 1000 ? (lamNM/1000).toFixed(2) + ' μm' : lamNM.toFixed(0) + ' nm';
+    mBand.textContent = bandOfLambda(lamNM);
+    mColor.textContent = colorLabel(T);
+    const Tref = 300;
+    mBright.textContent = '×' + Math.pow(T / Tref, 4).toExponential(2) + '  vs 300 K';
+
+    const { ctx, w, h, stars } = env;
+    ctx.clearRect(0, 0, w, h);
+    drawStars(ctx, stars, tReal);
+
+    const cx = w * 0.38, cy = h * 0.55, base = 72;
+    const [rr, gg, bb] = blackbodyRGB(T);
+
+    // Glow halo — intensity grows with T^4 but compressed via log for visual comfort
+    const brightness = Math.min(1, Math.log10(Math.pow(T, 4)) / 16);
+    const haloR = base + 28 + 80 * brightness;
+    const halo = ctx.createRadialGradient(cx, cy, base * 0.4, cx, cy, haloR);
+    halo.addColorStop(0, `rgba(${rr}, ${gg}, ${bb}, ${(0.65 * brightness).toFixed(3)})`);
+    halo.addColorStop(1, `rgba(${rr}, ${gg}, ${bb}, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rock silhouette path
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i <= NBUMP; i++) {
+      const b1 = bumps[i % NBUMP];
+      const x = cx + Math.cos(b1.a) * base * b1.r;
+      const y = cy + Math.sin(b1.a) * base * b1.r * 0.75;
+      if (i === 0) ctx.moveTo(x, y);
+      else         ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+
+    // Fill: blend rocky gray base with hot color based on T
+    const hotMix = Math.min(1, Math.max(0, (T - 500) / 1200));  // 0 at 500K, 1 at 1700K
+    const base_r = 68, base_g = 64, base_b = 60;
+    const mix = (a, b, t) => Math.round(a * (1 - t) + b * t);
+    const rMid = mix(base_r, rr, hotMix);
+    const gMid = mix(base_g, gg, hotMix);
+    const bMid = mix(base_b, bb, hotMix);
+    const rockGrad = ctx.createRadialGradient(cx - base * 0.3, cy - base * 0.3, base * 0.1, cx, cy, base * 1.2);
+    rockGrad.addColorStop(0, `rgb(${Math.min(255, rMid+45)}, ${Math.min(255, gMid+45)}, ${Math.min(255, bMid+45)})`);
+    rockGrad.addColorStop(0.6, `rgb(${rMid}, ${gMid}, ${bMid})`);
+    rockGrad.addColorStop(1, `rgb(${Math.round(rMid*0.45)}, ${Math.round(gMid*0.45)}, ${Math.round(bMid*0.45)})`);
+    ctx.fillStyle = rockGrad;
+    ctx.fill();
+
+    // Rock cracks/detail
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath();
+      const a = i * 1.7 + 0.4;
+      ctx.moveTo(cx + Math.cos(a) * base * 0.2, cy + Math.sin(a) * base * 0.15);
+      ctx.quadraticCurveTo(
+        cx + Math.cos(a + 0.6) * base * 0.5, cy + Math.sin(a + 0.6) * base * 0.4,
+        cx + Math.cos(a + 1.2) * base * 0.8, cy + Math.sin(a + 1.2) * base * 0.6
+      );
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Shimmer "heat wave" emission particles
+    const pcount = Math.floor(4 + brightness * 30);
+    for (let i = 0; i < pcount; i++) {
+      const ang = (tReal * 0.3 + i * 0.9) % (Math.PI * 2);
+      const phase = ((tReal * 0.6 + i * 0.27) % 1);
+      const rStart = base + 4;
+      const rNow = rStart + phase * (haloR - rStart);
+      const x = cx + Math.cos(ang) * rNow;
+      const y = cy + Math.sin(ang) * rNow * 0.85;
+      const a = (1 - phase) * brightness;
+      ctx.fillStyle = `rgba(${rr}, ${gg}, ${bb}, ${a.toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Mini spectrum strip to the right showing visible band + peak position
+    const mx0 = w * 0.62, mx1 = w * 0.94, my = h * 0.24, mh = 18;
+    // Visible gradient
+    for (let nm = 380; nm <= 780; nm += 2) {
+      const [r, g, b] = wavelengthRGB(nm);
+      const x = mx0 + (nm - 380) / (780 - 380) * (mx1 - mx0);
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(x, my, (mx1 - mx0) / ((780 - 380) / 2) + 0.5, mh);
+    }
+    ctx.strokeStyle = '#2a2f43';
+    ctx.strokeRect(mx0, my, mx1 - mx0, mh);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('380 nm', mx0, my + mh + 12);
+    ctx.textAlign = 'right';
+    ctx.fillText('780 nm', mx1, my + mh + 12);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = COL_TEXT;
+    ctx.fillText('visible band', (mx0 + mx1) / 2, my - 6);
+
+    // Wien peak marker on the strip
+    if (lamNM >= 380 && lamNM <= 780) {
+      const px = mx0 + (lamNM - 380) / (780 - 380) * (mx1 - mx0);
+      ctx.strokeStyle = COL_WARN;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(px, my - 4);
+      ctx.lineTo(px, my + mh + 4);
+      ctx.stroke();
+      ctx.fillStyle = COL_WARN;
+      ctx.font = 'bold 10px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('λ_max', px, my - 8);
+    } else {
+      const arrowSide = lamNM < 380 ? 'left' : 'right';
+      const px = arrowSide === 'left' ? mx0 - 2 : mx1 + 2;
+      ctx.fillStyle = COL_WARN;
+      ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+      ctx.textAlign = arrowSide === 'left' ? 'right' : 'left';
+      const msg = (arrowSide === 'left' ? '← UV ' : 'IR → ') +
+                  (lamNM >= 1000 ? (lamNM/1000).toFixed(2) + ' μm' : lamNM.toFixed(0) + ' nm');
+      ctx.fillText(msg, px + (arrowSide === 'left' ? -4 : 4), my + mh / 2 + 4);
+    }
+
+    // Label under rock
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('T = ' + T.toFixed(0) + ' K', cx, cy + base + 28);
+    ctx.fillStyle = COL_WARN;
+    ctx.fillText(colorLabel(T), cx, cy + base + 46);
+  }
+
+  sliderT.addEventListener('input', () => {
+    presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    redraw();
+  });
+  presets.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      presets.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sliderT.value = btn.dataset.t;
+      redraw();
+    });
+  });
+
+  function tick(now) {
+    tReal = now / 1000;
+    redraw();
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ============================================================
+// BLOCK 4 — Sun radiating onto a rock on Earth
+// ============================================================
+function buildEarth() {
+  const cv  = document.getElementById('cv-earth');
+  const env = setupCanvas(cv);
+  const sP = document.getElementById('earthP');
+  const sE = document.getElementById('earthE');
+  const sA = document.getElementById('earthA');
+  const cbEq = document.getElementById('earthEq');
+  const readP = document.getElementById('earthPReadout');
+  const readE = document.getElementById('earthEReadout');
+  const readA = document.getElementById('earthAReadout');
+  const mPin  = document.getElementById('earthPin');
+  const mT    = document.getElementById('earthT');
+  const mTeq  = document.getElementById('earthTeq');
+  const mPout = document.getElementById('earthPout');
+
+  // Rock temperature (state)
+  let Trock = 288;  // K, start at ~Earth surface temp
+  let lastTime = null;
+
+  // Photon streams (particles)
+  const incoming = [];   // sun → rock
+  const outgoing = [];   // rock → space
+  const MAX_PHOTONS = 220;
+
+  function spawnIncoming(w, h, sunX, sunY, rockX, rockY) {
+    if (incoming.length > MAX_PHOTONS) return;
+    // Launch from around Sun surface toward the rock with a little scatter
+    const ang = Math.atan2(rockY - sunY, rockX - sunX) + (Math.random() - 0.5) * 0.15;
+    const sx = sunX + Math.cos(ang) * 60;
+    const sy = sunY + Math.sin(ang) * 60;
+    const sp = 120 + Math.random() * 60;
+    incoming.push({ x: sx, y: sy, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1 });
+  }
+  function spawnOutgoing(w, h, rockX, rockY) {
+    if (outgoing.length > MAX_PHOTONS) return;
+    const ang = Math.random() * Math.PI * 2;
+    const sp = 60 + Math.random() * 50;
+    outgoing.push({ x: rockX, y: rockY, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1.5 });
+  }
+
+  function redraw(dtSec) {
+    const { ctx, w, h, stars } = env;
+
+    const P = +sP.value, E = +sE.value, A = +sA.value;
+    readP.textContent = P.toFixed(0) + ' W';
+    readE.textContent = E.toFixed(2);
+    readA.textContent = A.toFixed(2) + ' m²';
+
+    const Teq = Math.pow(P / (SIGMA * E * A), 0.25);
+    mTeq.textContent = Teq.toFixed(0) + ' K';
+    mPin.textContent = P.toFixed(0) + ' W';
+
+    // Evolve Trock toward Teq (explicit-Euler on P_in - P_out, with a fake "thermal capacity")
+    // dT/dt = (P_in - σεAT⁴)/(mc).  We pick mc so the run feels perceptive.
+    const heatCap = 4.0 + 25 * A;   // J/K — tuned for visual pacing
+    if (cbEq.checked) {
+      const Pout_cur = SIGMA * E * A * Math.pow(Trock, 4);
+      const dT = (P - Pout_cur) / heatCap * dtSec;
+      Trock += dT;
+      Trock = Math.max(2.7, Trock);  // cosmic microwave background floor
+    } else {
+      Trock = Teq;                   // snap to equilibrium
+    }
+    const Pout = SIGMA * E * A * Math.pow(Trock, 4);
+    mT.textContent    = Trock.toFixed(0) + ' K';
+    mPout.textContent = Pout.toFixed(0) + ' W';
+
+    ctx.clearRect(0, 0, w, h);
+    drawStars(ctx, stars, performance.now() / 1000);
+
+    // Layout
+    const sunX = w * 0.14, sunY = h * 0.38, sunR = 46;
+    const rockX = w * 0.70, rockY = h * 0.58, rockR = 36;
+
+    // ---- Sun ----
+    const sunHalo = ctx.createRadialGradient(sunX, sunY, sunR * 0.3, sunX, sunY, sunR * 2.6);
+    sunHalo.addColorStop(0, 'rgba(255, 220, 100, 0.55)');
+    sunHalo.addColorStop(1, 'rgba(255, 220, 100, 0)');
+    ctx.fillStyle = sunHalo;
+    ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 2.6, 0, Math.PI * 2); ctx.fill();
+    const sunBody = ctx.createRadialGradient(sunX - sunR*0.3, sunY - sunR*0.3, 4, sunX, sunY, sunR);
+    sunBody.addColorStop(0, '#fff8c0');
+    sunBody.addColorStop(0.6, '#ffd84a');
+    sunBody.addColorStop(1, '#d98000');
+    ctx.fillStyle = sunBody;
+    ctx.beginPath(); ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Sun', sunX, sunY + sunR + 20);
+    ctx.fillStyle = COL_SUN;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.fillText('P_in = ' + P.toFixed(0) + ' W', sunX, sunY + sunR + 34);
+
+    // ---- Rock on Earth ----
+    // Earth arc (just a curved surface at bottom right)
+    ctx.beginPath();
+    ctx.arc(rockX, h + 180, 220, Math.PI, 0);
+    ctx.closePath();
+    const earthGrad = ctx.createLinearGradient(0, h * 0.7, 0, h);
+    earthGrad.addColorStop(0, '#2a4d7a');
+    earthGrad.addColorStop(0.6, '#1a365a');
+    earthGrad.addColorStop(1, '#0e1a36');
+    ctx.fillStyle = earthGrad;
+    ctx.fill();
+    // rock
+    const [rr, gg, bb] = blackbodyRGB(Math.max(500, Trock));  // glow color at hot temps
+    const coolBlend = Math.min(1, Math.max(0, (Trock - 500) / 1200));
+    const base_r = 82, base_g = 74, base_b = 68;
+    const rRock = Math.round(base_r * (1 - coolBlend) + rr * coolBlend);
+    const gRock = Math.round(base_g * (1 - coolBlend) + gg * coolBlend);
+    const bRock = Math.round(base_b * (1 - coolBlend) + bb * coolBlend);
+    const rockGrad = ctx.createRadialGradient(rockX - rockR * 0.4, rockY - rockR * 0.4, 4, rockX, rockY, rockR * 1.1);
+    rockGrad.addColorStop(0, `rgb(${Math.min(255,rRock+50)}, ${Math.min(255,gRock+50)}, ${Math.min(255,bRock+50)})`);
+    rockGrad.addColorStop(0.7, `rgb(${rRock}, ${gRock}, ${bRock})`);
+    rockGrad.addColorStop(1, `rgb(${Math.round(rRock*0.5)}, ${Math.round(gRock*0.5)}, ${Math.round(bRock*0.5)})`);
+    ctx.fillStyle = rockGrad;
+    ctx.beginPath();
+    // lumpy rock
+    const NB = 14;
+    for (let i = 0; i <= NB; i++) {
+      const a = i / NB * Math.PI * 2;
+      const rr_ = rockR * (1 + 0.13 * Math.sin(i * 1.9) + 0.07 * Math.cos(i * 3.1));
+      const x = rockX + Math.cos(a) * rr_;
+      const y = rockY + Math.sin(a) * rr_ * 0.7;
+      if (i === 0) ctx.moveTo(x, y);
+      else         ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.fillStyle = COL_TEXT;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Rock on Earth', rockX, rockY + rockR + 18);
+    ctx.fillStyle = COL_HOT;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.fillText('T = ' + Trock.toFixed(0) + ' K', rockX, rockY + rockR + 32);
+
+    // ---- Photon spawning rates ----
+    // Incoming photons proportional to P_in; outgoing proportional to Pout.
+    // Scale to a reasonable visual density: spawn count per frame.
+    const inRate  = Math.min(MAX_PHOTONS / 40, 0.025 * P);   // per dt sec
+    const outRate = Math.min(MAX_PHOTONS / 40, 0.02  * Pout);
+    // Poisson-ish spawn
+    let inSpawn = inRate * dtSec;
+    while (inSpawn > 0) {
+      if (Math.random() < inSpawn) spawnIncoming(w, h, sunX, sunY, rockX, rockY);
+      inSpawn -= 1;
+    }
+    let outSpawn = outRate * dtSec;
+    while (outSpawn > 0) {
+      if (Math.random() < outSpawn) spawnOutgoing(w, h, rockX, rockY);
+      outSpawn -= 1;
+    }
+
+    // ---- Draw & advance photons ----
+    for (let i = incoming.length - 1; i >= 0; i--) {
+      const p = incoming[i];
+      p.x += p.vx * dtSec;
+      p.y += p.vy * dtSec;
+      // kill at rock or far away
+      const dx = p.x - rockX, dy = p.y - rockY;
+      if (dx*dx + dy*dy < rockR * rockR || p.x > w + 20 || p.x < -20 || p.y > h + 20 || p.y < -20) {
+        incoming.splice(i, 1); continue;
+      }
+      ctx.fillStyle = `rgba(255, 216, 74, 0.95)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      // trailing streak
+      ctx.strokeStyle = `rgba(255, 216, 74, 0.45)`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x - p.vx * 0.04, p.y - p.vy * 0.04);
+      ctx.stroke();
+    }
+    // outgoing
+    const [orr, ogg, obb] = blackbodyRGB(Math.max(800, Trock));  // redder when cooler
+    for (let i = outgoing.length - 1; i >= 0; i--) {
+      const p = outgoing[i];
+      p.x += p.vx * dtSec;
+      p.y += p.vy * dtSec;
+      p.life -= dtSec * 0.2;
+      if (p.life <= 0 || p.x < -20 || p.x > w + 20 || p.y < -20 || p.y > h + 20) {
+        outgoing.splice(i, 1); continue;
+      }
+      ctx.fillStyle = `rgba(${orr}, ${ogg}, ${obb}, ${Math.min(1, p.life).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Energy balance bar at the top
+    const barX = w * 0.32, barY = 22, barW = w * 0.36, barH = 16;
+    ctx.fillStyle = '#11141f';
+    ctx.fillRect(barX, barY, barW, barH);
+    ctx.strokeStyle = '#2a2f43';
+    ctx.strokeRect(barX, barY, barW, barH);
+    const maxPower = Math.max(P, Pout) * 1.2 + 1;
+    const pinW  = (P / maxPower) * barW;
+    const poutW = (Pout / maxPower) * barW;
+    ctx.fillStyle = 'rgba(255, 216, 74, 0.85)';
+    ctx.fillRect(barX, barY, pinW, barH / 2);
+    ctx.fillStyle = 'rgba(255, 123, 58, 0.85)';
+    ctx.fillRect(barX, barY + barH / 2, poutW, barH / 2);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('P_in (Sun → rock)', barX, barY - 4);
+    ctx.textAlign = 'right';
+    ctx.fillText('P_out (rock → space)', barX + barW, barY + barH + 12);
+
+    // Approaching/departing equilibrium indicator
+    ctx.fillStyle = Math.abs(P - Pout) / P < 0.01 ? COL_GOOD : COL_WARN;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    const txt = Math.abs(P - Pout) / P < 0.01
+       ? 'P_in ≈ P_out   (equilibrium reached)'
+       : (P > Pout ? 'P_in > P_out   →  rock warming' : 'P_in < P_out   →  rock cooling');
+    ctx.fillText(txt, w / 2, h - 14);
+  }
+
+  sP.addEventListener('input', () => {});
+  sE.addEventListener('input', () => {});
+  sA.addEventListener('input', () => {});
+
+  function tick(now) {
+    if (lastTime === null) lastTime = now;
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    redraw(dt);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ============================================================
+// Boot all four blocks
+// ============================================================
+function start() {
+  buildStefanBoltzmann();
+  buildPlot();
+  buildRock();
+  buildEarth();
+}
+window.addEventListener('load', start);
+window.addEventListener('resize', () => { location.reload(); });
+</script>
+</body>
+</html>
