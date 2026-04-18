@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Simultaneity &mdash; The Spaceship Duel</title>
+<link rel="icon" type="image/png" href="president_giuse.PNG">
+<meta property="og:title" content="Simultaneity — The Spaceship Duel">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.PNG">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/simultaneity.html">
+<meta property="og:type" content="website">
 <script>
 MathJax = {
   tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
@@ -95,7 +100,8 @@ MathJax = {
     margin: 12px 0 6px;
   }
   canvas.tall { height: 320px; }
-  canvas.contract { height: 300px; }
+  canvas#cv-eve { height: 460px; }
+  canvas.contract { height: 450px; }
   .speed {
     display: flex;
     gap: 6px;
@@ -692,7 +698,9 @@ function buildShip() {
     // --- Draw ---
     const ctx = env.ctx;
     ctx.clearRect(0, 0, w, h);
-    drawStars(ctx, env.stars, tReal);
+    // Stars drift rightward — even in the ship's own rest frame, the external
+    // universe whips past in the opposite direction of the ship's motion.
+    drawStars(ctx, env.stars, tReal, tReal * 40, w);
 
     // Frame header
     ctx.fillStyle = COL_TXT;
@@ -803,7 +811,7 @@ function buildEve() {
   const xCenter_px = (0 - xViewMin) * pxPerM;
   const xAlice_px  = (-halfL - xViewMin) * pxPerM;
   const xBob_px    = (+halfL - xViewMin) * pxPerM;
-  const yShip      = h * 0.54;
+  const yShip      = h * 0.42;  // ship sits higher so Eve's globe below has breathing room
 
   // In this "camera attached to ship" view (not a Lorentz boost — just a translating spatial window):
   //   emission point at x_cam = v · t_sim              (drifts right)
@@ -814,24 +822,32 @@ function buildEve() {
   // Alice fixed at -halfL, Bob fixed at +halfL.
 
   // --- Time warping: real seconds → sim μs ---
-  // Real-time schedule (at 1×) in seconds:
-  //   0    .. 0.4   hold       (sim = 0)                   pre-flash
-  //   0.4  .. 1.6   normal     (sim = 0 → 0.15)            Bob hit at sim ≈ 0.05 + shoots
-  //   1.6  .. 2.8   fast-fwd   (sim = 0.15 → 19.85)        wavefront & Bob's laser creep
-  //   2.8  .. 4.0   normal     (sim = 19.85 → 20.25)       Alice hit + shoots + Bob vaporized
-  //   4.0  .. 5.2   fast-fwd   (sim = 20.25 → 39.85)       Bob's laser still creeping
-  //   5.2  .. 6.4   normal     (sim = 39.85 → 40.15)       Alice vaporized
-  //   6.4  .. 7.8   hold       (sim = 40.15)               post-events
+  // Real-time schedule (at 1×) in seconds. Each slow-mo segment is timed so
+  // it ends EXACTLY at its climactic event — this way we can jump straight
+  // from slow-mo into a visible creep with no dead zone of "nothing moving".
+  // Segments use piecewise-linear interpolation: rate is constant within a
+  // segment, so every phase has one clean visual speed (no acceleration
+  // artifacts). Rate discontinuities at event boundaries are intentional —
+  // focus shifts from a fast-moving wavefront to a slow-creeping laser right
+  // at that instant, so the "jump" matches the change in what's interesting.
+  //   0.0 .. 0.4   hold        (sim = 0)                  pre-flash setup
+  //   0.4 .. 0.9   slow-mo     (sim = 0 → 0.05)           right-wavefront races to Bob (rate 0.1)
+  //   0.9 .. 2.9   creep       (sim = 0.05 → 19.95)       Bob's laser + left wavefront toward Alice (rate 9.95)
+  //   2.9 .. 3.3   slow-mo     (sim = 19.95 → 20.08)      Alice hit + her laser zips to Bob (rate 0.325)
+  //   3.3 .. 5.3   creep       (sim = 20.08 → 39.92)      Bob's laser continues chasing Alice (rate 9.92)
+  //   5.3 .. 5.8   slow-mo     (sim = 39.92 → 40.15)      Alice vaporized (rate 0.46)
+  //   5.8 .. 7.2   hold        (sim = 40.15)              post-events
   const SEGMENTS = [
     { r0: 0.0, r1: 0.4, s0: 0,     s1: 0,     fast: false },
-    { r0: 0.4, r1: 1.6, s0: 0,     s1: 0.15,  fast: false },
-    { r0: 1.6, r1: 2.8, s0: 0.15,  s1: 19.85, fast: true  },
-    { r0: 2.8, r1: 4.0, s0: 19.85, s1: 20.25, fast: false },
-    { r0: 4.0, r1: 5.2, s0: 20.25, s1: 39.85, fast: true  },
-    { r0: 5.2, r1: 6.4, s0: 39.85, s1: 40.15, fast: false },
-    { r0: 6.4, r1: 7.8, s0: 40.15, s1: 40.15, fast: false }
+    { r0: 0.4, r1: 0.9, s0: 0,     s1: 0.05,  fast: false },
+    { r0: 0.9, r1: 2.9, s0: 0.05,  s1: 19.95, fast: true  },
+    { r0: 2.9, r1: 3.3, s0: 19.95, s1: 20.08, fast: false },
+    { r0: 3.3, r1: 5.3, s0: 20.08, s1: 39.92, fast: true  },
+    { r0: 5.3, r1: 5.8, s0: 39.92, s1: 40.15, fast: false },
+    { r0: 5.8, r1: 7.2, s0: 40.15, s1: 40.15, fast: false }
   ];
-  const tCycle = 7.8;
+  const tCycle = 7.2;
+
   function realToSim(tr) {
     for (const s of SEGMENTS) {
       if (tr >= s.r0 && tr <= s.r1) {
@@ -839,7 +855,7 @@ function buildEve() {
         return { tSim: s.s0 + f * (s.s1 - s.s0), fast: s.fast };
       }
     }
-    return { tSim: 40.15, fast: false };
+    return { tSim: SEGMENTS[SEGMENTS.length - 1].s1, fast: false };
   }
 
   let speed = 1, tReal = 0, lastReal = null;
@@ -1102,9 +1118,10 @@ function buildContract() {
   const xConLC = (w - contractedWidth) / 2;
   const xConRC = xConLC + contractedWidth;
 
-  // Fixed y-coordinates tuned for h ≈ 300
-  const yRest = 85;    // rest-frame ship centerline
-  const yCon  = 215;   // contracted-frame ship centerline
+  // Fixed y-coordinates tuned for h ≈ 450 (taller so the two ships and their
+  // labels don't crowd each other)
+  const yRest = 110;   // rest-frame ship centerline
+  const yCon  = 340;   // contracted-frame ship centerline — pushed further down
   const HH    = 30;    // half-height of each ship hull here
 
   let tReal = 0, lastReal = null;
@@ -1114,7 +1131,9 @@ function buildContract() {
     lastReal = realT;
 
     ctx.clearRect(0, 0, w, h);
-    drawStars(ctx, env.stars, tReal);
+    // Stars drift rightward — in Eve's frame the ship moves leftward at 0.995c,
+    // so from any ship-frame vantage the starfield streams the other way.
+    drawStars(ctx, env.stars, tReal, tReal * 40, w);
 
     // ----- Section labels -----
     ctx.fillStyle = COL_TXT;
@@ -1126,18 +1145,8 @@ function buildContract() {
 
     // ----- Rest-frame ship (full 600 m) -----
     drawShipHull(ctx, xRestL, xRestR, yRest, -1, HH);
-    // name tags at the ends
-    ctx.fillStyle = COL_A;
-    ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('Alice', xRestL + 16, yRest - 2);
-    ctx.fillStyle = COL_B;
-    ctx.fillText('Bob', xRestR - 16, yRest - 2);
-    // colored dots
-    ctx.fillStyle = COL_A;
-    ctx.beginPath(); ctx.arc(xRestL + 16, yRest + 8, 3, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = COL_B;
-    ctx.beginPath(); ctx.arc(xRestR - 16, yRest + 8, 3, 0, Math.PI*2); ctx.fill();
+    drawPerson(ctx, xRestL + 22, yRest, COL_A, 'Alice', +1, false);
+    drawPerson(ctx, xRestR - 22, yRest, COL_B, 'Bob',   -1, false);
 
     // ruler underneath
     ctx.strokeStyle = COL_MUTE;
@@ -1154,25 +1163,26 @@ function buildContract() {
 
     // ----- Eve-frame contracted ship -----
     drawShipHull(ctx, xConLC, xConRC, yCon, -1, HH);
-    // small colored dots at the ends
-    ctx.fillStyle = COL_A;
-    ctx.beginPath(); ctx.arc(xConLC + 4, yCon, 3, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = COL_B;
-    ctx.beginPath(); ctx.arc(xConRC - 4, yCon, 3, 0, Math.PI * 2); ctx.fill();
+    // Stick figures on the contracted ship. They are placed at the hull ends
+    // (overlapping slightly) because at γ ≈ 10 the two crewmates really are
+    // crammed 10× closer in Eve's frame — that crowding IS the physics.
+    drawPerson(ctx, xConLC + 8, yCon, COL_A, 'Alice', +1, false);
+    drawPerson(ctx, xConRC - 8, yCon, COL_B, 'Bob',   -1, false);
 
-    // velocity arrow above contracted ship
+    // velocity arrow above contracted ship — placed high enough that its label
+    // no longer collides with the rest-frame ship's "600 m" ruler label
     ctx.strokeStyle = COL_EVE;
     ctx.fillStyle = COL_EVE;
     ctx.lineWidth = 1.5;
-    const aY = yCon - HH - 34;
+    const aY = yCon - HH - 56;
     ctx.beginPath();
-    ctx.moveTo(xConRC + 38, aY);
-    ctx.lineTo(xConLC - 38, aY);
+    ctx.moveTo(xConRC + 44, aY);
+    ctx.lineTo(xConLC - 44, aY);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(xConLC - 38, aY);
-    ctx.lineTo(xConLC - 30, aY - 4);
-    ctx.lineTo(xConLC - 30, aY + 4);
+    ctx.moveTo(xConLC - 44, aY);
+    ctx.lineTo(xConLC - 36, aY - 4);
+    ctx.lineTo(xConLC - 36, aY + 4);
     ctx.closePath();
     ctx.fill();
     ctx.font = '11px ui-monospace, Menlo, monospace';

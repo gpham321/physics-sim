@@ -6,7 +6,7 @@ Interactive browser demos for modern physics topics — built as static HTML + v
 
 Once Pages is enabled, the site will be available at:
 
-    https://gpham321.github.io/physics-sims/
+    https://gpham321.github.io/physics-sim/
 
 ## What's inside
 
@@ -16,8 +16,9 @@ Once Pages is enabled, the site will be available at:
 | `photoelectric.html` | Photoelectric effect — light frequency, intensity, cathode material, stopping voltage, I–V curve, and the KE vs. f threshold plot |
 | `relativity_momentum.html` | Relativistic momentum and center of mass — two spaceships and a photon |
 | `simultaneity.html` | Relativity of simultaneity — the spaceship duel |
-| `physics_23_7A_10B_study_guide.html` | Full study guide covering Giancoli chapters 21–25 (lectures 7A–10B) |
-| `president_giuse.PNG` | Portrait shown in the top-right corner of every page |
+| `thermal_radiation.html` | Stefan–Boltzmann, Wien, Planck — why hot things glow, and the ultraviolet catastrophe |
+| `physics_23_study_guide.html` | Full Physics 23 study guide covering Giancoli chapters 16–25 (lectures 1A–10B) |
+| `president_giuse.PNG` | Portrait shown in the top-right corner of every page (and favicon / link preview) |
 
 ## Enabling GitHub Pages
 

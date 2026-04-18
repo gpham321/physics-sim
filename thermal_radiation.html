@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Thermal Radiation &mdash; Why Hot Things Glow</title>
+<link rel="icon" type="image/png" href="president_giuse.PNG">
+<meta property="og:title" content="Thermal Radiation — Why Hot Things Glow">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.PNG">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/thermal_radiation.html">
+<meta property="og:type" content="website">
 <script>
 MathJax = {
   tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
@@ -713,7 +718,8 @@ function buildStefanBoltzmann() {
     drawStars(ctx, stars, tReal);
 
     const cx = w * 0.38, cy = h * 0.5;
-    const rSphere = 58;
+    // Sphere radius tracks A: A ∝ r² for a sphere, so r ∝ √A.
+    const rSphere = 15 + 25 * Math.sqrt(A);
     const [rr, gg, bb] = blackbodyRGB(T);
 
     // outer glow scales with log of power (so low T still shows something)

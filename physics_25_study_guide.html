@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics 25 Study Guide: Lectures 1–7 (Through Midterm #1)</title>
+<link rel="icon" type="image/png" href="president_giuse.PNG">
+<meta property="og:title" content="Physics 25 Study Guide — Modern Physics (Lectures 1–7)">
+<meta property="og:image" content="president_giuse.PNG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --border: #2a2f43;
+    --muted: #9aa2b6;
+    --primary: #66d9ef;
+    --accent: #66d9ef;
+    --accent2: #ffd166;
+    --eq-bg: rgba(102, 217, 239, 0.08);
+    --eq-border: #66d9ef;
+    --warn-bg: rgba(255, 209, 102, 0.09);
+    --warn-border: #ffd166;
+    --def-bg: rgba(166, 226, 46, 0.08);
+    --def-border: #a6e22e;
+    --sim-bg: rgba(192, 132, 247, 0.09);
+    --sim-border: #c084f7;
+    --section-bg: #1d2130;
+    --text: #e6e8ef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    min-height: 100vh;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 20;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  header {
+    background: linear-gradient(135deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    background: linear-gradient(180deg, #ffffff 0%, #9fd4e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header p { font-size: 1rem; color: var(--muted); }
+  header .subtitle { font-size: 0.92rem; margin-top: 0.5rem; color: var(--muted); }
+
+  /* TOC */
+  #toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 1.5rem auto;
+    max-width: 900px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  #toc-header {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.85rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.02rem;
+    user-select: none;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc-header:hover { background: #252a3d; }
+  #toc-content { padding: 1rem 1.5rem; display: block; }
+  #toc-content.hidden { display: none; }
+  #toc-content ul { list-style: none; columns: 2; gap: 1.5rem; }
+  #toc-content li { margin-bottom: 0.3rem; }
+  #toc-content a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.93rem;
+  }
+  #toc-content a:hover { text-decoration: underline; color: #9fe7f5; }
+  .toc-lec {
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: 0.3px;
+  }
+
+  /* Main layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  /* Lecture cards */
+  .lecture {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+  .lecture-header {
+    background: linear-gradient(90deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 1.3rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .lecture-header h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.55rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .lecture-header .meta { font-size: 0.88rem; color: var(--muted); margin-top: 0.25rem; }
+  .lecture-body { padding: 1.5rem; }
+
+  /* Subsections */
+  .subsection { margin-bottom: 1.8rem; }
+  .subsection h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.85rem;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+  }
+  .subsection h4 {
+    font-size: 1.02rem;
+    color: var(--accent);
+    margin: 0.9rem 0 0.35rem;
+    font-weight: 600;
+  }
+
+  /* Equation boxes */
+  .eq {
+    background: var(--eq-bg);
+    border-left: 4px solid var(--eq-border);
+    border-radius: 6px;
+    padding: 0.9rem 1.3rem;
+    margin: 0.85rem 0;
+    font-family: "STIX Two Text", "Cambria Math", Cambria, "Latin Modern Math", Georgia, serif;
+    font-size: 1.18rem;
+    color: var(--text);
+    overflow-x: auto;
+    letter-spacing: 0.3px;
+  }
+  .eq strong {
+    font-style: italic;
+    font-weight: 500;
+    color: #9fe7f5;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+  }
+  .eq em { font-style: italic; color: var(--accent2); }
+  .eq-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+  }
+
+  /* Warning / Important boxes */
+  .warn {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .warn strong { color: var(--warn-border); }
+
+  /* Definition boxes */
+  .def {
+    background: var(--def-bg);
+    border-left: 4px solid var(--def-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .def strong { color: var(--def-border); }
+
+  /* Simulation callout */
+  .sim {
+    background: var(--sim-bg);
+    border-left: 4px solid var(--sim-border);
+    border-radius: 6px;
+    padding: 0.8rem 1.1rem;
+    margin: 0.9rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .sim .sim-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(192, 132, 247, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sim-border);
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 18px;
+  }
+  .sim strong { color: var(--sim-border); }
+  .sim a { color: #d4b1fb; font-weight: 600; }
+
+  /* Key term */
+  .kt { font-weight: 700; color: var(--accent2); }
+
+  /* SVG diagrams */
+  .diagram {
+    background: #f2f5fb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.9rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram figcaption {
+    font-size: 0.85rem;
+    color: #4a5670;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* Two-column layout for equations */
+  .eq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin: 0.6rem 0;
+  }
+  @media (max-width: 640px) { .eq-grid { grid-template-columns: 1fr; } }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.9rem 0;
+    font-size: 0.93rem;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Summary lists */
+  ul.summary { padding-left: 1.3rem; }
+  ul.summary li { margin-bottom: 0.3rem; }
+
+  sup, sub { font-size: 0.72em; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  p { margin: 0.55rem 0; }
+  a { color: var(--accent); }
+
+  /* Footer */
+  .sg-footer {
+    margin: 4rem auto 1rem;
+    max-width: 960px;
+    padding: 1.5rem 1rem 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html"><img src="president_giuse.PNG" alt="President Giuse" class="portrait"></a>
+
+<header>
+  <h1>Physics 25 Study Guide</h1>
+  <p>OpenStax College Physics 2e — Modern Physics (Spring 2026, Prof. Irwin)</p>
+  <p class="subtitle">Lectures 1–7 &nbsp;|&nbsp; Special Relativity · Thermal Radiation · Blackbody · Photoelectric Effect · Wave–Particle Duality</p>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+<div class="container">
+<div id="toc">
+  <div id="toc-header" onclick="toggleTOC()">
+    📋 Table of Contents — Click to expand/collapse
+    <span id="toc-arrow">▼</span>
+  </div>
+  <div id="toc-content">
+    <ul>
+      <li><span class="toc-lec">Lecture 1 (M 3/30)</span></li>
+      <li><a href="#lec1-intro">Why Modern Physics?</a></li>
+      <li><a href="#lec1-28-1">28.1 Einstein's Postulates</a></li>
+      <li><a href="#lec1-28-2">28.2 Simultaneity &amp; Time Dilation</a></li>
+
+      <li><span class="toc-lec">Lecture 2 (W 4/1)</span></li>
+      <li><a href="#lec2-28-3">28.3 Length Contraction</a></li>
+      <li><a href="#lec2-28-4">28.4 Velocity Addition &amp; Doppler</a></li>
+
+      <li><span class="toc-lec">Lecture 3 (M 4/6)</span></li>
+      <li><a href="#lec3-28-5">28.5 Relativistic Momentum</a></li>
+      <li><a href="#lec3-28-6">28.6 Relativistic Energy</a></li>
+
+      <li><span class="toc-lec">Lecture 4 (W 4/8)</span></li>
+      <li><a href="#lec4-13-1">13.1 Temperature</a></li>
+      <li><a href="#lec4-14-7">14.7 Radiation &amp; Stefan–Boltzmann</a></li>
+      <li><a href="#lec4-catastrophe">The UV Catastrophe</a></li>
+
+      <li><span class="toc-lec">Lecture 5 (M 4/13)</span></li>
+      <li><a href="#lec5-29-1">29.1 Planck &amp; Quantization</a></li>
+      <li><a href="#lec5-29-2">29.2 Photoelectric Effect</a></li>
+      <li><a href="#lec5-29-3">29.3 Photons &amp; the EM Spectrum</a></li>
+
+      <li><span class="toc-lec">Lecture 6 (W 4/15)</span></li>
+      <li><a href="#lec6-27-3">27.3 Young's Double Slit</a></li>
+      <li><a href="#lec6-29-4">29.4 Photon Momentum</a></li>
+      <li><a href="#lec6-29-5">29.5 Particle–Wave Duality</a></li>
+
+      <li><span class="toc-lec">Lecture 7 (M 4/20)</span></li>
+      <li><a href="#lec7-29-6">29.6 de Broglie &amp; Matter Waves</a></li>
+      <li><a href="#lec7-29-7">29.7 Heisenberg Uncertainty</a></li>
+      <li><a href="#lec7-29-8">29.8 Duality Reviewed</a></li>
+
+      <li><span class="toc-lec">Midterm #1 (T 4/21)</span></li>
+      <li><a href="#midterm1">Midterm #1 Review</a></li>
+
+      <li><span class="toc-lec">Reference</span></li>
+      <li><a href="#formulas">All Key Equations</a></li>
+      <li><a href="#simulations">Simulations &amp; PhETs</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 1 ===================== -->
+<div class="lecture" id="lec1">
+  <div class="lecture-header">
+    <h2>Lecture 1 — Special Relativity: Postulates, Simultaneity, Time Dilation</h2>
+    <div class="meta">Date: March 30, 2026 &nbsp;|&nbsp; OpenStax §28.0–28.2</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec1-intro">
+      <h3>Why Modern Physics?</h3>
+      <p>By 1900, "classical" physics (Newton + Maxwell + thermodynamics) was wildly successful — and broken in two places that turned out to change everything:</p>
+      <ul class="summary">
+        <li><strong>Things that move very fast</strong> (approaching the speed of light) → <em>Special Relativity</em></li>
+        <li><strong>Things that are very small</strong> (atoms, photons, electrons) → <em>Quantum Mechanics</em></li>
+      </ul>
+      <p>Both eras produced modern technology: GPS requires relativity; computers, lasers, LEDs, solar cells, and MRI machines all require quantum mechanics. This course surveys both, plus their offspring: atomic physics, solid-state physics, and nuclear physics.</p>
+
+      <div class="def">
+        <strong>Correspondence principle:</strong> any successful new theory must <em>reduce</em> to the older theory in the regime where the older theory works. Relativity → Newton when v ≪ c; Quantum → Classical when actions are ≫ ℏ.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec1-28-1">
+      <h3>§28.1 — Einstein's Postulates of Special Relativity</h3>
+      <p>An <span class="kt">inertial reference frame</span> is one in which Newton's 1<sup>st</sup> law holds — a frame moving at constant velocity with no rotation. Accelerating or rotating frames are non-inertial.</p>
+
+      <div class="def">
+        <strong>Postulate 1 (Principle of Relativity):</strong> The laws of physics have the same form in every inertial frame. There is no preferred frame and no way to tell if you are "really" moving.<br><br>
+        <strong>Postulate 2 (Invariance of c):</strong> The speed of light in vacuum is <em>c</em> = 2.998 × 10<sup>8</sup> m/s, independent of the motion of the source <em>or</em> the observer.
+      </div>
+
+      <p>Postulate 2 is the strange one. If a spaceship at 0.5c flashes a headlight, Newton would say the beam moves at 1.5c relative to the ground — but every measurement ever performed says it moves at exactly <em>c</em>. The <span class="kt">Michelson–Morley experiment</span> (1887) ruled out a luminiferous ether, confirming there is no medium against which to measure absolute motion of light.</p>
+
+      <div class="warn">
+        <strong>Consequence:</strong> if everyone measures the same light speed, then observers in different frames must disagree about <em>time</em> and <em>length</em>. Relativity reorganizes space and time to save <em>c</em>.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec1-28-2">
+      <h3>§28.2 — Simultaneity &amp; Time Dilation</h3>
+
+      <h4>Simultaneity is Frame-Dependent</h4>
+      <p>Imagine a railcar moving at speed v. Two lamps at the front and back flash. A <strong>ground observer</strong> (Bob), equidistant from both lamps, sees the flashes arrive at the same moment — so for him they were <em>simultaneous</em>.</p>
+      <p>A <strong>rider on the car</strong> (Alice), seated at the middle, is moving toward the front lamp and away from the back lamp. She sees the front flash arrive <em>first</em>. In her frame, the front lamp flashed before the back one.</p>
+
+      <div class="def">
+        <strong>Two events that are simultaneous in one inertial frame are not simultaneous in another that moves relative to it.</strong> There is no universal "now."
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="220" viewBox="0 0 420 220">
+          <!-- Frame S: ground -->
+          <text x="10" y="20" font-size="12" fill="#333" font-family="serif" font-style="italic">Ground frame (Bob)</text>
+          <rect x="40" y="30" width="340" height="60" fill="#fff" stroke="#555" stroke-width="1.2"/>
+          <line x1="40" y1="90" x2="380" y2="90" stroke="#555" stroke-width="1"/>
+          <!-- lamps -->
+          <circle cx="80" cy="60" r="8" fill="#ffd166" stroke="#b89500"/>
+          <circle cx="340" cy="60" r="8" fill="#ffd166" stroke="#b89500"/>
+          <!-- rider -->
+          <circle cx="210" cy="60" r="7" fill="#66d9ef" stroke="#2e8b99"/>
+          <text x="210" y="50" font-size="10" fill="#2e8b99" text-anchor="middle">A</text>
+          <!-- wavefronts -->
+          <path d="M80,60 L150,60" stroke="#d33" stroke-width="1.8" marker-end="url(#ar1)"/>
+          <path d="M340,60 L270,60" stroke="#d33" stroke-width="1.8" marker-end="url(#ar1)"/>
+          <!-- Bob -->
+          <circle cx="210" cy="110" r="7" fill="#a6e22e" stroke="#5c7f0a"/>
+          <text x="210" y="126" font-size="10" fill="#333" text-anchor="middle">Bob (rest)</text>
+          <!-- velocity arrow -->
+          <line x1="390" y1="45" x2="410" y2="45" stroke="#2e6da4" stroke-width="2" marker-end="url(#ar2)"/>
+          <text x="385" y="36" font-size="10" fill="#2e6da4" text-anchor="start">v</text>
+          <!-- annotation -->
+          <text x="210" y="160" font-size="11" fill="#333" font-style="italic" text-anchor="middle">Ground: both flashes simultaneous</text>
+          <text x="210" y="180" font-size="11" fill="#333" font-style="italic" text-anchor="middle">Rider Alice (A): right-hand flash arrives first</text>
+          <text x="210" y="200" font-size="11" fill="#333" font-style="italic" text-anchor="middle">→ simultaneity depends on the observer</text>
+          <defs>
+            <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#d33"/></marker>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2e6da4"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Railcar simultaneity: two flashes synced on the ground are not synced on the moving car.</figcaption>
+      </div>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>Interactive sim:</strong> <a href="simultaneity.html">Simultaneity — The Spaceship Duel</a>.
+          Alice and Bob duel inside a ship at 0.995 c; both get hit at once in the ship frame but Eve on Earth disagrees. Watch the same events in two frames.
+        </div>
+      </div>
+
+      <h4>The Light Clock and Time Dilation</h4>
+      <p>Build a clock by bouncing a photon vertically between two mirrors separated by distance <em>D</em>. One tick = round-trip time.</p>
+      <ul class="summary">
+        <li>In the <strong>rest frame of the clock</strong>, the photon travels straight up and back: Δt<sub>0</sub> = 2D/c.</li>
+        <li>In the <strong>ground frame</strong>, the same clock moves sideways at speed v. The photon traces a longer, diagonal path — but it still travels at c. So the ground clock reads a larger time Δt > Δt<sub>0</sub>.</li>
+      </ul>
+
+      <div class="diagram">
+        <svg width="460" height="200" viewBox="0 0 460 200">
+          <!-- rest-frame clock -->
+          <text x="70" y="18" font-size="11" font-style="italic" fill="#333" text-anchor="middle">Rest frame (Δt₀)</text>
+          <line x1="30" y1="30"  x2="110" y2="30"  stroke="#444" stroke-width="2"/>
+          <line x1="30" y1="170" x2="110" y2="170" stroke="#444" stroke-width="2"/>
+          <text x="10" y="104" font-size="10" fill="#555">D</text>
+          <line x1="70" y1="30"  x2="70" y2="170" stroke="#ffc83d" stroke-width="2" stroke-dasharray="4 3"/>
+          <polyline points="66,170 70,160 74,170" fill="none" stroke="#ffc83d" stroke-width="2"/>
+          <circle cx="70" cy="100" r="3" fill="#ffc83d"/>
+          <!-- ground-frame clock (tilted path) -->
+          <text x="320" y="18" font-size="11" font-style="italic" fill="#333" text-anchor="middle">Ground frame (Δt)</text>
+          <!-- mirror positions at t=0 (left) and t=Δt/2 (mid) and t=Δt (right) -->
+          <line x1="200" y1="30"  x2="260" y2="30"  stroke="#888" stroke-width="2"/>
+          <line x1="200" y1="170" x2="260" y2="170" stroke="#888" stroke-width="2"/>
+          <line x1="290" y1="30"  x2="350" y2="30"  stroke="#888" stroke-width="2"/>
+          <line x1="290" y1="170" x2="350" y2="170" stroke="#888" stroke-width="2"/>
+          <line x1="380" y1="30"  x2="440" y2="30"  stroke="#444" stroke-width="2"/>
+          <line x1="380" y1="170" x2="440" y2="170" stroke="#444" stroke-width="2"/>
+          <!-- diagonal light path: bottom-left → top-mid → bottom-right -->
+          <line x1="230" y1="170" x2="320" y2="30"  stroke="#ffc83d" stroke-width="2"/>
+          <line x1="320" y1="30"  x2="410" y2="170" stroke="#ffc83d" stroke-width="2"/>
+          <circle cx="230" cy="170" r="3" fill="#ffc83d"/>
+          <circle cx="320" cy="30"  r="3" fill="#ffc83d"/>
+          <circle cx="410" cy="170" r="3" fill="#ffc83d"/>
+          <!-- velocity arrow -->
+          <line x1="230" y1="185" x2="410" y2="185" stroke="#2e6da4" stroke-width="1"/>
+          <line x1="400" y1="181" x2="410" y2="185" stroke="#2e6da4" stroke-width="2"/>
+          <line x1="400" y1="189" x2="410" y2="185" stroke="#2e6da4" stroke-width="2"/>
+          <text x="320" y="200" font-size="10" fill="#2e6da4" text-anchor="middle">ship moves v · Δt</text>
+          <text x="278" y="108" font-size="10" fill="#555" font-style="italic">s (diagonal)</text>
+        </svg>
+        <figcaption>Light-clock setup. Both observers see light move at c, but the ground observer sees a longer path, so Δt > Δt<sub>0</sub>.</figcaption>
+      </div>
+
+      <p>Pythagoras on the ground-frame triangle (height D, base vΔt/2, hypotenuse cΔt/2) gives:</p>
+      <div class="eq">
+        <span class="eq-label">Time Dilation (Eq. 28.2)</span>
+        Δt = Δt<sub>0</sub> / √(1 − v²/c²) = <em>γ</em> · Δt<sub>0</sub>
+      </div>
+      <div class="eq">
+        <span class="eq-label">The Lorentz Factor</span>
+        <em>γ</em> = 1 / √(1 − v²/c²) &nbsp;&nbsp; (always ≥ 1; → 1 when v ≪ c, → ∞ as v → c)
+      </div>
+
+      <div class="def">
+        <strong>Proper time Δt<sub>0</sub>:</strong> time between two events as measured by an observer for whom <em>both events occur at the same location</em> (the clock is at rest in that frame). Every other observer measures a <em>longer</em> time Δt = γΔt<sub>0</sub> — "moving clocks run slow."
+      </div>
+
+      <h4>Lorentz Factor Cheat Table</h4>
+      <table>
+        <tr><th>v/c</th><th>γ</th><th>Slowdown factor</th></tr>
+        <tr><td>0.10</td><td>1.005</td><td>0.5%</td></tr>
+        <tr><td>0.50</td><td>1.155</td><td>15.5%</td></tr>
+        <tr><td>0.80</td><td>1.667</td><td>67%</td></tr>
+        <tr><td>0.95</td><td>3.20</td><td>220%</td></tr>
+        <tr><td>0.99</td><td>7.09</td><td>609%</td></tr>
+        <tr><td>0.999</td><td>22.4</td><td>2140%</td></tr>
+      </table>
+
+      <h4>Experimental Verification: Cosmic-Ray Muons</h4>
+      <p>Muons have a proper half-life of ~1.52 μs. They are created ~10 km up in the atmosphere by cosmic rays and travel toward Earth at v ≈ 0.98c. Classically, they'd decay long before reaching the ground; relativistically, γ ≈ 5 so lab-frame lifetime is ~7.6 μs and they reach us in droves. (OpenStax Example 28.1 runs the same calculation.)</p>
+
+      <h4>The Twin Paradox</h4>
+      <p>If Alice rockets off at v = 0.9994c (γ = 30) for 2 years of <em>her</em> proper time, she returns to find 60 years have passed on Earth. Her twin Bob is now 60 years older than she is — this is real, not apparent.</p>
+      <div class="warn">
+        <strong>Why isn't it symmetric?</strong> Each twin sees the other's clock run slow <em>during steady cruise</em> — but Alice had to <em>accelerate</em> to turn around and come back. Acceleration breaks the symmetry; her frame is non-inertial during turnaround. Bob remains in a single inertial frame the whole time, so his proper time is the longest possible between the two meeting events.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 2 ===================== -->
+<div class="lecture" id="lec2">
+  <div class="lecture-header">
+    <h2>Lecture 2 — Length Contraction &amp; Velocity Addition</h2>
+    <div class="meta">Date: April 1, 2026 &nbsp;|&nbsp; OpenStax §28.3–28.4</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec2-28-3">
+      <h3>§28.3 — Length Contraction</h3>
+      <p>If moving clocks tick slow, then — by consistency — moving rulers must be shorter. Consider the muon again: in the muon's frame, it lives for Δt<sub>0</sub> ~ 1.52 μs and travels only a short distance L = vΔt<sub>0</sub>. In Earth's frame, it lives γΔt<sub>0</sub> and covers L<sub>0</sub> = vγΔt<sub>0</sub>. The two observers measure different distances.</p>
+
+      <div class="eq">
+        <span class="eq-label">Length Contraction (Eq. 28.3)</span>
+        L = L<sub>0</sub> / <em>γ</em> = L<sub>0</sub> · √(1 − v²/c²)
+      </div>
+
+      <div class="def">
+        <strong>Proper length L<sub>0</sub>:</strong> the length of an object measured in the frame where the object is <em>at rest</em> (i.e., the endpoints aren't moving). Every observer moving relative to it measures a <em>shorter</em> length L = L<sub>0</sub>/γ — but only <em>along the direction of motion</em>. Transverse dimensions are unchanged.
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="180" viewBox="0 0 420 180">
+          <text x="210" y="18" font-size="12" fill="#333" font-style="italic" text-anchor="middle">Earth &amp; astronaut see the trip differently</text>
+          <!-- Earth frame -->
+          <text x="40" y="40" font-size="11" fill="#333">Earth frame (L₀ = 4.3 ly)</text>
+          <line x1="40" y1="60" x2="380" y2="60" stroke="#444" stroke-width="2"/>
+          <circle cx="40" cy="60" r="8" fill="#2e8b57"/>
+          <text x="40" y="80" font-size="10" fill="#333" text-anchor="middle">Earth</text>
+          <circle cx="380" cy="60" r="8" fill="#ffd166"/>
+          <text x="380" y="80" font-size="10" fill="#333" text-anchor="middle">α-Cen</text>
+          <line x1="40" y1="68" x2="380" y2="68" stroke="#666" stroke-dasharray="4 3" stroke-width="0.8"/>
+          <text x="210" y="100" font-size="11" fill="#333" text-anchor="middle">L₀ = 4.3 light-years</text>
+
+          <!-- Astronaut frame -->
+          <text x="40" y="125" font-size="11" fill="#333">Astronaut frame (γ = 10, v ≈ 0.995c)</text>
+          <line x1="40" y1="145" x2="74" y2="145" stroke="#444" stroke-width="2"/>
+          <circle cx="40" cy="145" r="8" fill="#2e8b57"/>
+          <circle cx="74" cy="145" r="8" fill="#ffd166"/>
+          <text x="57" y="170" font-size="11" fill="#333" text-anchor="middle">L = L₀/γ ≈ 0.43 ly</text>
+        </svg>
+        <figcaption>Length contraction: only the dimension along motion shrinks. Earth and α-Centauri are closer together in the astronaut's frame.</figcaption>
+      </div>
+
+      <p>Length contraction and time dilation are <strong>two sides of the same coin</strong> — they always conspire so that <em>v = L/Δt</em> is the same in both frames.</p>
+
+      <div class="warn">
+        <strong>Ladder paradox:</strong> a 5-m ladder runs through a 4-m barn at high v. In the barn's frame the ladder is contracted and fits; in the ladder's frame the barn is contracted and doesn't fit. Resolution: simultaneity. The ladder's two ends <em>are never inside the barn at the same time</em> in the ladder's frame — so there's no contradiction.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec2-28-4">
+      <h3>§28.4 — Relativistic Velocity Addition &amp; Doppler Effect</h3>
+      <p>Classical velocity addition — if your train moves at v and you throw a ball forward at u′, the ground sees it at u = v + u′ — fails near light speed. If u′ = c, ground would see c + v > c, violating Postulate 2.</p>
+
+      <div class="eq">
+        <span class="eq-label">Relativistic Velocity Addition (1-D, Eq. 28.4)</span>
+        u = (v + u′) / (1 + v·u′/c²)
+      </div>
+
+      <p>Signs: pick an axis; v is the relative velocity between frames, u′ is object velocity in the primed frame, u is object velocity in the unprimed frame. Both u′ and v can be ±.</p>
+
+      <h4>Sanity Checks</h4>
+      <ul class="summary">
+        <li>Low v: denominator → 1, recovering u ≈ v + u′ (Galilean).</li>
+        <li>u′ = c: u = (v + c)/(1 + v/c) = c · (v + c)/(c + v) = c ✓</li>
+        <li>Combining two sub-c velocities always gives a sub-c result.</li>
+      </ul>
+
+      <h4>Worked Example (OpenStax 28.4)</h4>
+      <p>A ship approaches Earth at v = 0.500c and fires a canister forward at u′ = 0.750c.</p>
+      <div class="eq">
+        u = (0.500c + 0.750c) / (1 + 0.500 · 0.750) = 1.250c / 1.375 = <em>0.909c</em>
+      </div>
+      <p>Not 1.25c — even when both parts of the sum point the same way, relativity keeps the result below c.</p>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>PhET sim:</strong> <a href="https://phet.colorado.edu/en/simulations/simple-relativity" target="_blank">Simple Relativity</a> — drive a car at relativistic speed, watch time dilation and length contraction from each frame.
+        </div>
+      </div>
+
+      <h4>Relativistic Doppler Effect</h4>
+      <p>For light, the classical Doppler formula fails — there's no medium, and time itself is dilated. Let u be the relative speed between source and observer (u > 0 if moving apart).</p>
+      <div class="eq">
+        <span class="eq-label">Relativistic Doppler — Wavelength (Eq. 28.5)</span>
+        λ<sub>obs</sub> = λ<sub>s</sub> · √[(1 + u/c) / (1 − u/c)]
+      </div>
+      <div class="eq">
+        <span class="eq-label">Relativistic Doppler — Frequency</span>
+        f<sub>obs</sub> = f<sub>s</sub> · √[(1 − u/c) / (1 + u/c)]
+      </div>
+      <ul class="summary">
+        <li><strong>Recession (u > 0):</strong> λ<sub>obs</sub> > λ<sub>s</sub> — <span style="color:#d33;">red shift</span>.</li>
+        <li><strong>Approach (u < 0):</strong> λ<sub>obs</sub> < λ<sub>s</sub> — <span style="color:#36a;">blue shift</span>.</li>
+        <li>Galaxies recede from us with u ∝ distance (Hubble's Law) → cosmological red-shift → expanding universe.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 3 ===================== -->
+<div class="lecture" id="lec3">
+  <div class="lecture-header">
+    <h2>Lecture 3 — Relativistic Momentum &amp; Energy</h2>
+    <div class="meta">Date: April 6, 2026 &nbsp;|&nbsp; OpenStax §28.5–28.6</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec3-28-5">
+      <h3>§28.5 — Relativistic Momentum</h3>
+      <p>Classical p = mu is not conserved in all inertial frames at relativistic speeds. Momentum conservation is too important to lose, so the <em>definition</em> of momentum must be modified to preserve it under Lorentz transformations.</p>
+
+      <div class="eq">
+        <span class="eq-label">Relativistic Momentum (Eq. 28.6)</span>
+        <em>p</em> = <em>γ</em> m u = m u / √(1 − u²/c²)
+      </div>
+
+      <ul class="summary">
+        <li><strong>m</strong> is the <strong>invariant rest mass</strong> — the same for every observer. Modern convention: no "relativistic mass."</li>
+        <li><strong>u</strong> is the object's speed in the observer's frame.</li>
+        <li>At low u: p → mu (classical). At u → c: p → ∞.</li>
+      </ul>
+
+      <div class="warn">
+        <strong>Why no massive object reaches c:</strong> pushing a mass harder increases p, but as u → c the γ factor blows up — an ever-larger force produces an ever-smaller gain in u. Reaching c would take infinite momentum and infinite energy.
+      </div>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>Interactive sim:</strong> <a href="relativity_momentum.html">Relativistic Momentum &amp; Center of Mass</a>. Drag the slider from 0 to ~c and watch γmu diverge, while ½mu² would not.
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection" id="lec3-28-6">
+      <h3>§28.6 — Relativistic Energy &amp; E = mc²</h3>
+
+      <h4>Rest Energy</h4>
+      <p>Every object with rest mass m has an intrinsic energy just by existing:</p>
+      <div class="eq">
+        <span class="eq-label">Rest Energy (Eq. 28.7) — the most famous equation in physics</span>
+        <em>E<sub>0</sub></em> = m c²
+      </div>
+      <p>Mass and energy are interconvertible. A 1-gram mass has E<sub>0</sub> = (10⁻³)(3×10⁸)² = 9 × 10¹³ J ≈ 21 kilotons TNT — roughly twice the Hiroshima bomb.</p>
+
+      <h4>Total Energy &amp; Kinetic Energy</h4>
+      <div class="eq">
+        <span class="eq-label">Total Energy</span>
+        E = <em>γ</em> m c²
+      </div>
+      <div class="eq">
+        <span class="eq-label">Relativistic Kinetic Energy (Eq. 28.9)</span>
+        KE = E − E<sub>0</sub> = (<em>γ</em> − 1) m c²
+      </div>
+      <p>Low-v limit: γ ≈ 1 + ½u²/c², so KE → ½mu² (classical). High-v limit: KE → ∞ as u → c.</p>
+
+      <div class="diagram">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <!-- axes -->
+          <line x1="50" y1="170" x2="390" y2="170" stroke="#444" stroke-width="1.2"/>
+          <line x1="50" y1="20"  x2="50"  y2="170" stroke="#444" stroke-width="1.2"/>
+          <!-- c line -->
+          <line x1="340" y1="20" x2="340" y2="170" stroke="#d33" stroke-dasharray="4 3"/>
+          <text x="344" y="30" font-size="10" fill="#d33">u = c</text>
+          <!-- classical curve ½mu² (parabola) -->
+          <path d="M 50 170 Q 195 158 340 105" stroke="#2e6da4" stroke-width="2" fill="none" stroke-dasharray="3 3"/>
+          <text x="240" y="135" font-size="10" fill="#2e6da4">½ m u² (classical)</text>
+          <!-- relativistic (γ-1)mc² -->
+          <path d="M 50 170 Q 220 168 300 140 Q 330 95 340 25" stroke="#d33" stroke-width="2.2" fill="none"/>
+          <text x="200" y="85" font-size="10" fill="#d33">(γ − 1) m c² (relativistic)</text>
+          <!-- labels -->
+          <text x="220" y="188" font-size="11" fill="#333" text-anchor="middle">u</text>
+          <text x="20" y="90" font-size="11" fill="#333">KE</text>
+        </svg>
+        <figcaption>Classical ½mu² underestimates kinetic energy; relativistic KE diverges at u = c.</figcaption>
+      </div>
+
+      <h4>Energy–Momentum Relation (the one to memorize)</h4>
+      <div class="eq">
+        <span class="eq-label">The Mass Shell — Eq. 28.10</span>
+        E² = (p c)² + (m c²)²
+      </div>
+
+      <div class="def">
+        <strong>Two important limits:</strong>
+        <ul class="summary" style="margin-top:0.35rem;">
+          <li><strong>At rest</strong> (p = 0): E = mc² ✓</li>
+          <li><strong>Massless particles</strong> (m = 0, e.g., photons): E = pc, and they must travel at exactly c.</li>
+          <li><strong>Ultra-relativistic</strong> (pc ≫ mc²): E ≈ pc.</li>
+        </ul>
+      </div>
+
+      <h4>Units for the Relativistic World</h4>
+      <table>
+        <tr><th>Quantity</th><th>Convenient unit</th><th>Conversion</th></tr>
+        <tr><td>Energy</td><td>eV, keV, MeV, GeV</td><td>1 eV = 1.602 × 10⁻¹⁹ J</td></tr>
+        <tr><td>Mass</td><td>MeV/c², GeV/c²</td><td>m<sub>e</sub>c² = 0.511 MeV, m<sub>p</sub>c² = 938.3 MeV</td></tr>
+        <tr><td>Momentum</td><td>MeV/c, GeV/c</td><td>directly usable in E² = (pc)² + (mc²)²</td></tr>
+      </table>
+
+      <div class="warn">
+        <strong>Mass–energy conservation, not mass conservation:</strong> in nuclear fusion, fission, and particle collisions, rest mass is <em>not</em> conserved — energy/mass is. A deuteron is lighter than p + n; the difference is released as binding energy. This is the secret of the Sun.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 4 ===================== -->
+<div class="lecture" id="lec4">
+  <div class="lecture-header">
+    <h2>Lecture 4 — Thermal Radiation &amp; the UV Catastrophe</h2>
+    <div class="meta">Date: April 8, 2026 &nbsp;|&nbsp; OpenStax §13.1, §14.7</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec4-13-1">
+      <h3>§13.1 — Temperature &amp; the Kelvin Scale</h3>
+      <p>Temperature is operationally "what a thermometer measures," but microscopically it's a measure of the average translational kinetic energy per molecule. Three scales you must be fluent in:</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">°F ↔ °C</span>T(°F) = (9/5)T(°C) + 32</div>
+        <div class="eq"><span class="eq-label">°C ↔ °F</span>T(°C) = (5/9)[T(°F) − 32]</div>
+        <div class="eq"><span class="eq-label">K ↔ °C</span>T(K) = T(°C) + 273.15</div>
+        <div class="eq"><span class="eq-label">Absolute zero</span>0 K = −273.15 °C</div>
+      </div>
+
+      <p><strong>Always use Kelvin</strong> in thermal-radiation formulas — the T<sup>4</sup> dependence is extremely sensitive to the zero point.</p>
+
+      <div class="def">
+        <strong>Zeroth Law of Thermodynamics:</strong> if A is in thermal equilibrium with B, and B is in equilibrium with C, then A is in equilibrium with C. This is why a thermometer works.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec4-14-7">
+      <h3>§14.7 — Radiation &amp; the Stefan–Boltzmann Law</h3>
+      <p>Heat can transfer by <strong>conduction</strong> (contact), <strong>convection</strong> (fluid flow), or <strong>radiation</strong> (electromagnetic waves through vacuum). Radiation is how the Sun heats Earth and how a hot stove coil heats a pan from across an air gap.</p>
+
+      <div class="eq">
+        <span class="eq-label">Stefan–Boltzmann Law (Eq. 14.44)</span>
+        P = σ e A T<sup>4</sup>
+      </div>
+      <ul class="summary">
+        <li><strong>σ</strong> = <span class="kt">5.67 × 10⁻⁸ W/(m²·K⁴)</span> — the Stefan–Boltzmann constant.</li>
+        <li><strong>e</strong> = emissivity, dimensionless (0 ≤ e ≤ 1). Perfect blackbody: e = 1.</li>
+        <li><strong>A</strong> = radiating surface area.</li>
+        <li><strong>T</strong> = absolute temperature in Kelvin.</li>
+      </ul>
+
+      <div class="eq">
+        <span class="eq-label">Net Radiative Transfer (Eq. 14.45)</span>
+        P<sub>net</sub> = σ e A (T<sub>surroundings</sub><sup>4</sup> − T<sub>object</sub><sup>4</sup>)
+      </div>
+
+      <h4>Emissivity Table</h4>
+      <table>
+        <tr><th>Surface</th><th>Emissivity e</th><th>Notes</th></tr>
+        <tr><td>Ideal blackbody</td><td>1.00</td><td>Perfect absorber &amp; perfect emitter</td></tr>
+        <tr><td>Carbon black (soot)</td><td>~0.99</td><td>Highest natural emissivity</td></tr>
+        <tr><td>Human skin (IR)</td><td>~0.97</td><td>Independent of skin color</td></tr>
+        <tr><td>Tungsten filament</td><td>~0.5</td><td>Incandescent bulb</td></tr>
+        <tr><td>Polished silver</td><td>~0.02</td><td>Nearly perfect reflector</td></tr>
+      </table>
+
+      <div class="warn">
+        <strong>Kirchhoff's radiation rule:</strong> good absorbers are good emitters. A black t-shirt heats up faster in sunlight <em>and</em> cools faster at night. Silver polish keeps coffee hot by suppressing both absorption and emission.
+      </div>
+
+      <h4>Worked Example (OpenStax 14.9) — Heat Loss from a Person</h4>
+      <p>Skin at T = 306 K, room at T = 295 K, A = 1.40 m², e = 0.97.</p>
+      <div class="eq">
+        P<sub>net</sub> = (5.67×10⁻⁸)(0.97)(1.40)(295⁴ − 306⁴) ≈ −98 W
+      </div>
+      <p>About the size of basal metabolism (~125 W) — which is why you feel cold in a cool room even in still air.</p>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>Interactive sim:</strong> <a href="thermal_radiation.html">Thermal Radiation — Why Hot Things Glow</a>. Push the T slider and watch a rock glow red-hot to blue-white; inspect Stefan–Boltzmann, Wien, and the Planck/Rayleigh–Jeans comparison.
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection" id="lec4-catastrophe">
+      <h3>The Ultraviolet Catastrophe</h3>
+      <p>A <span class="kt">blackbody</span> is an idealized perfect absorber (e = 1). Real objects (hot stoves, lightbulb filaments, the Sun's photosphere, stars) radiate very close to blackbody curves. Experimentally observed features:</p>
+      <ul class="summary">
+        <li>Intensity depends only on T — not on composition.</li>
+        <li>Spectrum is continuous, peaked at a wavelength λ<sub>max</sub> that shifts with T.</li>
+        <li>Hotter → shorter λ<sub>max</sub> (red → orange → yellow → white → blue).</li>
+        <li>Total area under the curve ∝ T⁴ (Stefan–Boltzmann).</li>
+      </ul>
+
+      <div class="eq">
+        <span class="eq-label">Wien's Displacement Law</span>
+        λ<sub>max</sub> · T = 2.898 × 10⁻³ m·K
+      </div>
+      <p>Examples: room-temperature objects (T ≈ 300 K) peak in mid-IR (λ ≈ 10 μm); incandescent bulb filament (~3000 K) peaks in near-IR (~1 μm), so most energy is wasted as heat; Sun (~5800 K) peaks in green visible (~500 nm).</p>
+
+      <div class="diagram">
+        <svg width="420" height="220" viewBox="0 0 420 220">
+          <!-- axes -->
+          <line x1="50" y1="190" x2="390" y2="190" stroke="#444" stroke-width="1.2"/>
+          <line x1="50" y1="20"  x2="50"  y2="190" stroke="#444" stroke-width="1.2"/>
+          <text x="220" y="210" font-size="11" fill="#333" text-anchor="middle">wavelength λ</text>
+          <text x="18" y="110" font-size="11" fill="#333" transform="rotate(-90,18,110)">intensity</text>
+          <!-- visible band shading -->
+          <defs>
+            <linearGradient id="visb" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#6f3bff"/>
+              <stop offset="0.25" stop-color="#66d9ef"/>
+              <stop offset="0.5" stop-color="#6ce67c"/>
+              <stop offset="0.75" stop-color="#ffef6b"/>
+              <stop offset="1" stop-color="#ff3b2f"/>
+            </linearGradient>
+          </defs>
+          <rect x="130" y="20" width="40" height="170" fill="url(#visb)" opacity="0.2"/>
+          <text x="150" y="35" font-size="9" fill="#333" text-anchor="middle" font-style="italic">visible</text>
+          <!-- Rayleigh-Jeans diverging at short λ, stays above Planck curves everywhere -->
+          <path d="M 55 10 Q 100 15 150 30 Q 220 85 320 170 Q 360 187 390 189" stroke="#2e6da4" stroke-width="2" fill="none" stroke-dasharray="3 3"/>
+          <text x="85" y="62" font-size="10" fill="#2e6da4">Rayleigh–Jeans (diverges!)</text>
+          <!-- 3000 K Planck (peaks in IR, lower and further right) -->
+          <path d="M 55 190 Q 180 195 230 170 Q 260 130 300 170 Q 345 190 390 190" stroke="#d33" stroke-width="2" fill="none"/>
+          <text x="252" y="123" font-size="10" fill="#d33">Planck 3000 K</text>
+          <!-- 6000 K Planck (peaks in visible, sharply higher) -->
+          <path d="M 55 190 Q 95 185 130 140 Q 155 50 185 80 Q 225 115 270 150 Q 335 180 390 190" stroke="#e67e22" stroke-width="2" fill="none"/>
+          <text x="200" y="48" font-size="10" fill="#e67e22">Planck 6000 K (Sun)</text>
+          <!-- peak marks for 6000 K -->
+          <line x1="170" y1="75" x2="170" y2="190" stroke="#e67e22" stroke-dasharray="2 3" stroke-width="0.7"/>
+          <text x="173" y="88" font-size="9" fill="#e67e22">λ_max</text>
+        </svg>
+        <figcaption>Blackbody intensity vs wavelength. Classical theory (dashed) diverges at short λ — the UV catastrophe. Planck's quantum hypothesis (solid curves) matches experiment exactly.</figcaption>
+      </div>
+
+      <p>Classical physics (Rayleigh–Jeans) predicts each mode of the EM field gets average energy kT, and counting modes per wavelength interval gives</p>
+      <div class="eq">
+        <span class="eq-label">Rayleigh–Jeans (classical, wrong at short λ)</span>
+        I(λ,T) ∝ T / λ⁴
+      </div>
+      <p>This <em>diverges</em> as λ → 0 — total radiated energy would be infinite. Clearly wrong. Needed: a new idea. Enter <strong>Planck</strong> (Lecture 5).</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 5 ===================== -->
+<div class="lecture" id="lec5">
+  <div class="lecture-header">
+    <h2>Lecture 5 — Blackbody Radiation &amp; the Quantum of Energy</h2>
+    <div class="meta">Date: April 13, 2026 &nbsp;|&nbsp; OpenStax §29.1–29.3</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec5-29-1">
+      <h3>§29.1 — Planck's Quantum Hypothesis</h3>
+      <p>In 1900, Max Planck fit the observed blackbody curve with a desperate, ad-hoc assumption:</p>
+      <div class="def">
+        <strong>Planck's hypothesis:</strong> the oscillators in the walls of a blackbody can only possess energies that are integer multiples of a minimum quantum:
+      </div>
+      <div class="eq">
+        <span class="eq-label">Planck Energy Quantum (Eq. 29.1)</span>
+        E = n h f &nbsp;&nbsp; n = 0, 1, 2, 3, …
+      </div>
+      <div class="eq">
+        <span class="eq-label">Planck's Constant</span>
+        h = 6.626 × 10⁻³⁴ J·s = 4.136 × 10⁻¹⁵ eV·s
+      </div>
+
+      <p>At high frequencies (short λ), hf ≫ kT, so exciting even one quantum is unlikely — Boltzmann factor kills the divergence. At low f, hf ≪ kT and many quanta are excited, recovering Rayleigh–Jeans. Planck's full formula:</p>
+      <div class="eq">
+        <span class="eq-label">Planck Spectral Distribution</span>
+        I(λ,T) = (2πhc²/λ⁵) · 1 / [exp(hc/λkT) − 1]
+      </div>
+
+      <div class="warn">
+        <strong>Planck's reluctant revolution:</strong> Planck himself thought quantization was a mathematical trick, not reality. It took Einstein five more years to take the idea seriously and apply it to <em>light itself</em>.
+      </div>
+
+      <p>Atomic <span class="kt">line spectra</span> (the narrow bright wavelengths emitted by hot gases — neon, hydrogen, sodium lamps) were also unexplained by classical physics and pointed to quantization of <em>atomic</em> energy levels, not just oscillators in walls.</p>
+    </div>
+
+    <div class="subsection" id="lec5-29-2">
+      <h3>§29.2 — The Photoelectric Effect</h3>
+      <p>Shine light on a metal surface and electrons are ejected ("photoelectrons"). Measured facts that classical wave theory <em>cannot explain</em>:</p>
+      <ol style="padding-left:1.5rem">
+        <li><strong>Threshold frequency f<sub>0</sub>:</strong> below a material-specific f<sub>0</sub>, <em>no</em> electrons are ejected no matter how bright the light.</li>
+        <li><strong>No time delay:</strong> above f<sub>0</sub>, ejection is instantaneous even at extremely dim intensity.</li>
+        <li><strong>KE<sub>max</sub> depends on f, not intensity:</strong> brighter light ejects <em>more</em> electrons but not more energetic ones.</li>
+        <li><strong>KE<sub>max</sub> rises linearly with f</strong> above threshold.</li>
+      </ol>
+
+      <h4>Einstein's 1905 Resolution</h4>
+      <p>Einstein proposed that light itself is quantized — delivered in particle-like <span class="kt">photons</span> of energy E = hf. One photon ejects one electron; no photon, no electron, regardless of total light power.</p>
+
+      <div class="eq">
+        <span class="eq-label">Photon Energy</span>
+        E<sub>photon</sub> = h f = h c / λ
+      </div>
+      <div class="eq">
+        <span class="eq-label">Einstein Photoelectric Equation (Eq. 29.4)</span>
+        KE<sub>max</sub> = h f − BE &nbsp;&nbsp; (also written KE<sub>max</sub> = hf − φ)
+      </div>
+
+      <div class="def">
+        <strong>Binding energy / work function BE (= φ):</strong> minimum energy to release the least-bound electron from the metal's surface. Threshold frequency: hf<sub>0</sub> = BE.
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="210" viewBox="0 0 420 210">
+          <!-- axes -->
+          <line x1="60" y1="170" x2="390" y2="170" stroke="#444" stroke-width="1.2"/>
+          <line x1="60" y1="30"  x2="60"  y2="170" stroke="#444" stroke-width="1.2"/>
+          <!-- threshold -->
+          <line x1="140" y1="170" x2="140" y2="180" stroke="#333"/>
+          <text x="140" y="195" font-size="10" fill="#333" text-anchor="middle">f₀</text>
+          <!-- KE line: slope h -->
+          <line x1="140" y1="170" x2="360" y2="45" stroke="#d33" stroke-width="2.2"/>
+          <!-- zero-KE below threshold -->
+          <line x1="60" y1="170" x2="140" y2="170" stroke="#d33" stroke-width="2.2"/>
+          <!-- labels -->
+          <text x="220" y="203" font-size="11" fill="#333" text-anchor="middle">frequency f</text>
+          <text x="25" y="100" font-size="11" fill="#333" transform="rotate(-90,25,100)">KEₘₐₓ</text>
+          <text x="280" y="95" font-size="10" fill="#d33" font-style="italic">slope = h</text>
+          <!-- BE intercept -->
+          <line x1="50" y1="170" x2="60" y2="170" stroke="#2e6da4"/>
+          <text x="55" y="173" font-size="10" fill="#2e6da4" text-anchor="end">0</text>
+          <!-- y-intercept extrapolation showing -BE -->
+          <line x1="60" y1="170" x2="140" y2="170" stroke="#888" stroke-dasharray="3 3"/>
+          <line x1="60" y1="170" x2="60" y2="215" stroke="#888" stroke-dasharray="3 3"/>
+          <text x="80" y="160" font-size="10" fill="#2e6da4">y-intercept = −BE</text>
+        </svg>
+        <figcaption>KE<sub>max</sub> vs. frequency: zero below f<sub>0</sub>, linear above with slope h. Measuring the slope gives Planck's constant; the intercept gives the work function.</figcaption>
+      </div>
+
+      <h4>Work Function Table (typical values)</h4>
+      <table>
+        <tr><th>Metal</th><th>φ (eV)</th><th>Threshold λ<sub>0</sub></th><th>Color range</th></tr>
+        <tr><td>Cesium (Cs)</td><td>2.14</td><td>579 nm</td><td>Yellow and shorter</td></tr>
+        <tr><td>Sodium (Na)</td><td>2.28</td><td>544 nm</td><td>Green and shorter</td></tr>
+        <tr><td>Calcium (Ca)</td><td>2.71</td><td>459 nm</td><td>Blue and shorter</td></tr>
+        <tr><td>Aluminum (Al)</td><td>4.08</td><td>304 nm</td><td>UV only</td></tr>
+        <tr><td>Copper (Cu)</td><td>4.70</td><td>264 nm</td><td>UV only</td></tr>
+        <tr><td>Gold (Au)</td><td>5.10</td><td>243 nm</td><td>UV only</td></tr>
+      </table>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>Interactive sim:</strong> <a href="photoelectric.html">The Photoelectric Effect</a>. Pick cesium through gold, tune frequency and intensity, read off V<sub>stop</sub> on the I–V curve. Also see the <a href="https://phet.colorado.edu/sims/cheerpj/photoelectric/latest/photoelectric.html?simulation=photoelectric" target="_blank">PhET Photoelectric Effect</a>.
+        </div>
+      </div>
+
+      <h4>Worked Example (OpenStax 29.1) — Violet Light on Calcium</h4>
+      <p>λ = 420 nm, BE(Ca) = 2.71 eV. Using hc = 1240 eV·nm:</p>
+      <div class="eq">
+        E<sub>photon</sub> = 1240 / 420 = 2.96 eV&nbsp;&nbsp;→&nbsp;&nbsp; KE<sub>max</sub> = 2.96 − 2.71 = 0.25 eV
+      </div>
+
+      <div class="warn">
+        <strong>1921 Nobel Prize:</strong> Einstein won <em>not</em> for relativity but for this paper — because photons finally forced physicists to take quantization seriously as physical reality, not mathematical bookkeeping.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec5-29-3">
+      <h3>§29.3 — Photon Energies &amp; the EM Spectrum</h3>
+      <p>The single most useful relation in this chapter for quick calculations:</p>
+      <div class="eq">
+        <span class="eq-label">hc in handy units</span>
+        h c = 1240 eV · nm
+      </div>
+
+      <h4>The Energy Ladder</h4>
+      <table>
+        <tr><th>Phenomenon</th><th>Energy range</th></tr>
+        <tr><td>Molecular rotations</td><td>~10⁻⁵ eV (microwaves)</td></tr>
+        <tr><td>Molecular vibrations</td><td>~0.1 eV (IR)</td></tr>
+        <tr><td>Outer-shell atomic transitions</td><td>~1–3 eV (visible)</td></tr>
+        <tr><td>Molecular bond breaking</td><td>~1–10 eV (UV)</td></tr>
+        <tr><td>Inner-shell atomic transitions</td><td>~keV (X-rays)</td></tr>
+        <tr><td>Nuclear transitions</td><td>~MeV (γ-rays)</td></tr>
+      </table>
+
+      <p>Visible light corresponds to 1.63 eV (700 nm red) – 3.26 eV (380 nm violet) — exactly the right scale to drive outer-shell electron transitions, which is why human eyes evolved for that band.</p>
+
+      <h4>X-ray Tubes</h4>
+      <p>Accelerate an electron through V volts. Its KE = eV in electron-volts. Hitting an anode, it can radiate a photon with E ≤ eV. So an X-ray tube at 50 kV produces photons with E<sub>max</sub> ≈ 50 keV (λ<sub>min</sub> ≈ 0.025 nm) — plus characteristic lines specific to the anode material.</p>
+
+      <h4>Photons per Second from a Lightbulb</h4>
+      <p>100 W bulb, ~10% visible at average λ = 580 nm: each photon is E = 1240/580 ≈ 2.14 eV = 3.43 × 10⁻¹⁹ J. Rate: (10 W)/(3.43 × 10⁻¹⁹ J) ≈ <strong>2.9 × 10¹⁹ photons/s</strong>. That's why light seems continuous in everyday life — individual photons are too many and too small to notice.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 6 ===================== -->
+<div class="lecture" id="lec6">
+  <div class="lecture-header">
+    <h2>Lecture 6 — Interference, Photon Momentum &amp; Wave–Particle Duality</h2>
+    <div class="meta">Date: April 15, 2026 &nbsp;|&nbsp; OpenStax §27.3, §29.4–29.5</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec6-27-3">
+      <h3>§27.3 — Young's Double-Slit Experiment</h3>
+      <p>Thomas Young (1801) passed light through two narrow, closely-spaced slits and saw alternating bright and dark fringes on a screen — a pattern only possible for <em>waves</em>. This was the decisive 19th-century evidence that light is a wave (which Einstein's photons would complicate a century later).</p>
+
+      <div class="diagram">
+        <svg width="420" height="180" viewBox="0 0 420 180">
+          <!-- source -->
+          <circle cx="30" cy="90" r="6" fill="#ffd166" stroke="#b89500"/>
+          <text x="30" y="110" font-size="10" fill="#333" text-anchor="middle">laser</text>
+          <!-- wavefronts from source -->
+          <path d="M 40 90 Q 65 50 100 50" stroke="#bbb" fill="none"/>
+          <path d="M 40 90 Q 65 90 100 90" stroke="#bbb" fill="none"/>
+          <path d="M 40 90 Q 65 130 100 130" stroke="#bbb" fill="none"/>
+          <!-- slit barrier -->
+          <rect x="120" y="30"  width="8" height="45" fill="#555"/>
+          <rect x="120" y="85"  width="8" height="10" fill="#555"/>
+          <rect x="120" y="105" width="8" height="45" fill="#555"/>
+          <text x="124" y="22" font-size="10" fill="#333" text-anchor="middle">d</text>
+          <!-- slit emerging wavelets -->
+          <g stroke="#66d9ef" stroke-width="0.9" fill="none" opacity="0.8">
+            <path d="M128 80 Q 170 50 220 30"/>
+            <path d="M128 80 Q 170 80 220 80"/>
+            <path d="M128 80 Q 170 110 220 130"/>
+            <path d="M128 100 Q 170 70 220 50"/>
+            <path d="M128 100 Q 170 100 220 100"/>
+            <path d="M128 100 Q 170 130 220 150"/>
+          </g>
+          <!-- screen -->
+          <rect x="380" y="20" width="4" height="140" fill="#444"/>
+          <!-- fringe pattern -->
+          <g fill="#ffd166">
+            <rect x="384" y="30"  width="10" height="14" opacity="0.35"/>
+            <rect x="384" y="50"  width="10" height="14" opacity="0.7"/>
+            <rect x="384" y="70"  width="10" height="14" opacity="0.9"/>
+            <rect x="384" y="85"  width="10" height="16" opacity="1"/>
+            <rect x="384" y="103" width="10" height="14" opacity="0.9"/>
+            <rect x="384" y="123" width="10" height="14" opacity="0.7"/>
+            <rect x="384" y="143" width="10" height="14" opacity="0.35"/>
+          </g>
+          <text x="400" y="95" font-size="9" fill="#333">fringes</text>
+          <!-- angle θ and d sin θ -->
+          <line x1="128" y1="105" x2="380" y2="60" stroke="#d33" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="128" y1="85"  x2="380" y2="60" stroke="#d33" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="240" y="42" font-size="10" fill="#d33">θ</text>
+        </svg>
+        <figcaption>Light passes through two slits of separation d. Path-length difference d sin θ determines bright/dark fringes on a distant screen.</figcaption>
+      </div>
+
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Bright fringes — constructive</span>
+          d sin θ = m λ &nbsp;&nbsp; m = 0, ±1, ±2, …
+        </div>
+        <div class="eq">
+          <span class="eq-label">Dark fringes — destructive</span>
+          d sin θ = (m + ½) λ
+        </div>
+      </div>
+
+      <p>For small angles (slit spacing d ≪ screen distance L) the m-th bright fringe sits at y<sub>m</sub> ≈ mλL/d on the screen.</p>
+
+      <h4>Worked Example (OpenStax 27.1)</h4>
+      <p>He–Ne laser, d = 0.0100 mm, m = 3 bright fringe at θ = 10.95°.</p>
+      <div class="eq">
+        λ = d sin θ / m = (10⁻⁵ m)(sin 10.95°)/3 ≈ 633 nm ✓ (canonical He–Ne red)
+      </div>
+
+      <div class="def">
+        <strong>Why this matters now:</strong> by the 1900s everyone was convinced light was a wave, because only waves can interfere. Then photons came along — <em>and</em> interfered anyway. That's the puzzle Lecture 7 resolves with the wavefunction.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec6-29-4">
+      <h3>§29.4 — Photon Momentum</h3>
+      <p>A photon carries energy E = hf. From the relativistic mass-shell E² = (pc)² + (mc²)² with m = 0:</p>
+      <div class="eq">
+        <span class="eq-label">Photon Energy–Momentum</span>
+        E = p c &nbsp;&nbsp;⇒&nbsp;&nbsp; p = E/c = h f / c = h / λ
+      </div>
+      <div class="eq">
+        <span class="eq-label">Photon Momentum (Eq. 29.6)</span>
+        p = h / λ
+      </div>
+
+      <h4>Comet Tails and Solar Sails</h4>
+      <p>Solar radiation pressure always points <em>away</em> from the Sun. Comet dust tails are pushed into the classic "anti-Sun" direction. Proposed <span class="kt">solar sails</span> (LightSail-2 demonstrated this) use large mirrored sheets to accumulate momentum from billions of photons per second — slow but free acceleration in deep space.</p>
+
+      <h4>Compton Scattering (1923)</h4>
+      <p>X-ray photons scattering off nearly-free electrons emerge at <em>longer wavelength</em>, with shift Δλ = (h/m<sub>e</sub>c)(1 − cos θ). Wave theory predicts <em>no</em> wavelength shift — the result makes sense only if the photon is a particle carrying p = h/λ that collides elastically with the electron. Compton won the 1927 Nobel Prize.</p>
+
+      <h4>Worked Example (OpenStax 29.5)</h4>
+      <p>500-nm photon: p = h/λ = 6.63×10⁻³⁴ / 5×10⁻⁷ = <strong>1.33 × 10⁻²⁷ kg·m/s</strong>. An electron with that same momentum moves at only v = p/m<sub>e</sub> ≈ 1460 m/s and has KE ≈ 6 × 10⁻⁶ eV — five orders of magnitude less than the photon's 2.48 eV. So "momentum equal" doesn't mean "energy equal."</p>
+    </div>
+
+    <div class="subsection" id="lec6-29-5">
+      <h3>§29.5 — Particle–Wave Duality</h3>
+      <p>Light is <em>both</em> a wave (double-slit, diffraction grating, interference) <em>and</em> a particle (photoelectric effect, Compton scattering). Which face you see depends on what you measure:</p>
+      <ul class="summary">
+        <li><strong>Propagation</strong> (going from A to B, interfering, diffracting) → wave behavior.</li>
+        <li><strong>Emission/absorption</strong> (atom giving off or absorbing energy) → particle behavior.</li>
+      </ul>
+
+      <div class="def">
+        <strong>Complementarity (Bohr):</strong> wave and particle pictures are complementary — needed to fully describe light, but never both visible in the same single measurement.
+      </div>
+
+      <p>The next surprise (Lecture 7): if <em>light</em> is both wave and particle, maybe <em>electrons</em> are too. And indeed — they are.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 7 ===================== -->
+<div class="lecture" id="lec7">
+  <div class="lecture-header">
+    <h2>Lecture 7 — Matter Waves &amp; the Uncertainty Principle</h2>
+    <div class="meta">Date: April 20, 2026 &nbsp;|&nbsp; OpenStax §29.6–29.8</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec7-29-6">
+      <h3>§29.6 — de Broglie &amp; the Wave Nature of Matter</h3>
+      <p>In his 1924 doctoral thesis, Louis de Broglie (pronounced "de broy") made a radical proposal: if photons have p = h/λ, then <em>every</em> particle has an associated wavelength:</p>
+      <div class="eq">
+        <span class="eq-label">de Broglie Wavelength (Eq. 29.8)</span>
+        λ = h / p = h / (m v) &nbsp;&nbsp; (non-relativistic)
+      </div>
+
+      <h4>Why We Don't See It Macroscopically</h4>
+      <ul class="summary">
+        <li>A 3-kg bowling ball at 10 m/s: λ ≈ 2 × 10⁻³⁵ m — 20 orders of magnitude smaller than an atom. Utterly undetectable.</li>
+        <li>An electron at 1% of c: λ ≈ 2.4 × 10⁻¹⁰ m = 2.4 Å — comparable to atomic spacings in crystals. Observable!</li>
+      </ul>
+
+      <h4>Experimental Confirmation: Davisson–Germer (1927)</h4>
+      <p>Electrons scattered off a nickel crystal produced clear diffraction peaks obeying the <span class="kt">Bragg condition</span>:</p>
+      <div class="eq">
+        <span class="eq-label">Bragg Reflection</span>
+        2 d sin θ = m λ &nbsp;&nbsp; (m = 1, 2, 3, …)
+      </div>
+      <p>The measured λ matched h/p exactly. Every kind of particle has since been shown to diffract — neutrons, protons, whole atoms, and even buckminsterfullerene (C<sub>60</sub> — "buckyballs"). Matter waves are universal.</p>
+
+      <div class="sim">
+        <div class="sim-icon">P</div>
+        <div>
+          <strong>PhET sim:</strong> <a href="https://phet.colorado.edu/en/simulations/davisson-germer" target="_blank">Davisson–Germer: Electron Diffraction</a>. Fire electrons at a crystal lattice and watch the diffraction pattern emerge as you tune the voltage (which sets p, which sets λ).
+        </div>
+      </div>
+
+      <h4>Electron Microscopes</h4>
+      <p>Optical microscopes are limited by diffraction to ~200 nm resolution (Rayleigh's 1.22λ/D criterion from P23). Electrons at 100 keV have λ ≈ 4 × 10⁻³ nm — ~50,000× shorter than visible light. Modern transmission electron microscopes (TEM) resolve individual atoms; scanning electron microscopes (SEM) provide 3D-like surface images.</p>
+
+      <div class="diagram">
+        <svg width="420" height="170" viewBox="0 0 420 170">
+          <text x="210" y="18" font-size="12" fill="#333" font-style="italic" text-anchor="middle">Crystal Bragg reflection of matter waves</text>
+          <!-- atomic planes -->
+          <g stroke="#444" stroke-width="1">
+            <line x1="60" y1="60"  x2="360" y2="60"/>
+            <line x1="60" y1="90"  x2="360" y2="90"/>
+            <line x1="60" y1="120" x2="360" y2="120"/>
+          </g>
+          <g fill="#2e6da4">
+            <circle cx="80" cy="60" r="4"/> <circle cx="140" cy="60" r="4"/> <circle cx="200" cy="60" r="4"/> <circle cx="260" cy="60" r="4"/> <circle cx="320" cy="60" r="4"/>
+            <circle cx="80" cy="90" r="4"/> <circle cx="140" cy="90" r="4"/> <circle cx="200" cy="90" r="4"/> <circle cx="260" cy="90" r="4"/> <circle cx="320" cy="90" r="4"/>
+            <circle cx="80" cy="120" r="4"/><circle cx="140" cy="120" r="4"/><circle cx="200" cy="120" r="4"/><circle cx="260" cy="120" r="4"/><circle cx="320" cy="120" r="4"/>
+          </g>
+          <text x="368" y="60" font-size="10" fill="#444">plane 1</text>
+          <text x="368" y="90" font-size="10" fill="#444">plane 2</text>
+          <!-- incoming ray -->
+          <line x1="30" y1="30" x2="160" y2="90" stroke="#d33" stroke-width="1.6"/>
+          <polyline points="150,84 160,90 149,92" fill="none" stroke="#d33" stroke-width="1.6"/>
+          <!-- outgoing ray -->
+          <line x1="160" y1="90" x2="300" y2="30" stroke="#d33" stroke-width="1.6"/>
+          <polyline points="289,32 300,30 296,40" fill="none" stroke="#d33" stroke-width="1.6"/>
+          <!-- second ray -->
+          <line x1="60" y1="30" x2="200" y2="120" stroke="#e67e22" stroke-width="1.3" opacity="0.8"/>
+          <line x1="200" y1="120" x2="330" y2="30" stroke="#e67e22" stroke-width="1.3" opacity="0.8"/>
+          <!-- d label -->
+          <line x1="370" y1="60" x2="370" y2="90" stroke="#333"/>
+          <text x="380" y="79" font-size="11" fill="#333">d</text>
+          <!-- theta -->
+          <text x="180" y="75" font-size="11" fill="#d33">θ</text>
+        </svg>
+        <figcaption>Matter-wave Bragg reflection: two rays scattering off successive planes interfere constructively when 2d sin θ = mλ.</figcaption>
+      </div>
+    </div>
+
+    <div class="subsection" id="lec7-29-7">
+      <h3>§29.7 — Heisenberg Uncertainty Principle</h3>
+      <p>In the double-slit experiment with electrons fired <em>one at a time</em>, individual electrons land at definite points — but accumulate into an interference pattern. Each electron "explores both slits" as a probability wave, then "lands" as a particle. If you add a detector to determine which slit the electron went through, the pattern vanishes: <strong>measurement disturbs the system</strong>.</p>
+
+      <div class="def">
+        <strong>Wavefunction interpretation (Born):</strong> matter waves are <em>probability amplitudes</em>. The intensity |ψ|² gives the probability of finding the particle at a given location. Between measurements, the particle does not have a definite position.
+      </div>
+
+      <h4>Position–Momentum Uncertainty</h4>
+      <div class="eq">
+        <span class="eq-label">Heisenberg (position–momentum) — Eq. 29.10</span>
+        Δx · Δp ≥ h / (4π) &nbsp;=&nbsp; ℏ / 2
+      </div>
+      <p>The more precisely you localize a particle (small Δx), the more uncertain its momentum must be (large Δp). Not a measurement flaw — it's a fundamental property of the wavefunction.</p>
+
+      <h4>Energy–Time Uncertainty</h4>
+      <div class="eq">
+        <span class="eq-label">Heisenberg (energy–time)</span>
+        ΔE · Δt ≥ h / (4π)
+      </div>
+      <p>Short-lived excited atomic states have <em>intrinsically</em> broadened spectral lines; unstable particles have a mass-energy spread Γ related to their lifetime τ by Γ ≈ ℏ/τ.</p>
+
+      <h4>Worked Example (OpenStax 29.8)</h4>
+      <p>Localize an electron to Δx = 0.01 nm = 10⁻¹¹ m (a typical atomic size):</p>
+      <div class="eq">
+        Δp = h/(4π·Δx) ≈ 5.28 × 10⁻²⁴ kg·m/s &nbsp;&nbsp;→&nbsp;&nbsp; Δv ≈ 5.8 × 10⁶ m/s
+      </div>
+      <p>That Δv is comparable to actual electron speeds in atoms — so you can't "track" the electron in a classical orbit, only describe a probability cloud (the <strong>orbital</strong>).</p>
+
+      <div class="warn">
+        <strong>Uncertainty is not just about disturbance.</strong> You can't even <em>ask</em> what an electron's exact position AND exact momentum are — the wavefunction doesn't have a definite value for both. This will become the foundation of atomic orbitals (Lectures 8–11).
+      </div>
+    </div>
+
+    <div class="subsection" id="lec7-29-8">
+      <h3>§29.8 — Duality, Reviewed</h3>
+      <p>By 1927, the picture had snapped into focus:</p>
+      <ul class="summary">
+        <li>Every "thing" — photon, electron, atom — has both wave and particle aspects.</li>
+        <li>The wave aspect gives <em>probability amplitudes</em>; squaring gives observable probabilities.</li>
+        <li>Wavelike behavior (interference, diffraction) dominates when λ is comparable to the apparatus; particle behavior dominates when individual quanta are counted.</li>
+        <li>The correspondence principle explains why classical physics works in the everyday: Planck's constant is tiny relative to macroscopic actions, so quantum effects vanish in the classical limit.</li>
+      </ul>
+
+      <p>With this toolbox in hand, we can now build atoms (Lecture 8 onward).</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MIDTERM #1 ===================== -->
+<div class="lecture" id="midterm1">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #3a2030 0%, #6b3450 100%);">
+    <h2>Midterm #1 Preview — Tuesday, April 21</h2>
+    <div class="meta">5:30–6:30 PM &nbsp;|&nbsp; Covers Lectures 1–7 (Ch. 13.1, 14.7, 27.3, 28, 29)</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Topics You Must Own</h3>
+      <ul class="summary">
+        <li><strong>Special Relativity (Ch 28):</strong> two postulates, γ factor, proper vs. observer time/length, time dilation Δt = γΔt<sub>0</sub>, length contraction L = L<sub>0</sub>/γ, relativistic velocity addition, Doppler shift, p = γmu, E = γmc², KE = (γ−1)mc², E² = (pc)² + (mc²)².</li>
+        <li><strong>Thermal Radiation (Ch 13.1, 14.7):</strong> Kelvin conversions, emissivity, P = σeAT⁴, net transfer σeA(T₂⁴ − T₁⁴), Wien's λ_max T = 2.898 × 10⁻³ m·K.</li>
+        <li><strong>Quantization (Ch 29.1):</strong> Planck E = nhf, blackbody curves, why classical R–J diverged at short λ.</li>
+        <li><strong>Photoelectric (Ch 29.2):</strong> KE_max = hf − BE, threshold f<sub>0</sub> = BE/h, slope-h KE-vs-f graph, why intensity doesn't change KE_max.</li>
+        <li><strong>Photon Properties (Ch 29.3–4):</strong> E = hf = hc/λ, p = h/λ, hc = 1240 eV·nm, radiation pressure.</li>
+        <li><strong>Interference (Ch 27.3):</strong> d sin θ = mλ (bright), (m+½)λ (dark), fringe position y = mλL/d.</li>
+        <li><strong>Matter Waves &amp; Uncertainty (Ch 29.6–7):</strong> λ = h/p, Bragg 2d sin θ = mλ, Δx·Δp ≥ h/(4π), ΔE·Δt ≥ h/(4π).</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Strategy</h3>
+      <ul class="summary">
+        <li><strong>Always convert temperatures to Kelvin</strong> in P = σeAT⁴.</li>
+        <li><strong>Use hc = 1240 eV·nm</strong> for photon energies — one line, no scientific notation.</li>
+        <li><strong>Identify who measures proper time vs. proper length</strong> before picking a formula. Clock at rest → Δt<sub>0</sub>; meterstick at rest → L<sub>0</sub>.</li>
+        <li><strong>Pick a clear + axis</strong> for velocity addition so signs work out; then u = (v + u′)/(1 + vu′/c²).</li>
+        <li><strong>Check reasonable limits:</strong> at v ≪ c, formulas should reduce to classical; at v → c, γ diverges; KE → 0 as v → 0.</li>
+        <li><strong>Work out units in eV, MeV</strong> for atomic and sub-atomic problems; convert to J only at the end if needed (1 eV = 1.6 × 10⁻¹⁹ J).</li>
+      </ul>
+
+      <div class="warn">
+        <strong>Exam logistics:</strong> closed book, closed notes, no electronics. A simple 4-function calculator is provided. Focus on: classical-→-relativistic intuition, clear who-sees-what diagrams, and memorizing the key equations below.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FORMULA REFERENCE ===================== -->
+<div class="lecture" id="formulas">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #2e4a2e 0%, #2e8b57 100%);">
+    <h2>Quick Reference — All Key Equations (Lectures 1–7)</h2>
+    <div class="meta">Complete formula sheet for Midterm #1</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Chapter 28 — Special Relativity</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Lorentz factor</span><em>γ</em> = 1 / √(1 − v²/c²)</div>
+        <div class="eq"><span class="eq-label">Time dilation</span>Δt = γ Δt<sub>0</sub></div>
+        <div class="eq"><span class="eq-label">Length contraction</span>L = L<sub>0</sub> / γ</div>
+        <div class="eq"><span class="eq-label">Velocity addition</span>u = (v + u′)/(1 + vu′/c²)</div>
+        <div class="eq"><span class="eq-label">Doppler (wavelength)</span>λ<sub>obs</sub> = λ<sub>s</sub>√((1+u/c)/(1−u/c))</div>
+        <div class="eq"><span class="eq-label">Doppler (frequency)</span>f<sub>obs</sub> = f<sub>s</sub>√((1−u/c)/(1+u/c))</div>
+        <div class="eq"><span class="eq-label">Relativistic momentum</span>p = γ m u</div>
+        <div class="eq"><span class="eq-label">Rest energy</span>E<sub>0</sub> = m c²</div>
+        <div class="eq"><span class="eq-label">Total energy</span>E = γ m c²</div>
+        <div class="eq"><span class="eq-label">Kinetic energy</span>KE = (γ − 1) m c²</div>
+        <div class="eq"><span class="eq-label">Energy–momentum</span>E² = (p c)² + (m c²)²</div>
+        <div class="eq"><span class="eq-label">Massless particle</span>E = p c (speed = c)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapters 13.1 &amp; 14.7 — Temperature &amp; Thermal Radiation</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Kelvin from Celsius</span>T(K) = T(°C) + 273.15</div>
+        <div class="eq"><span class="eq-label">Fahrenheit ↔ Celsius</span>T(°F) = (9/5)T(°C) + 32</div>
+        <div class="eq"><span class="eq-label">Stefan–Boltzmann</span>P = σ e A T⁴</div>
+        <div class="eq"><span class="eq-label">Net radiation</span>P<sub>net</sub> = σ e A (T<sub>2</sub>⁴ − T<sub>1</sub>⁴)</div>
+        <div class="eq"><span class="eq-label">Wien's displacement</span>λ<sub>max</sub> · T = 2.898 × 10⁻³ m·K</div>
+        <div class="eq"><span class="eq-label">Stefan–Boltzmann const</span>σ = 5.67 × 10⁻⁸ W/(m²·K⁴)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 29 — Quantum Mechanics (Photons &amp; Matter Waves)</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Planck quantization</span>E<sub>n</sub> = n h f &nbsp;(n = 0,1,2,…)</div>
+        <div class="eq"><span class="eq-label">Photon energy</span>E = h f = h c / λ</div>
+        <div class="eq"><span class="eq-label">hc shortcut</span>h c = 1240 eV·nm</div>
+        <div class="eq"><span class="eq-label">Photoelectric</span>KE<sub>max</sub> = h f − BE</div>
+        <div class="eq"><span class="eq-label">Threshold frequency</span>f<sub>0</sub> = BE / h</div>
+        <div class="eq"><span class="eq-label">Photon momentum</span>p = h / λ = E / c</div>
+        <div class="eq"><span class="eq-label">de Broglie wavelength</span>λ = h / p = h / (m v)</div>
+        <div class="eq"><span class="eq-label">Bragg reflection</span>2 d sin θ = m λ</div>
+        <div class="eq"><span class="eq-label">Uncertainty (Δx, Δp)</span>Δx · Δp ≥ h / (4π)</div>
+        <div class="eq"><span class="eq-label">Uncertainty (ΔE, Δt)</span>ΔE · Δt ≥ h / (4π)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 27.3 — Double-Slit Interference</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Bright fringes</span>d sin θ = m λ</div>
+        <div class="eq"><span class="eq-label">Dark fringes</span>d sin θ = (m + ½) λ</div>
+        <div class="eq"><span class="eq-label">Fringe location (small θ)</span>y<sub>m</sub> ≈ m λ L / d</div>
+        <div class="eq"><span class="eq-label">Max order</span>m<sub>max</sub> ≤ d / λ</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Essential Constants</h3>
+      <table>
+        <tr><th>Constant</th><th>Symbol</th><th>Value</th></tr>
+        <tr><td>Speed of light</td><td>c</td><td>2.998 × 10⁸ m/s</td></tr>
+        <tr><td>Planck's constant</td><td>h</td><td>6.626 × 10⁻³⁴ J·s = 4.136 × 10⁻¹⁵ eV·s</td></tr>
+        <tr><td>Planck × speed of light</td><td>hc</td><td>1240 eV·nm</td></tr>
+        <tr><td>Reduced Planck</td><td>ℏ = h/2π</td><td>1.055 × 10⁻³⁴ J·s</td></tr>
+        <tr><td>Stefan–Boltzmann</td><td>σ</td><td>5.67 × 10⁻⁸ W/(m²·K⁴)</td></tr>
+        <tr><td>Wien's constant</td><td>b</td><td>2.898 × 10⁻³ m·K</td></tr>
+        <tr><td>Boltzmann's constant</td><td>k<sub>B</sub></td><td>1.381 × 10⁻²³ J/K = 8.617 × 10⁻⁵ eV/K</td></tr>
+        <tr><td>Electron mass</td><td>m<sub>e</sub></td><td>9.109 × 10⁻³¹ kg; m<sub>e</sub>c² = 0.511 MeV</td></tr>
+        <tr><td>Proton mass</td><td>m<sub>p</sub></td><td>1.673 × 10⁻²⁷ kg; m<sub>p</sub>c² = 938.3 MeV</td></tr>
+        <tr><td>Elementary charge</td><td>e</td><td>1.602 × 10⁻¹⁹ C</td></tr>
+        <tr><td>Electron volt</td><td>1 eV</td><td>1.602 × 10⁻¹⁹ J</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SIMULATIONS ===================== -->
+<div class="lecture" id="simulations">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #2e3a6b 0%, #6b5aa8 100%);">
+    <h2>Simulations &amp; Interactive Demos</h2>
+    <div class="meta">Play with the physics. Pair each sim with the relevant lecture.</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Built Into This Site</h3>
+      <ul class="summary">
+        <li><a href="simultaneity.html">Simultaneity — The Spaceship Duel</a> (Lecture 1): two frames, same events, different orderings.</li>
+        <li><a href="relativity_momentum.html">Relativistic Momentum &amp; Center of Mass</a> (Lecture 3): watch γmv diverge at v → c.</li>
+        <li><a href="thermal_radiation.html">Thermal Radiation — Why Hot Things Glow</a> (Lecture 4): Stefan–Boltzmann, Wien, Planck vs. Rayleigh–Jeans.</li>
+        <li><a href="photoelectric.html">The Photoelectric Effect</a> (Lecture 5): tune f and intensity, pick a metal, read V<sub>stop</sub>.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>PhET (University of Colorado Boulder)</h3>
+      <ul class="summary">
+        <li><a href="https://phet.colorado.edu/en/simulations/simple-relativity" target="_blank">Simple Relativity</a> — time dilation &amp; length contraction intuition.</li>
+        <li><a href="https://phet.colorado.edu/en/simulations/blackbody-spectrum" target="_blank">Blackbody Spectrum</a> — move T from a fridge to the Sun to a blue star.</li>
+        <li><a href="https://phet.colorado.edu/sims/cheerpj/photoelectric/latest/photoelectric.html?simulation=photoelectric" target="_blank">Photoelectric Effect</a> — the canonical demo, with work function slider.</li>
+        <li><a href="https://phet.colorado.edu/en/simulations/wave-interference" target="_blank">Wave Interference</a> — single + double slit with water, sound, or light.</li>
+        <li><a href="https://phet.colorado.edu/en/simulations/davisson-germer" target="_blank">Davisson–Germer: Electron Diffraction</a> — matter waves off a crystal lattice.</li>
+        <li><a href="https://phet.colorado.edu/en/simulations/quantum-wave-interference" target="_blank">Quantum Wave Interference</a> — single-photon/electron double-slit built up one particle at a time.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end .container -->
+
+<footer class="sg-footer">Giuse Pham Enterprises &middot; Est. 2026</footer>
+
+<script>
+function toggleTOC() {
+  const content = document.getElementById('toc-content');
+  const arrow = document.getElementById('toc-arrow');
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    arrow.textContent = '▼';
+  } else {
+    content.classList.add('hidden');
+    arrow.textContent = '►';
+  }
+}
+</script>
+
+</body>
+</html>
