@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Study Guide: Lectures 7A–10B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --border: #2a2f43;
+    --muted: #9aa2b6;
+    --primary: #66d9ef;
+    --accent: #66d9ef;
+    --accent2: #ffd166;
+    --eq-bg: rgba(102, 217, 239, 0.08);
+    --eq-border: #66d9ef;
+    --warn-bg: rgba(255, 209, 102, 0.09);
+    --warn-border: #ffd166;
+    --def-bg: rgba(166, 226, 46, 0.08);
+    --def-border: #a6e22e;
+    --section-bg: #1d2130;
+    --text: #e6e8ef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    min-height: 100vh;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 20;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  header {
+    background: linear-gradient(135deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    background: linear-gradient(180deg, #ffffff 0%, #9fd4e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header p { font-size: 1rem; color: var(--muted); }
+  header .subtitle { font-size: 0.92rem; margin-top: 0.5rem; color: var(--muted); }
+
+  /* TOC */
+  #toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 1.5rem auto;
+    max-width: 900px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  #toc-header {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.85rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.02rem;
+    user-select: none;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc-header:hover { background: #252a3d; }
+  #toc-content { padding: 1rem 1.5rem; display: block; }
+  #toc-content.hidden { display: none; }
+  #toc-content ul { list-style: none; columns: 2; gap: 1.5rem; }
+  #toc-content li { margin-bottom: 0.3rem; }
+  #toc-content a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.93rem;
+  }
+  #toc-content a:hover { text-decoration: underline; color: #9fe7f5; }
+  .toc-lec {
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: 0.3px;
+  }
+
+  /* Main layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  /* Lecture cards */
+  .lecture {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+  .lecture-header {
+    background: linear-gradient(90deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 1.3rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .lecture-header h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.55rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .lecture-header .meta { font-size: 0.88rem; color: var(--muted); margin-top: 0.25rem; }
+  .lecture-body { padding: 1.5rem; }
+
+  /* Subsections */
+  .subsection { margin-bottom: 1.8rem; }
+  .subsection h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.85rem;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+  }
+  .subsection h4 {
+    font-size: 1.02rem;
+    color: var(--accent);
+    margin: 0.9rem 0 0.35rem;
+    font-weight: 600;
+  }
+
+  /* Equation boxes — textbook-style math */
+  .eq {
+    background: var(--eq-bg);
+    border-left: 4px solid var(--eq-border);
+    border-radius: 6px;
+    padding: 0.9rem 1.3rem;
+    margin: 0.85rem 0;
+    font-family: "STIX Two Text", "Cambria Math", Cambria, "Latin Modern Math", Georgia, serif;
+    font-size: 1.18rem;
+    color: var(--text);
+    overflow-x: auto;
+    letter-spacing: 0.3px;
+  }
+  .eq strong {
+    font-style: italic;
+    font-weight: 500;
+    color: #9fe7f5;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+  }
+  .eq em { font-style: italic; color: var(--accent2); }
+  .eq-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+  }
+
+  /* Warning / Important boxes */
+  .warn {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .warn strong { color: var(--warn-border); }
+
+  /* Definition boxes */
+  .def {
+    background: var(--def-bg);
+    border-left: 4px solid var(--def-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .def strong { color: var(--def-border); }
+
+  /* Key term */
+  .kt { font-weight: 700; color: var(--accent2); }
+
+  /* SVG diagrams — kept on a soft light card so the original colored drawings stay readable */
+  .diagram {
+    background: #f2f5fb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.9rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram figcaption {
+    font-size: 0.85rem;
+    color: #4a5670;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* ASCII art */
+  .ascii {
+    background: #0a0c12;
+    color: #66d9ef;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0.9rem 0;
+    line-height: 1.45;
+  }
+
+  /* Two-column layout for equations */
+  .eq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin: 0.6rem 0;
+  }
+  @media (max-width: 640px) { .eq-grid { grid-template-columns: 1fr; } }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.9rem 0;
+    font-size: 0.93rem;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Summary lists */
+  ul.summary { padding-left: 1.3rem; }
+  ul.summary li { margin-bottom: 0.3rem; }
+
+  sup, sub { font-size: 0.72em; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  p { margin: 0.55rem 0; }
+  a { color: var(--accent); }
+
+  /* Footer */
+  .sg-footer {
+    margin: 4rem auto 1rem;
+    max-width: 960px;
+    padding: 1.5rem 1rem 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html"><img src="president_giuse.PNG" alt="President Giuse" class="portrait"></a>
+
+<header>
+  <h1>Physics Study Guide</h1>
+  <p>Giancoli Physics — Lectures 7A through 10B</p>
+  <p class="subtitle">Chapters 21–25 &nbsp;|&nbsp; EM Induction · Waves · Optics · Instruments</p>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+<div class="container">
+<div id="toc">
+  <div id="toc-header" onclick="toggleTOC()">
+    📋 Table of Contents — Click to expand/collapse
+    <span id="toc-arrow">▼</span>
+  </div>
+  <div id="toc-content">
+    <ul>
+      <li><span class="toc-lec">Lecture 7A (2/17)</span></li>
+      <li><a href="#lec7a-21-3">21.3 Motional EMF</a></li>
+      <li><a href="#lec7a-21-5">21.5 Electric Generators</a></li>
+      <li><a href="#lec7a-21-6">21.6 Back EMF</a></li>
+      <li><a href="#lec7a-21-7">21.7 Transformers</a></li>
+      <li><a href="#lec7a-21-10">21.10 Inductance</a></li>
+      <li><a href="#lec7a-21-11">21.11 Energy in Magnetic Field</a></li>
+      <li><a href="#lec7a-21-12">21.12 RL Circuit</a></li>
+
+      <li><span class="toc-lec">Lecture 7B (2/19)</span></li>
+      <li><a href="#lec7b-21-15">21.15 LC Oscillations &amp; Resonance</a></li>
+      <li><a href="#lec7b-22-1">22.1 Maxwell's Equations</a></li>
+      <li><a href="#lec7b-22-2">22.2 EM Waves Produced</a></li>
+
+      <li><span class="toc-lec">Lecture 8B (2/26)</span></li>
+      <li><a href="#lec8b-22-3">22.3 EM Spectrum</a></li>
+      <li><a href="#lec8b-22-4">22.4 Speed of Light</a></li>
+      <li><a href="#lec8b-22-5">22.5 Energy &amp; Intensity</a></li>
+
+      <li><span class="toc-lec">Lecture 9A (3/3)</span></li>
+      <li><a href="#lec9a-24-1">24.1 Huygens' Principle</a></li>
+      <li><a href="#lec9a-24-2">24.2 Double-Slit Interference</a></li>
+      <li><a href="#lec9a-24-4">24.4 Diffraction Grating</a></li>
+      <li><a href="#lec9a-24-5">24.5 Single-Slit Diffraction</a></li>
+      <li><a href="#lec9a-24-7">24.7 Thin-Film Interference</a></li>
+      <li><a href="#lec9a-23-1">23.1 Ray Model</a></li>
+      <li><a href="#lec9a-23-4">23.4 Refraction &amp; Snell's Law</a></li>
+
+      <li><span class="toc-lec">Lecture 9B (3/5)</span></li>
+      <li><a href="#lec9b-23-3">23.3 Spherical Mirrors</a></li>
+      <li><a href="#lec9b-23-7">23.7 Thin Lenses</a></li>
+      <li><a href="#lec9b-23-8">23.8 Lens Equation</a></li>
+      <li><a href="#lec9b-23-9">23.9 Lens Combinations</a></li>
+
+      <li><span class="toc-lec">Lecture 10A (3/10)</span></li>
+      <li><a href="#lec10a-25-1">25.1 Camera</a></li>
+      <li><a href="#lec10a-25-2">25.2 The Human Eye</a></li>
+      <li><a href="#lec10a-25-3">25.3 Corrective Lenses</a></li>
+      <li><a href="#lec10a-25-4">25.4 Magnifying Glass</a></li>
+
+      <li><span class="toc-lec">Lecture 10B (3/12)</span></li>
+      <li><a href="#lec10b-25-5">25.5 Microscope</a></li>
+      <li><a href="#lec10b-25-6">25.6 Telescopes</a></li>
+      <li><a href="#lec10b-25-7">25.7 Aberrations</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 7A ===================== -->
+<div class="lecture" id="lec7a">
+  <div class="lecture-header">
+    <h2>Lecture 7A — EM Induction, Inductance, RL Circuits, Transformers</h2>
+    <div class="meta">Date: February 17, 2026 &nbsp;|&nbsp; Sections: 21.3–21.7, 21.9–21.12</div>
+  </div>
+  <div class="lecture-body">
+
+    <!-- 21.3 -->
+    <div class="subsection" id="lec7a-21-3">
+      <h3>§21.3 — EMF Induced in a Moving Conductor (Motional EMF)</h3>
+      <p>When a conducting rod of length <em>ℓ</em> moves with velocity <em>v</em> perpendicular to a magnetic field <em>B</em>, free electrons in the rod experience a magnetic force <em>F = qvB</em>, driving them toward one end. This separation of charge creates a potential difference — an <span class="kt">induced EMF</span>.</p>
+
+      <div class="eq">
+        <span class="eq-label">Motional EMF (Eq. 21-3)</span>
+        <strong>ε = Bℓv</strong>
+      </div>
+
+      <p>This is valid when <em>B</em>, <em>ℓ</em>, and <em>v</em> are mutually perpendicular. If not perpendicular, use only the perpendicular components.</p>
+
+      <div class="def">
+        <strong>Derivation via force:</strong> A charge <em>q</em> in the rod feels force <em>F = qvB</em> along the rod. Work done moving charge from one end to the other: <em>W = qvBℓ</em>. Since EMF = W/q: <strong>ε = Bℓv</strong>.
+      </div>
+
+      <div class="diagram">
+        <svg width="340" height="160" viewBox="0 0 340 160">
+          <!-- U-shaped conductor -->
+          <rect x="30" y="30" width="8" height="110" fill="none" stroke="#2e6da4" stroke-width="2.5"/>
+          <rect x="30" y="132" width="200" height="8" fill="none" stroke="#2e6da4" stroke-width="2.5"/>
+          <rect x="220" y="30" width="8" height="40" fill="none" stroke="#2e6da4" stroke-width="2.5"/>
+          <!-- Moving rod -->
+          <rect x="148" y="30" width="8" height="110" fill="#e67e22" stroke="#b45000" stroke-width="1.5"/>
+          <text x="162" y="90" font-size="11" fill="#b45000" font-style="italic">ℓ</text>
+          <!-- B field dots -->
+          <text x="60" y="60" font-size="13" fill="#2e8b57">⊙</text>
+          <text x="100" y="60" font-size="13" fill="#2e8b57">⊙</text>
+          <text x="60" y="95" font-size="13" fill="#2e8b57">⊙</text>
+          <text x="100" y="95" font-size="13" fill="#2e8b57">⊙</text>
+          <text x="200" y="75" font-size="10" fill="#2e8b57">B (out)</text>
+          <!-- velocity arrow -->
+          <line x1="160" y1="20" x2="215" y2="20" stroke="#c0392b" stroke-width="2" marker-end="url(#arr)"/>
+          <text x="175" y="16" font-size="11" fill="#c0392b" font-style="italic">v</text>
+          <!-- EMF label -->
+          <text x="240" y="55" font-size="11" fill="#555">ε = Bℓv</text>
+          <!-- Force on electron -->
+          <line x1="152" y1="95" x2="152" y2="50" stroke="#9b59b6" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="115" y="70" font-size="10" fill="#9b59b6">F on e⁻</text>
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#c0392b"/></marker>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#9b59b6"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Moving rod on U-shaped conductor in magnetic field B (out of page). Rod moves right with speed v, inducing EMF ε = Bℓv.</figcaption>
+      </div>
+
+      <div class="warn">
+        <strong>Key insight:</strong> A changing magnetic flux (due to the changing area of the loop as the rod moves) also gives ε = BΔA/Δt = B(ℓv·Δt)/Δt = Bℓv — consistent with Faraday's Law.
+      </div>
+
+      <h4>Applications</h4>
+      <ul class="summary">
+        <li><strong>Electromagnetic blood-flow meter:</strong> vessel diameter ℓ, field B, measured EMF → v = ε/(Bℓ)</li>
+        <li><strong>Airplane wing EMF:</strong> ε = Bℓv ≈ 1 V (negligible in practice)</li>
+      </ul>
+    </div>
+
+    <!-- 21.4 -->
+    <div class="subsection">
+      <h3>§21.4 — Changing Magnetic Flux Produces an Electric Field</h3>
+      <p>A changing magnetic field produces an electric field — not just in conductors, but in <em>any region of space</em>. This is one of Maxwell's key insights (Faraday's Law generalized).</p>
+      <div class="eq">
+        <span class="eq-label">Effective E-field in moving conductor</span>
+        E = vB
+      </div>
+      <p>This follows from <em>F = qvB</em> and <em>E = F/q</em>.</p>
+    </div>
+
+    <!-- 21.5 -->
+    <div class="subsection" id="lec7a-21-5">
+      <h3>§21.5 — Electric Generators</h3>
+      <p>A <span class="kt">generator</span> converts mechanical energy → electrical energy. A coil of <em>N</em> turns and area <em>A</em> rotates at angular velocity <em>ω</em> in field <em>B</em>. By Faraday's law the induced EMF is:</p>
+      <div class="eq">
+        <span class="eq-label">AC Generator Output (Eq. 21-5)</span>
+        ε = NBAω sin(ωt) = ε₀ sin(ωt)
+        &nbsp;&nbsp; where ε₀ = NBAω
+      </div>
+      <p>The output is sinusoidal (alternating). The RMS output is:</p>
+      <div class="eq">
+        V<sub>rms</sub> = NBAω / √2 = ε₀ / √2
+      </div>
+
+      <div class="ascii">
+  AC Generator schematic:
+
+         N          Armature coil (N turns, area A)
+         |         /
+  ───────┤  ┌────┐ ← rotates in B field
+  Axle ──┤  │coil│
+         |  └────┘
+         S    | |
+              Slip rings → output ε = ε₀ sin(ωt)</div>
+
+      <h4>Generator Equation Derivation</h4>
+      <p>At angle θ from vertical, velocity component perpendicular to B: v⊥ = v sin θ = (ωh/2) sin θ. Contribution from both arms: ε = 2NBlv⊥ = 2NBl·(ωh/2) sin θ = NBAω sin(ωt).</p>
+
+      <div class="warn">
+        <strong>DC vs. AC generators:</strong> AC generators use continuous slip rings → sinusoidal output. DC generators use split-ring commutators → rectified (pulsating) DC.
+      </div>
+    </div>
+
+    <!-- 21.6 -->
+    <div class="subsection" id="lec7a-21-6">
+      <h3>§21.6 — Back EMF and Counter Torque; Eddy Currents</h3>
+      <h4>Back EMF in Motors</h4>
+      <p>As a motor's armature spins, it acts like a generator and produces a <span class="kt">back EMF</span> (ε<sub>back</sub>) opposing the applied voltage. Net current in the motor:</p>
+      <div class="eq">
+        <span class="eq-label">Motor current (Kirchhoff's rule)</span>
+        I = (V<sub>applied</sub> − ε<sub>back</sub>) / R
+      </div>
+      <p>At start-up: ε<sub>back</sub> = 0, so current is large (I = V/R). At full speed: ε<sub>back</sub> ≈ V, current is small.</p>
+      <div class="warn">
+        <strong>Motor burnout:</strong> If a motor jams (stops spinning), ε<sub>back</sub> = 0 and current surges to V/R, potentially melting windings. This is why appliances burn out when overloaded.
+      </div>
+
+      <h4>Counter Torque in Generators</h4>
+      <p>When a generator supplies current, Lenz's law produces a counter torque opposing rotation. More load → more counter torque → more mechanical energy input required. Energy is conserved.</p>
+
+      <h4>Eddy Currents</h4>
+      <p><span class="kt">Eddy currents</span> are induced currents that circulate within bulk conductors in changing magnetic fields. They cause:</p>
+      <ul class="summary">
+        <li><strong>Magnetic braking</strong> (smooth, contactless braking on trains)</li>
+        <li><strong>Heating losses</strong> in transformer cores (minimized by lamination)</li>
+        <li><strong>Metal detection</strong> (walk-through detectors pulse current → eddy currents in metal → detected)</li>
+      </ul>
+    </div>
+
+    <!-- 21.7 -->
+    <div class="subsection" id="lec7a-21-7">
+      <h3>§21.7 — Transformers and Transmission of Power</h3>
+      <p>A <span class="kt">transformer</span> changes AC voltage using mutual inductance. Primary coil (N<sub>P</sub> turns, voltage V<sub>P</sub>) is linked to secondary coil (N<sub>S</sub> turns, voltage V<sub>S</sub>) through a laminated iron core.</p>
+
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Transformer Voltage Ratio (Eq. 21-6)</span>
+          V<sub>S</sub> / V<sub>P</sub> = N<sub>S</sub> / N<sub>P</sub>
+        </div>
+        <div class="eq">
+          <span class="eq-label">Transformer Current Ratio (Eq. 21-7)</span>
+          I<sub>S</sub> / I<sub>P</sub> = N<sub>P</sub> / N<sub>S</sub>
+        </div>
+      </div>
+      <div class="eq">
+        <span class="eq-label">Power conservation (ideal transformer)</span>
+        P<sub>in</sub> = P<sub>out</sub> &nbsp;→&nbsp; I<sub>P</sub>V<sub>P</sub> = I<sub>S</sub>V<sub>S</sub>
+      </div>
+
+      <div class="ascii">
+  Transformer (step-up shown):
+
+  Primary (NP=4)    Iron Core    Secondary (NS=12)
+      ||||          ┌──────┐         ||||||||||||
+  VP ─┤  ├─────────┤ ████ ├─────────┤           ├─ VS
+      ||||          └──────┘         ||||||||||||
+
+  VS/VP = NS/NP = 12/4 = 3  →  VS = 3·VP  (step-up)</div>
+
+      <h4>Types of Transformers</h4>
+      <table>
+        <tr><th>Type</th><th>N<sub>S</sub> vs N<sub>P</sub></th><th>Voltage</th><th>Current</th><th>Example</th></tr>
+        <tr><td>Step-up</td><td>N<sub>S</sub> &gt; N<sub>P</sub></td><td>V<sub>S</sub> &gt; V<sub>P</sub></td><td>I<sub>S</sub> &lt; I<sub>P</sub></td><td>Power plant output</td></tr>
+        <tr><td>Step-down</td><td>N<sub>S</sub> &lt; N<sub>P</sub></td><td>V<sub>S</sub> &lt; V<sub>P</sub></td><td>I<sub>S</sub> &gt; I<sub>P</sub></td><td>Home supply, phone charger</td></tr>
+      </table>
+
+      <h4>Power Transmission</h4>
+      <p>Power loss in transmission lines: P<sub>loss</sub> = I²R. Transmitting at high voltage → low current → minimal loss.</p>
+      <div class="eq">
+        <span class="eq-label">Power loss in transmission lines</span>
+        P<sub>loss</sub> = I²R = (P<sub>transmitted</sub>/V)<sup>2</sup> · R
+      </div>
+      <div class="warn">
+        <strong>Example:</strong> 120 kW at 240 V → I = 500 A → P<sub>loss</sub> = (500)²(0.4) = 100 kW (83% lost!). At 24,000 V → I = 5 A → P<sub>loss</sub> = 10 W (&lt;0.01% lost).
+      </div>
+      <p>Typical transmission: 240 kV → step down to 7200 V (substation) → step down to 120/240 V (home).</p>
+    </div>
+
+    <!-- 21.9 -->
+    <div class="subsection">
+      <h3>§21.9 — Applications of Induction</h3>
+      <ul class="summary">
+        <li><strong>Microphone:</strong> Sound vibrates a coil near a magnet → induced EMF = audio signal</li>
+        <li><strong>Seismograph:</strong> Relative motion of magnet and coil during earthquakes → induced EMF</li>
+        <li><strong>GFCI:</strong> Detects current imbalance (≥5 mA) in hot vs. neutral lines → trips in &lt;1 ms, protecting from electrocution</li>
+        <li><strong>Inductive charging:</strong> Primary coil in charger base, secondary in device — like a transformer without an iron core</li>
+      </ul>
+    </div>
+
+    <!-- 21.10 -->
+    <div class="subsection" id="lec7a-21-10">
+      <h3>§21.10 — Inductance</h3>
+      <h4>Mutual Inductance</h4>
+      <p>When current in coil 1 changes, it induces an EMF in nearby coil 2:</p>
+      <div class="eq">
+        <span class="eq-label">Mutual Inductance (Eq. 21-8)</span>
+        ε₂ = −M · (ΔI₁/Δt)
+        &nbsp;&nbsp; where M = mutual inductance [henrys, H]
+      </div>
+
+      <h4>Self-Inductance</h4>
+      <p>A changing current in a coil induces an EMF in that same coil opposing the change (<span class="kt">self-inductance</span> L):</p>
+      <div class="eq">
+        <span class="eq-label">Self-Inductance (Eq. 21-9)</span>
+        ε = −L · (ΔI/Δt)
+        &nbsp;&nbsp; [L in henrys, H]
+      </div>
+
+      <h4>Inductance of a Solenoid</h4>
+      <div class="eq">
+        <span class="eq-label">Solenoid inductance (Eq. 21-13)</span>
+        L = μ₀N²A / ℓ
+        &nbsp;&nbsp; (N turns, length ℓ, cross-section area A, air-filled)
+      </div>
+      <p>where μ₀ = 4π × 10⁻⁷ T·m/A. For iron core: replace μ₀ with μ = K<sub>m</sub>μ₀ where K<sub>m</sub> ≈ hundreds to thousands.</p>
+
+      <div class="def">
+        <strong>Units:</strong> 1 Henry (H) = 1 V·s/A. An inductor symbol on circuit diagrams: ⌇⌇⌇⌇ (coil).
+      </div>
+    </div>
+
+    <!-- 21.11 -->
+    <div class="subsection" id="lec7a-21-11">
+      <h3>§21.11 — Energy Stored in a Magnetic Field</h3>
+      <p>An inductor carrying current I stores energy in its magnetic field:</p>
+      <div class="eq">
+        <span class="eq-label">Energy in inductor (Eq. 21-10)</span>
+        U = ½LI²
+      </div>
+      <p>For a solenoid, using L = μ₀N²A/ℓ and B = μ₀NI/ℓ:</p>
+      <div class="eq">
+        <span class="eq-label">Magnetic energy density (Eq. 21-10)</span>
+        u = B² / (2μ₀) &nbsp;&nbsp; [J/m³]
+      </div>
+      <div class="warn">
+        <strong>Analogy with capacitor:</strong> Capacitor stores U = ½CV² in electric field (density u = ½ε₀E²). Inductor stores U = ½LI² in magnetic field (density u = B²/2μ₀). Both formulas are general — valid anywhere those fields exist.
+      </div>
+    </div>
+
+    <!-- 21.12 -->
+    <div class="subsection" id="lec7a-21-12">
+      <h3>§21.12 — LR Circuit</h3>
+      <p>When a battery V₀ is connected to an inductor L and resistor R in series, current builds exponentially:</p>
+      <div class="eq">
+        <span class="eq-label">Current build-up in RL circuit (Eq. 21-12)</span>
+        I(t) = (V₀/R)(1 − e<sup>−t/τ</sup>)
+        &nbsp;&nbsp; where τ = L/R (time constant)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Current decay (battery disconnected)</span>
+        I(t) = I<sub>max</sub> · e<sup>−t/τ</sup>
+      </div>
+
+      <div class="diagram">
+        <svg width="400" height="180" viewBox="0 0 400 180">
+          <!-- axes -->
+          <line x1="40" y1="30" x2="40" y2="155" stroke="#333" stroke-width="1.5"/>
+          <line x1="40" y1="155" x2="380" y2="155" stroke="#333" stroke-width="1.5"/>
+          <text x="10" y="35" font-size="11" fill="#333">I</text>
+          <text x="385" y="158" font-size="11" fill="#333">t</text>
+          <!-- Imax line -->
+          <line x1="40" y1="45" x2="380" y2="45" stroke="#aaa" stroke-width="1" stroke-dasharray="4"/>
+          <text x="43" y="43" font-size="10" fill="#888">I<tspan dy="4" font-size="8">max</tspan><tspan dy="-4">=V₀/R</tspan></text>
+          <!-- Growth curve -->
+          <path d="M40,155 C80,155 100,90 130,65 C160,45 200,47 380,46" stroke="#2e6da4" stroke-width="2.5" fill="none"/>
+          <text x="200" y="35" font-size="11" fill="#2e6da4">Growth: I=(V₀/R)(1−e⁻ᵗ/τ)</text>
+          <!-- tau marker -->
+          <line x1="130" y1="45" x2="130" y2="155" stroke="#e67e22" stroke-width="1" stroke-dasharray="3"/>
+          <text x="115" y="170" font-size="10" fill="#e67e22">τ=L/R</text>
+          <!-- 0.63 label -->
+          <line x1="40" y1="87" x2="130" y2="87" stroke="#e67e22" stroke-width="1" stroke-dasharray="2"/>
+          <text x="42" y="84" font-size="9" fill="#e67e22">0.63·I<tspan dy="3" font-size="7">max</tspan></text>
+        </svg>
+        <figcaption>RL circuit current growth. At t = τ = L/R, current reaches 63% of maximum.</figcaption>
+      </div>
+
+      <div class="eq-grid">
+        <div class="def">
+          <strong>Time constant:</strong> τ = L/R<br>
+          At t = τ: I = 0.63 I<sub>max</sub><br>
+          At t = 5τ: I ≈ 0.993 I<sub>max</sub> (essentially full)
+        </div>
+        <div class="def">
+          <strong>Comparison to RC:</strong><br>
+          RC circuit: τ = RC<br>
+          LR circuit: τ = L/R<br>
+          Both show exponential behavior
+        </div>
+      </div>
+
+      <h4>AC Circuits — Reactance (§21.13)</h4>
+      <p>For AC sources with current I = I₀ cos(2πft):</p>
+      <table>
+        <tr><th>Element</th><th>Voltage–Current</th><th>Reactance/Resistance</th><th>Phase</th></tr>
+        <tr><td>Resistor R</td><td>V = IR</td><td>R (ohms)</td><td>In phase</td></tr>
+        <tr><td>Inductor L</td><td>V = IX<sub>L</sub></td><td>X<sub>L</sub> = 2πfL = ωL</td><td>V leads I by 90°</td></tr>
+        <tr><td>Capacitor C</td><td>V = IX<sub>C</sub></td><td>X<sub>C</sub> = 1/(2πfC)</td><td>I leads V by 90°</td></tr>
+      </table>
+
+      <h4>LRC Series Circuit (§21.14)</h4>
+      <div class="eq">
+        <span class="eq-label">Impedance</span>
+        Z = √(R² + (X<sub>L</sub> − X<sub>C</sub>)²)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Ohm's Law for AC</span>
+        V<sub>rms</sub> = I<sub>rms</sub> · Z
+      </div>
+      <div class="eq">
+        <span class="eq-label">Phase angle</span>
+        tan φ = (X<sub>L</sub> − X<sub>C</sub>) / R
+      </div>
+    </div>
+
+  </div><!-- end lecture-body -->
+</div><!-- end lecture 7A -->
+
+<!-- ===================== LECTURE 7B ===================== -->
+<div class="lecture" id="lec7b">
+  <div class="lecture-header">
+    <h2>Lecture 7B — LC Circuits, Maxwell's Equations, EM Waves</h2>
+    <div class="meta">Date: February 19, 2026 &nbsp;|&nbsp; Sections: 21.13–21.15, 22.1–22.2</div>
+  </div>
+  <div class="lecture-body">
+
+    <!-- 21.15 LC resonance -->
+    <div class="subsection" id="lec7b-21-15">
+      <h3>§21.15 — Resonance in AC Circuits; LC Oscillations</h3>
+      <p>In an LRC series circuit, current is maximum when the impedance Z is minimum. This occurs when X<sub>L</sub> = X<sub>C</sub>, i.e., at the <span class="kt">resonant frequency</span>:</p>
+      <div class="eq">
+        <span class="eq-label">Resonant Frequency (Eq. 21-19)</span>
+        f₀ = 1 / (2π√(LC))
+        &nbsp;&nbsp; or equivalently &nbsp;&nbsp; ω₀ = 1/√(LC)
+      </div>
+      <p>At resonance, Z = R (purely resistive), and I<sub>rms</sub> = V<sub>rms</sub>/R (maximum).</p>
+
+      <h4>LC Oscillations (ideal: R ≈ 0)</h4>
+      <p>Energy oscillates between the capacitor (electric field) and the inductor (magnetic field), analogous to a mechanical pendulum:</p>
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Oscillation frequency</span>
+          f = 1 / (2π√(LC))
+        </div>
+        <div class="eq">
+          <span class="eq-label">Energy conservation</span>
+          U<sub>total</sub> = ½LI² + Q²/(2C) = const.
+        </div>
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <!-- LC circuit -->
+          <rect x="30" y="60" width="60" height="30" rx="4" fill="#ddeeff" stroke="#2e6da4" stroke-width="2"/>
+          <text x="55" y="79" font-size="12" fill="#2e6da4" text-anchor="middle">C</text>
+          <path d="M90,75 L140,75" stroke="#333" stroke-width="2"/>
+          <!-- inductor symbol -->
+          <path d="M140,75 Q150,55 160,75 Q170,55 180,75 Q190,55 200,75 Q210,55 220,75" stroke="#c0392b" stroke-width="2" fill="none"/>
+          <text x="180" y="50" font-size="12" fill="#c0392b" text-anchor="middle">L</text>
+          <path d="M220,75 L270,75" stroke="#333" stroke-width="2"/>
+          <!-- connect back -->
+          <path d="M30,75 L30,140 L270,140 L270,75" stroke="#333" stroke-width="2" fill="none"/>
+          <!-- energy arrows -->
+          <text x="150" y="120" font-size="10" fill="#555">½CV² ↔ ½LI²</text>
+          <text x="90" y="175" font-size="11" fill="#2e8b57">f = 1/(2π√LC)</text>
+          <!-- oscillation wave -->
+          <path d="M300,80 Q320,40 340,80 Q360,120 380,80 Q400,40 420,80" stroke="#e67e22" stroke-width="2" fill="none" stroke-dasharray="4"/>
+          <text x="340" y="140" font-size="10" fill="#e67e22">Q(t) = Q₀cos(ωt)</text>
+        </svg>
+        <figcaption>LC circuit oscillations: charge and current oscillate at f₀ = 1/(2π√LC).</figcaption>
+      </div>
+
+      <div class="warn">
+        <strong>Analogy to pendulum:</strong> Capacitor charge Q ↔ displacement x; Inductor current I ↔ velocity v; L ↔ mass m; 1/C ↔ spring constant k. Frequency: f = (1/2π)√(1/LC) ↔ f = (1/2π)√(k/m).
+      </div>
+
+      <h4>Radio Tuning Application</h4>
+      <p>A variable capacitor C is adjusted so that f₀ = 1/(2π√(LC)) matches the station frequency. Only that frequency produces significant current in the receiver circuit.</p>
+    </div>
+
+    <!-- 22.1 Maxwell's equations -->
+    <div class="subsection" id="lec7b-22-1">
+      <h3>§22.1 — Maxwell's Equations</h3>
+      <p>Maxwell unified all of electromagnetism into four equations. These are the foundation of classical electrodynamics and are consistent with special relativity.</p>
+
+      <div class="eq">
+        <span class="eq-label">Maxwell's Equation 1 — Gauss's Law (Electric)</span>
+        ΣE⊥ΔA = Q<sub>encl</sub> / ε₀
+        &nbsp;&nbsp; "Electric field lines originate on positive charges"
+      </div>
+      <div class="eq">
+        <span class="eq-label">Maxwell's Equation 2 — Gauss's Law (Magnetic)</span>
+        ΣB⊥ΔA = 0
+        &nbsp;&nbsp; "Magnetic field lines always form closed loops — no magnetic monopoles"
+      </div>
+      <div class="eq">
+        <span class="eq-label">Maxwell's Equation 3 — Faraday's Law</span>
+        ΣE‖Δℓ = −ΔΦ<sub>B</sub>/Δt
+        &nbsp;&nbsp; "A changing magnetic field produces an electric field"
+      </div>
+      <div class="eq">
+        <span class="eq-label">Maxwell's Equation 4 — Ampère's Law (Extended)</span>
+        ΣB‖Δℓ = μ₀I + μ₀ε₀(ΔΦ<sub>E</sub>/Δt)
+        &nbsp;&nbsp; "A current OR changing electric field produces a magnetic field"
+      </div>
+
+      <div class="warn">
+        <strong>Maxwell's key addition:</strong> The term μ₀ε₀(ΔΦ<sub>E</sub>/Δt) in Equation 4 is the "<span class="kt">displacement current</span>" — Maxwell's hypothesis that a changing electric field acts like a current and produces a magnetic field. This symmetry predicts electromagnetic waves.
+      </div>
+
+      <table>
+        <tr><th>Equation</th><th>Named for</th><th>Physical meaning</th></tr>
+        <tr><td>1. Electric Gauss's Law</td><td>Gauss / Coulomb</td><td>Electric charges are sources of E field</td></tr>
+        <tr><td>2. Magnetic Gauss's Law</td><td>Gauss</td><td>No magnetic monopoles; B field lines close</td></tr>
+        <tr><td>3. Faraday's Law</td><td>Faraday</td><td>Changing B → electric field</td></tr>
+        <tr><td>4. Ampère–Maxwell Law</td><td>Ampère / Maxwell</td><td>Current or changing E → magnetic field</td></tr>
+      </table>
+    </div>
+
+    <!-- 22.2 Production of EM Waves -->
+    <div class="subsection" id="lec7b-22-2">
+      <h3>§22.2 — Production of Electromagnetic Waves</h3>
+      <p>Maxwell reasoned: if changing B → E (Faraday), and changing E → B (his extension of Ampère), then these fields can mutually sustain each other and propagate through space as a wave — even in vacuum.</p>
+
+      <h4>How EM Waves are Produced</h4>
+      <p>Oscillating charges on an antenna (driven by an AC source) create oscillating E and B fields. These fields "detach" from the antenna and propagate outward as <span class="kt">electromagnetic waves</span>.</p>
+
+      <div class="def">
+        <strong>Key properties of EM waves:</strong>
+        <ul class="summary" style="margin-top:0.3rem">
+          <li>E and B are perpendicular to each other and to the direction of propagation (transverse wave)</li>
+          <li>E and B are in phase (reach maxima simultaneously)</li>
+          <li>Amplitude decreases as 1/r from source; intensity as 1/r²</li>
+          <li>Self-sustaining: no medium required — propagate in vacuum</li>
+          <li>Produced by <em>accelerating</em> electric charges</li>
+        </ul>
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="170" viewBox="0 0 420 170">
+          <!-- direction of propagation -->
+          <line x1="20" y1="85" x2="400" y2="85" stroke="#555" stroke-width="1.5" stroke-dasharray="4"/>
+          <line x1="380" y1="80" x2="405" y2="85" stroke="#555" stroke-width="2"/>
+          <line x1="380" y1="90" x2="405" y2="85" stroke="#555" stroke-width="2"/>
+          <text x="380" y="75" font-size="11" fill="#555">→ z</text>
+          <!-- E field (vertical, red) -->
+          <path d="M40,85 Q65,30 90,85 Q115,140 140,85 Q165,30 190,85 Q215,140 240,85 Q265,30 290,85 Q315,140 340,85" stroke="#c0392b" stroke-width="2.5" fill="none"/>
+          <text x="170" y="20" font-size="11" fill="#c0392b" font-weight="bold">E (vertical)</text>
+          <!-- B field (horizontal, blue) -->
+          <path d="M40,85 Q65,60 90,85 Q115,110 140,85 Q165,60 190,85 Q215,110 240,85 Q265,60 290,85 Q315,110 340,85" stroke="#2e6da4" stroke-width="2.5" fill="none" opacity="0.7"/>
+          <text x="170" y="160" font-size="11" fill="#2e6da4" font-weight="bold">B (horizontal, into/out of page)</text>
+          <text x="10" y="100" font-size="10" fill="#2e8b57">→ propagation</text>
+        </svg>
+        <figcaption>EM wave: E (red) and B (blue) oscillate perpendicular to each other and to the direction of travel.</figcaption>
+      </div>
+
+      <div class="eq">
+        <span class="eq-label">Ratio of E to B in EM wave</span>
+        E/B = c &nbsp;&nbsp; (speed of light)
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 8B ===================== -->
+<div class="lecture" id="lec8b">
+  <div class="lecture-header">
+    <h2>Lecture 8B — Maxwell's Equations &amp; Electromagnetic Waves (Full)</h2>
+    <div class="meta">Date: February 26, 2026 &nbsp;|&nbsp; Sections: 22.1–22.5</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec8b-22-3">
+      <h3>§22.3 — Light as an EM Wave; The EM Spectrum</h3>
+      <p>Maxwell calculated the speed of EM waves from his equations and found it exactly matched the measured speed of light. Therefore <strong>light is an electromagnetic wave</strong>.</p>
+      <div class="eq">
+        <span class="eq-label">Speed of Light (Eq. 22-2, 22-3)</span>
+        c = 1/√(ε₀μ₀) = E/B = 3.00 × 10⁸ m/s
+      </div>
+      <p>where ε₀ = 8.85 × 10⁻¹² C²/(N·m²) and μ₀ = 4π × 10⁻⁷ N/A².</p>
+
+      <div class="eq">
+        <span class="eq-label">Wave equation (Eq. 22-4)</span>
+        c = f · λ &nbsp;&nbsp; (applies to all EM waves in vacuum)
+      </div>
+
+      <h4>The Electromagnetic Spectrum</h4>
+      <table>
+        <tr><th>Type</th><th>Wavelength</th><th>Frequency</th><th>Uses/Source</th></tr>
+        <tr><td>Radio waves</td><td>10³ m – 0.1 m</td><td>10⁴ – 10⁹ Hz</td><td>AM/FM radio, TV</td></tr>
+        <tr><td>Microwaves</td><td>0.1 m – 1 mm</td><td>10⁹ – 3×10¹¹ Hz</td><td>Radar, microwave ovens, WiFi</td></tr>
+        <tr><td>Infrared (IR)</td><td>1 mm – 700 nm</td><td>3×10¹¹ – 4×10¹⁴ Hz</td><td>Heat, remote controls, IR cameras</td></tr>
+        <tr><td><strong>Visible light</strong></td><td>700 nm – 400 nm</td><td>4–7.5 × 10¹⁴ Hz</td><td>Vision (red → violet)</td></tr>
+        <tr><td>Ultraviolet (UV)</td><td>400 nm – 10 nm</td><td>7.5×10¹⁴ – 10¹⁶ Hz</td><td>Sun, sterilization</td></tr>
+        <tr><td>X-rays</td><td>10 nm – 0.01 nm</td><td>10¹⁶ – 10¹⁸ Hz</td><td>Medical imaging, crystallography</td></tr>
+        <tr><td>Gamma rays</td><td>&lt; 0.01 nm</td><td>&gt; 10¹⁸ Hz</td><td>Nuclear decay, cancer therapy</td></tr>
+      </table>
+      <div class="warn">
+        <strong>Visible light:</strong> wavelengths 400 nm (violet) to 700 nm (red). Frequencies ≈ 4.3 × 10¹⁴ Hz (red) to 7.5 × 10¹⁴ Hz (violet).
+      </div>
+    </div>
+
+    <div class="subsection" id="lec8b-22-4">
+      <h3>§22.4 — Measuring the Speed of Light</h3>
+      <p>Historical methods: Rømer (1676, Jupiter's moons), Michelson (rotating mirror, 1926). Modern value:</p>
+      <div class="eq">
+        c = 2.9979 × 10⁸ m/s ≈ 3.00 × 10⁸ m/s (exact by definition since 1983)
+      </div>
+      <p>In a medium with index of refraction n: &nbsp; v = c/n &lt; c</p>
+    </div>
+
+    <div class="subsection" id="lec8b-22-5">
+      <h3>§22.5 — Energy and Intensity of EM Waves</h3>
+      <p>EM waves carry energy. The energy density in fields E and B:</p>
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Electric field energy density</span>
+          u<sub>E</sub> = ½ε₀E²
+        </div>
+        <div class="eq">
+          <span class="eq-label">Magnetic field energy density</span>
+          u<sub>B</sub> = B²/(2μ₀)
+        </div>
+      </div>
+      <p>Since E = cB and c = 1/√(ε₀μ₀), the two contributions are equal: u<sub>E</sub> = u<sub>B</sub>.</p>
+      <div class="eq">
+        <span class="eq-label">Total EM energy density</span>
+        u = ε₀E² = B²/μ₀ = ε₀E·cB
+      </div>
+
+      <h4>Intensity (Irradiance)</h4>
+      <p>Intensity = power per unit area (W/m²). For a plane EM wave with peak fields E₀ and B₀:</p>
+      <div class="eq">
+        <span class="eq-label">Intensity of EM wave (Eq. 22-7)</span>
+        I = S<sub>avg</sub> = ½c·ε₀·E₀² = (E₀B₀)/(2μ₀) = c·ε₀·E<sub>rms</sub>²
+      </div>
+      <div class="eq">
+        <span class="eq-label">RMS fields</span>
+        E<sub>rms</sub> = E₀/√2, &nbsp;&nbsp; B<sub>rms</sub> = B₀/√2
+      </div>
+
+      <div class="warn">
+        <strong>Poynting vector S:</strong> The instantaneous power per area carried by an EM wave is S = cε₀E² = (EB)/μ₀. The time-averaged value is I = S<sub>avg</sub> = ½cε₀E₀².
+      </div>
+
+      <h4>Radiation Pressure</h4>
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Pressure (fully absorbed)</span>
+          P = I/c
+        </div>
+        <div class="eq">
+          <span class="eq-label">Pressure (fully reflected)</span>
+          P = 2I/c
+        </div>
+      </div>
+      <p>Radiation pressure is tiny but measurable (demonstrated by Crookes radiometer, solar sails concept).</p>
+
+      <h4>Inverse Square Law</h4>
+      <div class="eq">
+        I = P<sub>source</sub> / (4πr²) &nbsp;&nbsp; (for isotropic source)
+      </div>
+      <p>E and B amplitudes fall as 1/r; intensity falls as 1/r².</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 9A ===================== -->
+<div class="lecture" id="lec9a">
+  <div class="lecture-header">
+    <h2>Lecture 9A — Wave Optics: Interference &amp; Diffraction; Refraction</h2>
+    <div class="meta">Date: March 3, 2026 &nbsp;|&nbsp; Sections: 24.1–24.7, 23.1–23.2, 23.4–23.6</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec9a-24-1">
+      <h3>§24.1 — Waves vs. Rays; Huygens' Principle</h3>
+      <p><span class="kt">Huygens' Principle:</span> Every point on a wavefront acts as a source of secondary spherical wavelets. The new wavefront is the envelope of these wavelets after a time Δt.</p>
+      <p>This explains reflection and refraction using wave theory. It also explains why light bends around corners (diffraction) — prominent when λ is comparable to slit/obstacle size.</p>
+      <div class="def">
+        <strong>When to use wave optics:</strong> When slit/obstacle size ≈ λ (diffraction is important). <br>
+        <strong>When to use ray optics:</strong> When slit/obstacle ≫ λ (geometric optics is a good approximation).
+      </div>
+    </div>
+
+    <div class="subsection" id="lec9a-24-2">
+      <h3>§24.2 — Young's Double-Slit Experiment</h3>
+      <p>Two narrow slits separated by distance <em>d</em> are illuminated by coherent light (wavelength λ). Waves from the two slits interfere, producing alternating bright and dark fringes on a screen at distance <em>L</em>.</p>
+
+      <div class="eq-grid">
+        <div class="eq">
+          <span class="eq-label">Constructive interference (bright fringes)</span>
+          d sin θ = mλ &nbsp;&nbsp; m = 0, ±1, ±2, …
+        </div>
+        <div class="eq">
+          <span class="eq-label">Destructive interference (dark fringes)</span>
+          d sin θ = (m + ½)λ &nbsp;&nbsp; m = 0, ±1, ±2, …
+        </div>
+      </div>
+      <div class="eq">
+        <span class="eq-label">Fringe spacing on screen (small angle: sin θ ≈ tan θ = y/L)</span>
+        y<sub>m</sub> = mλL/d &nbsp;&nbsp; (position of m-th bright fringe)
+        &nbsp;&nbsp; Fringe spacing: Δy = λL/d
+      </div>
+
+      <div class="diagram">
+        <svg width="400" height="200" viewBox="0 0 400 200">
+          <!-- barrier with 2 slits -->
+          <rect x="100" y="20" width="8" height="60" fill="#555"/>
+          <rect x="100" y="100" width="8" height="40" fill="#555"/>
+          <rect x="100" y="160" width="8" height="30" fill="#555"/>
+          <text x="85" y="90" font-size="10" fill="#555" text-anchor="middle">d</text>
+          <line x1="108" y1="80" x2="108" y2="100" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="2"/>
+          <!-- rays to screen -->
+          <line x1="108" y1="80" x2="330" y2="50" stroke="#2e6da4" stroke-width="1.2" opacity="0.7"/>
+          <line x1="108" y1="80" x2="330" y2="100" stroke="#2e6da4" stroke-width="1.2" opacity="0.7"/>
+          <line x1="108" y1="100" x2="330" y2="100" stroke="#2e6da4" stroke-width="1.2" opacity="0.7"/>
+          <line x1="108" y1="100" x2="330" y2="150" stroke="#2e6da4" stroke-width="1.2" opacity="0.7"/>
+          <!-- screen -->
+          <rect x="330" y="20" width="8" height="160" fill="#ddd" stroke="#999"/>
+          <!-- bright fringes -->
+          <rect x="330" y="48" width="8" height="4" fill="#ffee00"/>
+          <rect x="330" y="98" width="8" height="4" fill="#ffee00"/>
+          <rect x="330" y="148" width="8" height="4" fill="#ffee00"/>
+          <text x="345" y="102" font-size="10" fill="#2e8b57">m=0</text>
+          <text x="345" y="52" font-size="10" fill="#2e8b57">m=1</text>
+          <!-- labels -->
+          <text x="30" y="93" font-size="11" fill="#555">→ light</text>
+          <text x="200" y="185" font-size="10" fill="#555">L (screen distance)</text>
+          <line x1="108" y1="180" x2="330" y2="180" stroke="#555" stroke-width="1"/>
+        </svg>
+        <figcaption>Young's double-slit. Bright fringes where path difference = mλ. Fringe spacing Δy = λL/d.</figcaption>
+      </div>
+
+      <div class="warn">
+        <strong>Phase difference:</strong> Path difference δ = d sin θ. Constructive: δ = mλ (integer wavelengths). Destructive: δ = (m+½)λ (half-integer wavelengths). Two sources must be coherent (same frequency, constant phase relationship).
+      </div>
+
+      <h4>Index of Refraction and Wavelength in a Medium</h4>
+      <div class="eq">
+        <span class="eq-label">Wavelength in medium with index n</span>
+        λ<sub>n</sub> = λ / n &nbsp;&nbsp; (frequency unchanged: f = c/λ = v/λ<sub>n</sub>)
+      </div>
+    </div>
+
+    <div class="subsection" id="lec9a-24-4">
+      <h3>§24.4 — Diffraction Grating</h3>
+      <p>A diffraction grating has many closely spaced slits (N slits, spacing d). The condition for bright maxima is the same as double-slit, but the peaks are much sharper and brighter:</p>
+      <div class="eq">
+        <span class="eq-label">Diffraction Grating — Principal Maxima</span>
+        d sin θ = mλ &nbsp;&nbsp; m = 0, ±1, ±2, … &nbsp;&nbsp; (m = order)
+      </div>
+      <p>where d = 1/(number of lines per meter) = grating spacing.</p>
+
+      <div class="def">
+        <strong>Advantages over double-slit:</strong> Many slits → very sharp, bright maxima (narrow peaks). Used in spectrometers to measure wavelengths with high precision. White light → each wavelength appears at a different angle.
+      </div>
+
+      <h4>Resolving Power</h4>
+      <div class="eq">
+        R = λ/Δλ = mN &nbsp;&nbsp; (m = order, N = total number of slits)
+      </div>
+    </div>
+
+    <div class="subsection" id="lec9a-24-5">
+      <h3>§24.5 — Single-Slit Diffraction</h3>
+      <p>Even a single slit of width <em>a</em> produces a diffraction pattern. Minima occur where:</p>
+      <div class="eq">
+        <span class="eq-label">Single-Slit — Dark Fringes (minima)</span>
+        a sin θ = mλ &nbsp;&nbsp; m = ±1, ±2, ±3, … &nbsp;&nbsp; (NOT m = 0)
+      </div>
+      <div class="warn">
+        <strong>Note:</strong> m = 0 is the central maximum (not a minimum!). Minima at m = ±1, ±2, … The central maximum has double the width of the other maxima.
+      </div>
+      <p>Central maximum width: Δy = 2λL/a. Narrower slit → wider diffraction pattern (inverse relationship).</p>
+
+      <div class="diagram">
+        <svg width="380" height="160" viewBox="0 0 380 160">
+          <!-- single slit -->
+          <rect x="80" y="10" width="6" height="55" fill="#555"/>
+          <rect x="80" y="95" width="6" height="55" fill="#555"/>
+          <text x="50" y="76" font-size="10" fill="#555">a</text>
+          <line x1="86" y1="65" x2="86" y2="95" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="2"/>
+          <!-- intensity pattern on screen -->
+          <rect x="300" y="10" width="6" height="140" fill="#ddd"/>
+          <!-- central max -->
+          <ellipse cx="303" cy="80" rx="3" ry="35" fill="#ffee00" opacity="0.8"/>
+          <!-- side maxima -->
+          <ellipse cx="303" cy="28" rx="3" ry="12" fill="#ffee00" opacity="0.5"/>
+          <ellipse cx="303" cy="132" rx="3" ry="12" fill="#ffee00" opacity="0.5"/>
+          <!-- labels -->
+          <text x="315" y="82" font-size="10" fill="#333">Central max</text>
+          <text x="315" y="30" font-size="10" fill="#333">m=1</text>
+          <text x="315" y="134" font-size="10" fill="#333">m=-1</text>
+          <!-- dark fringe arrows -->
+          <text x="315" y="50" font-size="9" fill="#c0392b">← dark (m=1)</text>
+          <text x="315" y="112" font-size="9" fill="#c0392b">← dark (m=-1)</text>
+          <!-- width label -->
+          <text x="120" y="150" font-size="10" fill="#555">a sinθ = mλ (minima)</text>
+        </svg>
+        <figcaption>Single-slit diffraction intensity pattern. Minima at a sinθ = mλ (m ≠ 0).</figcaption>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§24.6 — Diffraction and the Double-Slit</h3>
+      <p>The actual double-slit pattern is the product of the two-slit interference pattern and the single-slit diffraction envelope. Some interference maxima may be "missing" if they coincide with single-slit minima.</p>
+      <div class="eq">
+        Missing order when: &nbsp; m<sub>double-slit</sub> = m' · (d/a) &nbsp; where m' is a single-slit minimum order
+      </div>
+    </div>
+
+    <div class="subsection" id="lec9a-24-7">
+      <h3>§24.7 — Thin-Film Interference</h3>
+      <p>When light reflects from a thin film (e.g., soap bubble, oil slick), rays reflecting from the top and bottom surfaces may interfere. The path difference is 2t (twice the film thickness for normal incidence).</p>
+
+      <h4>Phase Shift on Reflection</h4>
+      <div class="def">
+        <strong>Phase shift rule:</strong> When light reflects from a surface where it goes from lower to higher n, it undergoes a 180° phase shift (equivalent to λ/2 path difference). No phase shift when going from higher to lower n.
+      </div>
+
+      <table>
+        <tr><th>Condition</th><th>Bright (constructive)</th><th>Dark (destructive)</th></tr>
+        <tr><td>0 or 2 phase shifts (both or neither surfaces shift)</td><td>2t = mλ<sub>n</sub></td><td>2t = (m+½)λ<sub>n</sub></td></tr>
+        <tr><td>1 phase shift (one surface shifts)</td><td>2t = (m+½)λ<sub>n</sub></td><td>2t = mλ<sub>n</sub></td></tr>
+      </table>
+      <p>where λ<sub>n</sub> = λ/n is the wavelength inside the film (n = index of film).</p>
+
+      <div class="eq">
+        <span class="eq-label">Thin-film: path difference in film</span>
+        2t = mλ/n &nbsp;&nbsp; or &nbsp;&nbsp; 2nt = mλ &nbsp;&nbsp; (bright, with one phase shift)
+      </div>
+
+      <div class="warn">
+        <strong>Examples:</strong>
+        <ul style="margin:0.3rem 0 0 1rem">
+          <li>Soap film (n ≈ 1.33) in air: one phase shift (at top surface only) → 2nt = (m+½)λ for bright</li>
+          <li>Oil (n = 1.5) on water (n = 1.33): both surfaces shift → 2nt = mλ for bright</li>
+          <li>Anti-reflection coating: one phase shift, thickness = λ/(4n) → destructive reflection</li>
+        </ul>
+      </div>
+
+      <h4>Newton's Rings</h4>
+      <p>Circular thin-film interference rings formed between a convex lens and a flat glass surface. Central spot is dark (one phase shift, t→0).</p>
+    </div>
+
+    <!-- 23.1 Ray model -->
+    <div class="subsection" id="lec9a-23-1">
+      <h3>§23.1 — The Ray Model of Light</h3>
+      <p>Light travels in straight-line paths called <span class="kt">rays</span> when λ ≪ size of obstacles. This is the basis of <span class="kt">geometric optics</span>. Ray model successfully explains reflection, refraction, and image formation.</p>
+    </div>
+
+    <!-- 23.2 Reflection -->
+    <div class="subsection">
+      <h3>§23.2 — Reflection; Plane Mirror Images</h3>
+      <div class="eq">
+        <span class="eq-label">Law of Reflection</span>
+        θ<sub>r</sub> = θ<sub>i</sub> &nbsp;&nbsp; (angle of reflection = angle of incidence, measured from normal)
+      </div>
+      <p><strong>Plane mirror:</strong> Virtual, upright image. Image distance = object distance (d<sub>i</sub> = d<sub>o</sub> behind mirror). Image same size as object. Mirror need only be half person's height for full-body view.</p>
+      <div class="def">
+        <strong>Real image:</strong> Light rays actually converge at image point. Can be projected on screen.<br>
+        <strong>Virtual image:</strong> Rays only appear to diverge from image point (don't pass through it). Cannot be projected.
+      </div>
+    </div>
+
+    <!-- 23.4 Refraction -->
+    <div class="subsection" id="lec9a-23-4">
+      <h3>§23.4 — Refraction; Snell's Law</h3>
+      <p>When light crosses a boundary between media with different indices of refraction, it bends. <span class="kt">Snell's Law</span>:</p>
+      <div class="eq">
+        <span class="eq-label">Snell's Law of Refraction</span>
+        n₁ sin θ₁ = n₂ sin θ₂
+      </div>
+      <p>n = index of refraction = c/v. Light bends toward the normal when entering a denser medium (n₂ &gt; n₁), away from normal when entering less dense.</p>
+
+      <table>
+        <tr><th>Medium</th><th>Index n</th><th>Speed v = c/n</th></tr>
+        <tr><td>Vacuum</td><td>1.000</td><td>3.00 × 10⁸ m/s</td></tr>
+        <tr><td>Air</td><td>1.0003 ≈ 1.00</td><td>≈ c</td></tr>
+        <tr><td>Water</td><td>1.33</td><td>2.26 × 10⁸ m/s</td></tr>
+        <tr><td>Glass (crown)</td><td>1.52</td><td>1.97 × 10⁸ m/s</td></tr>
+        <tr><td>Diamond</td><td>2.42</td><td>1.24 × 10⁸ m/s</td></tr>
+      </table>
+
+      <div class="diagram">
+        <svg width="300" height="200" viewBox="0 0 300 200">
+          <!-- interface -->
+          <line x1="0" y1="100" x2="300" y2="100" stroke="#999" stroke-width="1.5" stroke-dasharray="5"/>
+          <text x="220" y="90" font-size="11" fill="#555">n₁ (air)</text>
+          <text x="220" y="115" font-size="11" fill="#2e6da4">n₂ (glass, n₂&gt;n₁)</text>
+          <!-- normal -->
+          <line x1="150" y1="20" x2="150" y2="180" stroke="#ccc" stroke-width="1" stroke-dasharray="3"/>
+          <!-- incident ray -->
+          <line x1="60" y1="20" x2="150" y2="100" stroke="#e67e22" stroke-width="2.5" marker-end="url(#arr3)"/>
+          <!-- reflected ray -->
+          <line x1="150" y1="100" x2="240" y2="20" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3"/>
+          <!-- refracted ray -->
+          <line x1="150" y1="100" x2="195" y2="180" stroke="#2e6da4" stroke-width="2.5" marker-end="url(#arr4)"/>
+          <!-- angle labels -->
+          <text x="108" y="72" font-size="11" fill="#e67e22">θ₁</text>
+          <text x="162" y="145" font-size="11" fill="#2e6da4">θ₂</text>
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e67e22"/></marker>
+            <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2e6da4"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Snell's Law: n₁ sin θ₁ = n₂ sin θ₂. Light bends toward normal entering denser medium.</figcaption>
+      </div>
+
+      <h4>§23.5 — Total Internal Reflection (TIR)</h4>
+      <p>When light travels from denser (n₁) to less dense (n₂) medium, and θ₁ exceeds the <span class="kt">critical angle</span> θ<sub>c</sub>, light is totally reflected (no refracted ray):</p>
+      <div class="eq">
+        <span class="eq-label">Critical Angle for TIR (n₁ &gt; n₂)</span>
+        sin θ<sub>c</sub> = n₂ / n₁
+        &nbsp;&nbsp; (if n₂ = air ≈ 1: sin θ<sub>c</sub> = 1/n₁)
+      </div>
+      <div class="def">
+        <strong>Applications of TIR:</strong>
+        <ul style="margin:0.3rem 0 0 1rem">
+          <li><strong>Optical fibers:</strong> Light trapped by TIR at glass–air boundary; used in communications and medical scopes</li>
+          <li><strong>Prism binoculars:</strong> 45°-45°-90° prisms (n ≈ 1.5, θ<sub>c</sub> = 41.8°) fold light path</li>
+          <li><strong>Diamonds:</strong> Very high n (2.42), small θ<sub>c</sub> (24.4°) → lots of internal reflections → brilliance</li>
+        </ul>
+      </div>
+
+      <h4>§23.6 — Visible Spectrum and Dispersion</h4>
+      <p>Glass has different n for different wavelengths: n is slightly larger for violet (shorter λ) than red (longer λ). This <span class="kt">dispersion</span> causes a prism to split white light into a spectrum. Rainbows are caused by dispersion in water droplets.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 9B ===================== -->
+<div class="lecture" id="lec9b">
+  <div class="lecture-header">
+    <h2>Lecture 9B — Geometric Optics: Mirrors &amp; Lenses</h2>
+    <div class="meta">Date: March 5, 2026 &nbsp;|&nbsp; Sections: 23.3, 23.7–23.10</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec9b-23-3">
+      <h3>§23.3 — Formation of Images by Spherical Mirrors</h3>
+      <h4>Focal Length of a Spherical Mirror</h4>
+      <p>For a concave spherical mirror with radius of curvature r, parallel rays converge at the focal point F. The focal length:</p>
+      <div class="eq">
+        <span class="eq-label">Focal length of spherical mirror (Eq. 23-1)</span>
+        f = r / 2
+      </div>
+      <p>Valid for paraxial rays (small angles only). Concave mirror: f &gt; 0. Convex mirror: f &lt; 0.</p>
+
+      <h4>Mirror Equation</h4>
+      <div class="eq">
+        <span class="eq-label">Mirror Equation (Eq. 23-2)</span>
+        1/d<sub>o</sub> + 1/d<sub>i</sub> = 1/f = 2/r
+      </div>
+      <div class="eq">
+        <span class="eq-label">Lateral Magnification (Eq. 23-3)</span>
+        m = h<sub>i</sub>/h<sub>o</sub> = −d<sub>i</sub>/d<sub>o</sub>
+      </div>
+
+      <h4>Sign Conventions for Mirrors</h4>
+      <table>
+        <tr><th>Quantity</th><th>Positive (+)</th><th>Negative (−)</th></tr>
+        <tr><td>d<sub>o</sub></td><td>Object in front of mirror</td><td>Object behind mirror (virtual object)</td></tr>
+        <tr><td>d<sub>i</sub></td><td>Image in front of mirror (real)</td><td>Image behind mirror (virtual)</td></tr>
+        <tr><td>f</td><td>Concave mirror</td><td>Convex mirror</td></tr>
+        <tr><td>m</td><td>Image upright</td><td>Image inverted</td></tr>
+      </table>
+
+      <h4>Ray Diagram Rules for Mirrors</h4>
+      <div class="ascii">
+  Three principal rays from object point O':
+
+  Ray 1: Parallel to axis → reflects through F (concave) or away from F (convex)
+  Ray 2: Through F → reflects parallel to axis
+  Ray 3: Through center of curvature C → reflects back on itself
+
+  Image I' forms where reflected rays intersect (real)
+  or appear to intersect behind mirror (virtual)</div>
+
+      <h4>Cases for Concave Mirrors</h4>
+      <table>
+        <tr><th>Object location</th><th>Image type</th><th>Image location</th><th>Orientation</th><th>Size</th></tr>
+        <tr><td>d<sub>o</sub> &gt; 2f (beyond C)</td><td>Real</td><td>f &lt; d<sub>i</sub> &lt; 2f</td><td>Inverted</td><td>Reduced</td></tr>
+        <tr><td>d<sub>o</sub> = 2f (at C)</td><td>Real</td><td>d<sub>i</sub> = 2f</td><td>Inverted</td><td>Same size</td></tr>
+        <tr><td>f &lt; d<sub>o</sub> &lt; 2f</td><td>Real</td><td>d<sub>i</sub> &gt; 2f</td><td>Inverted</td><td>Enlarged</td></tr>
+        <tr><td>d<sub>o</sub> = f</td><td>—</td><td>d<sub>i</sub> = ∞</td><td>—</td><td>—</td></tr>
+        <tr><td>d<sub>o</sub> &lt; f (inside F)</td><td>Virtual</td><td>Behind mirror</td><td>Upright</td><td>Enlarged</td></tr>
+      </table>
+
+      <div class="warn">
+        <strong>Convex mirror:</strong> Always forms virtual, upright, reduced image regardless of object position. Wide field of view → used as security/rearview mirrors. f is negative.
+      </div>
+    </div>
+
+    <!-- 23.7 Thin lenses -->
+    <div class="subsection" id="lec9b-23-7">
+      <h3>§23.7 — Thin Lenses</h3>
+      <p>A lens refracts light at two surfaces. A <span class="kt">converging lens</span> (thicker at center) has positive focal length; a <span class="kt">diverging lens</span> (thinner at center) has negative focal length.</p>
+
+      <div class="diagram">
+        <svg width="420" height="160" viewBox="0 0 420 160">
+          <!-- Converging lens -->
+          <ellipse cx="120" cy="80" rx="10" ry="50" fill="#cce8ff" stroke="#2e6da4" stroke-width="2"/>
+          <text x="105" y="20" font-size="11" fill="#2e6da4">Converging</text>
+          <text x="108" y="32" font-size="10" fill="#2e6da4">(+ lens)</text>
+          <!-- parallel rays converging -->
+          <line x1="20" y1="60" x2="130" y2="60" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="130" y1="60" x2="180" y2="80" stroke="#e67e22" stroke-width="1.5" marker-end="url(#arr5)"/>
+          <line x1="20" y1="80" x2="130" y2="80" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="130" y1="80" x2="180" y2="80" stroke="#e67e22" stroke-width="1.5" marker-end="url(#arr5)"/>
+          <line x1="20" y1="100" x2="130" y2="100" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="130" y1="100" x2="180" y2="80" stroke="#e67e22" stroke-width="1.5" marker-end="url(#arr5)"/>
+          <text x="175" y="70" font-size="10" fill="#c0392b">F</text>
+          <!-- Diverging lens -->
+          <path d="M280,30 Q268,80 280,130 M300,30 Q312,80 300,130" stroke="#c0392b" stroke-width="2" fill="#ffe8e8"/>
+          <text x="268" y="20" font-size="11" fill="#c0392b">Diverging</text>
+          <text x="275" y="32" font-size="10" fill="#c0392b">(− lens)</text>
+          <!-- rays diverging -->
+          <line x1="220" y1="60" x2="290" y2="60" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="290" y1="60" x2="380" y2="45" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3"/>
+          <line x1="220" y1="80" x2="290" y2="80" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="290" y1="80" x2="380" y2="80" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3"/>
+          <line x1="220" y1="100" x2="290" y2="100" stroke="#e67e22" stroke-width="1.5"/>
+          <line x1="290" y1="100" x2="380" y2="115" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3"/>
+          <text x="240" y="70" font-size="10" fill="#c0392b">F (virtual)</text>
+          <defs>
+            <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e67e22"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Converging lens focuses parallel rays at real focal point F. Diverging lens causes rays to spread from virtual F.</figcaption>
+      </div>
+
+      <h4>Lens Types</h4>
+      <table>
+        <tr><th>Shape</th><th>Name</th><th>f</th></tr>
+        <tr><td>Biconvex, plano-convex, converging meniscus</td><td>Converging</td><td>f &gt; 0</td></tr>
+        <tr><td>Biconcave, plano-concave, diverging meniscus</td><td>Diverging</td><td>f &lt; 0</td></tr>
+      </table>
+    </div>
+
+    <!-- 23.8 Lens equation -->
+    <div class="subsection" id="lec9b-23-8">
+      <h3>§23.8 — The Thin Lens Equation</h3>
+      <div class="eq">
+        <span class="eq-label">Thin Lens Equation (same form as mirror equation)</span>
+        1/d<sub>o</sub> + 1/d<sub>i</sub> = 1/f
+      </div>
+      <div class="eq">
+        <span class="eq-label">Lateral Magnification</span>
+        m = h<sub>i</sub>/h<sub>o</sub> = −d<sub>i</sub>/d<sub>o</sub>
+      </div>
+
+      <h4>Sign Conventions for Thin Lenses</h4>
+      <table>
+        <tr><th>Quantity</th><th>Positive (+)</th><th>Negative (−)</th></tr>
+        <tr><td>d<sub>o</sub></td><td>Object on incoming light side</td><td>Virtual object</td></tr>
+        <tr><td>d<sub>i</sub></td><td>Image on outgoing side (real)</td><td>Image on same side as object (virtual)</td></tr>
+        <tr><td>f</td><td>Converging lens</td><td>Diverging lens</td></tr>
+        <tr><td>m</td><td>Image upright</td><td>Image inverted</td></tr>
+      </table>
+
+      <h4>Lens Power (Diopters)</h4>
+      <div class="eq">
+        P = 1/f &nbsp;&nbsp; [diopters, D; f in meters]
+        &nbsp;&nbsp; Example: f = 25 cm → P = +4.0 D
+      </div>
+
+      <h4>Ray Diagram Rules for Lenses</h4>
+      <div class="ascii">
+  Three principal rays (for converging lens):
+
+  Ray 1: Parallel to axis → refracts through far focal point F₂
+  Ray 2: Through optical center (midpoint of lens) → passes straight through
+  Ray 3: Through near focal point F₁ → refracts parallel to axis
+
+  Image forms where refracted rays intersect (real)
+  or appear to diverge from (virtual, same side as object)</div>
+
+      <h4>Image Cases for Converging Lens</h4>
+      <table>
+        <tr><th>Object location</th><th>Image</th><th>Orientation</th><th>Size</th><th>Type</th></tr>
+        <tr><td>d<sub>o</sub> &gt; 2f</td><td>f &lt; d<sub>i</sub> &lt; 2f</td><td>Inverted</td><td>Reduced</td><td>Real</td></tr>
+        <tr><td>d<sub>o</sub> = 2f</td><td>d<sub>i</sub> = 2f</td><td>Inverted</td><td>Same</td><td>Real</td></tr>
+        <tr><td>f &lt; d<sub>o</sub> &lt; 2f</td><td>d<sub>i</sub> &gt; 2f</td><td>Inverted</td><td>Enlarged</td><td>Real</td></tr>
+        <tr><td>d<sub>o</sub> &lt; f</td><td>Same side as object</td><td>Upright</td><td>Enlarged</td><td>Virtual</td></tr>
+      </table>
+      <p>Diverging lens: always virtual, upright, reduced image.</p>
+    </div>
+
+    <!-- 23.9 Lens combinations -->
+    <div class="subsection" id="lec9b-23-9">
+      <h3>§23.9 — Combinations of Lenses</h3>
+      <p>For two thin lenses in contact or close together:</p>
+      <div class="eq">
+        1/f<sub>total</sub> = 1/f₁ + 1/f₂ &nbsp;&nbsp; or &nbsp;&nbsp; P<sub>total</sub> = P₁ + P₂
+      </div>
+      <p>For separated lenses: treat each lens sequentially. The image from lens 1 becomes the object for lens 2.</p>
+
+      <h4>§23.10 — Lensmaker's Equation</h4>
+      <div class="eq">
+        <span class="eq-label">Lensmaker's Equation</span>
+        1/f = (n−1)[1/R₁ − 1/R₂]
+      </div>
+      <p>where R₁, R₂ are radii of curvature of lens surfaces (positive if center of curvature is on the far side).</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 10A ===================== -->
+<div class="lecture" id="lec10a">
+  <div class="lecture-header">
+    <h2>Lecture 10A — Optical Instruments: Camera, Eye, Magnifier</h2>
+    <div class="meta">Date: March 10, 2026 &nbsp;|&nbsp; Sections: 25.1–25.4</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec10a-25-1">
+      <h3>§25.1 — Camera</h3>
+      <p>A camera uses a converging lens to form a real, inverted, reduced image on film/sensor. The image distance is adjusted by moving the lens (focusing).</p>
+      <div class="eq">
+        1/d<sub>o</sub> + 1/d<sub>i</sub> = 1/f &nbsp;&nbsp; (thin lens equation applies)
+      </div>
+      <h4>f-stop (f-number)</h4>
+      <div class="eq">
+        f/# = f / D &nbsp;&nbsp; (f = focal length, D = aperture diameter)
+      </div>
+      <p>Common f-stops: f/1.4, f/2, f/2.8, f/4, f/5.6, f/8, f/11, f/16. Each stop halves the light area → doubles exposure time needed. Lower f/# = wider aperture = more light = shallower depth of field.</p>
+
+      <div class="def">
+        <strong>Depth of field:</strong> Range of object distances that appear in focus. Smaller aperture (larger f/#) → greater depth of field.
+      </div>
+    </div>
+
+    <div class="subsection" id="lec10a-25-2">
+      <h3>§25.2 — The Human Eye</h3>
+      <p>The eye is a variable-power optical system. The cornea does most of the refracting (~2/3 of total power). The <span class="kt">crystalline lens</span> provides fine adjustment through <span class="kt">accommodation</span> (changing shape via ciliary muscles).</p>
+
+      <div class="ascii">
+  Cross-section of Human Eye:
+
+  Incoming       Cornea  Lens    Retina (sensor)
+  light →  ─────┤(n≈1.38)├──────────────────────
+                         Vitreous humor
+                         (n≈1.337)
+
+  Image forms on retina (fovea = highest resolution)
+  Signals sent via optic nerve to brain</div>
+
+      <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Diameter of eye</td><td>≈ 2.5 cm</td></tr>
+        <tr><td>Near point (young adult)</td><td>≈ 25 cm (closest comfortable focus)</td></tr>
+        <tr><td>Far point (normal eye)</td><td>∞ (can focus on very distant objects)</td></tr>
+        <tr><td>Lens power range</td><td>+18 to +24 D (accommodation range)</td></tr>
+      </table>
+    </div>
+
+    <div class="subsection" id="lec10a-25-3">
+      <h3>§25.3 — Corrective Lenses</h3>
+      <h4>Nearsightedness (Myopia)</h4>
+      <p>Far point is closer than infinity — eye too powerful or too long. Cannot focus on distant objects. Corrected with <strong>diverging</strong> (negative) lens that moves the image of a distant object to the person's far point.</p>
+      <div class="eq">
+        For myopia: &nbsp; f = −(far point distance) &nbsp;&nbsp; [far point in meters, f negative]
+      </div>
+
+      <h4>Farsightedness (Hyperopia)</h4>
+      <p>Near point is farther than 25 cm — eye too weak or too short. Cannot focus on close objects. Corrected with <strong>converging</strong> (positive) lens that moves a close object's image to the person's near point.</p>
+      <div class="eq">
+        For hyperopia: &nbsp; 1/f = 1/d<sub>o</sub> + 1/d<sub>i</sub>
+        &nbsp; where d<sub>o</sub> = desired near distance, d<sub>i</sub> = −(near point)
+      </div>
+
+      <h4>Presbyopia and Astigmatism</h4>
+      <ul class="summary">
+        <li><strong>Presbyopia:</strong> Loss of accommodation with age → near point recedes → reading glasses needed</li>
+        <li><strong>Astigmatism:</strong> Non-spherical cornea → different focal lengths in different planes → corrected by cylindrical lens</li>
+      </ul>
+    </div>
+
+    <div class="subsection" id="lec10a-25-4">
+      <h3>§25.4 — Magnifying Glass (Simple Magnifier)</h3>
+      <p>A converging lens held close to the eye allows an object to be placed closer than the near point (25 cm), producing a larger apparent (angular) size.</p>
+
+      <h4>Angular Magnification</h4>
+      <p>The angular magnification M compares the angle subtended with the lens to the angle subtended by the object at the near point (25 cm) without the lens:</p>
+      <div class="eq">
+        <span class="eq-label">Magnification — object at focal point (image at ∞, most relaxed)</span>
+        M = N / f &nbsp;&nbsp; where N = 25 cm (near point), f = focal length [cm]
+      </div>
+      <div class="eq">
+        <span class="eq-label">Magnification — image at near point N (maximum magnification)</span>
+        M = N/f + 1 = 25/f + 1
+      </div>
+
+      <div class="warn">
+        <strong>Example:</strong> A 5 cm focal length magnifier: M = 25/5 = 5× (relaxed eye) or M = 25/5 + 1 = 6× (image at near point). For comfortable, relaxed viewing, use M = N/f.
+      </div>
+
+      <div class="def">
+        <strong>Why it works:</strong> The lens creates a virtual, upright, enlarged image on the same side as the object. The eye sees this virtual image as if it were at infinity (or at least beyond the near point).
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 10B ===================== -->
+<div class="lecture" id="lec10b">
+  <div class="lecture-header">
+    <h2>Lecture 10B — Optical Instruments: Microscopes, Telescopes, Aberrations</h2>
+    <div class="meta">Date: March 12, 2026 &nbsp;|&nbsp; Sections: 25.5–25.9</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection" id="lec10b-25-5">
+      <h3>§25.5 — Compound Microscope</h3>
+      <p>A compound microscope uses two converging lenses to achieve high magnification of nearby objects:</p>
+      <ul class="summary">
+        <li><strong>Objective lens</strong> (short f, f<sub>obj</sub> ≈ mm–cm): object placed just beyond F<sub>obj</sub> → forms real, inverted, magnified image I'</li>
+        <li><strong>Eyepiece (ocular)</strong> (acts as magnifying glass): I' serves as object just inside F<sub>eye</sub> → forms virtual, enlarged image seen by eye</li>
+      </ul>
+
+      <div class="ascii">
+  Compound Microscope layout:
+
+  Object     Objective    Intermediate  Eyepiece   Eye
+    O ───────[   f_obj   ]──── I' ────[  f_eye  ]──→
+    ↑very close                ↑real         ↑virtual
+    just beyond F_obj          enlarged      final image
+                               inverted</div>
+
+      <h4>Total Magnification</h4>
+      <div class="eq">
+        <span class="eq-label">Microscope magnification (Eq. 25-6)</span>
+        M<sub>total</sub> = M<sub>obj</sub> × M<sub>eye</sub>
+        = (−d<sub>i,obj</sub> / d<sub>o,obj</sub>) × (N / f<sub>eye</sub>)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Simplified (for standard tube length ℓ ≈ 16 cm, N = 25 cm)</span>
+        M ≈ (ℓ / f<sub>obj</sub>) × (N / f<sub>eye</sub>) = (ℓ · N) / (f<sub>obj</sub> · f<sub>eye</sub>)
+      </div>
+      <p>where ℓ is the distance between the objective's back focal point and the front focal point of the eyepiece (the "tube length", typically ≈ 16 cm or 18 cm).</p>
+
+      <div class="warn">
+        <strong>Example:</strong> f<sub>obj</sub> = 0.80 cm, f<sub>eye</sub> = 2.5 cm, ℓ = 16 cm, N = 25 cm:<br>
+        M = (16/0.80)(25/2.5) = 20 × 10 = 200×
+      </div>
+
+      <h4>Resolution of a Microscope</h4>
+      <p>Minimum resolvable separation (Rayleigh criterion): δ<sub>min</sub> = 0.61λ / (n sin θ) where n sin θ is the numerical aperture (NA). Shorter wavelength → better resolution (electron microscopes use e⁻ waves with very short λ).</p>
+    </div>
+
+    <div class="subsection" id="lec10b-25-6">
+      <h3>§25.6 — Telescopes</h3>
+      <p>Telescopes magnify distant objects. Two main types:</p>
+
+      <h4>Refracting Telescope</h4>
+      <p>Two converging lenses. Objective has long focal length; eyepiece has short focal length. Object at ∞ → objective forms real image at its focal point → eyepiece acts as magnifier.</p>
+      <div class="eq">
+        <span class="eq-label">Telescope angular magnification (Eq. 25-9)</span>
+        M = −f<sub>obj</sub> / f<sub>eye</sub>
+        &nbsp;&nbsp; (negative = inverted image)
+      </div>
+      <p>The two lenses are separated by f<sub>obj</sub> + f<sub>eye</sub> (sum of focal lengths) when viewing an object at infinity.</p>
+
+      <div class="ascii">
+  Refracting telescope (Keplerian type):
+
+  Distant     Objective        Eyepiece    Eye
+  object ─── [  f_obj  ] ──── [f_eye] ────→
+              ←─────────────────────────→
+                    f_obj + f_eye (tube length)
+                      Final image at ∞ (inverted)</div>
+
+      <h4>Reflecting Telescope</h4>
+      <p>Uses a large concave mirror as the objective instead of a lens. Advantages:</p>
+      <ul class="summary">
+        <li>No chromatic aberration (mirrors reflect all wavelengths equally)</li>
+        <li>Easier to build very large diameter mirrors than lenses</li>
+        <li>Parabolic mirrors eliminate spherical aberration</li>
+        <li>Can use CCD sensor at prime focus directly</li>
+      </ul>
+      <p>Designs: Newtonian focus (flat secondary mirror at 45°), Cassegrain (convex secondary through hole in primary).</p>
+
+      <div class="eq">
+        M = −f<sub>mirror</sub> / f<sub>eye</sub> &nbsp;&nbsp; (same formula as refracting telescope)
+      </div>
+
+      <h4>Terrestrial Telescopes</h4>
+      <ul class="summary">
+        <li><strong>Galilean telescope:</strong> Diverging eyepiece → upright image, compact, no field lens (opera glasses)</li>
+        <li><strong>Spyglass (erector type):</strong> Extra erecting lens to flip image upright</li>
+        <li><strong>Binoculars:</strong> Use two Porro prisms (TIR) to fold light path and produce upright image; effectively have long f<sub>obj</sub> in compact body</li>
+      </ul>
+
+      <h4>Light-Gathering Power</h4>
+      <p>Proportional to area of objective: ∝ D<sup>2</sup>. Larger aperture → fainter objects visible. This, not magnification, is why astronomers want big telescopes.</p>
+    </div>
+
+    <div class="subsection" id="lec10b-25-7">
+      <h3>§25.7 — Lens Aberrations</h3>
+      <h4>Spherical Aberration</h4>
+      <p>Rays far from the optical axis focus at a different point than paraxial rays. Corrected by: compound lens systems, aspherical lenses, stopping down aperture.</p>
+
+      <h4>Chromatic Aberration</h4>
+      <p>Since n varies with λ (dispersion), different colors focus at different points. Corrected by an <span class="kt">achromatic doublet</span>: a converging and diverging lens of different glass types cemented together. Mirrors have no chromatic aberration.</p>
+
+      <h4>Other Aberrations</h4>
+      <ul class="summary">
+        <li><strong>Coma:</strong> Off-axis points form comet-shaped blurs</li>
+        <li><strong>Astigmatism:</strong> Off-axis rays in different planes focus at different distances</li>
+        <li><strong>Field curvature:</strong> Image forms on curved surface, not flat</li>
+        <li><strong>Distortion:</strong> Magnification varies with distance from axis</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>§25.8 — Limits of Resolution; Rayleigh Criterion</h3>
+      <p>Due to diffraction, even a perfect lens cannot form a perfect point image. Two point sources can just be resolved when the central maximum of one coincides with the first minimum of the other:</p>
+      <div class="eq">
+        <span class="eq-label">Rayleigh Criterion — circular aperture</span>
+        θ<sub>min</sub> = 1.22 λ/D &nbsp;&nbsp; (radians)
+        &nbsp;&nbsp; [D = aperture diameter, λ = wavelength]
+      </div>
+      <p>Smaller θ<sub>min</sub> (better resolution) requires: larger D or shorter λ.</p>
+      <div class="eq">
+        <span class="eq-label">Minimum resolvable distance at range L</span>
+        s<sub>min</sub> = 1.22 λL/D
+      </div>
+
+      <h4>§25.9 — Specialty Instruments</h4>
+      <table>
+        <tr><th>Instrument</th><th>Principle</th><th>Key formula</th></tr>
+        <tr><td>Spectrometer / spectroscope</td><td>Diffraction grating separates wavelengths</td><td>d sin θ = mλ</td></tr>
+        <tr><td>Interferometer (Michelson)</td><td>Path difference → interference fringes</td><td>ΔL = mλ/2 (bright)</td></tr>
+        <tr><td>Fiber optic scope (endoscope)</td><td>TIR keeps light in fiber</td><td>sin θ<sub>c</sub> = n₂/n₁</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== FORMULA REFERENCE SHEET ===================== -->
+<div class="lecture" id="formulas">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #2e4a2e 0%, #2e8b57 100%);">
+    <h2>Quick Reference — All Key Equations</h2>
+    <div class="meta">Complete formula sheet for exams</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Chapter 21 — EM Induction &amp; Circuits</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Faraday's Law</span>ε = −NΔΦ<sub>B</sub>/Δt</div>
+        <div class="eq"><span class="eq-label">Motional EMF</span>ε = Bℓv</div>
+        <div class="eq"><span class="eq-label">Magnetic Flux</span>Φ<sub>B</sub> = BA cos θ</div>
+        <div class="eq"><span class="eq-label">Generator EMF</span>ε = NBAω sin(ωt)</div>
+        <div class="eq"><span class="eq-label">Transformer voltage</span>V<sub>S</sub>/V<sub>P</sub> = N<sub>S</sub>/N<sub>P</sub></div>
+        <div class="eq"><span class="eq-label">Transformer current</span>I<sub>S</sub>/I<sub>P</sub> = N<sub>P</sub>/N<sub>S</sub></div>
+        <div class="eq"><span class="eq-label">Self-inductance EMF</span>ε = −L(ΔI/Δt)</div>
+        <div class="eq"><span class="eq-label">Solenoid inductance</span>L = μ₀N²A/ℓ</div>
+        <div class="eq"><span class="eq-label">Energy in inductor</span>U = ½LI²</div>
+        <div class="eq"><span class="eq-label">Magnetic energy density</span>u = B²/(2μ₀)</div>
+        <div class="eq"><span class="eq-label">RL current (rise)</span>I = (V/R)(1 − e<sup>−t/τ</sup>)</div>
+        <div class="eq"><span class="eq-label">RL time constant</span>τ = L/R</div>
+        <div class="eq"><span class="eq-label">Inductive reactance</span>X<sub>L</sub> = 2πfL = ωL</div>
+        <div class="eq"><span class="eq-label">Capacitive reactance</span>X<sub>C</sub> = 1/(2πfC)</div>
+        <div class="eq"><span class="eq-label">LRC impedance</span>Z = √(R² + (X<sub>L</sub>−X<sub>C</sub>)²)</div>
+        <div class="eq"><span class="eq-label">LC resonance frequency</span>f₀ = 1/(2π√(LC))</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 22 — Electromagnetic Waves</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Speed of light</span>c = 1/√(ε₀μ₀) = 3.00×10⁸ m/s</div>
+        <div class="eq"><span class="eq-label">E and B relation</span>E/B = c</div>
+        <div class="eq"><span class="eq-label">Wave equation</span>c = fλ</div>
+        <div class="eq"><span class="eq-label">EM energy density</span>u = ε₀E² = B²/μ₀</div>
+        <div class="eq"><span class="eq-label">EM wave intensity</span>I = ½cε₀E₀²</div>
+        <div class="eq"><span class="eq-label">Radiation pressure (absorbed)</span>P = I/c</div>
+        <div class="eq"><span class="eq-label">Radiation pressure (reflected)</span>P = 2I/c</div>
+        <div class="eq"><span class="eq-label">Inverse square law</span>I = P<sub>src</sub>/(4πr²)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 23 — Geometric Optics</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Law of reflection</span>θ<sub>r</sub> = θ<sub>i</sub></div>
+        <div class="eq"><span class="eq-label">Snell's Law</span>n₁ sin θ₁ = n₂ sin θ₂</div>
+        <div class="eq"><span class="eq-label">Index of refraction</span>n = c/v</div>
+        <div class="eq"><span class="eq-label">Critical angle (TIR)</span>sin θ<sub>c</sub> = n₂/n₁</div>
+        <div class="eq"><span class="eq-label">Mirror focal length</span>f = r/2</div>
+        <div class="eq"><span class="eq-label">Mirror/Lens equation</span>1/d<sub>o</sub> + 1/d<sub>i</sub> = 1/f</div>
+        <div class="eq"><span class="eq-label">Magnification</span>m = −d<sub>i</sub>/d<sub>o</sub></div>
+        <div class="eq"><span class="eq-label">Lens power</span>P = 1/f [diopters]</div>
+        <div class="eq"><span class="eq-label">Lensmaker's equation</span>1/f = (n−1)(1/R₁ − 1/R₂)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 24 — Wave Nature of Light</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Double-slit bright fringes</span>d sin θ = mλ</div>
+        <div class="eq"><span class="eq-label">Double-slit dark fringes</span>d sin θ = (m+½)λ</div>
+        <div class="eq"><span class="eq-label">Fringe position</span>y<sub>m</sub> = mλL/d</div>
+        <div class="eq"><span class="eq-label">Diffraction grating maxima</span>d sin θ = mλ</div>
+        <div class="eq"><span class="eq-label">Single-slit minima</span>a sin θ = mλ (m≠0)</div>
+        <div class="eq"><span class="eq-label">Wavelength in medium</span>λ<sub>n</sub> = λ/n</div>
+        <div class="eq"><span class="eq-label">Thin-film (1 phase shift, bright)</span>2nt = (m+½)λ</div>
+        <div class="eq"><span class="eq-label">Thin-film (0 or 2 shifts, bright)</span>2nt = mλ</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Chapter 25 — Optical Instruments</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Simple magnifier (relaxed)</span>M = N/f = 25 cm/f</div>
+        <div class="eq"><span class="eq-label">Simple magnifier (max)</span>M = N/f + 1</div>
+        <div class="eq"><span class="eq-label">Microscope magnification</span>M = (ℓ/f<sub>obj</sub>)(N/f<sub>eye</sub>)</div>
+        <div class="eq"><span class="eq-label">Telescope magnification</span>M = −f<sub>obj</sub>/f<sub>eye</sub></div>
+        <div class="eq"><span class="eq-label">Rayleigh criterion</span>θ<sub>min</sub> = 1.22λ/D</div>
+        <div class="eq"><span class="eq-label">Camera f-number</span>f/# = f/D</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Maxwell's Equations (Summary)</h3>
+      <div class="eq"><span class="eq-label">1. Gauss's Law — Electric</span>∮ E·dA = Q<sub>encl</sub>/ε₀ &nbsp;&nbsp; (charges are sources of E)</div>
+      <div class="eq"><span class="eq-label">2. Gauss's Law — Magnetic</span>∮ B·dA = 0 &nbsp;&nbsp; (no magnetic monopoles)</div>
+      <div class="eq"><span class="eq-label">3. Faraday's Law</span>∮ E·dl = −dΦ<sub>B</sub>/dt &nbsp;&nbsp; (changing B → E)</div>
+      <div class="eq"><span class="eq-label">4. Ampère–Maxwell Law</span>∮ B·dl = μ₀I + μ₀ε₀(dΦ<sub>E</sub>/dt) &nbsp;&nbsp; (I or changing E → B)</div>
+    </div>
+
+    <div class="subsection">
+      <h3>Important Constants</h3>
+      <table>
+        <tr><th>Constant</th><th>Symbol</th><th>Value</th></tr>
+        <tr><td>Speed of light</td><td>c</td><td>3.00 × 10⁸ m/s</td></tr>
+        <tr><td>Permittivity of free space</td><td>ε₀</td><td>8.85 × 10⁻¹² C²/(N·m²)</td></tr>
+        <tr><td>Permeability of free space</td><td>μ₀</td><td>4π × 10⁻⁷ T·m/A = 1.257 × 10⁻⁶ T·m/A</td></tr>
+        <tr><td>Near point (standard)</td><td>N</td><td>25 cm = 0.25 m</td></tr>
+        <tr><td>Euler's number</td><td>e</td><td>2.718…</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end .container -->
+
+<footer class="sg-footer">Giuse Pham Enterprises &middot; Est. 2026</footer>
+
+<script>
+function toggleTOC() {
+  const content = document.getElementById('toc-content');
+  const arrow = document.getElementById('toc-arrow');
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    arrow.textContent = '▼';
+  } else {
+    content.classList.add('hidden');
+    arrow.textContent = '►';
+  }
+}
+</script>
+
+</body>
+</html>

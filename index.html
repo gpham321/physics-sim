@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Giuse's Physics 25 Simulations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 64px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin: 0 0 10px;
+    font-size: 44px;
+    line-height: 1.15;
+    background: linear-gradient(180deg, #ffffff 0%, #9fd4e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .lead {
+    color: var(--muted);
+    margin: 0 0 44px;
+    font-size: 16px;
+    max-width: 620px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 760px) {
+    .cards { grid-template-columns: 1fr; }
+    h1 { font-size: 34px; }
+    .portrait { width: 54px; height: 54px; top: 14px; right: 16px; }
+    body { padding-top: 80px; }
+  }
+  a.card {
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  a.card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+  }
+  .thumb {
+    display: block;
+    width: 100%;
+    height: 150px;
+    background: #0a0c12;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-body { padding: 20px 24px 22px; }
+  a.card h2 {
+    margin: 0 0 8px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 19px;
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: 0.2px;
+  }
+  a.card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .arrow {
+    color: var(--accent);
+    font-size: 13px;
+    margin-top: 14px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  .section-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--text);
+    margin: 56px 0 16px;
+    letter-spacing: 0.3px;
+    opacity: 0.9;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin-top: 8px;
+    opacity: 0.7;
+  }
+  a.wide-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  a.wide-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+  }
+  .wide-card-icon {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 26px;
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+  }
+  .wide-card-body { flex: 1; }
+  .wide-card h2 {
+    margin: 0 0 6px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 18px;
+    font-family: "Playfair Display", Georgia, serif;
+  }
+  .wide-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  footer {
+    margin-top: 56px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<img src="president_giuse.PNG" alt="President Giuse" class="portrait">
+
+<div class="wrap">
+
+<h1>Giuse's Physics 25 Simulations</h1>
+<p class="lead">Interactive browser demos for modern physics topics. Drag the sliders, change the inputs, and watch the math respond.</p>
+
+<div class="cards">
+
+  <a class="card" href="photoelectric.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="pe-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffd166" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#ffd166" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <g stroke="#ffd166" stroke-width="1.2" opacity="0.55">
+        <line x1="50" y1="75" x2="20" y2="35"/>
+        <line x1="50" y1="75" x2="12" y2="75"/>
+        <line x1="50" y1="75" x2="20" y2="115"/>
+        <line x1="60" y1="55" x2="85" y2="28"/>
+        <line x1="60" y1="95" x2="85" y2="122"/>
+      </g>
+      <circle cx="50" cy="75" r="28" fill="url(#pe-glow)"/>
+      <circle cx="50" cy="75" r="11" fill="#ffd166"/>
+      <g fill="#ffd166">
+        <circle cx="92" cy="68" r="3.2"/>
+        <circle cx="114" cy="82" r="3.2"/>
+        <circle cx="132" cy="60" r="3.2"/>
+      </g>
+      <rect x="150" y="30" width="7" height="90" fill="#7a8095" stroke="#aab1c4"/>
+      <text x="153" y="22" fill="#e6e8ef" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">K</text>
+      <rect x="260" y="30" width="7" height="90" fill="#7a8095" stroke="#aab1c4"/>
+      <text x="263" y="22" fill="#e6e8ef" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">A</text>
+      <g fill="#66d9ef">
+        <circle cx="180" cy="50" r="3"/>
+        <circle cx="200" cy="70" r="3"/>
+        <circle cx="220" cy="60" r="3"/>
+        <circle cx="240" cy="88" r="3"/>
+      </g>
+      <g stroke="#66d9ef" stroke-width="1" opacity="0.5">
+        <line x1="180" y1="50" x2="172" y2="52"/>
+        <line x1="200" y1="70" x2="192" y2="72"/>
+        <line x1="220" y1="60" x2="212" y2="62"/>
+        <line x1="240" y1="88" x2="232" y2="90"/>
+      </g>
+    </svg>
+    <div class="card-body">
+      <h2>The Photoelectric Effect</h2>
+      <p>Shine light on a metal cathode, tune the frequency and intensity, switch between materials from cesium to gold, and read off the stopping voltage on the I&ndash;V curve.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="relativity_momentum.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <line x1="160" y1="24" x2="160" y2="126" stroke="#5a6276" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="160" y="16" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="10" text-anchor="middle">CoM</text>
+      <circle cx="70" cy="75" r="18" fill="#ff5f6d"/>
+      <text x="70" y="80" fill="#ffffff" font-family="ui-monospace, monospace" font-size="12" text-anchor="middle" font-weight="bold">m₁</text>
+      <g stroke="#ff5f6d" stroke-width="2.2" fill="none">
+        <line x1="92" y1="75" x2="138" y2="75"/>
+        <polyline points="132,69 138,75 132,81"/>
+      </g>
+      <text x="115" y="64" fill="#ff5f6d" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">γ₁v₁</text>
+      <circle cx="250" cy="75" r="22" fill="#66d9ef"/>
+      <text x="250" y="80" fill="#0a0c12" font-family="ui-monospace, monospace" font-size="12" text-anchor="middle" font-weight="bold">m₂</text>
+      <g stroke="#66d9ef" stroke-width="2.2" fill="none">
+        <line x1="225" y1="75" x2="188" y2="75"/>
+        <polyline points="194,69 188,75 194,81"/>
+      </g>
+      <text x="207" y="64" fill="#66d9ef" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">γ₂v₂</text>
+      <text x="160" y="132" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle" font-style="italic">p = γmv</text>
+    </svg>
+    <div class="card-body">
+      <h2>Relativistic Momentum &amp; Center of Mass</h2>
+      <p>Explore how momentum and center-of-mass motion behave at speeds approaching the speed of light, where Newtonian intuition breaks down.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="simultaneity.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sm-bulb" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff0a0" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#ffd166" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <g fill="#cfd3df" opacity="0.55">
+        <circle cx="40"  cy="30"  r="1.1"/>
+        <circle cx="90"  cy="18"  r="0.7"/>
+        <circle cx="140" cy="40"  r="1.3"/>
+        <circle cx="200" cy="25"  r="0.8"/>
+        <circle cx="250" cy="35"  r="1.0"/>
+        <circle cx="290" cy="22"  r="0.6"/>
+        <circle cx="30"  cy="120" r="0.9"/>
+        <circle cx="110" cy="128" r="1.1"/>
+        <circle cx="175" cy="118" r="0.7"/>
+        <circle cx="270" cy="130" r="1.0"/>
+      </g>
+      <path d="M 50 85 L 68 66 L 250 66 Q 270 66 270 76 L 270 94 Q 270 104 250 104 L 68 104 Z" fill="#1e2338" stroke="#3a4365" stroke-width="1.2"/>
+      <line x1="80"  y1="70" x2="80"  y2="100" stroke="#2a2f43"/>
+      <line x1="240" y1="70" x2="240" y2="100" stroke="#2a2f43"/>
+      <circle cx="72"  cy="85" r="5" fill="#66d9ef"/>
+      <text x="72"  y="54" fill="#66d9ef" font-family="ui-monospace, monospace" font-size="10" text-anchor="middle">Alice</text>
+      <circle cx="248" cy="85" r="5" fill="#a6e22e"/>
+      <text x="248" y="54" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10" text-anchor="middle">Bob</text>
+      <circle cx="160" cy="85" r="16" fill="url(#sm-bulb)"/>
+      <circle cx="160" cy="85" r="4" fill="#ffd166"/>
+      <g stroke="#ffe999" stroke-width="1.4" opacity="0.85">
+        <line x1="120" y1="70" x2="120" y2="100"/>
+        <line x1="200" y1="70" x2="200" y2="100"/>
+      </g>
+      <g stroke="#c084f7" stroke-width="1.6" fill="none">
+        <line x1="60" y1="135" x2="35" y2="135"/>
+        <polyline points="42,131 35,135 42,139"/>
+      </g>
+      <text x="160" y="20" fill="#c084f7" font-family="ui-monospace, monospace" font-size="10" text-anchor="middle" font-style="italic">v = 0.995 c</text>
+    </svg>
+    <div class="card-body">
+      <h2>Simultaneity &mdash; The Spaceship Duel</h2>
+      <p>Alice and Bob duel inside a ship moving at 0.995&thinsp;c. In the ship's frame both get hit by the flash at once&nbsp;&mdash; but Eve on Earth disagrees. Watch the same events unfold in two frames.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+</div>
+
+<h2 class="section-title">Study Resources</h2>
+
+<a class="wide-card" href="Physics_7A_10B_Study_Guide.html">
+  <div class="wide-card-icon">P23</div>
+  <div class="wide-card-body">
+    <h2>Physics 23 — Lectures 7A through 10B</h2>
+    <p>Full study guide covering Giancoli chapters 21–25: EM induction, Maxwell's equations, waves, optics, and instruments. Equations, diagrams, and worked definitions.</p>
+    <div class="arrow">Open study guide &rarr;</div>
+  </div>
+</a>
+
+<footer>Giuse Pham Enterprises &middot; Est. 2026</footer>
+
+</div>
+</body>
+</html>

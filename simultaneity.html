@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simultaneity &mdash; The Spaceship Duel</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --eve: #c084f7;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+  }
+  h2 {
+    margin-top: 0;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  h3 {
+    margin: 0 0 8px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .case {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 22px 0;
+  }
+  .case.good { border-left-color: var(--good); }
+  .case.bad  { border-left-color: var(--bad); }
+  .case.eve  { border-left-color: var(--eve); }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 300px;
+    background: #06080f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 12px 0 6px;
+  }
+  canvas.tall { height: 320px; }
+  canvas.contract { height: 300px; }
+  .speed {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin: 8px 0 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .speed-btn {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .speed-btn:hover { background: #2a2f43; }
+  .speed-btn.active {
+    background: var(--accent);
+    color: #0a0c12;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+  .verdict {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: var(--panel-2);
+    font-size: 14px;
+  }
+  .verdict.good { color: var(--good); }
+  .verdict.bad { color: var(--bad); }
+  .verdict.eve { color: var(--eve); }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .nums {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    background: var(--panel-2);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    margin: 12px 0;
+  }
+  .nums div span { color: var(--muted); }
+  mjx-container { color: var(--text) !important; }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="president_giuse.PNG" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Simultaneity &mdash; A Spaceship Duel at 0.995 c</h1>
+<p class="lead">Two gunslingers, one light bulb, two different answers to "who shot first?" &mdash; a demonstration of the relativity of simultaneity.</p>
+
+<div class="panel">
+  <h2>The Setup</h2>
+  <p>
+    A spaceship of proper length \(L_0 = 600\) m cruises past Earth at \(v = 0.995\,c\) heading <em>leftward</em> (toward Earth). Inside the ship, <strong style="color:var(--accent)">Alice</strong> stands at the 0 m mark (the <em>front</em> of the ship, in the direction of motion) and <strong style="color:var(--good)">Bob</strong> stands at the 600 m mark (the rear). A light bulb is mounted at the exact midpoint, 300 m from each. When the bulb flashes, each duelist will shoot the instant the light wave reaches them &mdash; so whoever gets hit by light first shoots first.
+  </p>
+  <p>
+    Meanwhile, <strong style="color:var(--eve)">Eve</strong>, an Earth-based judge, watches the whole thing. She is supposed to rule whether the duel was fair. In the ship's own frame, the two are hit by light simultaneously and vaporize each other at the same instant &mdash; a perfectly fair duel. In Eve's frame on Earth, the story will turn out differently.
+  </p>
+  <p>At this speed, the Lorentz factor is</p>
+  $$ \gamma \;=\; \frac{1}{\sqrt{1 - v^2/c^2}} \;=\; \frac{1}{\sqrt{1 - 0.995^{2}}} \;\approx\; 10.01. $$
+  <p>Two kinematic facts follow immediately &mdash; both will matter below:</p>
+  <p><strong>Length contraction.</strong> Eve sees the ship squeezed along its direction of motion:</p>
+  $$ L \;=\; \frac{L_0}{\gamma} \;=\; \frac{600\;\text{m}}{10.01} \;\approx\; 59.9\;\text{m}. $$
+  <p><strong>Lorentz transformation of time.</strong> Two events that happen in the ship's frame at \((t', x')\) occur in Eve's frame at</p>
+  $$ t \;=\; \gamma\!\left(t' + \frac{v\,x'}{c^{2}}\right), \qquad x \;=\; \gamma\,(x' + v\,t'). $$
+  <p>For two events that are <em>simultaneous</em> in the ship's frame (so \(\Delta t' = 0\)) but separated along the motion by \(\Delta x'\), Eve sees them split in time by</p>
+  $$ \Delta t \;=\; \gamma\,\frac{v\,\Delta x'}{c^{2}}. $$
+  <p>That single formula &mdash; the "relativity of simultaneity" &mdash; is what makes this duel unfair in Eve's frame.</p>
+  <p style="font-size:14px;color:var(--muted);">
+    <strong>About the animations.</strong> Real light moves at \(3\times 10^{8}\) m/s, which is far too fast to see. The animations use a "movie" speed of light \(c_{\text{movie}} = 300\) m/s so the waves are visible. All the equations use the real \(c\); the movie is just a slow-motion viewer. Also, in Eve's frame Alice waits about 400 times longer than Bob for the light to arrive, so the Eve-frame animation automatically <em>fast-forwards</em> through the long wait (the clock in the corner advances faster) and slows back to normal for each arrival. The speed buttons below each canvas multiply everything uniformly.
+  </p>
+</div>
+
+<!-- ==================== BLOCK 1: SHIP FRAME ==================== -->
+<div class="case good">
+  <h3>Block 1 &mdash; The Ship's Frame (Alice &amp; Bob's Rest Frame)</h3>
+  <p>
+    In the ship's own reference frame, Alice, Bob, and the bulb are all at rest. The bulb is equidistant from both duelists, and light travels at \(c\) in both directions, so the two arrival events are simultaneous:
+  </p>
+  $$ t'_\text{A hit} \;=\; t'_\text{B hit} \;=\; \frac{L_0/2}{c} \;=\; \frac{300\;\text{m}}{3\times 10^{8}\;\text{m/s}} \;=\; 1\;\mu\text{s}. $$
+  <p>
+    Both pull the trigger at the same instant. Each laser beam then has to cross the full 600 m to hit the opposite duelist:
+  </p>
+  $$ t'_\text{vaporize} \;=\; 1\;\mu\text{s} + \frac{L_0}{c} \;=\; 1\;\mu\text{s} + 2\;\mu\text{s} \;=\; 3\;\mu\text{s}. $$
+  <p>The two vaporization events are simultaneous in this frame &mdash; a fair duel.</p>
+  <div class="nums">
+    <div><span>L<sub>0</sub>&nbsp;(proper length):</span> 600&nbsp;m</div>
+    <div><span>Alice's position x'<sub>A</sub>:</span> 0&nbsp;m (front)</div>
+    <div><span>Bob's position x'<sub>B</sub>:</span> 600&nbsp;m (rear)</div>
+    <div><span>Bulb at x'<sub>bulb</sub>:</span> 300&nbsp;m (middle)</div>
+    <div><span>Light reaches Alice at:</span> t' = 1&nbsp;μs</div>
+    <div><span>Light reaches Bob at:</span> t' = 1&nbsp;μs</div>
+    <div><span>Both vaporized at:</span> t' = 3&nbsp;μs</div>
+    <div><span>Δt' between hits:</span> 0 (simultaneous)</div>
+  </div>
+  <canvas id="cv-ship" class="tall"></canvas>
+  <div class="speed" data-case="ship">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#66d9ef"></span>Alice (front, x' = 0)</div>
+    <div><span class="swatch" style="background:#a6e22e"></span>Bob (rear, x' = 600 m)</div>
+    <div><span class="swatch" style="background:#ffd166"></span>Bulb &amp; light wavefronts</div>
+    <div><span class="swatch" style="background:#ff5f6d"></span>Laser beams</div>
+  </div>
+  <div class="verdict good">Both receive light at exactly \(t' = 1\;\mu\text{s}\); both fire; both are vaporized at exactly \(t' = 3\;\mu\text{s}\). In this frame, the duel is perfectly fair.</div>
+</div>
+
+<!-- ==================== LENGTH CONTRACTION MIDDLE ==================== -->
+<div class="panel">
+  <h2>Block 2 &mdash; Length Contraction Between Frames</h2>
+  <p>
+    Before we look at Eve's frame, we need to know how long the spaceship appears to her. Length contraction says that lengths along the direction of motion are squeezed by a factor of \(\gamma\):
+  </p>
+  $$ L \;=\; \frac{L_0}{\gamma} \;=\; L_0\sqrt{1 - v^{2}/c^{2}}. $$
+  <p>With \(L_0 = 600\) m and \(v = 0.995\,c\):</p>
+  $$ L \;=\; 600\;\text{m}\,\sqrt{1 - 0.995^{2}} \;=\; 600\;\text{m} \cdot 0.0999 \;\approx\; 59.9\;\text{m}. $$
+  <p>
+    That is an astonishing squeeze: what the crew measures as a six-hundred-meter vessel, Eve measures with her rulers as a sixty-meter sliver. This contracted length \(L\) is the spacing between Alice and Bob in <em>her</em> frame &mdash; it's the distance the light in her frame has to cross. (Note: only distances along the direction of motion contract. Heights and widths perpendicular to the motion are unchanged.)
+  </p>
+  <canvas id="cv-contract" class="contract"></canvas>
+  <p style="font-size:14px;color:var(--muted);">
+    The two ships are drawn at the same scale. The upper one shows the rest length the crew measures; the lower shows what Eve measures with her meter sticks as the ship whips past at \(0.995\,c\).
+  </p>
+</div>
+
+<!-- ==================== BLOCK 3: EVE'S FRAME ==================== -->
+<div class="case eve">
+  <h3>Block 3 &mdash; Eve's Frame (Earth)</h3>
+  <p>
+    From Eve's perspective, the contracted ship is flying leftward at \(v = 0.995\,c\). Alice rides the front (leading edge); Bob rides the rear (trailing edge). When the bulb flashes, Eve says the light travels at \(c\) in both directions in <em>her</em> frame &mdash; that's the whole content of the second postulate of relativity.
+  </p>
+  <p>
+    Think about what that means: the right-going wavefront is heading toward Bob at \(c\), while Bob himself is racing <em>into</em> it at \(0.995\,c\). The gap between them shrinks at a rate \(c + v\) (a <em>closing speed</em>, see the note below). The left-going wavefront, on the other hand, is chasing Alice, who is running away from it at almost \(c\). That gap shrinks at only \(c - v\). So in Eve's frame:
+  </p>
+  $$ t_\text{B hit} \;=\; \frac{L/2}{c + v}, \qquad t_\text{A hit} \;=\; \frac{L/2}{c - v}. $$
+  <p>Plugging in \(L = 59.9\) m and \(v = 0.995\,c\):</p>
+  $$ t_\text{B hit} \;=\; \frac{29.96\;\text{m}}{1.995\,c} \;\approx\; 5.01\times 10^{-8}\;\text{s} \;=\; 0.050\;\mu\text{s}, $$
+  $$ t_\text{A hit} \;=\; \frac{29.96\;\text{m}}{0.005\,c} \;\approx\; 2.00\times 10^{-5}\;\text{s} \;=\; 20.0\;\mu\text{s}. $$
+  <p>
+    The difference is \(\Delta t \approx 19.9\;\mu\text{s}\) &mdash; Alice is hit by light roughly <strong>400 times</strong> later than Bob. You can get the same answer more slickly from the Lorentz-transform identity \(\Delta t = \gamma v\,\Delta x'/c^{2}\):
+  </p>
+  $$ \Delta t \;=\; \gamma\,\frac{v\,L_0}{c^{2}} \;=\; 10.01 \cdot \frac{0.995\,c \cdot 600\;\text{m}}{c^{2}} \;=\; \frac{5977\;\text{m}}{c} \;\approx\; 19.9\;\mu\text{s}. \;\checkmark $$
+  <p>
+    So in Eve's frame, <strong style="color:var(--good)">Bob is hit first and shoots first</strong>. Alice is still standing there, oblivious, for another 20 μs of Eve's time. From Eve's viewpoint this is a firing-squad situation masquerading as a duel &mdash; Bob gets to shoot long before Alice even sees the flash.
+  </p>
+  <p>
+    Once each trigger is pulled, the laser still has to cross the ship to find its target. In Eve's frame, <em>Alice's</em> beam (fired at \(t \approx 20\;\mu\text{s}\)) is rushing rightward to meet Bob, who is sprinting leftward into it &mdash; they close at \(c + v\) and meet almost instantly, at \(t \approx 20.08\;\mu\text{s}\). Bob's beam (fired way back at \(t \approx 0.05\;\mu\text{s}\)) is <em>chasing</em> Alice, who is fleeing in the same direction &mdash; they close at only \(c - v\) and don't meet until \(t \approx 40\;\mu\text{s}\). So in Eve's frame Bob is vaporized about 20 μs before Alice. The <em>order</em> of the two vaporization events survives (it must, because they are causally linked through the ship's own timeline) but the gap between them is stretched apart.
+  </p>
+  <p style="font-size:14px;color:var(--muted);">
+    <strong>Is this relativistic velocity addition?</strong> No. The quantities \(c+v\) and \(c-v\) above are <em>closing speeds</em> — the rate at which the distance between two moving things shrinks, both tracked inside Eve's one inertial frame. Closing speeds may exceed \(c\); they are not the velocity of any single object, so no law is broken. Relativistic velocity addition (\(u' = (u - v)/(1 - uv/c^{2})\)) is for a different question: "given that object X moves at \(u\) in my frame, what speed does a second observer, moving at \(v\) relative to me, measure for \(X\)?" We never cross between frames in the derivation above &mdash; we just track distances in Eve's frame &mdash; so velocity addition is not needed here.
+  </p>
+  <div class="nums">
+    <div><span>L&nbsp;(contracted length):</span> 59.9&nbsp;m</div>
+    <div><span>v:</span> 0.995&nbsp;c</div>
+    <div><span>γ:</span> 10.01</div>
+    <div><span>Bob hit (&amp; shoots) at:</span> t ≈ 0.050&nbsp;μs</div>
+    <div><span>Alice hit (&amp; shoots) at:</span> t ≈ 20.0&nbsp;μs</div>
+    <div><span>Δt (Alice − Bob):</span> ≈ 19.9&nbsp;μs</div>
+    <div><span>Bob vaporized at:</span> t ≈ 20.08&nbsp;μs</div>
+    <div><span>Alice vaporized at:</span> t ≈ 40.0&nbsp;μs</div>
+    <div><span>Ratio t<sub>A</sub>/t<sub>B</sub>:</span> ≈ 399</div>
+    <div><span>Who fires first:</span> Bob</div>
+  </div>
+  <canvas id="cv-eve" class="tall"></canvas>
+  <div class="speed" data-case="eve">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#66d9ef"></span>Alice (front, leading edge)</div>
+    <div><span class="swatch" style="background:#a6e22e"></span>Bob (rear, trailing edge)</div>
+    <div><span class="swatch" style="background:#ffd166"></span>Flash site (fixed in Eve's frame)</div>
+    <div><span class="swatch" style="background:#ffe999"></span>Light wavefronts (both move at c in Eve's frame)</div>
+    <div><span class="swatch" style="background:#ff5f6d"></span>Alice's laser (zooms right)</div>
+    <div><span class="swatch" style="background:#ff9f5d"></span>Bob's laser (creeps left)</div>
+    <div><span class="swatch" style="background:#c084f7"></span>Earth / Eve</div>
+  </div>
+  <div class="verdict eve">Bob is hit by light at \(t \approx 0.050\;\mu\text{s}\) and shoots. Alice isn't hit until \(t \approx 20\;\mu\text{s}\). Alice's laser catches Bob almost at once (~20.08 μs); Bob's slow laser doesn't reach Alice until ~40 μs. The ship frame's simultaneous events are split by ~20 μs in Eve's frame — Bob shoots and dies first.</div>
+</div>
+
+<!-- ==================== CONCLUSION ==================== -->
+<div class="panel">
+  <h2>Takeaway &mdash; Why the Verdict Differs</h2>
+  <p>
+    In the ship frame, the light bulb is at rest halfway between Alice and Bob, so its photons arrive at the two ends at the same moment. Both shoot; both are vaporized; fair duel.
+  </p>
+  <p>
+    In Eve's frame, <em>the bulb is at rest with respect to her too once it flashes</em> &mdash; the flash event is a single point in spacetime, not attached to the ship. The light expands outward at \(c\) from that fixed point in her frame. But Alice and Bob are moving leftward at nearly \(c\). Bob (rear) rushes into the rightward-going wavefront; Alice (front) sprints away from the leftward-going one. The two arrival events that were simultaneous in the ship's frame split apart in Eve's.
+  </p>
+  <p>This isn't a glitch in either observer's measurement &mdash; both are correct in their own frame. Simultaneity is <em>relative</em>:</p>
+  $$ \boxed{\;\Delta t \;=\; \gamma\!\left(\Delta t' + \frac{v\,\Delta x'}{c^{2}}\right).\;} $$
+  <p>Even if two events have \(\Delta t' = 0\) in one frame, a second frame moving relative to the first will generally measure \(\Delta t \ne 0\). The size of the split grows with both the relative velocity \(v\) and the spatial separation \(\Delta x'\) of the events. That is why relativistic simultaneity effects are utterly invisible in daily life (\(v/c\) too small) but dominate the duel above (\(v/c = 0.995\) and a 600-meter gap).</p>
+  <p style="font-size:14px;color:var(--muted);">
+    <strong>Footnote on the vaporization events.</strong> Even though the two <em>arrival</em> events are split by 20 μs in Eve's frame, once both duelists have fired, the lasers chase down their targets. If you crunch the Lorentz transform for the vaporization events \((t' = 3\;\mu\text{s}, x' = 0)\) and \((t' = 3\;\mu\text{s}, x' = 600\;\text{m})\), you'll find Bob is vaporized about 20 μs before Alice in Eve's frame as well &mdash; the order of events is preserved because they are causally connected through the ship's own timeline. Eve and the ship's crew disagree on <em>when</em> things happen, but they agree that "Bob fired a laser" caused "Alice was vaporized" and vice versa.
+  </p>
+</div>
+
+</div>
+
+<script>
+// ============================================================
+// Common utilities (shared by all three canvases)
+// ============================================================
+
+const COL_A       = '#66d9ef';   // Alice — cyan
+const COL_B       = '#a6e22e';   // Bob — green
+const COL_BULB    = '#ffd166';   // bulb — yellow
+const COL_WAVE    = '#ffe999';   // wavefront — pale yellow
+const COL_LASER_A = '#ff5f6d';   // Alice's laser — red
+const COL_LASER_B = '#ff9f5d';   // Bob's laser — orange
+const COL_EVE     = '#c084f7';   // Eve / Earth — purple
+const COL_TXT     = '#cfd3df';
+const COL_MUTE    = '#7a8095';
+const COL_BORDER  = '#2a2f43';
+
+// --- Starfield: positions fixed, per-star twinkle on brightness + radius ---
+function makeStars(w, h, density = 2200) {
+  const stars = [];
+  const n = Math.max(50, Math.floor(w * h / density));
+  for (let i = 0; i < n; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      base: 0.15 + Math.random() * 0.8,      // base brightness (varies star-to-star)
+      size: 0.35 + Math.random() * 1.6,      // varying sizes so some look closer
+      freq: 0.3 + Math.random() * 2.8,       // twinkle frequency
+      phase: Math.random() * Math.PI * 2,
+      color: Math.random() < 0.85 ? [220, 230, 255]
+           : Math.random() < 0.5  ? [255, 220, 190]
+           :                        [180, 210, 255]
+    });
+  }
+  return stars;
+}
+function drawStars(ctx, stars, t, drift = 0, wrapWidth = 0) {
+  for (const s of stars) {
+    let x = s.x;
+    if (drift !== 0 && wrapWidth > 0) {
+      x = ((s.x + drift) % wrapWidth + wrapWidth) % wrapWidth;
+    }
+    const tw = Math.max(0, s.base * (0.45 + 0.55 * Math.sin(t * s.freq + s.phase)));
+    const [r, g, b] = s.color;
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${tw.toFixed(3)})`;
+    ctx.beginPath();
+    ctx.arc(x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+    // small glow halo for brighter stars
+    if (s.base > 0.65) {
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${(tw * 0.15).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(x, s.y, s.size * 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function setupCanvas(cv, density = 2200) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  cv.width  = Math.floor(rect.width  * dpr);
+  cv.height = Math.floor(rect.height * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height, stars: makeStars(rect.width, rect.height, density) };
+}
+
+// ============================================================
+// Draw helpers
+// ============================================================
+
+// Stick figure with a little hat, facing a given direction (+1 right, -1 left)
+function drawPerson(ctx, x, y, color, label, dir, vaporized) {
+  ctx.save();
+  ctx.translate(x, y);
+  // shadow box
+  ctx.fillStyle = color;
+  ctx.strokeStyle = '#0a0c12';
+  ctx.lineWidth = 1.2;
+
+  // head
+  ctx.beginPath();
+  ctx.arc(0, -14, 6, 0, Math.PI * 2);
+  if (vaporized) {
+    ctx.fillStyle = '#5a0c15';
+    ctx.fill();
+    ctx.strokeStyle = COL_LASER_A;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  } else {
+    ctx.fill();
+    ctx.strokeStyle = '#0a0c12';
+    ctx.stroke();
+  }
+
+  // body
+  ctx.strokeStyle = vaporized ? '#5a0c15' : color;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(0, -8);
+  ctx.lineTo(0, 10);
+  ctx.stroke();
+
+  // arms (one pointing toward dir, holding a gun; other down)
+  ctx.beginPath();
+  ctx.moveTo(0, -2);
+  ctx.lineTo(10 * dir, 2);
+  ctx.moveTo(0, -2);
+  ctx.lineTo(-6 * dir, 4);
+  ctx.stroke();
+
+  // gun
+  ctx.strokeStyle = vaporized ? '#3a0a10' : '#cfd3df';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(10 * dir, 2);
+  ctx.lineTo(16 * dir, 0);
+  ctx.stroke();
+
+  // legs
+  ctx.strokeStyle = vaporized ? '#5a0c15' : color;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(0, 10);
+  ctx.lineTo(-4, 20);
+  ctx.moveTo(0, 10);
+  ctx.lineTo(4, 20);
+  ctx.stroke();
+
+  ctx.restore();
+
+  // label
+  ctx.fillStyle = vaporized ? COL_LASER_A : color;
+  ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, x, y - 26);
+}
+
+// Light bulb (on/off), with optional shining glow
+function drawBulb(ctx, x, y, on, t) {
+  ctx.save();
+  ctx.translate(x, y);
+  if (on) {
+    // radial glow
+    const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 40);
+    g.addColorStop(0, 'rgba(255, 240, 170, 0.85)');
+    g.addColorStop(0.5, 'rgba(255, 220, 110, 0.25)');
+    g.addColorStop(1, 'rgba(255, 220, 110, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(0, 0, 40, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // bulb body
+  ctx.fillStyle = on ? '#fff0a0' : '#5c5e6a';
+  ctx.strokeStyle = '#0a0c12';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(0, 0, 7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // socket
+  ctx.fillStyle = '#2a2d3a';
+  ctx.fillRect(-4, 6, 8, 5);
+  ctx.strokeRect(-4, 6, 8, 5);
+  ctx.restore();
+}
+
+function drawExplosion(ctx, x, y, t) {
+  // starburst effect
+  ctx.save();
+  ctx.translate(x, y);
+  const phase = (t % 1) / 1;
+  const r = 6 + phase * 20;
+  const alpha = 1 - phase;
+  ctx.strokeStyle = `rgba(255, 120, 80, ${alpha.toFixed(3)})`;
+  ctx.lineWidth = 2.2;
+  for (let i = 0; i < 8; i++) {
+    const a = i * Math.PI / 4 + t * 2;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * 4, Math.sin(a) * 4);
+    ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    ctx.stroke();
+  }
+  ctx.fillStyle = `rgba(255, 200, 100, ${(alpha * 0.5).toFixed(3)})`;
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// Ship outline — a rounded rectangle with a nose on the "front" side
+function drawShipHull(ctx, x1, x2, y, frontSide, hh = 44) {
+  ctx.save();
+  ctx.beginPath();
+  // If the ship has a nose on the frontSide (−1 = left, +1 = right) we taper that end
+  const noseLen = Math.min(18, hh * 0.6);
+  if (frontSide < 0) {
+    ctx.moveTo(x1 - noseLen, y);
+    ctx.lineTo(x1, y - hh);
+    ctx.lineTo(x2 - 8, y - hh);
+    ctx.quadraticCurveTo(x2, y - hh, x2, y - hh + 8);
+    ctx.lineTo(x2, y + hh - 8);
+    ctx.quadraticCurveTo(x2, y + hh, x2 - 8, y + hh);
+    ctx.lineTo(x1, y + hh);
+    ctx.closePath();
+  } else {
+    ctx.moveTo(x2 + noseLen, y);
+    ctx.lineTo(x2, y - hh);
+    ctx.lineTo(x1 + 8, y - hh);
+    ctx.quadraticCurveTo(x1, y - hh, x1, y - hh + 8);
+    ctx.lineTo(x1, y + hh - 8);
+    ctx.quadraticCurveTo(x1, y + hh, x1 + 8, y + hh);
+    ctx.lineTo(x2, y + hh);
+    ctx.closePath();
+  }
+  const grad = ctx.createLinearGradient(0, y - hh, 0, y + hh);
+  grad.addColorStop(0, '#2a3150');
+  grad.addColorStop(0.5, '#1e2338');
+  grad.addColorStop(1, '#11141f');
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = '#3a4365';
+  ctx.lineWidth = 1.4;
+  ctx.stroke();
+
+  // portholes
+  const count = Math.max(3, Math.floor((x2 - x1) / 60));
+  for (let i = 0; i < count; i++) {
+    const px = x1 + ((i + 0.5) / count) * (x2 - x1);
+    ctx.beginPath();
+    ctx.arc(px, y - hh + 10, 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#66d9ef';
+    ctx.globalAlpha = 0.55;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+}
+
+// Vertical light wavefront line (glowing)
+function drawWavefront(ctx, x, y1, y2, alpha) {
+  const g = ctx.createLinearGradient(x - 4, 0, x + 4, 0);
+  g.addColorStop(0,   `rgba(255, 230, 140, 0)`);
+  g.addColorStop(0.5, `rgba(255, 245, 180, ${alpha})`);
+  g.addColorStop(1,   `rgba(255, 230, 140, 0)`);
+  ctx.fillStyle = g;
+  ctx.fillRect(x - 4, y1, 8, y2 - y1);
+  // core line
+  ctx.strokeStyle = `rgba(255, 255, 200, ${Math.min(1, alpha * 1.4).toFixed(3)})`;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(x, y1);
+  ctx.lineTo(x, y2);
+  ctx.stroke();
+}
+
+function drawLaser(ctx, x1, x2, y, color) {
+  if (x1 === x2) return;
+  const g = ctx.createLinearGradient(0, y - 4, 0, y + 4);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(0.5, color);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  const xa = Math.min(x1, x2), xb = Math.max(x1, x2);
+  ctx.fillRect(xa, y - 3, xb - xa, 6);
+  // bright core
+  ctx.strokeStyle = '#ffffff';
+  ctx.globalAlpha = 0.7;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(xa, y);
+  ctx.lineTo(xb, y);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
+// Brief expanding ring at the moment someone is illuminated by the wavefront
+function drawLightHit(ctx, x, y, dt, duration) {
+  if (dt < 0 || dt > duration) return;
+  const f = dt / duration;
+  const alpha = 1 - f;
+  const r = 6 + f * 28;
+  ctx.strokeStyle = `rgba(255, 240, 140, ${alpha.toFixed(3)})`;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y - 6, r, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+// ============================================================
+// BLOCK 1 — Ship frame
+// ============================================================
+function buildShip() {
+  const cv  = document.getElementById('cv-ship');
+  const env = setupCanvas(cv, 2400);
+  const w = env.w, h = env.h;
+
+  // --- Physics (SI in the ship's rest frame, using movie c) ---
+  const L0       = 600;    // m
+  const c_movie  = 300;    // m/s  — chosen so 1 sim-second ↔ 1 μs real time
+  const xA_m     = 0;      // Alice at the front
+  const xB_m     = L0;     // Bob at the rear
+  const xBulb_m  = L0 / 2;
+  // Times (all in sim seconds, which equal real μs by our choice of c_movie)
+  const tLight   = (L0 / 2) / c_movie;   // 1  s  = 1 μs
+  const tLaser   = L0       / c_movie;   // 2  s  = 2 μs
+
+  // --- Pixel layout ---
+  const margin   = 50;
+  const xA_px    = margin;
+  const xB_px    = w - margin;
+  const pxPerM   = (xB_px - xA_px) / L0;
+  const xBulb_px = xA_px + xBulb_m * pxPerM;
+  const yShip    = h * 0.56;
+
+  // --- Cycle ---
+  const tHold0 = 0.5;
+  const tHold1 = 1.2;
+  const tCycle = tHold0 + tLight + tLaser + tHold1;  // 0.5 + 1 + 2 + 1.2 = 4.7 s
+
+  let speed = 1, tReal = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal === null) lastReal = realT;
+    tReal += (realT - lastReal) * speed;
+    lastReal = realT;
+
+    const tt = tReal % tCycle;
+
+    // --- Phase decoding ---
+    let phase;
+    let tSim = 0;      // ship-frame time in μs (for display)
+    let bulbOn = false;
+    let waveDist_m = 0;  // distance of each wavefront from bulb, in m
+    let laserDist_m = 0; // distance each laser has traveled, in m
+    let afterHit = false;
+    let afterVap = false;
+
+    if (tt < tHold0) {
+      phase = 'At rest. The bulb is dark. Both duelists aim.';
+    } else if (tt < tHold0 + tLight) {
+      const dt = tt - tHold0;
+      tSim = dt;
+      bulbOn = true;
+      waveDist_m = c_movie * dt;
+      phase = 'Bulb flashes. Wavefronts expand symmetrically at c.';
+    } else if (tt < tHold0 + tLight + tLaser) {
+      const dt = tt - (tHold0 + tLight);
+      tSim = tLight + dt;
+      bulbOn = true;
+      waveDist_m = L0 / 2;
+      afterHit = true;
+      laserDist_m = c_movie * dt;
+      phase = 'Light reached both at t\' = 1 μs. Both fire their lasers.';
+    } else {
+      const dt = tt - (tHold0 + tLight + tLaser);
+      tSim = tLight + tLaser;
+      bulbOn = true;
+      waveDist_m = L0 / 2;
+      afterHit = true;
+      afterVap = true;
+      laserDist_m = L0;
+      phase = 'Both vaporized at t\' = 3 μs — a simultaneous, fair outcome.';
+    }
+
+    // --- Draw ---
+    const ctx = env.ctx;
+    ctx.clearRect(0, 0, w, h);
+    drawStars(ctx, env.stars, tReal);
+
+    // Frame header
+    ctx.fillStyle = COL_TXT;
+    ctx.font = 'bold 13px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('SHIP FRAME  (Alice & Bob at rest)', 14, 20);
+
+    // Ship hull
+    drawShipHull(ctx, xA_px - 10, xB_px + 10, yShip, -1);
+
+    // Distance markers on the bottom
+    ctx.strokeStyle = '#2a2f43';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(xA_px,    yShip + 46);
+    ctx.lineTo(xB_px,    yShip + 46);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    for (const m of [0, 150, 300, 450, 600]) {
+      const px = xA_px + m * pxPerM;
+      ctx.beginPath();
+      ctx.moveTo(px, yShip + 42);
+      ctx.lineTo(px, yShip + 50);
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillText(m + ' m', px, yShip + 64);
+    }
+
+    // Wavefronts (symmetric)
+    if (bulbOn) {
+      const alpha = Math.min(1, 0.3 + waveDist_m / (L0 / 2) * 0.4);
+      const x1 = xBulb_px - waveDist_m * pxPerM;
+      const x2 = xBulb_px + waveDist_m * pxPerM;
+      drawWavefront(ctx, x1, yShip - 40, yShip + 40, alpha * 0.85);
+      drawWavefront(ctx, x2, yShip - 40, yShip + 40, alpha * 0.85);
+    }
+
+    // Bulb
+    drawBulb(ctx, xBulb_px, yShip, bulbOn, tReal);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('bulb @ 300 m', xBulb_px, yShip - 34);
+
+    // Lasers (only after hit)
+    if (afterHit) {
+      const laserFrontA = xA_px + laserDist_m * pxPerM;         // Alice shoots right
+      const laserFrontB = xB_px - laserDist_m * pxPerM;         // Bob shoots left
+      drawLaser(ctx, xA_px + 4,  laserFrontA, yShip + 2, COL_LASER_A);
+      drawLaser(ctx, xB_px - 4,  laserFrontB, yShip - 2, COL_LASER_B);
+    }
+
+    // Alice & Bob
+    drawPerson(ctx, xA_px, yShip,     COL_A, 'Alice', +1, afterVap);
+    drawPerson(ctx, xB_px, yShip,     COL_B, 'Bob',   -1, afterVap);
+
+    // Explosions on vaporization
+    if (afterVap) {
+      drawExplosion(ctx, xA_px, yShip - 6, tReal);
+      drawExplosion(ctx, xB_px, yShip - 6, tReal);
+    }
+
+    // HUD
+    ctx.fillStyle = COL_TXT;
+    ctx.font = '12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(phase, 14, h - 16);
+
+    // Clock (top right)
+    ctx.textAlign = 'right';
+    ctx.fillStyle = COL_WAVE;
+    ctx.fillText('t\' = ' + tSim.toFixed(2) + '  μs', w - 14, 20);
+  }
+
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+
+// ============================================================
+// BLOCK 3 — Eve's frame (ship-tracking camera view)
+// ============================================================
+function buildEve() {
+  const cv  = document.getElementById('cv-eve');
+  const env = setupCanvas(cv, 2400);
+  const w = env.w, h = env.h;
+
+  // --- Physics in Eve's frame ---
+  const c_movie = 300;                   // m/s — same convention as ship: 1 sim-s = 1 μs
+  const v       = 0.995 * c_movie;       // 298.5 m/s, leftward
+  const L0      = 600;
+  const gamma   = 1 / Math.sqrt(1 - 0.995 * 0.995);  // ≈ 10.01
+  const L       = L0 / gamma;            // ≈ 59.93 m
+  const halfL   = L / 2;
+
+  // Sim-time (t in Eve's frame) of key events, measured from emission:
+  const tBob      = halfL / (c_movie + v);       // ≈ 0.050 μs — light hits Bob
+  const tAlice    = halfL / (c_movie - v);       // ≈ 20.0 μs — light hits Alice
+  const tBobVap   = tAlice + L / (c_movie + v);  // ≈ 20.08 μs — Alice's laser reaches Bob
+  const tAliceVap = tBob   + L / (c_movie - v);  // ≈ 40.0 μs — Bob's laser reaches Alice
+
+  // --- Pixel layout (ship-tracking "camera follows ship center" view).
+  // Ship is fixed on canvas; emission point & wavefronts drift.
+  const xViewMin = -70, xViewMax = 100;
+  const pxPerM   = w / (xViewMax - xViewMin);
+  const xCenter_px = (0 - xViewMin) * pxPerM;
+  const xAlice_px  = (-halfL - xViewMin) * pxPerM;
+  const xBob_px    = (+halfL - xViewMin) * pxPerM;
+  const yShip      = h * 0.54;
+
+  // In this "camera attached to ship" view (not a Lorentz boost — just a translating spatial window):
+  //   emission point at x_cam = v · t_sim              (drifts right)
+  //   right wavefront at x_cam = (c + v) · t_sim       (zooms right)
+  //   left  wavefront at x_cam = -(c - v) · t_sim      (creeps left)
+  //   Alice's laser front at x_cam = -halfL + (c+v)(t_sim − tAlice)   once fired
+  //   Bob's laser front   at x_cam = +halfL − (c−v)(t_sim − tBob)     once fired
+  // Alice fixed at -halfL, Bob fixed at +halfL.
+
+  // --- Time warping: real seconds → sim μs ---
+  // Real-time schedule (at 1×) in seconds:
+  //   0    .. 0.4   hold       (sim = 0)                   pre-flash
+  //   0.4  .. 1.6   normal     (sim = 0 → 0.15)            Bob hit at sim ≈ 0.05 + shoots
+  //   1.6  .. 2.8   fast-fwd   (sim = 0.15 → 19.85)        wavefront & Bob's laser creep
+  //   2.8  .. 4.0   normal     (sim = 19.85 → 20.25)       Alice hit + shoots + Bob vaporized
+  //   4.0  .. 5.2   fast-fwd   (sim = 20.25 → 39.85)       Bob's laser still creeping
+  //   5.2  .. 6.4   normal     (sim = 39.85 → 40.15)       Alice vaporized
+  //   6.4  .. 7.8   hold       (sim = 40.15)               post-events
+  const SEGMENTS = [
+    { r0: 0.0, r1: 0.4, s0: 0,     s1: 0,     fast: false },
+    { r0: 0.4, r1: 1.6, s0: 0,     s1: 0.15,  fast: false },
+    { r0: 1.6, r1: 2.8, s0: 0.15,  s1: 19.85, fast: true  },
+    { r0: 2.8, r1: 4.0, s0: 19.85, s1: 20.25, fast: false },
+    { r0: 4.0, r1: 5.2, s0: 20.25, s1: 39.85, fast: true  },
+    { r0: 5.2, r1: 6.4, s0: 39.85, s1: 40.15, fast: false },
+    { r0: 6.4, r1: 7.8, s0: 40.15, s1: 40.15, fast: false }
+  ];
+  const tCycle = 7.8;
+  function realToSim(tr) {
+    for (const s of SEGMENTS) {
+      if (tr >= s.r0 && tr <= s.r1) {
+        const f = (tr - s.r0) / (s.r1 - s.r0 || 1);
+        return { tSim: s.s0 + f * (s.s1 - s.s0), fast: s.fast };
+      }
+    }
+    return { tSim: 40.15, fast: false };
+  }
+
+  let speed = 1, tReal = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal === null) lastReal = realT;
+    tReal += (realT - lastReal) * speed;
+    lastReal = realT;
+    const tt = tReal % tCycle;
+    const { tSim, fast } = realToSim(tt);
+
+    // Positions in the ship-tracking view (in meters)
+    const xEmit_m  = v * tSim;
+    const xRight_m = (c_movie + v) * tSim;
+    const xLeft_m  = -(c_movie - v) * tSim;
+
+    // Convert to canvas px
+    const xEmit_px  = (xEmit_m  - xViewMin) * pxPerM;
+    const xRight_px = (xRight_m - xViewMin) * pxPerM;
+    const xLeft_px  = (xLeft_m  - xViewMin) * pxPerM;
+
+    // Event flags
+    const bobHit    = tSim >= tBob;
+    const aliceHit  = tSim >= tAlice;
+    const bobVap    = tSim >= tBobVap;
+    const aliceVap  = tSim >= tAliceVap;
+
+    // --- Draw ---
+    const ctx = env.ctx;
+    ctx.clearRect(0, 0, w, h);
+    // Stars drift rightward to convey that the ship (and our camera with it) is moving leftward
+    const starDrift = tReal * 45;   // px per real-second; already scaled by `speed` via tReal
+    drawStars(ctx, env.stars, tReal, starDrift, w);
+
+    // Earth — fixed reference in Eve's frame, shown as a small globe in the lower-left
+    ctx.save();
+    ctx.translate(28, h - 30);
+    const eg = ctx.createRadialGradient(-3, -3, 2, 0, 0, 16);
+    eg.addColorStop(0, '#6fbdff');
+    eg.addColorStop(0.6, '#2a5ab8');
+    eg.addColorStop(1, '#0f1a3c');
+    ctx.fillStyle = eg;
+    ctx.beginPath();
+    ctx.arc(0, 0, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#6adf7e';
+    ctx.globalAlpha = 0.55;
+    ctx.beginPath(); ctx.ellipse(-4,  1, 5, 2.5, 0.3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse( 4, -4, 3, 1.6, 0.9, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse( 2,  5, 3, 1.4, -0.4, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#0a0c12';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = COL_EVE;
+    ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Eve (Earth)', 48, h - 32);
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.fillText('at rest', 48, h - 20);
+
+    // Header
+    ctx.fillStyle = COL_EVE;
+    ctx.font = 'bold 13px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('EVE\'S FRAME  (camera tracks ship position)', 14, 20);
+
+    // Velocity arrow on top — ship moves left at v
+    ctx.strokeStyle = COL_EVE;
+    ctx.fillStyle = COL_EVE;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(xCenter_px + 40, 40);
+    ctx.lineTo(xCenter_px - 40, 40);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xCenter_px - 40, 40);
+    ctx.lineTo(xCenter_px - 32, 36);
+    ctx.lineTo(xCenter_px - 32, 44);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('v = 0.995 c', xCenter_px, 30);
+
+    // Distance markers along bottom (ship-centered tick marks in m)
+    ctx.strokeStyle = '#2a2f43';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, yShip + 46);
+    ctx.lineTo(w, yShip + 46);
+    ctx.stroke();
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    for (const m of [-60, -30, 0, 30, 60, 90]) {
+      const px = (m - xViewMin) * pxPerM;
+      ctx.beginPath();
+      ctx.moveTo(px, yShip + 42);
+      ctx.lineTo(px, yShip + 50);
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillText(m + ' m', px, yShip + 64);
+    }
+    ctx.textAlign = 'left';
+    ctx.fillText('(ship-relative position)', 10, yShip + 78);
+
+    // Ship hull (front is on the LEFT since ship moves leftward, nose on left)
+    drawShipHull(ctx, xAlice_px - 4, xBob_px + 4, yShip, -1);
+
+    // Right wavefront — only visible in the window
+    if (tSim > 0) {
+      if (xRight_px >= 0 && xRight_px <= w) {
+        drawWavefront(ctx, xRight_px, yShip - 46, yShip + 40, 0.85);
+      } else if (xRight_px > w) {
+        // indicator at right edge that wavefront has sailed off
+        ctx.fillStyle = COL_WAVE;
+        ctx.globalAlpha = 0.55;
+        ctx.beginPath();
+        ctx.moveTo(w - 4, yShip);
+        ctx.lineTo(w - 18, yShip - 8);
+        ctx.lineTo(w - 18, yShip + 8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = COL_WAVE;
+        ctx.font = '10px ui-monospace, Menlo, monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('→ right wavefront (past Bob)', w - 22, yShip - 4);
+      }
+      if (xLeft_px >= 0 && xLeft_px <= w) {
+        drawWavefront(ctx, xLeft_px, yShip - 46, yShip + 40, 0.85);
+      }
+    }
+
+    // Emission point (flash site, fixed in Eve's inertial frame → drifts rightward here)
+    if (tSim > 0) {
+      if (xEmit_px >= 0 && xEmit_px <= w) {
+        ctx.save();
+        ctx.translate(xEmit_px, yShip - 58);
+        ctx.fillStyle = 'rgba(255, 220, 120, 0.85)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        // small cross marker
+        ctx.strokeStyle = 'rgba(255, 220, 120, 0.8)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-5, 0); ctx.lineTo(5, 0);
+        ctx.moveTo(0, -5); ctx.lineTo(0, 5);
+        ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = COL_WAVE;
+        ctx.font = '10px ui-monospace, Menlo, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('flash site (fixed in Eve frame)', xEmit_px, yShip - 70);
+      } else if (xEmit_px > w) {
+        ctx.fillStyle = 'rgba(255, 220, 120, 0.6)';
+        ctx.font = '10px ui-monospace, Menlo, monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('flash site ≫ off screen →', w - 6, yShip - 70);
+      }
+    }
+
+    // Bulb (drawn in ship, always dark after emission because the photon has departed)
+    drawBulb(ctx, xCenter_px, yShip, tSim === 0, tReal);
+
+    // --- Lasers in the ship-tracking view ---
+    // Bob fires leftward the instant he's hit. In the tracking view his laser
+    // front retreats from +halfL leftward at (c − v) — slow creep.
+    if (bobHit) {
+      const dt = tSim - tBob;
+      let headM = +halfL - (c_movie - v) * dt;
+      if (aliceVap) headM = -halfL;   // don't over-run Alice once she's vaporized
+      const headPx = (headM - xViewMin) * pxPerM;
+      drawLaser(ctx, xBob_px - 3, headPx, yShip + 3, COL_LASER_B);
+    }
+    // Alice fires rightward the instant she's hit. Her laser front advances
+    // from −halfL rightward at (c + v) — zooms across almost instantly.
+    if (aliceHit) {
+      const dt = tSim - tAlice;
+      let headM = -halfL + (c_movie + v) * dt;
+      if (bobVap) headM = +halfL;     // don't over-run Bob once he's vaporized
+      const headPx = (headM - xViewMin) * pxPerM;
+      drawLaser(ctx, xAlice_px + 3, headPx, yShip - 3, COL_LASER_A);
+    }
+
+    // --- People ---
+    // They stay standing (with gun raised) until a laser beam actually hits them.
+    drawPerson(ctx, xAlice_px, yShip, COL_A, 'Alice', +1, aliceVap);
+    drawPerson(ctx, xBob_px,   yShip, COL_B, 'Bob',   -1, bobVap);
+
+    // Brief yellow ring when a duelist is first illuminated by the wavefront
+    if (bobHit)   drawLightHit(ctx, xBob_px,   yShip, tSim - tBob,   0.3);
+    if (aliceHit) drawLightHit(ctx, xAlice_px, yShip, tSim - tAlice, 0.3);
+
+    // Vaporization explosion at the moment each is killed
+    if (bobVap)   drawExplosion(ctx, xBob_px,   yShip - 6, tReal);
+    if (aliceVap) drawExplosion(ctx, xAlice_px, yShip - 6, tReal);
+
+    // --- HUD — phase text and fast-forward banner ---
+    ctx.fillStyle = COL_TXT;
+    ctx.font = '12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    let phase;
+    if (tSim < 1e-6)                phase = 'Before the flash.';
+    else if (tSim < tBob)           phase = 'Flash! Right wavefront races toward Bob (closing at c + v).';
+    else if (tSim < tAlice - 0.3)   phase = 'Bob hit. He shoots — his laser creeps toward Alice (closing at c − v).';
+    else if (tSim < tAlice)         phase = 'Left wavefront is finally about to reach Alice...';
+    else if (tSim < tBobVap)        phase = 'Alice hit. She shoots — her laser rushes toward Bob (closing at c + v).';
+    else if (tSim < tAliceVap - 0.3) phase = 'Bob vaporized. Bob\'s slow laser still inching toward Alice.';
+    else if (tSim < tAliceVap)      phase = 'Bob\'s laser about to finally reach Alice...';
+    else                            phase = 'Alice vaporized ~40 μs after the flash. Order of events preserved, but split in time.';
+    ctx.fillText(phase, 14, h - 16);
+
+    // Fast-forward banner
+    if (fast) {
+      ctx.fillStyle = 'rgba(255, 160, 80, 0.85)';
+      ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('⏩  FAST-FORWARDING  THROUGH  THE  WAIT  ⏩', w / 2, 42);
+    }
+
+    // Clock (Eve's frame time in μs, top right)
+    ctx.fillStyle = COL_WAVE;
+    ctx.font = '12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('Eve\'s clock  t = ' + tSim.toFixed(3) + '  μs', w - 14, 20);
+
+    // Event markers (top-right secondary lines)
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = bobHit   ? COL_B       : COL_MUTE;
+    ctx.fillText('Bob hit by light at t ≈ 0.05 μs',      w - 14, 38);
+    ctx.fillStyle = aliceHit ? COL_A       : COL_MUTE;
+    ctx.fillText('Alice hit by light at t ≈ 20.0 μs',    w - 14, 54);
+    ctx.fillStyle = bobVap   ? COL_LASER_A : COL_MUTE;
+    ctx.fillText('Bob vaporized at t ≈ 20.08 μs',        w - 14, 70);
+    ctx.fillStyle = aliceVap ? COL_LASER_A : COL_MUTE;
+    ctx.fillText('Alice vaporized at t ≈ 40.0 μs',       w - 14, 86);
+  }
+
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+// ============================================================
+// Middle — static length-contraction illustration
+// ============================================================
+function buildContract() {
+  const cv  = document.getElementById('cv-contract');
+  const env = setupCanvas(cv, 3200);
+  const w = env.w, h = env.h;
+  const ctx = env.ctx;
+
+  // Pixel scale: map 600 m (proper length) to ~78% of canvas width
+  const fullWidth       = w * 0.78;
+  const contractedWidth = fullWidth / 10.013;   // γ ≈ 10.013
+  const xRestL = (w - fullWidth) / 2;
+  const xRestR = xRestL + fullWidth;
+  const xConLC = (w - contractedWidth) / 2;
+  const xConRC = xConLC + contractedWidth;
+
+  // Fixed y-coordinates tuned for h ≈ 300
+  const yRest = 85;    // rest-frame ship centerline
+  const yCon  = 215;   // contracted-frame ship centerline
+  const HH    = 30;    // half-height of each ship hull here
+
+  let tReal = 0, lastReal = null;
+  function update(realT) {
+    if (lastReal === null) lastReal = realT;
+    tReal += (realT - lastReal);
+    lastReal = realT;
+
+    ctx.clearRect(0, 0, w, h);
+    drawStars(ctx, env.stars, tReal);
+
+    // ----- Section labels -----
+    ctx.fillStyle = COL_TXT;
+    ctx.font = 'bold 12px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Ship\'s rest frame:  L₀ = 600 m', 14, yRest - HH - 14);
+    ctx.fillStyle = COL_EVE;
+    ctx.fillText('Eve\'s frame:        L = L₀/γ ≈ 59.9 m   (γ ≈ 10.01)', 14, yCon - HH - 14);
+
+    // ----- Rest-frame ship (full 600 m) -----
+    drawShipHull(ctx, xRestL, xRestR, yRest, -1, HH);
+    // name tags at the ends
+    ctx.fillStyle = COL_A;
+    ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Alice', xRestL + 16, yRest - 2);
+    ctx.fillStyle = COL_B;
+    ctx.fillText('Bob', xRestR - 16, yRest - 2);
+    // colored dots
+    ctx.fillStyle = COL_A;
+    ctx.beginPath(); ctx.arc(xRestL + 16, yRest + 8, 3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = COL_B;
+    ctx.beginPath(); ctx.arc(xRestR - 16, yRest + 8, 3, 0, Math.PI*2); ctx.fill();
+
+    // ruler underneath
+    ctx.strokeStyle = COL_MUTE;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(xRestL, yRest + HH + 10); ctx.lineTo(xRestR, yRest + HH + 10);
+    ctx.moveTo(xRestL, yRest + HH + 6);  ctx.lineTo(xRestL, yRest + HH + 14);
+    ctx.moveTo(xRestR, yRest + HH + 6);  ctx.lineTo(xRestR, yRest + HH + 14);
+    ctx.stroke();
+    ctx.fillStyle = COL_MUTE;
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('600 m (proper length)', (xRestL + xRestR) / 2, yRest + HH + 26);
+
+    // ----- Eve-frame contracted ship -----
+    drawShipHull(ctx, xConLC, xConRC, yCon, -1, HH);
+    // small colored dots at the ends
+    ctx.fillStyle = COL_A;
+    ctx.beginPath(); ctx.arc(xConLC + 4, yCon, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = COL_B;
+    ctx.beginPath(); ctx.arc(xConRC - 4, yCon, 3, 0, Math.PI * 2); ctx.fill();
+
+    // velocity arrow above contracted ship
+    ctx.strokeStyle = COL_EVE;
+    ctx.fillStyle = COL_EVE;
+    ctx.lineWidth = 1.5;
+    const aY = yCon - HH - 34;
+    ctx.beginPath();
+    ctx.moveTo(xConRC + 38, aY);
+    ctx.lineTo(xConLC - 38, aY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xConLC - 38, aY);
+    ctx.lineTo(xConLC - 30, aY - 4);
+    ctx.lineTo(xConLC - 30, aY + 4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('v = 0.995 c', (xConLC + xConRC) / 2, aY - 6);
+
+    // ruler underneath contracted ship
+    ctx.strokeStyle = COL_MUTE;
+    ctx.beginPath();
+    ctx.moveTo(xConLC, yCon + HH + 10); ctx.lineTo(xConRC, yCon + HH + 10);
+    ctx.moveTo(xConLC, yCon + HH + 6);  ctx.lineTo(xConLC, yCon + HH + 14);
+    ctx.moveTo(xConRC, yCon + HH + 6);  ctx.lineTo(xConRC, yCon + HH + 14);
+    ctx.stroke();
+    ctx.fillStyle = COL_MUTE;
+    ctx.textAlign = 'center';
+    ctx.fillText('~60 m', (xConLC + xConRC) / 2, yCon + HH + 26);
+
+    // dashed guide lines connecting rest-frame ruler to contracted-frame ruler
+    ctx.strokeStyle = '#3a4365';
+    ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    ctx.moveTo(xRestL, yRest + HH + 16);
+    ctx.lineTo(xConLC, yCon  - HH - 12);
+    ctx.moveTo(xRestR, yRest + HH + 16);
+    ctx.lineTo(xConRC, yCon  - HH - 12);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  return { update, setSpeed() {} };
+}
+
+// ============================================================
+// Wiring — shared animation clock
+// ============================================================
+const drivers = {};
+const speeds  = { ship: 1, eve: 1 };
+
+function rebuild() {
+  drivers.ship     = buildShip();
+  drivers.contract = buildContract();
+  drivers.eve      = buildEve();
+  drivers.ship.setSpeed(speeds.ship);
+  drivers.eve .setSpeed(speeds.eve );
+}
+
+function wireSpeedControls() {
+  document.querySelectorAll('.speed').forEach(group => {
+    const key = group.dataset.case;
+    group.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const s = parseFloat(btn.dataset.speed);
+        speeds[key] = s;
+        if (drivers[key]) drivers[key].setSpeed(s);
+        group.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+}
+
+function start() {
+  rebuild();
+  wireSpeedControls();
+  const t0 = performance.now();
+  function frame(now) {
+    const t = (now - t0) / 1000;
+    drivers.ship     && drivers.ship.update(t);
+    drivers.eve      && drivers.eve.update(t);
+    drivers.contract && drivers.contract.update(t);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+window.addEventListener('load', start);
+window.addEventListener('resize', rebuild);
+</script>
+</body>
+</html>
