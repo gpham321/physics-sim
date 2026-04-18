@@ -1374,9 +1374,10 @@ function buildEarth() {
     ctx.clearRect(0, 0, w, h);
     drawStars(ctx, stars, performance.now() / 1000);
 
-    // Layout
+    // Layout. Rock radius tracks the A slider (A ∝ r² for a sphere, so r ∝ √A).
     const sunX = w * 0.14, sunY = h * 0.38, sunR = 46;
-    const rockX = w * 0.70, rockY = h * 0.58, rockR = 36;
+    const rockX = w * 0.70, rockY = h * 0.58;
+    const rockR = 18 + 42 * Math.sqrt(A);
 
     // ---- Sun ----
     const sunHalo = ctx.createRadialGradient(sunX, sunY, sunR * 0.3, sunX, sunY, sunR * 2.6);
