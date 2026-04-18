@@ -16,7 +16,7 @@ Once Pages is enabled, the site will be available at:
 | `photoelectric.html` | Photoelectric effect — light frequency, intensity, cathode material, stopping voltage, I–V curve, and the KE vs. f threshold plot |
 | `relativity_momentum.html` | Relativistic momentum and center of mass — two spaceships and a photon |
 | `simultaneity.html` | Relativity of simultaneity — the spaceship duel |
-| `Physics_7A_10B_Study_Guide.html` | Full study guide covering Giancoli chapters 21–25 (lectures 7A–10B) |
+| `physics_23_7A_10B_study_guide.html` | Full study guide covering Giancoli chapters 21–25 (lectures 7A–10B) |
 | `president_giuse.PNG` | Portrait shown in the top-right corner of every page |
 
 ## Enabling GitHub Pages
