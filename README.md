@@ -19,6 +19,7 @@ Once Pages is enabled, the site will be available at:
 | `simultaneity.html` | Relativity of simultaneity — the spaceship duel |
 | `thermal_radiation.html` | Stefan–Boltzmann, Wien, Planck — why hot things glow, and the ultraviolet catastrophe |
 | `physics_23_study_guide.html` | Full Physics 23 study guide covering Giancoli chapters 16–25 (lectures 1A–10B) |
+| `physics_25_study_guide.html` | Physics 25 (Modern Physics) study guide — Lectures 1–7 through Midterm #1 |
 | `president_giuse.jpg` | Portrait shown in the top-right corner of every page (and favicon / link preview) |
 
 ## Enabling GitHub Pages
