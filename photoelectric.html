@@ -181,6 +181,40 @@ MathJax = {
   </ul>
 </div>
 
+<div class="panel">
+  <h2>Controls</h2>
+  <div class="slider-grid">
+    <div class="slider-row">
+      <label><span>Cathode material (work function \(\Phi\))</span><span id="matReadout" class="mono">Cesium — 2.10 eV</span></label>
+      <div class="material-buttons" id="matButtons">
+        <button type="button" data-phi="2.1"  data-name="Cesium">Cs</button>
+        <button type="button" data-phi="2.28" data-name="Sodium">Na</button>
+        <button type="button" data-phi="2.87" data-name="Calcium">Ca</button>
+        <button type="button" data-phi="4.08" data-name="Aluminum">Al</button>
+        <button type="button" data-phi="4.5"  data-name="Steel (Fe)">Fe</button>
+        <button type="button" data-phi="4.7"  data-name="Copper">Cu</button>
+        <button type="button" data-phi="5.1"  data-name="Gold">Au</button>
+      </div>
+      <div class="hint">Different metals hold onto their electrons more or less tightly. Low-Φ materials like cesium emit with visible light; high-Φ ones like gold need UV.</div>
+    </div>
+    <div class="slider-row">
+      <label for="vSlider"><span>Bias voltage \(V\) (anode relative to cathode)</span><span id="vReadout" class="mono">0.00 V</span></label>
+      <input type="range" id="vSlider" min="-5" max="5" step="0.05" value="0">
+      <div class="hint">Positive accelerates electrons toward the anode (saturation current). Negative repels them — eventually current drops to zero at the stopping voltage.</div>
+    </div>
+    <div class="slider-row">
+      <label for="iSlider"><span>Light intensity</span><span id="iReadout" class="mono">50%</span></label>
+      <input type="range" id="iSlider" min="0" max="100" step="1" value="50">
+      <div class="hint">Sets how many photons per second hit the cathode (and so the saturation current). Does <em>not</em> change \(V_\text{stop}\).</div>
+    </div>
+    <div class="slider-row">
+      <label for="fSlider"><span>Light frequency \(f\)</span><span id="fReadout" class="mono">7.0 × 10¹⁴ Hz</span></label>
+      <input type="range" id="fSlider" min="4" max="15" step="0.1" value="7">
+      <div class="hint">Controls per-photon energy \(hf\). Below the threshold \(f_0 = \Phi/h\) (shown above), no electrons are ejected at all.</div>
+    </div>
+  </div>
+</div>
+
 <div class="grid">
   <div class="card">
     <h3>Circuit</h3>
@@ -220,43 +254,16 @@ MathJax = {
   </div>
 </div>
 
-<div class="card" style="margin: 24px 0;">
-  <h3>KE<sub>max</sub> vs. frequency — the threshold plot</h3>
-  <canvas id="ke" style="height: 320px;"></canvas>
-  <p class="hint" style="margin-top: 10px;">Einstein's equation \(KE_\text{max} = hf - \Phi\) gives a straight line. <strong>Slope</strong> is Planck's constant \(h\) (same for every material). <strong>x-intercept</strong> is the threshold frequency \(f_0 = \Phi/h\). All seven materials are plotted — the active one is bright, the rest are faded. Switching materials slides the line horizontally without changing its slope.</p>
-</div>
-
-<div class="panel">
-  <h2>Controls</h2>
-  <div class="slider-grid">
-    <div class="slider-row">
-      <label><span>Cathode material (work function \(\Phi\))</span><span id="matReadout" class="mono">Cesium — 2.10 eV</span></label>
-      <div class="material-buttons" id="matButtons">
-        <button type="button" data-phi="2.1"  data-name="Cesium">Cs</button>
-        <button type="button" data-phi="2.28" data-name="Sodium">Na</button>
-        <button type="button" data-phi="2.87" data-name="Calcium">Ca</button>
-        <button type="button" data-phi="4.08" data-name="Aluminum">Al</button>
-        <button type="button" data-phi="4.5"  data-name="Steel (Fe)">Fe</button>
-        <button type="button" data-phi="4.7"  data-name="Copper">Cu</button>
-        <button type="button" data-phi="5.1"  data-name="Gold">Au</button>
-      </div>
-      <div class="hint">Different metals hold onto their electrons more or less tightly. Low-Φ materials like cesium emit with visible light; high-Φ ones like gold need UV.</div>
-    </div>
-    <div class="slider-row">
-      <label for="vSlider"><span>Bias voltage \(V\) (anode relative to cathode)</span><span id="vReadout" class="mono">0.00 V</span></label>
-      <input type="range" id="vSlider" min="-5" max="5" step="0.05" value="0">
-      <div class="hint">Positive accelerates electrons toward the anode (saturation current). Negative repels them — eventually current drops to zero at the stopping voltage.</div>
-    </div>
-    <div class="slider-row">
-      <label for="iSlider"><span>Light intensity</span><span id="iReadout" class="mono">50%</span></label>
-      <input type="range" id="iSlider" min="0" max="100" step="1" value="50">
-      <div class="hint">Sets how many photons per second hit the cathode (and so the saturation current). Does <em>not</em> change \(V_\text{stop}\).</div>
-    </div>
-    <div class="slider-row">
-      <label for="fSlider"><span>Light frequency \(f\)</span><span id="fReadout" class="mono">7.0 × 10¹⁴ Hz</span></label>
-      <input type="range" id="fSlider" min="4" max="15" step="0.1" value="7">
-      <div class="hint">Controls per-photon energy \(hf\). Below the threshold \(f_0 = \Phi/h\) (shown above), no electrons are ejected at all.</div>
-    </div>
+<div class="grid">
+  <div class="card">
+    <h3>KE<sub>max</sub> vs. frequency — the threshold plot</h3>
+    <canvas id="ke" style="height: 320px;"></canvas>
+    <p class="hint" style="margin-top: 10px;">Einstein's equation \(KE_\text{max} = hf - \Phi\) gives a straight line. <strong>Slope</strong> is Planck's constant \(h\) (same for every material). <strong>x-intercept</strong> is the threshold frequency \(f_0 = \Phi/h\). Switching materials slides the line horizontally without changing its slope.</p>
+  </div>
+  <div class="card">
+    <h3>Current vs. intensity — at the current \(V\) and \(f\)</h3>
+    <canvas id="iI" style="height: 320px;"></canvas>
+    <p class="hint" style="margin-top: 10px;">With \(f\) above threshold and \(V\) above the stopping voltage, current grows <em>linearly</em> with intensity — double the photons, double the electrons. Below threshold (or below \(-V_\text{stop}\)), the line collapses onto the x-axis no matter how bright the light. That intensity-independence of the onset is the classical surprise.</p>
   </div>
 </div>
 
@@ -1133,6 +1140,121 @@ function drawKE() {
 }
 
 // ============================================================
+// Current vs intensity canvas
+// ============================================================
+const iICv = $('iI');
+let iIEnv;
+
+function initII() { iIEnv = setupCanvas(iICv); }
+
+function drawII() {
+  const { ctx, w, h } = iIEnv;
+  ctx.clearRect(0, 0, w, h);
+
+  const padL = 52, padR = 22, padT = 28, padB = 44;
+  const left = padL, right = w - padR;
+  const top  = padT, bottom = h - padB;
+  const plotW = right - left, plotH = bottom - top;
+  const iMin = 0, iMax = 100;                // intensity %
+  const curMax = I_SAT_MAX * 1.05;           // y-axis headroom
+
+  const xToPx = i => left   + (i  - iMin) / (iMax - iMin) * plotW;
+  const yToPx = c => bottom - (c / curMax) * plotH;
+
+  // Grid
+  ctx.strokeStyle = '#1a1f2e';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= iMax; i += 10) {
+    ctx.beginPath(); ctx.moveTo(xToPx(i), top); ctx.lineTo(xToPx(i), bottom); ctx.stroke();
+  }
+  for (let c = 0; c <= I_SAT_MAX; c += 1) {
+    const py = yToPx(c);
+    ctx.beginPath(); ctx.moveTo(left, py); ctx.lineTo(right, py); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = '#5a6276';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(left, bottom); ctx.lineTo(right, bottom);
+  ctx.moveTo(left, top);    ctx.lineTo(left, bottom);
+  ctx.stroke();
+
+  // X tick labels
+  ctx.fillStyle = '#cfd3df';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= iMax; i += 25) {
+    ctx.fillText(i.toFixed(0) + '%', xToPx(i), bottom + 14);
+  }
+  ctx.fillStyle = '#9aa2b6';
+  ctx.fillText('light intensity', (left + right)/2, h - 8);
+
+  // Y tick labels
+  ctx.fillStyle = '#cfd3df';
+  ctx.textAlign = 'right';
+  for (let c = 0; c <= I_SAT_MAX; c += 2) {
+    ctx.fillText(c.toFixed(0), left - 6, yToPx(c) + 4);
+  }
+  ctx.save();
+  ctx.translate(14, (top + bottom)/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#9aa2b6';
+  ctx.fillText('current  (μA)', 0, 0);
+  ctx.restore();
+
+  // Plot I vs intensity at the current V and f (a straight line through the origin)
+  ctx.strokeStyle = '#66d9ef';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const N = 40;
+  for (let k = 0; k <= N; k++) {
+    const iPct = iMin + (k / N) * (iMax - iMin);
+    const I = currentAt(state.V, state.f, iPct);
+    const x = xToPx(iPct), y = yToPx(I);
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Operating point
+  const I_now = currentAt(state.V, state.f, state.intensity);
+  const dotX = xToPx(state.intensity);
+  const dotY = yToPx(I_now);
+  ctx.strokeStyle = 'rgba(102, 217, 239, 0.55)';
+  ctx.setLineDash([3, 3]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(dotX, top);  ctx.lineTo(dotX, bottom);
+  ctx.moveTo(left, dotY); ctx.lineTo(right, dotY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#66d9ef';
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(dotX, dotY, 7, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Dot label
+  ctx.fillStyle = '#66d9ef';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  const lbl = `(${state.intensity.toFixed(0)}%, ${I_now.toFixed(2)} μA)`;
+  if (dotX < right - 110) { ctx.textAlign = 'left';  ctx.fillText(lbl, dotX + 12, dotY - 10); }
+  else                    { ctx.textAlign = 'right'; ctx.fillText(lbl, dotX - 12, dotY - 10); }
+
+  // Header info
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'left';
+  const slopeNote = (maxKE(state.f) > 0 && state.V > -stoppingV(state.f))
+    ? 'slope depends on V and f  •  always through the origin'
+    : 'below threshold (or V ≤ −V_stop) — current = 0 for any intensity';
+  ctx.fillText(slopeNote, left + 4, top - 10);
+}
+
+// ============================================================
 // Main loop
 // ============================================================
 let lastT = performance.now() / 1000;
@@ -1144,6 +1266,7 @@ function frame(now) {
   drawCircuit();
   drawGraph();
   drawKE();
+  drawII();
   requestAnimationFrame(frame);
 }
 
@@ -1151,6 +1274,7 @@ function start() {
   initCircuit();
   initGraph();
   initKE();
+  initII();
   refreshUI();
   requestAnimationFrame(frame);
 }
@@ -1159,6 +1283,7 @@ window.addEventListener('resize', () => {
   initCircuit();
   initGraph();
   initKE();
+  initII();
 });
 </script>
 </body>
