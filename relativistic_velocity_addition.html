@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Relativistic Velocity Addition</title>
+<link rel="icon" type="image/jpeg" href="president_giuse.jpg">
+<meta property="og:title" content="Relativistic Velocity Addition">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/relativistic_velocity_addition.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; font-weight: 600; color: var(--accent); }
+  h3 { margin: 0 0 8px; font-weight: 600; color: var(--text); }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .case {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 22px 0;
+  }
+  .case.good { border-left-color: var(--good); }
+  .case.bad  { border-left-color: var(--bad); }
+  .case.warn { border-left-color: var(--warn); }
+  .case h3 { margin-top: 0; }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 280px;
+    background: #0a0c12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 12px 0 6px;
+  }
+  .speed {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin: 8px 0 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .speed-btn {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .speed-btn:hover { background: #2a2f43; }
+  .speed-btn.active {
+    background: var(--accent);
+    color: #0a0c12;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+  .verdict {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: var(--panel-2);
+    font-size: 14px;
+  }
+  .verdict.good { color: var(--good); }
+  .verdict.bad  { color: var(--bad); }
+  .verdict.warn { color: var(--warn); }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .nums {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    background: var(--panel-2);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    margin: 12px 0;
+  }
+  .nums div span { color: var(--muted); }
+  .derivation {
+    background: var(--panel-2);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 6px;
+    font-size: 14.5px;
+  }
+  .derivation p { margin: 8px 0; }
+  .derivation p:first-child { margin-top: 0; }
+  .derivation p:last-child { margin-bottom: 0; }
+  .scenario-heading {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 22px;
+    margin: 40px 0 4px;
+    letter-spacing: 0.2px;
+  }
+  .scenario-heading::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 2px;
+    background: var(--accent);
+    margin-top: 8px;
+    opacity: 0.6;
+  }
+  .scenario-sub { color: var(--muted); margin-top: 8px; }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Relativistic Velocity Addition</h1>
+<p class="lead">When a rocket flies past you at half the speed of light and fires a missile forward at half the speed of light, you don't see the missile moving at \(c\) — you see it at \(0.8\,c\). Velocities don't simply add when speeds approach \(c\). Here's the formula that keeps light at \(c\) for every observer, and four animated scenarios that show it in action.</p>
+
+<div class="panel">
+  <h2>The Setup</h2>
+  <p>Two observers describe the velocity of the same object along the x-axis. Frame \(S\) (the "ground" frame) is at rest. Frame \(S'\) (the "rocket" frame) moves at velocity \(v\) relative to \(S\), in the \(+x\) direction. They both watch a third object moving along \(x\):</p>
+  <ul>
+    <li>The object's velocity in \(S\) is called \(u\) (what the ground sees).</li>
+    <li>The object's velocity in \(S'\) is called \(u'\) (what the rocket-rider sees).</li>
+  </ul>
+
+  <p>Einstein's velocity addition formula relates the two:</p>
+  $$ \boxed{\;u \;=\; \frac{u' + v}{1 + \dfrac{u'\,v}{c^{2}}}\;} $$
+
+  <p>A few sanity checks:</p>
+  <ul>
+    <li><strong>Low-speed limit.</strong> When \(u', v \ll c\), the denominator is \(\approx 1\) and you get \(u \approx u' + v\) — the everyday Galilean rule.</li>
+    <li><strong>Light is invariant.</strong> Plug in \(u' = c\):  \(u = (c + v)/(1 + v/c) = c\). Light has the same speed in every frame.</li>
+    <li><strong>Speed limit holds.</strong> No matter how close \(u'\) and \(v\) get to \(c\), the formula keeps \(|u| < c\). The denominator grows just fast enough to choke off the numerator.</li>
+    <li><strong>Sign convention.</strong> Velocities are signed. Negative means motion in the \(-x\) direction.</li>
+  </ul>
+
+  <h3 style="margin-top: 22px; color: var(--accent);">Solving for \(u'\) — the inverse</h3>
+  <p>Sometimes you know two velocities in the ground frame and want a <em>relative</em> velocity. If you're on Ship 1 (moving at \(v\)) and Ship 2 is moving at \(u\) (both as seen from the ground), what speed does Ship 2 have <em>from your seat</em>? That's \(u'\). We just need to solve the formula above for \(u'\):</p>
+
+  <div class="derivation">
+    <p><strong>Derivation.</strong> Start with</p>
+    $$ u \;=\; \frac{u' + v}{1 + u'v/c^{2}}. $$
+    <p>Multiply both sides by the denominator to clear the fraction:</p>
+    $$ u\Bigl(1 + \frac{u'v}{c^{2}}\Bigr) \;=\; u' + v. $$
+    <p>Distribute on the left:</p>
+    $$ u \;+\; \frac{u\,u'\,v}{c^{2}} \;=\; u' \;+\; v. $$
+    <p>Move every \(u'\) to one side and everything else to the other:</p>
+    $$ u - v \;=\; u' \;-\; \frac{u\,u'\,v}{c^{2}} \;=\; u'\Bigl(1 - \frac{uv}{c^{2}}\Bigr). $$
+    <p>Divide by the bracket:</p>
+    $$ \boxed{\;u' \;=\; \frac{u - v}{1 - \dfrac{u\,v}{c^{2}}}\;} $$
+    <p style="font-size:13.5px; color: var(--muted);">Notice the symmetry: this is the original equation with the sign of \(v\) flipped. That's exactly what "looking from the rocket's frame instead of the ground" should do — undo the boost \(v\).</p>
+  </div>
+
+  <p>So the same formula does double duty:</p>
+  <ul>
+    <li><strong>Forward problem (Scenario A below):</strong> use \(u = (u'+v)/(1+u'v/c^{2})\) when you know the velocity inside a moving frame and want what the ground sees.</li>
+    <li><strong>Inverse problem (Scenario B below):</strong> use \(u' = (u-v)/(1-uv/c^{2})\) when you know two ground velocities and want one in the other ship's frame.</li>
+  </ul>
+
+  <p style="font-size:14px; color:var(--muted); margin-top:14px;"><strong>About the animations.</strong> Real light travels too fast to see, so each canvas uses a "movie speed of light" \(c_\text{movie}\) — the algebra is identical to using the real \(c\); only the time scale is rescaled. Each canvas shows two stacked horizontal frames: the <strong>top</strong> half is the ground frame \(S\); the <strong>bottom</strong> half is the rocket / your-ship frame \(S'\). Watch how the same physical ball or ship has different velocities in the two frames.</p>
+</div>
+
+
+<!-- ======================================== -->
+<!-- ===== SCENARIO A: solving for u    ===== -->
+<!-- ======================================== -->
+<h2 class="scenario-heading">Scenario A — Rocket throws a ball: solving for \(u\)</h2>
+<p class="scenario-sub">Eve floats in deep space, at rest. A rocket flies past her at velocity \(v\). Inside the rocket, the captain throws a ball at velocity \(u'\) (in the rocket's frame). What velocity \(u\) does Eve measure for the ball?</p>
+
+
+<!-- Case A1: Same direction -->
+<div class="case good">
+  <h3>Case A1 — Ball thrown forward (same direction as rocket)</h3>
+  <p>Take \(v = 0.6\,c\) (rocket) and \(u' = +0.8\,c\) (ball, thrown forward in the rocket's frame). Galileo would predict \(u = 0.8c + 0.6c = 1.4c\), faster than light — impossible. Plug into the relativistic formula instead:</p>
+  $$ u \;=\; \frac{0.8\,c + 0.6\,c}{1 + (0.8)(0.6)} \;=\; \frac{1.4\,c}{1.48} \;\approx\; 0.946\,c. $$
+  <div class="nums">
+    <div><span>v (rocket vs. ground):</span> +0.600 c</div>
+    <div><span>u' (ball in rocket's frame):</span> +0.800 c</div>
+    <div><span>u (ball in ground frame):</span> +0.946 c</div>
+    <div><span>Galilean prediction (u' + v):</span> 1.400 c (not allowed)</div>
+  </div>
+  <canvas id="cvA1"></canvas>
+  <div class="speed" data-case="A1">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#cfd3df"></span>Eve (ground observer)</div>
+    <div><span class="swatch" style="background:#66d9ef"></span>Rocket (moves at v)</div>
+    <div><span class="swatch" style="background:#ffd166"></span>Ball</div>
+    <div><span class="swatch" style="background:#ff5f6d; opacity:0.55"></span>Galilean "ghost" ball at u'+v</div>
+  </div>
+  <div class="verdict good">In the ground frame the ball moves at 0.946 c — fast, but still under c. The Galilean ghost ball (red, dashed) sprints ahead at the impossible 1.4 c so you can see how badly classical addition fails. Note the bottom frame (rocket's view): there the ball really does move at +0.8 c relative to the rocket.</div>
+</div>
+
+
+<!-- Case A2: Opposite direction -->
+<div class="case warn">
+  <h3>Case A2 — Ball thrown backward (opposite direction in rocket's frame)</h3>
+  <p>Same rocket, but now the captain hurls the ball <em>backward</em>: \(v = +0.6\,c\), \(u' = -0.8\,c\). Galileo would say \(u = -0.8c + 0.6c = -0.2c\). The relativistic answer is similar in spirit but slightly different in size:</p>
+  $$ u \;=\; \frac{-0.8\,c + 0.6\,c}{1 + (-0.8)(0.6)} \;=\; \frac{-0.2\,c}{0.52} \;\approx\; -0.385\,c. $$
+  <div class="nums">
+    <div><span>v (rocket vs. ground):</span> +0.600 c</div>
+    <div><span>u' (ball in rocket's frame):</span> &minus;0.800 c</div>
+    <div><span>u (ball in ground frame):</span> &minus;0.385 c</div>
+    <div><span>Galilean prediction (u' + v):</span> &minus;0.200 c</div>
+  </div>
+  <canvas id="cvA2"></canvas>
+  <div class="speed" data-case="A2">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#cfd3df"></span>Eve (ground observer)</div>
+    <div><span class="swatch" style="background:#66d9ef"></span>Rocket (moves at v)</div>
+    <div><span class="swatch" style="background:#ffd166"></span>Ball</div>
+    <div><span class="swatch" style="background:#ff5f6d; opacity:0.55"></span>Galilean ghost ball at u'+v</div>
+  </div>
+  <div class="verdict warn">The ball was thrown hard enough (in the rocket's frame) to be moving backward in the ground frame, even though the rocket itself was moving forward at 0.6 c. Eve sees the ball drift left at 0.385 c — almost twice as fast as the Galilean prediction of 0.2 c. The denominator (1 + u'v/c² = 0.52) is now <em>less than 1</em>, so the formula <em>amplifies</em> the answer instead of suppressing it.</div>
+</div>
+
+
+<!-- ======================================== -->
+<!-- ===== SCENARIO B: solving for u'   ===== -->
+<!-- ======================================== -->
+<h2 class="scenario-heading">Scenario B — Two ships, one observer: solving for \(u'\)</h2>
+<p class="scenario-sub">You're on Ship 1, cruising past Earth at velocity \(v\). Mission control radios that Ship 2 is moving at velocity \(u\) (also relative to Earth). Question: at what speed \(u'\) is Ship 2 approaching (or receding from) <em>you</em>? Use the inverse formula \(u' = (u-v)/(1 - uv/c^{2})\).</p>
+
+
+<!-- Case B1: Same direction -->
+<div class="case good">
+  <h3>Case B1 — Both ships moving in the same direction</h3>
+  <p>Take \(v = +0.6\,c\) (you) and \(u = +0.8\,c\) (Ship 2). Both head the same way; Ship 2 is faster, so it should be slowly pulling ahead. Galileo would say the gap opens at \(u - v = 0.2\,c\). Relativistically:</p>
+  $$ u' \;=\; \frac{0.8\,c - 0.6\,c}{1 - (0.8)(0.6)} \;=\; \frac{0.2\,c}{0.52} \;\approx\; +0.385\,c. $$
+  <div class="nums">
+    <div><span>v (your ship vs. ground):</span> +0.600 c</div>
+    <div><span>u (Ship 2 vs. ground):</span> +0.800 c</div>
+    <div><span>u' (Ship 2 from your seat):</span> +0.385 c</div>
+    <div><span>Galilean prediction (u − v):</span> +0.200 c</div>
+  </div>
+  <canvas id="cvB1"></canvas>
+  <div class="speed" data-case="B1">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#66d9ef"></span>Your ship (Ship 1)</div>
+    <div><span class="swatch" style="background:#a6e22e"></span>Ship 2</div>
+    <div><span class="swatch" style="background:#ff5f6d; opacity:0.55"></span>Galilean ghost (Ship 2 at u−v)</div>
+  </div>
+  <div class="verdict good">In the ground frame (top) Ship 2 inches past you at 0.2 c. But "inching" is misleading — both ships are tearing along close to c, so the gap-closing rate <em>in your seated frame</em> is actually 0.385 c, almost double what Galileo would compute. The watching ship really is approaching faster than the ground frame's bare subtraction implies.</div>
+</div>
+
+
+<!-- Case B2: Opposite directions -->
+<div class="case bad">
+  <h3>Case B2 — Ships moving in opposite directions</h3>
+  <p>Now suppose Ship 2 is heading the other way: \(v = +0.6\,c\) (you, rightward), \(u = -0.8\,c\) (Ship 2, leftward). Galileo would say the closing speed is \(u - v = -1.4\,c\) — a relative speed faster than light. Relativity refuses:</p>
+  $$ u' \;=\; \frac{-0.8\,c - 0.6\,c}{1 - (-0.8)(0.6)} \;=\; \frac{-1.4\,c}{1.48} \;\approx\; -0.946\,c. $$
+  <div class="nums">
+    <div><span>v (your ship vs. ground):</span> +0.600 c</div>
+    <div><span>u (Ship 2 vs. ground):</span> &minus;0.800 c</div>
+    <div><span>u' (Ship 2 from your seat):</span> &minus;0.946 c</div>
+    <div><span>Galilean prediction (u − v):</span> &minus;1.400 c (not allowed)</div>
+  </div>
+  <canvas id="cvB2"></canvas>
+  <div class="speed" data-case="B2">
+    <span>Speed:</span>
+    <button class="speed-btn" data-speed="0.25">0.25&times;</button>
+    <button class="speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="speed-btn active" data-speed="1">1&times;</button>
+    <button class="speed-btn" data-speed="2">2&times;</button>
+    <button class="speed-btn" data-speed="4">4&times;</button>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:#66d9ef"></span>Your ship (Ship 1)</div>
+    <div><span class="swatch" style="background:#a6e22e"></span>Ship 2</div>
+    <div><span class="swatch" style="background:#ff5f6d; opacity:0.55"></span>Galilean ghost at u−v (faster than light)</div>
+  </div>
+  <div class="verdict bad">From your seat Ship 2 hurtles past at 0.946 c — frighteningly fast, but still under c. The Galilean ghost (dashed red) zips by at 1.4 c, which would be a relative speed faster than light. Relativity packs a closing speed of nearly 1.4 c into a measurable speed of just 0.946 c.</div>
+</div>
+
+
+<!-- ===== Key takeaways panel ===== -->
+<div class="panel" style="margin-top: 30px;">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li><strong>The denominator is the magic.</strong> The whole correction lives in \(1 \pm uv/c^{2}\). At everyday speeds \(uv/c^{2} \approx 0\) and you fall back to Galileo. At relativistic speeds it actively suppresses (or amplifies) the numerator.</li>
+    <li><strong>Same direction: denominator is &gt; 1, so \(u\) is suppressed.</strong> Adding two large positive velocities never gets you past \(c\).</li>
+    <li><strong>Opposite directions: denominator is &lt; 1, so \(|u|\) gets <em>amplified</em>.</strong> Cases A2 and B2 show this — the relative speed grows faster than the Galilean subtraction would predict, but still asymptotes to \(c\), never crossing it.</li>
+    <li><strong>The two formulas are the same equation, solved for different unknowns.</strong> Pick whichever variable you don't already know.</li>
+    <li><strong>"Closing speed" can exceed \(c\)</strong> if measured in a third frame (e.g., the ground), but the speed of either ship as measured by the <em>other ship</em> can never reach \(c\). That subtle distinction is exactly what the formula enforces.</li>
+  </ul>
+  <p style="font-size:14px; color:var(--muted); margin-top: 12px;">In Giancoli §26.7. The same formula generalizes to vector velocities (the components transverse to \(v\) get a separate \(\gamma\) factor), but the 1D version above is the one you'll use 95% of the time.</p>
+</div>
+
+</div>
+
+<script>
+// ====== Shared constants ======
+const COL_EVE     = '#cfd3df';
+const COL_ROCKET  = '#66d9ef';   // also "Your ship"
+const COL_BALL    = '#ffd166';
+const COL_SHIP2   = '#a6e22e';
+const COL_GHOST   = '#ff5f6d';
+const COL_TXT     = '#cfd3df';
+const COL_MUTE    = '#7a8095';
+const COL_DIVIDER = '#2a2f43';
+
+const C_FRAC = 1.0;              // we work in units of c
+
+// ====== Canvas setup ======
+function setupCanvas(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  cv.width  = Math.floor(rect.width  * dpr);
+  cv.height = Math.floor(rect.height * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Stars
+  const stars = [];
+  const count = Math.max(40, Math.floor(rect.width * rect.height / 1800));
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * rect.width,
+      y: Math.random() * rect.height,
+      base: 0.18 + Math.random() * 0.45,
+      size: 0.4 + Math.random() * 1.1,
+      freq: 0.5 + Math.random() * 2.0,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+  return { ctx, w: rect.width, h: rect.height, stars };
+}
+
+// ====== Drawing primitives ======
+function drawStars(env, t, bottomScrollVx) {
+  // Stars in the bottom half scroll left at bottomScrollVx px/s (parallax for the
+  // "at rest" frame whose rocket is actually moving at +v in the ground frame).
+  const { ctx, stars, w, h } = env;
+  for (const s of stars) {
+    let x = s.x;
+    if (s.y > h / 2 && bottomScrollVx) {
+      x = ((s.x - bottomScrollVx * t) % w + w) % w;
+    }
+    const tw = Math.max(0, s.base * (0.5 + 0.5 * Math.sin(t * s.freq + s.phase)));
+    ctx.fillStyle = `rgba(220, 230, 255, ${tw.toFixed(3)})`;
+    ctx.beginPath();
+    ctx.arc(x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawDivider(env) {
+  const { ctx, w, h } = env;
+  ctx.strokeStyle = COL_DIVIDER;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([5, 4]);
+  ctx.beginPath();
+  ctx.moveTo(20, h/2); ctx.lineTo(w - 20, h/2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawFrameLabel(env, text, top) {
+  const { ctx, h } = env;
+  ctx.fillStyle = COL_MUTE;
+  ctx.font = 'bold 11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(text, 12, top ? 16 : (h/2 + 16));
+}
+
+function drawShip(ctx, x, y, color, dir, scale) {
+  scale = scale || 1;
+  const w = 36 * scale, h = 18 * scale;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = color;
+  ctx.strokeStyle = '#0a0c12';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  if (dir >= 0) {
+    ctx.moveTo(w/2, 0);
+    ctx.lineTo(-w/2,  h/2);
+    ctx.lineTo(-w/2, -h/2);
+  } else {
+    ctx.moveTo(-w/2, 0);
+    ctx.lineTo( w/2,  h/2);
+    ctx.lineTo( w/2, -h/2);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#0a0c12';
+  ctx.fillRect(-w*0.15, -h*0.18, w*0.3, h*0.36);
+  ctx.restore();
+}
+
+function drawBall(ctx, x, y, color, dashed) {
+  if (dashed) {
+    ctx.globalAlpha = 0.55;
+  }
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#0a0c12';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  // little stitch
+  ctx.strokeStyle = '#0a0c12';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.arc(x, y, 5, -0.6, 0.6);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
+function drawObserverFigure(ctx, x, y, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y - 8, 4.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(x, y - 3.5); ctx.lineTo(x, y + 7);
+  ctx.moveTo(x - 5, y + 0); ctx.lineTo(x + 5, y + 0);
+  ctx.moveTo(x, y + 7); ctx.lineTo(x - 4, y + 14);
+  ctx.moveTo(x, y + 7); ctx.lineTo(x + 4, y + 14);
+  ctx.stroke();
+}
+
+function labelAbove(ctx, x, y, text, color) {
+  ctx.fillStyle = color;
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+}
+
+function labelBelow(ctx, x, y, text, color) {
+  ctx.fillStyle = color;
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+}
+
+function drawArrow(ctx, x1, y, x2, color, dashed) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 1.5;
+  if (dashed) ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.moveTo(x1, y);
+  ctx.lineTo(x2, y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // arrowhead
+  const dir = (x2 - x1) >= 0 ? 1 : -1;
+  ctx.beginPath();
+  ctx.moveTo(x2, y);
+  ctx.lineTo(x2 - 6 * dir, y - 4);
+  ctx.lineTo(x2 - 6 * dir, y + 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// ====== Generic two-frame scene drawer ======
+//
+// Each case configures: top frame (ground) and bottom frame (S').
+// We render whatever objects are passed in.
+//
+// objects = [ {kind, x, y, color, dir, label, dashed} ]
+function renderScene(env, t, opts) {
+  const { ctx, w, h } = env;
+  ctx.clearRect(0, 0, w, h);
+  drawStars(env, t, opts.bottomScrollVx || 0);
+  drawDivider(env);
+  drawFrameLabel(env, opts.topLabel, true);
+  drawFrameLabel(env, opts.bottomLabel, false);
+
+  for (const o of opts.objects) {
+    if (o.kind === 'ship')      drawShip(ctx, o.x, o.y, o.color, o.dir, o.scale);
+    else if (o.kind === 'ball') drawBall(ctx, o.x, o.y, o.color, !!o.dashed);
+    else if (o.kind === 'eve')  drawObserverFigure(ctx, o.x, o.y, o.color);
+    else if (o.kind === 'arrow') drawArrow(ctx, o.x1, o.y, o.x2, o.color, !!o.dashed);
+    if (o.label) labelAbove(ctx, o.x, o.y - 18, o.label, o.color);
+    if (o.subLabel) labelBelow(ctx, o.x, o.y + 28, o.subLabel, COL_MUTE);
+  }
+
+  // HUD: phase and computed velocities
+  ctx.fillStyle = COL_TXT;
+  ctx.font = '12px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText(opts.hudRight || '', w - 12, 16);
+  ctx.fillText(opts.hudRightBottom || '', w - 12, h/2 + 16);
+}
+
+
+// ============================================================
+// Animation builders
+// ============================================================
+//
+// Common pattern:
+//  - C_PX        : "movie c" in pixels per second
+//  - tEject      : when, in seconds, the ball/ship-2 starts moving
+//  - state.*_g   : ground-frame coordinates (top half)
+//  - state.*_r   : rocket-frame coordinates (bottom half)
+// ============================================================
+
+
+// ====== CASE A1: Same direction (ball forward) ======
+function buildCaseA1() {
+  const cv  = document.getElementById('cvA1');
+  const env = setupCanvas(cv);
+  const w = env.w, h = env.h;
+
+  const C_PX = 90;                  // "movie c" px/s
+  const v   = 0.6, up = 0.8;
+  const u   = (up + v) / (1 + up * v);
+  const uG  = up + v;               // Galilean prediction (1.4 c)
+
+  const v_px  = v  * C_PX;
+  const u_px  = u  * C_PX;
+  const up_px = up * C_PX;
+  const uG_px = uG * C_PX;          // ghost ball (impossible)
+
+  const yTop = h * 0.32, yBot = h * 0.78;
+  const xEve = 60;
+  const xR0  = 130;          // rocket starts here in ground frame
+  const tEject = 1.0;
+
+  // cycle ends when the fastest object (ghost) leaves on the right
+  const tCycle = (w - xR0) / Math.max(uG_px, v_px) + tEject + 1.0;
+
+  let speed = 1, tScaled = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal == null) lastReal = realT;
+    tScaled += (realT - lastReal) * speed;
+    lastReal = realT;
+    const tt = tScaled % tCycle;
+
+    // ----- Ground frame -----
+    const xR_g = xR0 + v_px * tt;
+    let xBall_g = null, xGhost_g = null;
+    if (tt >= tEject) {
+      const xRej = xR0 + v_px * tEject;
+      xBall_g  = xRej + u_px  * (tt - tEject);
+      xGhost_g = xRej + uG_px * (tt - tEject);
+    }
+
+    // ----- Rocket frame -----
+    // Rocket parked at center of bottom half. Eve drifts left at -v.
+    const xR_r   = w * 0.42;
+    const xEve_r = xR_r - 60 - v_px * tt;
+    let xBall_r = null;
+    if (tt >= tEject) {
+      xBall_r = xR_r + up_px * (tt - tEject);
+    }
+
+    const objects = [];
+    // top: ground frame
+    objects.push({ kind: 'eve',  x: xEve, y: yTop, color: COL_EVE, label: 'Eve' });
+    if (xR_g < w + 40)
+      objects.push({ kind: 'ship', x: xR_g, y: yTop, color: COL_ROCKET, dir: +1,
+                     label: 'rocket  v=+0.600 c' });
+    if (xBall_g != null && xBall_g < w + 20)
+      objects.push({ kind: 'ball', x: xBall_g, y: yTop + 24, color: COL_BALL,
+                     label: 'ball  u=+0.946 c' });
+    if (xGhost_g != null && xGhost_g < w + 20)
+      objects.push({ kind: 'ball', x: xGhost_g, y: yTop + 40, color: COL_GHOST, dashed: true,
+                     subLabel: 'Galilean ghost: 1.4 c (impossible)' });
+
+    // bottom: rocket frame
+    if (xEve_r > -40)
+      objects.push({ kind: 'eve', x: xEve_r, y: yBot, color: COL_EVE, label: 'Eve  −0.600 c' });
+    objects.push({ kind: 'ship', x: xR_r, y: yBot, color: COL_ROCKET, dir: +1,
+                   label: 'rocket (at rest)' });
+    if (xBall_r != null && xBall_r < w + 20)
+      objects.push({ kind: 'ball', x: xBall_r, y: yBot + 24, color: COL_BALL,
+                     label: "ball  u'=+0.800 c" });
+
+    renderScene(env, tScaled, {
+      topLabel:    "GROUND FRAME (Eve, S):  u = (u'+v)/(1+u'v/c²) = 0.946 c",
+      bottomLabel: "ROCKET FRAME (S'):  u' = +0.800 c (input)",
+      objects,
+      bottomScrollVx: v_px,    // stars sweep left at v in the rocket's frame
+      hudRight:        tt < tEject ? 'rocket cruising at v…' : 'ball thrown, in flight',
+      hudRightBottom:  tt < tEject ? 'captain is winding up' : 'ball in flight at u′ = 0.8 c'
+    });
+  }
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+
+// ====== CASE A2: Opposite direction (ball backward) ======
+function buildCaseA2() {
+  const cv  = document.getElementById('cvA2');
+  const env = setupCanvas(cv);
+  const w = env.w, h = env.h;
+
+  const C_PX = 90;
+  const v   = 0.6, up = -0.8;
+  const u   = (up + v) / (1 + up * v);   // -0.385 c
+  const uG  = up + v;                    // -0.2 c
+
+  const v_px  = v  * C_PX;
+  const u_px  = u  * C_PX;
+  const up_px = up * C_PX;
+  const uG_px = uG * C_PX;
+
+  const yTop = h * 0.32, yBot = h * 0.78;
+  const xEve = w * 0.32;        // Eve is somewhere in the middle
+  const xR0  = 80;              // rocket starts on the left
+  const tEject = 1.2;
+
+  // Ball moves left (negative); eventually leaves on left side. Cycle:
+  const tCycle = Math.max(
+    (w - xR0) / v_px,
+    (xR0 + v_px * tEject) / Math.abs(u_px)
+  ) + tEject + 1.0;
+
+  let speed = 1, tScaled = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal == null) lastReal = realT;
+    tScaled += (realT - lastReal) * speed;
+    lastReal = realT;
+    const tt = tScaled % tCycle;
+
+    // Ground frame
+    const xR_g = xR0 + v_px * tt;
+    let xBall_g = null, xGhost_g = null;
+    if (tt >= tEject) {
+      const xRej = xR0 + v_px * tEject;
+      xBall_g  = xRej + u_px  * (tt - tEject);   // moves left
+      xGhost_g = xRej + uG_px * (tt - tEject);   // also left, slower
+    }
+
+    // Rocket frame: rocket centered, ball thrown leftward at -0.8 c
+    const xR_r   = w * 0.55;
+    const xEve_r = xR_r + 60 - v_px * tt;
+    let xBall_r = null;
+    if (tt >= tEject) {
+      xBall_r = xR_r + up_px * (tt - tEject);    // moves left
+    }
+
+    const objects = [];
+    // top
+    objects.push({ kind: 'eve', x: xEve, y: yTop, color: COL_EVE, label: 'Eve' });
+    if (xR_g < w + 40)
+      objects.push({ kind: 'ship', x: xR_g, y: yTop, color: COL_ROCKET, dir: +1,
+                     label: 'rocket  v=+0.600 c' });
+    if (xBall_g != null && xBall_g > -20)
+      objects.push({ kind: 'ball', x: xBall_g, y: yTop + 24, color: COL_BALL,
+                     label: 'ball  u=−0.385 c' });
+    if (xGhost_g != null && xGhost_g > -20)
+      objects.push({ kind: 'ball', x: xGhost_g, y: yTop + 40, color: COL_GHOST, dashed: true,
+                     subLabel: 'Galilean: −0.2 c' });
+
+    // bottom
+    if (xEve_r > -40 && xEve_r < w + 40)
+      objects.push({ kind: 'eve', x: xEve_r, y: yBot, color: COL_EVE, label: 'Eve  −0.600 c' });
+    objects.push({ kind: 'ship', x: xR_r, y: yBot, color: COL_ROCKET, dir: +1,
+                   label: 'rocket (at rest)' });
+    if (xBall_r != null && xBall_r > -20)
+      objects.push({ kind: 'ball', x: xBall_r, y: yBot + 24, color: COL_BALL,
+                     label: "ball  u'=−0.800 c" });
+
+    renderScene(env, tScaled, {
+      topLabel:    "GROUND FRAME (Eve, S):  u = −0.385 c (almost 2× the Galilean answer)",
+      bottomLabel: "ROCKET FRAME (S'):  u' = −0.800 c (input, thrown backward)",
+      objects,
+      bottomScrollVx: v_px,    // stars sweep left at v in the rocket's frame
+      hudRight:        tt < tEject ? 'rocket cruising at v…' : 'ball thrown backward',
+      hudRightBottom:  tt < tEject ? 'captain is about to toss left' : 'ball flying at u′ = −0.8 c'
+    });
+  }
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+
+// ====== CASE B1: Two ships, same direction ======
+function buildCaseB1() {
+  const cv  = document.getElementById('cvB1');
+  const env = setupCanvas(cv);
+  const w = env.w, h = env.h;
+
+  const C_PX = 70;
+  const v = 0.6, u = 0.8;
+  const up = (u - v) / (1 - u * v);   // +0.385 c
+  const uG = u - v;                   // +0.2 c
+
+  const v_px  = v  * C_PX;
+  const u_px  = u  * C_PX;
+  const up_px = up * C_PX;
+  const uG_px = uG * C_PX;
+
+  const yTop = h * 0.32, yBot = h * 0.78;
+
+  // Initial gap so Ship 2 starts just behind Ship 1 in ground frame
+  const x1_0 = w * 0.20;
+  const x2_0 = w * 0.05;       // Ship 2 a little to the left initially
+
+  const tCycle = (w - x2_0) / u_px + 0.5;
+
+  let speed = 1, tScaled = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal == null) lastReal = realT;
+    tScaled += (realT - lastReal) * speed;
+    lastReal = realT;
+    const tt = tScaled % tCycle;
+
+    // Ground frame
+    const x1_g = x1_0 + v_px * tt;
+    const x2_g = x2_0 + u_px * tt;          // catches up + passes
+    const xGhost_g = x1_g + uG_px * tt;     // Galilean: 0.2 c relative to Ship 1
+                                            // shown anchored to Ship 1 to make the contrast obvious
+
+    // Your frame (Ship 1 stationary at center of bottom)
+    const x1_r = w * 0.50;
+    const x2_r = x1_r - (x1_0 - x2_0) + up_px * tt;   // Ship 2 approaches/passes you at u'
+
+    const objects = [];
+    // top
+    if (x1_g < w + 40)
+      objects.push({ kind: 'ship', x: x1_g, y: yTop, color: COL_ROCKET, dir: +1,
+                     label: 'You  v=+0.600 c' });
+    if (x2_g < w + 40)
+      objects.push({ kind: 'ship', x: x2_g, y: yTop + 32, color: COL_SHIP2, dir: +1,
+                     label: 'Ship 2  u=+0.800 c' });
+    if (xGhost_g < w + 40 && xGhost_g > -40)
+      objects.push({ kind: 'ball', x: xGhost_g, y: yTop + 50, color: COL_GHOST, dashed: true,
+                     subLabel: 'Galilean: gap closes at 0.2 c' });
+
+    // bottom: your frame
+    objects.push({ kind: 'ship', x: x1_r, y: yBot, color: COL_ROCKET, dir: +1,
+                   label: 'You (at rest)' });
+    if (x2_r < w + 40)
+      objects.push({ kind: 'ship', x: x2_r, y: yBot + 32, color: COL_SHIP2, dir: +1,
+                     label: "Ship 2  u'=+0.385 c" });
+
+    renderScene(env, tScaled, {
+      topLabel:    "GROUND FRAME (S): two ships, same direction, both close to c",
+      bottomLabel: "YOUR FRAME (S'):  u' = (u−v)/(1−uv/c²) = +0.385 c",
+      objects,
+      bottomScrollVx: v_px,    // stars sweep left at v in your frame
+      hudRight:        'Ship 2 slowly pulls ahead (in ground frame)',
+      hudRightBottom:  'Ship 2 approaches/passes you at 0.385 c'
+    });
+  }
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+
+// ====== CASE B2: Two ships, opposite directions ======
+function buildCaseB2() {
+  const cv  = document.getElementById('cvB2');
+  const env = setupCanvas(cv);
+  const w = env.w, h = env.h;
+
+  const C_PX = 70;
+  const v = 0.6, u = -0.8;
+  const up = (u - v) / (1 - u * v);   // -0.946 c
+  const uG = u - v;                   // -1.4 c (impossible)
+
+  const v_px  = v  * C_PX;
+  const u_px  = u  * C_PX;
+  const up_px = up * C_PX;
+  const uG_px = uG * C_PX;
+
+  const yTop = h * 0.32, yBot = h * 0.78;
+
+  // Initial positions: Ship 1 left, Ship 2 right, closing on each other
+  const x1_0 = w * 0.15;
+  const x2_0 = w * 0.85;
+
+  // Cycle until both have left the canvas
+  const tCycle = Math.max(
+    (w - x1_0) / v_px,
+    x2_0 / Math.abs(u_px)
+  ) + 0.5;
+
+  let speed = 1, tScaled = 0, lastReal = null;
+
+  function update(realT) {
+    if (lastReal == null) lastReal = realT;
+    tScaled += (realT - lastReal) * speed;
+    lastReal = realT;
+    const tt = tScaled % tCycle;
+
+    // Ground frame
+    const x1_g = x1_0 + v_px * tt;     // moves right
+    const x2_g = x2_0 + u_px * tt;     // moves left
+    const xGhost_g = x1_g + uG_px * tt; // ghost relative to Ship 1, faster than light
+
+    // Your frame
+    const x1_r = w * 0.55;
+    const x2_r = x1_r + (x2_0 - x1_0) + up_px * tt; // Ship 2 closing in at u' (very negative)
+
+    const objects = [];
+    // top
+    if (x1_g < w + 40 && x1_g > -40)
+      objects.push({ kind: 'ship', x: x1_g, y: yTop, color: COL_ROCKET, dir: +1,
+                     label: 'You  v=+0.600 c' });
+    if (x2_g < w + 40 && x2_g > -40)
+      objects.push({ kind: 'ship', x: x2_g, y: yTop + 32, color: COL_SHIP2, dir: -1,
+                     label: 'Ship 2  u=−0.800 c' });
+    if (xGhost_g < w + 40 && xGhost_g > -40)
+      objects.push({ kind: 'ball', x: xGhost_g, y: yTop + 50, color: COL_GHOST, dashed: true,
+                     subLabel: 'Galilean ghost: 1.4 c (faster than light!)' });
+
+    // bottom: your frame
+    objects.push({ kind: 'ship', x: x1_r, y: yBot, color: COL_ROCKET, dir: +1,
+                   label: 'You (at rest)' });
+    if (x2_r < w + 40 && x2_r > -40)
+      objects.push({ kind: 'ship', x: x2_r, y: yBot + 32, color: COL_SHIP2, dir: -1,
+                     label: "Ship 2  u'=−0.946 c" });
+
+    renderScene(env, tScaled, {
+      topLabel:    "GROUND FRAME (S):  closing speed 1.4 c — but in no single frame does anything exceed c",
+      bottomLabel: "YOUR FRAME (S'):  u' = −0.946 c — fast, but still under c",
+      objects,
+      bottomScrollVx: v_px,    // stars sweep left at v in your frame
+      hudRight:        'ships pass each other in ground frame',
+      hudRightBottom:  'in your frame Ship 2 hurtles past at 0.946 c'
+    });
+  }
+  return { update, setSpeed(s) { speed = s; } };
+}
+
+
+// ====== Run all four on a shared clock ======
+const drivers = [];
+const speeds  = { A1: 1, A2: 1, B1: 1, B2: 1 };
+const builders = { A1: buildCaseA1, A2: buildCaseA2, B1: buildCaseB1, B2: buildCaseB2 };
+
+function rebuild() {
+  drivers.length = 0;
+  for (const k of ['A1', 'A2', 'B1', 'B2']) {
+    const d = builders[k]();
+    d.id = k;
+    d.setSpeed(speeds[k]);
+    drivers.push(d);
+  }
+}
+
+function wireSpeedControls() {
+  document.querySelectorAll('.speed').forEach(group => {
+    const id = group.dataset.case;
+    group.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const s = parseFloat(btn.dataset.speed);
+        speeds[id] = s;
+        const d = drivers.find(x => x.id === id);
+        if (d) d.setSpeed(s);
+        group.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+}
+
+function start() {
+  rebuild();
+  wireSpeedControls();
+  let t0 = performance.now();
+  function frame(now) {
+    const t = (now - t0) / 1000;
+    for (const d of drivers) d.update(t);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+window.addEventListener('load', start);
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(rebuild, 150);
+});
+</script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Giuse's Physics 25 Simulations</title>
-<link rel="icon" type="image/png" href="president_giuse.PNG">
+<link rel="icon" type="image/jpeg" href="president_giuse.jpg">
 <meta property="og:title" content="Giuse's Physics 25 Simulations">
-<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.PNG">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.jpg">
 <meta property="og:url" content="https://gpham321.github.io/physics-sim/">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -197,7 +197,7 @@
 </head>
 <body>
 
-<img src="president_giuse.PNG" alt="President Giuse" class="portrait">
+<img src="president_giuse.jpg" alt="President Giuse" class="portrait">
 
 <div class="wrap">
 
@@ -430,6 +430,50 @@
     <div class="card-body">
       <h2>Thermal Radiation &mdash; Why Hot Things Glow</h2>
       <p>Stefan&ndash;Boltzmann, Wien's displacement law, and Planck's blackbody curve. Push the temperature slider and watch a rock glow red-hot to blue-white. See why the classical Rayleigh&ndash;Jeans curve blew up and forced Planck to invent quanta.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="relativistic_velocity_addition.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <!-- subtle stars -->
+      <g fill="#cfd3df" opacity="0.5">
+        <circle cx="30"  cy="22"  r="0.9"/>
+        <circle cx="80"  cy="14"  r="0.6"/>
+        <circle cx="135" cy="26"  r="1.1"/>
+        <circle cx="200" cy="18"  r="0.7"/>
+        <circle cx="260" cy="32"  r="1.0"/>
+        <circle cx="295" cy="42"  r="0.6"/>
+        <circle cx="40"  cy="125" r="0.9"/>
+        <circle cx="120" cy="135" r="0.7"/>
+        <circle cx="225" cy="128" r="1.0"/>
+        <circle cx="285" cy="120" r="0.6"/>
+      </g>
+
+      <!-- Rocket (cyan) flying rightward -->
+      <g transform="translate(80,80)">
+        <polygon points="22,0 -22,12 -22,-12" fill="#66d9ef" stroke="#0a0c12" stroke-width="1"/>
+        <rect x="-4" y="-5" width="10" height="10" fill="#0a0c12"/>
+        <!-- thruster flames -->
+        <polygon points="-22,-7 -32,0 -22,7" fill="#ffb347" opacity="0.8">
+          <animate attributeName="opacity" values="0.4;0.95;0.4" dur="0.4s" repeatCount="indefinite"/>
+        </polygon>
+      </g>
+      <text x="80" y="58" fill="#66d9ef" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">v = 0.6c</text>
+
+      <!-- Ball flying ahead, faster -->
+      <circle cx="190" cy="80" r="6" fill="#ffd166" stroke="#0a0c12" stroke-width="1">
+        <animate attributeName="cx" values="160;260" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <text x="200" y="58" fill="#ffd166" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">u = 0.946c</text>
+
+      <!-- Equation hint at bottom -->
+      <text x="160" y="115" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle" font-style="italic">u = (u' + v) / (1 + u'v/c²)</text>
+    </svg>
+    <div class="card-body">
+      <h2>Relativistic Velocity Addition</h2>
+      <p>A rocket flies past at 0.6&thinsp;c and shoots a ball forward at 0.8&thinsp;c. You don't see the ball at 1.4&thinsp;c &mdash; you see it at 0.946&thinsp;c. Four animated cases show how velocities really add (and subtract) at relativistic speeds.</p>
       <div class="arrow">Open simulation &rarr;</div>
     </div>
   </a>
