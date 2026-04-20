@@ -1382,7 +1382,8 @@
     }
   }
   setInterval(tickClock, 1000);
-  tickClock();
+  // NOTE: don't call tickClock() here — `state` is declared below and would be
+  // undefined at this point. We call it once after init() instead.
 
   // ----- Per-IP/device daily limit (5 brain cells per day) -----
   // Strategy:
@@ -1492,6 +1493,7 @@
     }
   }
   init();
+  tickClock();   // safe to call now: state is initialized
 
   // ----- Brain cell flow into the tube -----
   var tubeEl = document.getElementById('tube');
