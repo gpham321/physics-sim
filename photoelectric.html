@@ -278,6 +278,27 @@ MathJax = {
   </ul>
 </div>
 
+<div class="panel">
+  <h2>Wave–particle duality</h2>
+  <p>The experiment above forces us to treat light as <em>quanta</em> — discrete packets of energy \(hf\). But light also shows unambiguous <em>wave</em> behavior in other experiments, most famously <strong>double-slit interference</strong>. Both pictures are needed, and which one shows up depends on what you actually measure.</p>
+  <p><strong>Why a wave?</strong> Send light through two narrow slits and let it fall on a screen beyond. You don't see two bright patches behind the slits (as you would for classical bullets) — you see alternating bright and dark <em>fringes</em>. The only way to get that pattern is if light at each slit is a wave that spreads out, and the two spreading waves add constructively (bright) or destructively (dark) on the screen. The fringe spacing \(\Delta y = \lambda D / d\) directly encodes the wavelength — wave behavior, through and through.</p>
+  <p><strong>Why a particle?</strong> The photoelectric effect above. Dimming the light doesn't slow ejection down — it just makes ejections rarer. Below the threshold frequency, <em>no</em> amount of classical wave energy frees an electron, but one single photon with \(hf \geq \Phi\) does the job instantly. Energy is delivered in indivisible lumps, one photon at a time.</p>
+  <p><strong>The reconciliation</strong> is quantum mechanics: light is described by a wave function whose squared amplitude gives the probability of detecting a photon at a given place. In the double slit, that wave passes through both slits and interferes with itself; photons still arrive one-by-one on the screen, but the <em>distribution</em> of where they land follows the bright-and-dark fringe pattern. The wave is the rulebook; the particle is the event.</p>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Light as a wave — double-slit interference</h3>
+    <canvas id="wave" style="height: 340px;"></canvas>
+    <p class="hint" style="margin-top: 10px;">A plane wave hits a barrier with two slits. Each slit becomes a new source of circular waves (Huygens' principle), and the two sets of waves overlap in the region beyond. Where crest meets crest, they reinforce (bright); where crest meets trough, they cancel (dark). Watching the right-hand screen, you get a stable pattern of fringes — the time-average of constantly interfering crests and troughs. A stream of classical particles could never produce that pattern.</p>
+  </div>
+  <div class="card">
+    <h3>Light as a particle — energy in discrete packets</h3>
+    <canvas id="particle" style="height: 340px;"></canvas>
+    <p class="hint" style="margin-top: 10px;">The same light source now fires individual <em>photons</em> at a metal. Each photon is a discrete packet of energy \(hf\). If \(hf \geq \Phi\), one photon immediately frees one electron — no waiting for enough wave energy to accumulate on the surface. Dim the source until only one photon arrives at a time and you still see one-for-one ejections. That instantaneous, quantized delivery of energy is what waves alone cannot explain.</p>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -1255,6 +1276,266 @@ function drawII() {
 }
 
 // ============================================================
+// WAVE animation — double-slit interference
+// ============================================================
+const waveCv = $('wave');
+let waveEnv;
+let waveT = 0;
+let waveBuffer = null, waveBufCtx = null, waveImgData = null;
+
+function initWave() {
+  waveEnv = setupCanvas(waveCv);
+  const bw = Math.max(40, Math.floor(waveEnv.w / 2.5));
+  const bh = Math.max(40, Math.floor(waveEnv.h / 2.5));
+  waveBuffer = document.createElement('canvas');
+  waveBuffer.width = bw;
+  waveBuffer.height = bh;
+  waveBufCtx = waveBuffer.getContext('2d');
+  waveImgData = waveBufCtx.createImageData(bw, bh);
+}
+
+function drawWave(dt) {
+  const { ctx, w, h } = waveEnv;
+  waveT += dt;
+
+  const sourceX  = w * 0.06;
+  const barrierX = w * 0.42;
+  const screenX  = w * 0.90;
+  const slit1Y   = h * 0.38;
+  const slit2Y   = h * 0.62;
+  const slitHalf = 7;
+
+  const lambda = 28;               // px
+  const k      = 2 * Math.PI / lambda;
+  const omega  = 7.5;              // rad/s
+
+  // Low-res buffer: wave amplitude field
+  const bw = waveBuffer.width, bh = waveBuffer.height;
+  const invSX = w / bw, invSY = h / bh;
+  const data = waveImgData.data;
+
+  for (let by = 0; by < bh; by++) {
+    const cy = by * invSY;
+    for (let bx = 0; bx < bw; bx++) {
+      const cx = bx * invSX;
+      let amp;
+      if (cx < barrierX - 3) {
+        amp = Math.cos(k * cx - omega * waveT);
+      } else {
+        const dx = cx - barrierX;
+        const r1 = Math.sqrt(dx*dx + (cy - slit1Y)*(cy - slit1Y));
+        const r2 = Math.sqrt(dx*dx + (cy - slit2Y)*(cy - slit2Y));
+        amp = 0.5 * (Math.cos(k * r1 - omega * waveT) + Math.cos(k * r2 - omega * waveT));
+      }
+      const v = (amp + 1) * 0.5;
+      const v2 = v * v;
+      const idx = (by * bw + bx) * 4;
+      data[idx  ] = 14 + v2 * 60;
+      data[idx+1] = 14 + v2 * 185;
+      data[idx+2] = 24 + v2 * 225;
+      data[idx+3] = 255;
+    }
+  }
+  waveBufCtx.putImageData(waveImgData, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(waveBuffer, 0, 0, w, h);
+
+  // Barrier (three segments around the two slits)
+  const bThick = 8;
+  ctx.fillStyle = '#2a2f43';
+  ctx.strokeStyle = '#5a6276';
+  ctx.lineWidth = 1;
+  const bx0 = barrierX - bThick/2;
+  const segs = [
+    [0, slit1Y - slitHalf],
+    [slit1Y + slitHalf, slit2Y - slitHalf],
+    [slit2Y + slitHalf, h]
+  ];
+  for (const [y0, y1] of segs) {
+    ctx.fillRect(bx0, y0, bThick, y1 - y0);
+    ctx.strokeRect(bx0, y0, bThick, y1 - y0);
+  }
+
+  // Screen with time-averaged interference pattern:  I(y') ~ cos²(π d y' / (λ D))
+  const screenW = 10;
+  const D = screenX - barrierX;
+  const d = slit2Y - slit1Y;
+  const midY = (slit1Y + slit2Y) / 2;
+  for (let py = 0; py < h; py++) {
+    const phase = Math.PI * d * (py - midY) / (lambda * D);
+    const intensity = Math.cos(phase) * Math.cos(phase);
+    const c = (30 + intensity * 225) | 0;
+    ctx.fillStyle = `rgb(${(c * 0.35)|0}, ${(c * 0.78)|0}, ${c})`;
+    ctx.fillRect(screenX, py, screenW, 1);
+  }
+  ctx.strokeStyle = '#5a6276';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(screenX, 0, screenW, h);
+
+  // Labels
+  ctx.fillStyle = '#cfd3df';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('plane wave →', sourceX + 2, 16);
+  ctx.textAlign = 'center';
+  ctx.fillText('barrier', barrierX, h - 24);
+  ctx.fillText('(two slits)', barrierX, h - 10);
+  ctx.textAlign = 'right';
+  ctx.fillText('screen', screenX - 4, 16);
+  ctx.fillStyle = '#9aa2b6';
+  ctx.fillText('(fringe pattern)', screenX - 4, 30);
+}
+
+// ============================================================
+// PARTICLE animation — photon packets & ejected electrons
+// ============================================================
+const particleCv = $('particle');
+let particleEnv;
+let pPhotons = [];
+let pElectrons = [];
+let pPhotonAcc = 0;
+
+function initParticle() {
+  particleEnv = setupCanvas(particleCv);
+  pPhotons = [];
+  pElectrons = [];
+  pPhotonAcc = 0;
+}
+
+function drawParticle(dt) {
+  const { ctx, w, h } = particleEnv;
+  ctx.clearRect(0, 0, w, h);
+
+  const sourceX  = w * 0.12;
+  const sourceY  = h * 0.50;
+  const metalX   = w * 0.68;
+  const metalTop = h * 0.12;
+  const metalBot = h * 0.88;
+  const metalW   = 20;
+
+  // Spawn photons at a modest rate so each one is individually visible
+  pPhotonAcc += dt * 2.2;
+  while (pPhotonAcc >= 1) {
+    pPhotonAcc -= 1;
+    const targetY = metalTop + 20 + Math.random() * (metalBot - metalTop - 40);
+    const dx = (metalX - metalW/2) - (sourceX + 12);
+    const dy = targetY - sourceY;
+    const dist = Math.hypot(dx, dy);
+    const speed = 135;
+    pPhotons.push({
+      x: sourceX + 12, y: sourceY,
+      vx: speed * dx / dist,
+      vy: speed * dy / dist,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  for (let i = pPhotons.length - 1; i >= 0; i--) {
+    const p = pPhotons[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.phase += dt * 22;
+    if (p.x >= metalX - metalW/2) {
+      pElectrons.push({
+        x: metalX - metalW/2 - 2,
+        y: p.y,
+        vx: -(70 + Math.random() * 55),
+        vy: (Math.random() - 0.5) * 90
+      });
+      pPhotons.splice(i, 1);
+    }
+  }
+
+  for (let i = pElectrons.length - 1; i >= 0; i--) {
+    const e = pElectrons[i];
+    e.x += e.vx * dt;
+    e.y += e.vy * dt;
+    if (e.x < -10 || e.y < -10 || e.y > h + 10) pElectrons.splice(i, 1);
+  }
+
+  // Metal slab
+  const mGrad = ctx.createLinearGradient(metalX - metalW/2, 0, metalX + metalW/2, 0);
+  mGrad.addColorStop(0.0, '#6a7080');
+  mGrad.addColorStop(0.4, '#a0a6b6');
+  mGrad.addColorStop(1.0, '#7a8095');
+  ctx.fillStyle = mGrad;
+  ctx.fillRect(metalX - metalW/2, metalTop, metalW, metalBot - metalTop);
+  ctx.strokeStyle = '#aab1c4';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(metalX - metalW/2, metalTop, metalW, metalBot - metalTop);
+
+  // Light source
+  const glow = ctx.createRadialGradient(sourceX, sourceY, 0, sourceX, sourceY, 26);
+  glow.addColorStop(0, '#ffd166');
+  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(sourceX, sourceY, 26, 0, Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#ffd166';
+  ctx.beginPath();
+  ctx.arc(sourceX, sourceY, 10, 0, Math.PI*2);
+  ctx.fill();
+
+  // Photons as localized wave packets — a sinusoid inside a Gaussian envelope
+  for (const p of pPhotons) {
+    const vn = 1 / Math.hypot(p.vx, p.vy);
+    const tx = p.vx * vn, ty = p.vy * vn;
+    const nx = -ty, ny = tx;
+    const half = 9;
+
+    ctx.strokeStyle = '#ffd166';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let s = -half; s <= half; s += 1) {
+      const env = Math.exp(-(s*s) / (half*half * 0.5));
+      const wiggle = Math.sin(s * 0.9 + p.phase) * 4.5 * env;
+      const x = p.x + tx * s + nx * wiggle;
+      const y = p.y + ty * s + ny * wiggle;
+      if (s === -half) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffd166';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // Electrons
+  for (const e of pElectrons) {
+    ctx.fillStyle = '#66d9ef';
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, 4, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(102, 217, 239, 0.55)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(e.x, e.y);
+    ctx.lineTo(e.x - e.vx * 0.05, e.y - e.vy * 0.05);
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('light source', sourceX, sourceY - 32);
+  ctx.fillText('metal', metalX, metalTop - 8);
+
+  // Legend
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#ffd166';
+  ctx.beginPath(); ctx.arc(14, h - 26, 4, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#cfd3df';
+  ctx.fillText('photon — one packet of energy hf', 24, h - 22);
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(14, h - 10, 4, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#cfd3df';
+  ctx.fillText('ejected electron — one photon in, one electron out', 24, h - 6);
+}
+
+// ============================================================
 // Main loop
 // ============================================================
 let lastT = performance.now() / 1000;
@@ -1267,6 +1548,8 @@ function frame(now) {
   drawGraph();
   drawKE();
   drawII();
+  drawWave(dt);
+  drawParticle(dt);
   requestAnimationFrame(frame);
 }
 
@@ -1275,6 +1558,8 @@ function start() {
   initGraph();
   initKE();
   initII();
+  initWave();
+  initParticle();
   refreshUI();
   requestAnimationFrame(frame);
 }
@@ -1284,6 +1569,8 @@ window.addEventListener('resize', () => {
   initGraph();
   initKE();
   initII();
+  initWave();
+  initParticle();
 });
 </script>
 </body>

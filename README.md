@@ -20,7 +20,9 @@ Once Pages is enabled, the site will be available at:
 | `thermal_radiation.html` | Stefan–Boltzmann, Wien, Planck — why hot things glow, and the ultraviolet catastrophe |
 | `physics_23_study_guide.html` | Full Physics 23 study guide covering Giancoli chapters 16–25 (lectures 1A–10B) |
 | `physics_25_study_guide.html` | Physics 25 (Modern Physics) study guide — Lectures 1–7 through Midterm #1 |
+| `brain_lab.html` | **Hidden** — Giuse Pham Enterprises Brain Cell Reclamation Lab. Cryo-canister, pink-cell transport tube, golden-ticket payout, pressure gauges, live brain-cell counter. Reachable by clicking "Giuse Pham Enterprises" in the index footer. |
 | `president_giuse.jpg` | Portrait shown in the top-right corner of every page (and favicon / link preview) |
+| `giuse_brain.png` | The brain-in-a-jar render used inside the canister on `brain_lab.html` |
 
 ## Enabling GitHub Pages
 
@@ -32,6 +34,8 @@ Once Pages is enabled, the site will be available at:
 ## Running locally
 
 Just open `index.html` in a browser. No server needed.
+
+The brain lab page (`brain_lab.html`) keeps a daily redemption counter in `localStorage` and tries to fetch your public IP from `api.ipify.org` to share the per-day cap across browsers on the same network. If the fetch is blocked it falls back to a stable device-fingerprint hash. Both paths are best-effort client-side — fully resetting localStorage will reset the counter.
 
 ---
 
