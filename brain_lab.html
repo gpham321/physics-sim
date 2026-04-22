@@ -2102,10 +2102,10 @@
             </label>
           </div>
           <div class="db-row fun-btns">
-            <button class="fun-btn amber" id="fb-overdrive">OVERDRIVE</button>
             <button class="fun-btn magenta" id="fb-lowpower">LOW POWER</button>
-            <button class="fun-btn green" id="fb-shake">SHAKE TANK</button>
+            <button class="fun-btn amber" id="fb-overdrive">OVERDRIVE</button>
             <button class="fun-btn warn" id="fb-purge">RESET</button>
+            <button class="fun-btn green" id="fb-shake">SHAKE TANK</button>
           </div>
         </div>
       </div>
@@ -2795,11 +2795,10 @@
           var h = 3 + amp * 37;
           bar.el.style.height = h.toFixed(1) + 'px';
 
-          var hue = 160 - band * 160;                   // green(160)→cyan(180?)... actually map differently
-          // Bass (left) → magenta/red, mids → amber, treble → cyan:
-          hue = band < 0.33 ? (330 - band * 90)         // 330 (magenta) → 300 (violet)
-              : band < 0.66 ? (50 - (band - 0.33) * 30) // 50 (amber) → 40 (yellow-amber)
-              : (200 - (band - 0.66) * 40);             // 200 (cyan-blue) → 186
+          // Rainbow chase: every bar's hue = time-rotating base + its position offset,
+          // so a continuous color wave sweeps across the row (~6 s per full rotation).
+          var hueOffset = (now * 0.06) % 360;
+          var hue = (hueOffset + band * 220) % 360;
           var light = 30 + amp * 35;
           bar.el.style.background = 'hsl(' + hue.toFixed(0) + ', 95%, ' + light.toFixed(0) + '%)';
           bar.el.style.boxShadow = amp > 0.15
