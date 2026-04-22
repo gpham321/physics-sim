@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Giuse Pham Enterprises &mdash; Brain Cell Reclamation Lab</title>
 <link rel="icon" type="image/jpeg" href="president_giuse.jpg">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -575,7 +575,8 @@
   .receive-station {
     position: relative;
     width: 300px;
-    height: 310px;
+    height: 260px;
+    flex-shrink: 0;
     background: linear-gradient(180deg, #2a3252 0%, #161b30 100%);
     border-radius: 10px 10px 6px 6px;
     border: 2px solid #3a4467;
@@ -588,9 +589,9 @@
   }
   .station-screen {
     position: absolute;
-    top: 22px; left: 14px; right: 14px;
-    min-height: 100px;
-    max-height: 170px;
+    top: 20px; left: 14px; right: 14px;
+    min-height: 88px;
+    max-height: 110px;
     background:
       linear-gradient(180deg, rgba(0,255,170,0.06) 0%, rgba(0,255,170,0.02) 100%),
       #02110a;
@@ -615,7 +616,7 @@
 
   .station-lights {
     position: absolute;
-    top: 140px; left: 14px; right: 14px;
+    top: 118px; left: 14px; right: 14px;
     display: flex;
     justify-content: space-around;
     padding: 8px 0;
@@ -639,9 +640,9 @@
 
   .station-collector {
     position: absolute;
-    bottom: 18px; left: 50%;
+    bottom: 12px; left: 50%;
     transform: translateX(-50%);
-    width: 110px; height: 110px;
+    width: 88px; height: 88px;
     border-radius: 50%;
     background:
       radial-gradient(circle at 35% 30%, rgba(255,255,255,0.4) 0%, transparent 35%),
@@ -892,6 +893,47 @@
   footer.status-bar .lit { color: var(--green); text-shadow: 0 0 4px rgba(102,255,170,0.6); }
   footer.status-bar .warn { color: var(--amber); text-shadow: 0 0 4px rgba(255,179,71,0.6); }
 
+  /* ============ BACKGROUND-MUSIC MUTE BUTTON ============ */
+  .mute-btn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(15, 19, 34, 0.82);
+    color: var(--cyan);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3100;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    transition: color 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    padding: 0;
+  }
+  .mute-btn:hover {
+    color: #aaf0ff;
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(56,225,255,0.4), 0 4px 14px rgba(0,0,0,0.45);
+  }
+  .mute-btn.muted {
+    color: var(--warn);
+    border-color: rgba(255,59,47,0.45);
+  }
+  .mute-btn.muted:hover {
+    border-color: var(--warn);
+    box-shadow: 0 0 12px rgba(255,59,47,0.4), 0 4px 14px rgba(0,0,0,0.45);
+  }
+  .mute-btn svg { display: block; }
+  .mute-btn .slash { display: none; }
+  .mute-btn.muted .sound-wave { display: none; }
+  .mute-btn.muted .slash { display: inline; }
+
   /* ============ GAUGE + INLINE SLIDER ============ */
   .gauge-unit {
     display: flex;
@@ -934,11 +976,135 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
+    gap: 10px;
     width: 300px;
+    height: 640px;          /* matches canister height so left column = chamber height */
     flex-shrink: 0;
     position: relative;
     z-index: 2;
+  }
+
+  /* ============ SPEAKER CABINETS (twin) ============ */
+  .speakers {
+    display: flex;
+    gap: 10px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+  .speaker {
+    flex: 1;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06) 0%, transparent 40%),
+      linear-gradient(180deg, #2e3348 0%, #1a1d2b 100%);
+    border: 1px solid #3a4467;
+    border-radius: 8px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      inset 0 -2px 4px rgba(0,0,0,0.55),
+      0 4px 10px rgba(0,0,0,0.55);
+    position: relative;
+  }
+  .speaker::before {    /* subtle speaker-grille dots */
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 6px;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
+    background-size: 6px 6px;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .tweeter {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #7a8095 0%, #3a4467 55%, #0a0f1f 100%);
+    border: 1px solid #444a60;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.22),
+      inset 0 -1px 2px rgba(0,0,0,0.6),
+      0 2px 3px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .tweeter::after {     /* tweeter dust cap */
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #aab1c4, #5a6580);
+  }
+  .woofer {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 28%, #6a7080 0%, #2a2f43 45%, #0a0f1f 100%);
+    border: 2px solid #444a60;
+    box-shadow:
+      inset 0 2px 2px rgba(255,255,255,0.15),
+      inset 0 -3px 5px rgba(0,0,0,0.6),
+      0 3px 5px rgba(0,0,0,0.55);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    transform: scale(1);
+    transform-origin: center center;
+    will-change: transform;
+  }
+  .woofer::before {     /* cone corrugation ring */
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: inset 0 0 0 3px rgba(0,0,0,0.25);
+  }
+  .woofer::after {      /* woofer dust cap — the bass "rocker" */
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #aab1c4 0%, #5a6580 60%, #2a2f43 100%);
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.35),
+      0 2px 3px rgba(0,0,0,0.6);
+  }
+
+  /* ============ LED MUSIC-SYNC BARS ============ */
+  .led-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2px;
+    height: 52px;
+    padding: 6px 8px;
+    background: linear-gradient(180deg, #050810 0%, #0a0f1f 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.7);
+  }
+  .led-bar {
+    flex: 1;
+    min-height: 3px;
+    height: 3px;
+    background: #1a3a2a;
+    border-radius: 1px;
+    will-change: height, background;
+    transition: background 0.08s linear;
   }
   .dispenser-buttons {
     background: linear-gradient(180deg, rgba(15,19,34,0.9) 0%, rgba(10,15,31,0.9) 100%);
@@ -1530,6 +1696,159 @@
     transform: translateY(-1px);
   }
 
+  /* ================================================================
+     TOUCH / MOBILE
+     ================================================================ */
+  /* Disable tap highlight flash on every clickable thing */
+  button, a, input, label {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Cursor spark layer is pointless without a mouse and wastes frames */
+  @media (hover: none) {
+    .cursor-spot, .cursor-spark, .cursor-arc { display: none !important; }
+  }
+  /* Mute button respects the iPhone home-indicator safe area */
+  .mute-btn {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    right:  calc(16px + env(safe-area-inset-right));
+    min-width: 44px;   /* Apple HIG touch target */
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ================================================================
+     PHONE LAYOUT (< 600px)
+     ================================================================ */
+  @media (max-width: 600px) {
+    body {
+      padding: 16px 10px calc(24px + env(safe-area-inset-bottom));
+    }
+    /* Header stacks: brand, home, counter each on their own line */
+    header.top-bar {
+      padding: 12px 14px;
+      gap: 10px;
+    }
+    .brand { font-size: 15px; letter-spacing: 3px; }
+    .brand small { font-size: 8.5px; letter-spacing: 3px; }
+    .home-link { font-size: 11px; padding: 5px 10px; }
+    .counter .value { font-size: 22px; }
+    .counter .label, .counter .unit { font-size: 8px; letter-spacing: 3px; }
+
+    .lab-banner {
+      font-size: 10px;
+      letter-spacing: 3px;
+      padding: 6px 4px;
+    }
+
+    /* Main stage: single column, tight gutters */
+    main.stage {
+      grid-template-columns: 1fr;
+      padding: 14px 8px 32px;
+      gap: 18px;
+    }
+
+    /* Gauge panels: 2-column grid (6 gauges → 3 compact rows) */
+    .side-panel {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .gauge-unit { width: calc(50% - 6px); max-width: 150px; }
+    .gauge { width: 130px; height: 130px; }
+    .gauge::before { inset: 6px; }
+    .gauge-label { top: 22px; font-size: 9px; letter-spacing: 2px; }
+    .gauge-value { bottom: 22px; font-size: 11px; }
+
+    /* Lab row: stack dispenser column, tube (hidden), canister */
+    .lab-row {
+      flex-direction: column !important;
+      align-items: center;
+      gap: 18px !important;
+    }
+    /* Tube looks awkward floating between stacked pieces — drop it on phones */
+    .transport-tube { display: none !important; }
+
+    /* Dispenser column: full width, auto height (no longer chained to chamber) */
+    .dispenser-column {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      gap: 8px;
+    }
+    .speakers { height: 118px; }
+    .speaker { padding: 8px 6px; }
+    .tweeter { width: 22px; height: 22px; }
+    .tweeter::after { width: 8px; height: 8px; }
+    .woofer { width: 62px; height: 62px; }
+    .woofer::after { width: 20px; height: 20px; }
+    .led-bars { height: 44px; padding: 5px 6px; }
+    .dispenser-buttons { padding: 10px 12px; gap: 10px; }
+    .fun-btn { padding: 8px 10px; font-size: 9px; min-height: 36px; }
+
+    .receive-station {
+      width: 100%;
+      max-width: 360px;
+      height: 240px;
+    }
+    .station-screen { min-height: 80px; max-height: 100px; font-size: 9.5px; }
+    .station-lights { top: 108px; }
+    .station-collector { bottom: 10px; width: 80px; height: 80px; }
+
+    /* Canister shrinks to fit ~360px viewport */
+    .canister {
+      width: 280px;
+      height: 400px;
+    }
+    .canister-cap, .canister-bolts-row {
+      width: 254px;
+    }
+    .canister-body {
+      width: 244px;
+      border-radius: 20px;
+    }
+    .brain-img { width: 220px; }
+    .canister-cap::before { left: 6px; }
+    .canister-cap::after  { right: 6px; }
+    /* bolts are positioned by inline left — hide a few to avoid crowding */
+    .canister-bolts-row .bolt:nth-child(n+4) { display: none; }
+    .canister-bolts-row .bolt:nth-child(1) { left: 18px; }
+    .canister-bolts-row .bolt:nth-child(2) { left: 114px; }
+    .canister-bolts-row .bolt:nth-child(3) { left: 224px; }
+    .canister-clock { bottom: -48px; padding: 6px 12px; }
+    .canister-clock .clk-time { font-size: 18px; }
+
+    /* Redeem row: smaller button, wrap stacks */
+    .redeem-row { margin-top: 24px; gap: 12px; }
+    .redeem-btn {
+      font-size: 15px;
+      letter-spacing: 2px;
+      padding: 14px 28px;
+      min-height: 48px;
+    }
+    .redeem-more-btn {
+      font-size: 10px;
+      padding: 10px 14px;
+      max-width: 260px;
+    }
+    .btn-helper { font-size: 10px; letter-spacing: 1.4px; }
+
+    /* Modal respects viewport on small screens */
+    .extra-box { padding: 20px 18px 22px; max-height: 90vh; }
+    .extra-title { font-size: 15px; letter-spacing: 2px; }
+    .quiz-q { font-size: 13px; padding: 12px 12px; }
+    .quiz-choice { font-size: 12px; padding: 10px 12px; min-height: 44px; }
+
+    /* Golden ticket: tighter on small screens */
+    .ticket { padding: 26px 22px 22px; }
+    .ticket .tk-title { font-size: 26px; }
+    .ticket .tk-amount { font-size: 40px; }
+
+    /* Status bar condenses */
+    footer.status-bar { padding: 10px 14px; font-size: 10px; letter-spacing: 1.4px; gap: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -1639,7 +1958,7 @@
   <div class="side-panel">
     <div class="gauge-unit">
     <div class="gauge" id="g1">
-      <div class="gauge-label">PSI</div>
+      <div class="gauge-label">PRESSURE</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
         <g stroke="#3a4467" stroke-width="1.5" fill="none">
           <path d="M 28 130 A 65 65 0 1 1 142 130" />
@@ -1669,7 +1988,7 @@
 
     <div class="gauge-unit">
     <div class="gauge" id="g2">
-      <div class="gauge-label">CRYO °K</div>
+      <div class="gauge-label">TEMPERATURE</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
         <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
         <g stroke="#5a6580" stroke-width="1.2">
@@ -1697,7 +2016,7 @@
 
     <div class="gauge-unit">
     <div class="gauge" id="g3">
-      <div class="gauge-label">VOLTS</div>
+      <div class="gauge-label">VOLTAGE</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
         <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
         <g stroke="#5a6580" stroke-width="1.2">
@@ -1729,6 +2048,19 @@
 
     <div class="lab-row">
       <div class="dispenser-column">
+        <div class="speakers">
+          <div class="speaker">
+            <div class="tweeter"></div>
+            <div class="woofer" id="woofer-l"></div>
+          </div>
+          <div class="speaker">
+            <div class="tweeter"></div>
+            <div class="woofer" id="woofer-r"></div>
+          </div>
+        </div>
+
+        <div class="led-bars" id="led-bars"></div>
+
         <div class="receive-station">
           <div class="station-label">DISPENSER UNIT &middot; MK-VII</div>
           <div class="station-screen">
@@ -1771,8 +2103,9 @@
           </div>
           <div class="db-row fun-btns">
             <button class="fun-btn amber" id="fb-overdrive">OVERDRIVE</button>
+            <button class="fun-btn magenta" id="fb-lowpower">LOW POWER</button>
             <button class="fun-btn green" id="fb-shake">SHAKE TANK</button>
-            <button class="fun-btn warn" id="fb-purge">PURGE &amp; RESET</button>
+            <button class="fun-btn warn" id="fb-purge">RESET</button>
           </div>
         </div>
       </div>
@@ -1835,7 +2168,7 @@
   <div class="side-panel">
     <div class="gauge-unit">
       <div class="gauge" id="g4">
-        <div class="gauge-label">FLOW</div>
+        <div class="gauge-label">FLOW RATE</div>
         <svg class="gauge-svg" viewBox="0 0 170 170">
           <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
           <g stroke="#5a6580" stroke-width="1.2">
@@ -1863,7 +2196,7 @@
 
     <div class="gauge-unit">
       <div class="gauge" id="g5">
-        <div class="gauge-label">CHARGE</div>
+        <div class="gauge-label">POWER</div>
         <svg class="gauge-svg" viewBox="0 0 170 170">
           <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
           <g stroke="#5a6580" stroke-width="1.2">
@@ -1891,7 +2224,7 @@
 
     <div class="gauge-unit">
       <div class="gauge" id="g6">
-        <div class="gauge-label">FIELD</div>
+        <div class="gauge-label">SPEED</div>
         <svg class="gauge-svg" viewBox="0 0 170 170">
           <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
           <g stroke="#5a6580" stroke-width="1.2">
@@ -1912,7 +2245,7 @@
                 style="filter: drop-shadow(0 0 4px #c084f7);"/>
           <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
         </svg>
-        <div class="gauge-value" id="g6-val">5.0 T</div>
+        <div class="gauge-value" id="g6-val">5.0&times;</div>
       </div>
       <input type="range" class="gauge-slider" id="s-field" min="0" max="10" step="0.1" value="5">
     </div>
@@ -1953,6 +2286,16 @@
 <!-- Hidden background-music host (YouTube IFrame API replaces this div with an iframe) -->
 <div id="bg-music-host" style="position:fixed; top:-2000px; left:-2000px; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden;"></div>
 
+<!-- Mute toggle for the background music -->
+<button class="mute-btn" id="mute-btn" aria-label="Mute music" title="Mute music">
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="3,9 3,15 7,15 12,19 12,5 7,9" fill="currentColor" stroke="none"/>
+    <path class="sound-wave" d="M 15.5 9 Q 18 12 15.5 15" fill="none"/>
+    <path class="sound-wave" d="M 18.5 6 Q 22.5 12 18.5 18" fill="none"/>
+    <line class="slash" x1="4" y1="4" x2="20" y2="20" stroke="currentColor"/>
+  </svg>
+</button>
+
 <script>
 /* ================================================================
    BACKGROUND MUSIC (YouTube IFrame API, 30% volume, looped)
@@ -1971,6 +2314,7 @@
 
   var player = null;
   var wantPlaying = true;   // desired state; set by bgMusic.play/pause
+  var wantMuted = false;    // desired state; set by bgMusic.mute/unmute
 
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('bg-music-host', {
@@ -1992,6 +2336,7 @@
         onReady: function (e) {
           e.target.setVolume(VOL);
           try { e.target.seekTo(START_AT, true); } catch (_) {}
+          if (wantMuted) e.target.mute();
           if (wantPlaying) e.target.playVideo();
         }
       }
@@ -2020,8 +2365,41 @@
     },
     setVolume: function (v) {
       if (player && player.setVolume) player.setVolume(v);
+    },
+    mute: function () {
+      wantMuted = true;
+      if (player && player.mute) player.mute();
+    },
+    unmute: function () {
+      wantMuted = false;
+      if (player && player.unMute) { player.unMute(); player.setVolume(VOL); }
+    },
+    isMuted: function () { return wantMuted; },
+    isPlaying: function () {
+      if (!player || !player.getPlayerState) return false;
+      try { return player.getPlayerState() === 1; } catch (_) { return false; }
     }
   };
+})();
+
+// Mute button toggle
+(function () {
+  var btn = document.getElementById('mute-btn');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    if (!window.bgMusic) return;
+    if (window.bgMusic.isMuted && window.bgMusic.isMuted()) {
+      window.bgMusic.unmute();
+      btn.classList.remove('muted');
+      btn.title = 'Mute music';
+      btn.setAttribute('aria-label', 'Mute music');
+    } else {
+      window.bgMusic.mute();
+      btn.classList.add('muted');
+      btn.title = 'Unmute music';
+      btn.setAttribute('aria-label', 'Unmute music');
+    }
+  });
 })();
 </script>
 
@@ -2145,7 +2523,7 @@
     { id: 'g6', val: 'g6-val',
       target: function () { return ang(controlState.field / 10); },
       wobble: 5,
-      fmt: function (a) { return (((a+90)/180)*10).toFixed(1) + ' T'; } }
+      fmt: function (a) { return (((a+90)/180)*10).toFixed(1) + '×'; } }
   ];
 
   // Smooth needle animation via requestAnimationFrame.
@@ -2276,10 +2654,10 @@
     if (v <= 200) { issues.push('UNDERVOLT'); }
     if (f <= 3)   { issues.push('FLOW STALL'); }
     if (f >= 92)  { issues.push('FLOW SURGE'); crit = crit || f >= 98; }
-    if (c <= 8)   { issues.push('CHARGE DEPLETED'); }
-    if (c >= 95)  { issues.push('CHARGE OVERLOAD'); crit = crit || c >= 99; }
-    if (fld >= 9) { issues.push('FIELD SATURATION'); crit = crit || fld >= 9.8; }
-    if (fld <= 0.5) { issues.push('FIELD COLLAPSE'); crit = true; }
+    if (c <= 8)   { issues.push('POWER DEPLETED'); }
+    if (c >= 95)  { issues.push('POWER OVERLOAD'); crit = crit || c >= 99; }
+    if (fld >= 9) { issues.push('SPEED SATURATION'); crit = crit || fld >= 9.8; }
+    if (fld <= 0.5) { issues.push('SPEED COLLAPSE'); crit = true; }
     if (crit) return { level: 'crit', msg: '⚠ CRITICAL · ' + issues.slice(0,2).join(' · ') + ' · STABILIZE OR ABORT' };
     if (issues.length) return { level: 'warn', msg: 'CAUTION · ' + issues.slice(0,2).join(' · ') + ' · ADJUST CONTROLS' };
     return { level: 'nominal', msg: 'CRYO-NEURAL TANK ONLINE · PRESSURE NOMINAL · AWAITING INPUT' };
@@ -2323,6 +2701,125 @@
       var dy  = -52 + 2 * c;            // -50 ↔ -54
       var rot = -3 * c;                 // -3° ↔ +3°
       brainImg.style.transform = 'translate(-50%, ' + dy.toFixed(2) + '%) rotate(' + rot.toFixed(2) + 'deg)';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // ============================================================
+  // MUSIC-SYNC: WOOFERS + LED BARS
+  // ============================================================
+  // YouTube's iframe audio can't be read cross-origin, so this is a
+  // tempo-driven *visual* sync rather than a true spectrum analyzer.
+  // It beats at ~120 BPM with organic variation and goes quiet when
+  // bgMusic reports paused/muted.
+  (function () {
+    var wooferL = $('woofer-l');
+    var wooferR = $('woofer-r');
+    var barsBox = $('led-bars');
+    if (!wooferL || !wooferR || !barsBox) return;
+
+    // Build LED bars
+    var NUM_BARS = 20;
+    var bars = [];
+    for (var i = 0; i < NUM_BARS; i++) {
+      var b = document.createElement('div');
+      b.className = 'led-bar';
+      barsBox.appendChild(b);
+      bars.push({ el: b, phase: Math.random() * Math.PI * 2, seed: Math.random() });
+    }
+
+    // Beat timing: ~120 BPM with ±10% jitter so it feels organic
+    var BEAT_MS_BASE = 500;     // 120 BPM
+    var nextBeatAt = performance.now();
+    var beatEnergy = 0;         // 0..1, decays between beats
+
+    function scheduleNextBeat(now) {
+      // 4-beat bar: beat 1 (downbeat) hits hardest, beat 3 next, 2/4 lightest
+      var jitter = 0.9 + Math.random() * 0.2;
+      nextBeatAt = now + BEAT_MS_BASE * jitter;
+    }
+
+    var beatCount = 0;
+    function fireBeat() {
+      beatCount++;
+      var downbeat = (beatCount % 4) === 1;
+      var backbeat = (beatCount % 2) === 1;
+      var energy = downbeat ? 1.0 : (backbeat ? 0.75 : 0.55);
+      energy *= 0.9 + Math.random() * 0.2;   // per-hit variation
+      beatEnergy = Math.max(beatEnergy, energy);
+
+      // Woofer kick: the transition + reset gives a quick "cone bump"
+      var scale = 1 + 0.18 * energy;
+      wooferL.style.transition = 'transform 0.05s cubic-bezier(.2,.9,.3,1)';
+      wooferR.style.transition = 'transform 0.05s cubic-bezier(.2,.9,.3,1)';
+      wooferL.style.transform = 'scale(' + scale.toFixed(3) + ')';
+      wooferR.style.transform = 'scale(' + scale.toFixed(3) + ')';
+      setTimeout(function () {
+        wooferL.style.transition = 'transform 0.24s cubic-bezier(.3,0,.3,1)';
+        wooferR.style.transition = 'transform 0.24s cubic-bezier(.3,0,.3,1)';
+        wooferL.style.transform = 'scale(1)';
+        wooferR.style.transform = 'scale(1)';
+      }, 55);
+    }
+
+    function tick(now) {
+      now = now || performance.now();
+      var active = !!(window.bgMusic && window.bgMusic.isPlaying && window.bgMusic.isPlaying()
+                      && window.bgMusic.isMuted && !window.bgMusic.isMuted());
+
+      if (active) {
+        while (now >= nextBeatAt) {
+          fireBeat();
+          scheduleNextBeat(nextBeatAt);   // schedule from the last beat, not `now`, to keep tempo stable
+        }
+        // Energy decays between beats
+        beatEnergy = Math.max(0, beatEnergy - 0.035);
+
+        // LED bars: each bar blends (a) current beat energy weighted toward
+        // low-index bars, (b) a slow sinusoidal wobble, (c) a fast flicker.
+        for (var i = 0; i < bars.length; i++) {
+          var bar = bars[i];
+          var band = i / (bars.length - 1);              // 0..1, left→right
+          var bassWeight = Math.pow(1 - band, 1.4);     // bass: left-heavy
+          var midWeight = Math.exp(-Math.pow((band - 0.5) * 3, 2));
+          var trebleWeight = Math.pow(band, 1.4);
+
+          var wobble = 0.5 + 0.5 * Math.sin(now * 0.004 + bar.phase);
+          var flicker = 0.5 + 0.5 * Math.sin(now * 0.018 + bar.phase * 2.1);
+          var amp = beatEnergy * (0.75 * bassWeight + 0.5 * midWeight + 0.35 * trebleWeight);
+          amp += 0.15 * wobble * (0.3 + 0.7 * trebleWeight);
+          amp += 0.08 * flicker * midWeight;
+          amp = Math.max(0, Math.min(1, amp));
+
+          var h = 3 + amp * 37;
+          bar.el.style.height = h.toFixed(1) + 'px';
+
+          var hue = 160 - band * 160;                   // green(160)→cyan(180?)... actually map differently
+          // Bass (left) → magenta/red, mids → amber, treble → cyan:
+          hue = band < 0.33 ? (330 - band * 90)         // 330 (magenta) → 300 (violet)
+              : band < 0.66 ? (50 - (band - 0.33) * 30) // 50 (amber) → 40 (yellow-amber)
+              : (200 - (band - 0.66) * 40);             // 200 (cyan-blue) → 186
+          var light = 30 + amp * 35;
+          bar.el.style.background = 'hsl(' + hue.toFixed(0) + ', 95%, ' + light.toFixed(0) + '%)';
+          bar.el.style.boxShadow = amp > 0.15
+            ? '0 0 ' + (amp * 10).toFixed(1) + 'px hsl(' + hue.toFixed(0) + ', 95%, 60%)'
+            : 'none';
+        }
+      } else {
+        // Idle: slowly pull everything to zero
+        beatEnergy *= 0.9;
+        wooferL.style.transform = 'scale(1)';
+        wooferR.style.transform = 'scale(1)';
+        for (var j = 0; j < bars.length; j++) {
+          bars[j].el.style.height = '3px';
+          bars[j].el.style.background = '#1a3a2a';
+          bars[j].el.style.boxShadow = 'none';
+        }
+        // Re-anchor the beat clock to "now" so we don't rush to catch up when resumed
+        nextBeatAt = now + BEAT_MS_BASE;
+      }
+
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -2432,8 +2929,12 @@
   })();
 
   // ============================================================
-  // BUBBLE SLIDER (replaces the MORE BUBBLES button)
+  // BUBBLE SLIDER + DECAY-TO-TARGET
   // ============================================================
+  // BUBBLE_TARGET is the slider's requested count. The live bubble count
+  // in the DOM can exceed it (e.g. after SHAKE TANK spawns a burst) and a
+  // slow decay interval pulls it back down one at a time.
+  var BUBBLE_TARGET = 14;
   function setBubbleCount(n) {
     n = Math.max(0, Math.min(60, Math.round(n)));
     var box = bubblesBox;
@@ -2443,10 +2944,17 @@
   (function () {
     var s = $('s-bubbles'), v = $('v-bubbles');
     s.addEventListener('input', function () {
-      setBubbleCount(parseInt(s.value, 10));
+      BUBBLE_TARGET = parseInt(s.value, 10);
+      setBubbleCount(BUBBLE_TARGET);      // snap immediately when the slider moves
       v.textContent = s.value;
     });
   })();
+  // Slow decay: pops one excess bubble every ~350 ms until count == target
+  setInterval(function () {
+    if (bubblesBox.children.length > BUBBLE_TARGET) {
+      bubblesBox.removeChild(bubblesBox.lastChild);
+    }
+  }, 350);
 
   // ============================================================
   // TANK LIGHTS TOGGLE (binary switch)
@@ -2464,12 +2972,20 @@
     var targets = { pressure: 260, temp: 220, voltage: 9500, flow: 88, charge: 97, field: 9.5 };
     animateControls(targets);
   });
+  $('fb-lowpower').addEventListener('click', function () {
+    // Opposite of OVERDRIVE: every dial near the bottom of its range.
+    var targets = { pressure: 35, temp: 25, voltage: 800, flow: 8, charge: 12, field: 1.0 };
+    animateControls(targets);
+  });
   $('fb-shake').addEventListener('click', function () {
     var c = $('canister');
     c.classList.remove('shaking');
     void c.offsetWidth;
     c.classList.add('shaking');
-    for (var i = 0; i < 10; i++) setTimeout(addBubble, i * 30);
+    // Spawn a burst above the slider target. The decay interval slowly
+    // pops bubbles off until count == BUBBLE_TARGET again.
+    var burst = 18;
+    for (var i = 0; i < burst; i++) setTimeout(addBubble, i * 25);
   });
   $('fb-purge').addEventListener('click', function () {
     var targets = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88, field: 5.0 };
@@ -2490,9 +3006,9 @@
         var valEl = $('v-' + k);
         if (slider) slider.value = controlState[k];
         if (valEl) {
-          var unit = { pressure: 'PSI', temp: '°K', voltage: 'V', flow: 'mL/s', charge: '%', field: 'T' }[k];
+          var unit = { pressure: 'PSI', temp: '°K', voltage: 'V', flow: 'mL/s', charge: '%', field: '×' }[k];
           var display = (k === 'field') ? controlState[k].toFixed(1) : Math.round(controlState[k]);
-          valEl.textContent = display + ' ' + unit;
+          valEl.textContent = (k === 'field') ? (display + unit) : (display + ' ' + unit);
         }
       });
       updateChamberAndBrain();
@@ -2638,7 +3154,7 @@
   function updateButton() {
     var locked = state.halfDayCount >= 1 || (state.lockedUntil && Date.now() < state.lockedUntil);
     btn.disabled = !!locked;
-    btn.textContent = locked ? 'LOCKED — NEXT WINDOW SOON' : 'REDEEM BRAIN CELLS';
+    btn.textContent = locked ? 'LOCKED — ON COOLDOWN' : 'REDEEM BRAIN CELLS';
     if (locked) moreBtn.classList.add('show'); else moreBtn.classList.remove('show');
   }
 
