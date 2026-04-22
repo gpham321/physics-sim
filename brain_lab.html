@@ -98,12 +98,14 @@
     background: linear-gradient(180deg, rgba(10,15,31,0.85) 0%, rgba(10,15,31,0.55) 100%);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;   /* home | brand (centered) | counter */
     align-items: center;
     gap: 24px;
-    flex-wrap: wrap;
   }
+  header.top-bar .home-link { justify-self: start; }
+  header.top-bar .brand     { justify-self: center; text-align: center; }
+  header.top-bar .counter   { justify-self: end; text-align: right; }
   .brand {
     font-family: "Orbitron", sans-serif;
     font-weight: 900;
@@ -1724,11 +1726,15 @@
     body {
       padding: 16px 10px calc(24px + env(safe-area-inset-bottom));
     }
-    /* Header stacks: brand, home, counter each on their own line */
+    /* Header stacks: home, brand, counter each on their own line */
     header.top-bar {
       padding: 12px 14px;
       gap: 10px;
+      grid-template-columns: 1fr;
     }
+    header.top-bar .home-link,
+    header.top-bar .brand,
+    header.top-bar .counter { justify-self: center; text-align: center; }
     .brand { font-size: 15px; letter-spacing: 3px; }
     .brand small { font-size: 8.5px; letter-spacing: 3px; }
     .home-link { font-size: 11px; padding: 5px 10px; }
@@ -1937,11 +1943,11 @@
 </svg>
 
 <header class="top-bar">
+  <a class="home-link" href="index.html">&larr; RETURN TO LOBBY</a>
   <div class="brand">
     GIUSE PHAM ENTERPRISES
     <small>BRAIN CELL RECLAMATION LAB &middot; SECTOR 7&minus;G</small>
   </div>
-  <a class="home-link" href="index.html">&larr; RETURN TO LOBBY</a>
   <div class="counter">
     <div class="label">ACTIVE BRAIN CELLS &middot; LIVE</div>
     <div class="value" id="brain-counter">186,423,876,501</div>
@@ -2088,7 +2094,7 @@
           <div class="db-row">
             <label class="bubble-ctrl">
               <span>BUBBLES</span>
-              <input type="range" class="gauge-slider" id="s-bubbles" min="0" max="60" value="14">
+              <input type="range" class="gauge-slider" id="s-bubbles" min="0" max="200" value="14">
               <span class="ctrl-val" id="v-bubbles">14</span>
             </label>
           </div>
@@ -2928,32 +2934,60 @@
   })();
 
   // ============================================================
-  // BUBBLE SLIDER + DECAY-TO-TARGET
+  // BUBBLE SLIDER + LINEAR 10 s DECAY-TO-TARGET
   // ============================================================
   // BUBBLE_TARGET is the slider's requested count. The live bubble count
-  // in the DOM can exceed it (e.g. after SHAKE TANK spawns a burst) and a
-  // slow decay interval pulls it back down one at a time.
+  // in the DOM can temporarily exceed it (SHAKE TANK spawns a burst). The
+  // decay "session" is armed whenever the current count jumps above target;
+  // it then linearly pulls count back to target over 10 seconds.
   var BUBBLE_TARGET = 14;
+  var BUBBLE_MAX = 200;
+  var decaySession = null;   // { t0, initialExcess }
+
   function setBubbleCount(n) {
-    n = Math.max(0, Math.min(60, Math.round(n)));
+    n = Math.max(0, Math.min(BUBBLE_MAX, Math.round(n)));
     var box = bubblesBox;
     while (box.children.length < n) addBubble();
     while (box.children.length > n) box.removeChild(box.lastChild);
   }
+
+  function armBubbleDecay() {
+    var excess = bubblesBox.children.length - BUBBLE_TARGET;
+    if (excess > 0) {
+      decaySession = { t0: performance.now(), initialExcess: excess };
+    } else {
+      decaySession = null;
+    }
+  }
+
   (function () {
     var s = $('s-bubbles'), v = $('v-bubbles');
     s.addEventListener('input', function () {
       BUBBLE_TARGET = parseInt(s.value, 10);
       setBubbleCount(BUBBLE_TARGET);      // snap immediately when the slider moves
       v.textContent = s.value;
+      decaySession = null;                // slider reset clears any pending decay
     });
   })();
-  // Slow decay: pops one excess bubble every ~350 ms until count == target
+
+  // 80 ms tick — compute where count SHOULD be based on linear interpolation
+  // from initialExcess → 0 over 10 s, then trim any surplus bubbles.
   setInterval(function () {
-    if (bubblesBox.children.length > BUBBLE_TARGET) {
+    if (!decaySession) return;
+    var elapsed = (performance.now() - decaySession.t0) / 1000;
+    var expectedExcess;
+    if (elapsed >= 10) {
+      expectedExcess = 0;
+    } else {
+      expectedExcess = decaySession.initialExcess * (1 - elapsed / 10);
+    }
+    // Trim surplus bubbles until current excess ≤ expectedExcess
+    var target = BUBBLE_TARGET + Math.ceil(expectedExcess);
+    while (bubblesBox.children.length > target) {
       bubblesBox.removeChild(bubblesBox.lastChild);
     }
-  }, 350);
+    if (elapsed >= 10.2) decaySession = null;
+  }, 80);
 
   // ============================================================
   // TANK LIGHTS TOGGLE (binary switch)
@@ -2981,10 +3015,12 @@
     c.classList.remove('shaking');
     void c.offsetWidth;
     c.classList.add('shaking');
-    // Spawn a burst above the slider target. The decay interval slowly
-    // pops bubbles off until count == BUBBLE_TARGET again.
-    var burst = 18;
-    for (var i = 0; i < burst; i++) setTimeout(addBubble, i * 25);
+    // Spawn a visible burst above the slider target, capped at BUBBLE_MAX.
+    // Arm a linear decay that will clear the excess over the next 10 s.
+    var room = BUBBLE_MAX - bubblesBox.children.length;
+    var burst = Math.min(40, Math.max(0, room));
+    for (var i = 0; i < burst; i++) setTimeout(addBubble, i * 20);
+    setTimeout(armBubbleDecay, burst * 20 + 60);
   });
   $('fb-purge').addEventListener('click', function () {
     var targets = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88, field: 5.0 };
