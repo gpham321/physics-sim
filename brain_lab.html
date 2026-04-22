@@ -358,7 +358,7 @@
       radial-gradient(ellipse at 30% 20%, rgba(56,225,255,0.35) 0%, transparent 55%),
       radial-gradient(ellipse at 70% 80%, rgba(255,77,184,0.3) 0%, transparent 55%),
       linear-gradient(180deg, #0a1f3a 0%, #1a0a3a 100%);
-    animation: liquidShift 8s ease-in-out infinite;
+    animation: liquidShift var(--field-liquid-dur, 8s) ease-in-out infinite;
   }
   @keyframes liquidShift {
     0%, 100% { filter: hue-rotate(0deg); }
@@ -397,7 +397,7 @@
       drop-shadow(0 0 22px rgba(56,225,255,0.95))
       drop-shadow(0 0 44px rgba(255,77,184,0.55))
       drop-shadow(0 0 90px rgba(56,225,255,0.35));
-    animation: brainFloat 5s ease-in-out infinite;
+    animation: brainFloat var(--field-brain-dur, 5s) ease-in-out infinite;
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
@@ -506,7 +506,7 @@
     border-radius: 6px;
     background: radial-gradient(ellipse, #ffd0ee 0%, #ff66cc 50%, transparent 80%);
     box-shadow: 0 0 10px #ff66cc;
-    animation: port-pulse 2.2s ease-in-out infinite;
+    animation: port-pulse var(--field-port-dur, 2.2s) ease-in-out infinite;
   }
   @keyframes port-pulse {
     0%, 100% { opacity: 0.55; }
@@ -651,7 +651,7 @@
     box-shadow:
       inset 0 0 20px rgba(102,255,170,0.4),
       0 0 16px rgba(102,255,170,0.4);
-    animation: collector-pulse 3s ease-in-out infinite;
+    animation: collector-pulse var(--field-coll-dur, 3s) ease-in-out infinite;
     overflow: hidden;
   }
   @keyframes collector-pulse {
@@ -1888,6 +1888,34 @@
       </div>
       <input type="range" class="gauge-slider" id="s-charge" min="0" max="100" value="88">
     </div>
+
+    <div class="gauge-unit">
+      <div class="gauge" id="g6">
+        <div class="gauge-label">FIELD</div>
+        <svg class="gauge-svg" viewBox="0 0 170 170">
+          <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
+          <g stroke="#5a6580" stroke-width="1.2">
+            <line x1="28" y1="130" x2="35" y2="124"/>
+            <line x1="42" y1="80"  x2="49" y2="83"/>
+            <line x1="85" y1="55"  x2="85" y2="63"/>
+            <line x1="128" y1="80" x2="121" y2="83"/>
+            <line x1="142" y1="130" x2="135" y2="124"/>
+          </g>
+          <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
+            <text x="22" y="142">0</text>
+            <text x="80" y="48">5</text>
+            <text x="146" y="142" text-anchor="end">10</text>
+          </g>
+          <line class="needle" x1="85" y1="92" x2="85" y2="38"
+                stroke="#c084f7" stroke-width="3" stroke-linecap="round"
+                transform="rotate(0 85 92)"
+                style="filter: drop-shadow(0 0 4px #c084f7);"/>
+          <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
+        </svg>
+        <div class="gauge-value" id="g6-val">5.0 T</div>
+      </div>
+      <input type="range" class="gauge-slider" id="s-field" min="0" max="10" step="0.1" value="5">
+    </div>
   </div>
 </main>
 
@@ -1921,6 +1949,78 @@
     <div class="tk-serial" id="tk-serial">SERIAL #00000000</div>
   </div>
 </div>
+
+<!-- Hidden background-music host (YouTube IFrame API replaces this div with an iframe) -->
+<div id="bg-music-host" style="position:fixed; top:-2000px; left:-2000px; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden;"></div>
+
+<script>
+/* ================================================================
+   BACKGROUND MUSIC (YouTube IFrame API, 30% volume, looped)
+   Video: https://www.youtube.com/watch?v=7d6rzXVlbjg
+   Exposes window.bgMusic.{play, pause, setVolume} for the main IIFE.
+   ================================================================ */
+(function () {
+  var VIDEO_ID = '7d6rzXVlbjg';
+  var VOL = 30;
+
+  // Inject the YouTube IFrame API once.
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+
+  var player = null;
+  var wantPlaying = true;   // desired state; set by bgMusic.play/pause
+
+  window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player('bg-music-host', {
+      height: '1', width: '1',
+      videoId: VIDEO_ID,
+      playerVars: {
+        autoplay: 1,
+        loop: 1,
+        playlist: VIDEO_ID,   // required for single-video looping
+        controls: 0,
+        modestbranding: 1,
+        disablekb: 1,
+        playsinline: 1,
+        iv_load_policy: 3,
+        fs: 0
+      },
+      events: {
+        onReady: function (e) {
+          e.target.setVolume(VOL);
+          if (wantPlaying) e.target.playVideo();
+        }
+      }
+    });
+  };
+
+  // Most browsers block autoplay with sound until a user gesture.
+  // The first click/keypress anywhere on the page kicks it off.
+  function kick() {
+    if (player && typeof player.playVideo === 'function') {
+      player.setVolume(VOL);
+      if (wantPlaying) player.playVideo();
+    }
+  }
+  document.addEventListener('click', kick);
+  document.addEventListener('keydown', kick);
+
+  window.bgMusic = {
+    play: function () {
+      wantPlaying = true;
+      if (player && player.playVideo) { player.setVolume(VOL); player.playVideo(); }
+    },
+    pause: function () {
+      wantPlaying = false;
+      if (player && player.pauseVideo) player.pauseVideo();
+    },
+    setVolume: function (v) {
+      if (player && player.setVolume) player.setVolume(v);
+    }
+  };
+})();
+</script>
 
 <script>
 (function () {
@@ -2010,7 +2110,8 @@
     temp: 77,        // 2-300 °K
     voltage: 5800,   // 0-10000 V
     flow: 28,        // 0-100 mL/s
-    charge: 88       // 0-100 %
+    charge: 88,      // 0-100 %
+    field: 5.0       // 0-10 T  (magnetic confinement field; drives animation speeds)
   };
 
   // Each gauge: pulls 'target' from controlState, needle wobbles around target angle
@@ -2037,7 +2138,11 @@
     { id: 'g5', val: 'g5-val',
       target: function () { return ang(controlState.charge / 100); },
       wobble: 4,
-      fmt: function (a) { return Math.round(((a+90)/180)*100) + '%'; } }
+      fmt: function (a) { return Math.round(((a+90)/180)*100) + '%'; } },
+    { id: 'g6', val: 'g6-val',
+      target: function () { return ang(controlState.field / 10); },
+      wobble: 5,
+      fmt: function (a) { return (((a+90)/180)*10).toFixed(1) + ' T'; } }
   ];
 
   // Smooth needle animation via requestAnimationFrame.
@@ -2083,6 +2188,7 @@
   wireSlider('s-voltage',  'voltage');
   wireSlider('s-flow',     'flow');
   wireSlider('s-charge',   'charge');
+  wireSlider('s-field',    'field');
 
   // ============================================================
   // CHAMBER COLOR + BRAIN TINT + STATUS BANNER
@@ -2098,7 +2204,7 @@
   liquidEl.classList.add('dyn');
 
   // Default (page-load) values — used as the neutral anchor for the brain tint
-  var DEFAULTS = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88 };
+  var DEFAULTS = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88, field: 5.0 };
 
   function updateChamberAndBrain() {
     var tN = (controlState.temp - 2) / 298;
@@ -2141,6 +2247,17 @@
       'drop-shadow(0 0 22px hsla(' + h1 + ', 85%, 60%, 0.9)) ' +
       'drop-shadow(0 0 44px hsla(' + h2 + ', 75%, 55%, 0.55)) ' +
       'drop-shadow(0 0 90px hsla(' + h1 + ', 80%, 55%, 0.35))';
+
+    // FIELD drives animation speeds inside the chamber. At field = 5 T
+    // (default) scale = 1.0, giving the original 8 s / 5 s / 2.2 s / 3 s
+    // durations. scale = 2.5 at field = 0 (slow, barely thrumming) and
+    // scale = 0.25 at field = 10 (rapid, agitated).
+    var fScale = Math.max(0.25, 2.5 - controlState.field * 0.225);
+    var rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--field-liquid-dur', (8    * fScale).toFixed(2) + 's');
+    rootStyle.setProperty('--field-brain-dur',  (5    * fScale).toFixed(2) + 's');
+    rootStyle.setProperty('--field-port-dur',   (2.2  * fScale).toFixed(2) + 's');
+    rootStyle.setProperty('--field-coll-dur',   (3    * fScale).toFixed(2) + 's');
   }
 
   function classifyState() {
@@ -2148,7 +2265,7 @@
     var issues = [];
     var crit = false;
     var p = controlState.pressure, t = controlState.temp, v = controlState.voltage,
-        f = controlState.flow, c = controlState.charge;
+        f = controlState.flow, c = controlState.charge, fld = controlState.field;
     if (p >= 270) { issues.push('OVERPRESSURE'); crit = crit || p >= 290; }
     if (p <= 25)  { issues.push('VACUUM BREACH'); crit = true; }
     if (t >= 250) { issues.push('CRYO FAILURE'); crit = crit || t >= 290; }
@@ -2159,6 +2276,8 @@
     if (f >= 92)  { issues.push('FLOW SURGE'); crit = crit || f >= 98; }
     if (c <= 8)   { issues.push('CHARGE DEPLETED'); }
     if (c >= 95)  { issues.push('CHARGE OVERLOAD'); crit = crit || c >= 99; }
+    if (fld >= 9) { issues.push('FIELD SATURATION'); crit = crit || fld >= 9.8; }
+    if (fld <= 0.5) { issues.push('FIELD COLLAPSE'); crit = true; }
     if (crit) return { level: 'crit', msg: '⚠ CRITICAL · ' + issues.slice(0,2).join(' · ') + ' · STABILIZE OR ABORT' };
     if (issues.length) return { level: 'warn', msg: 'CAUTION · ' + issues.slice(0,2).join(' · ') + ' · ADJUST CONTROLS' };
     return { level: 'nominal', msg: 'CRYO-NEURAL TANK ONLINE · PRESSURE NOMINAL · AWAITING INPUT' };
@@ -2310,7 +2429,7 @@
   // FUN BUTTONS
   // ============================================================
   $('fb-overdrive').addEventListener('click', function () {
-    var targets = { pressure: 260, temp: 220, voltage: 9500, flow: 88, charge: 97 };
+    var targets = { pressure: 260, temp: 220, voltage: 9500, flow: 88, charge: 97, field: 9.5 };
     animateControls(targets);
   });
   $('fb-shake').addEventListener('click', function () {
@@ -2321,7 +2440,7 @@
     for (var i = 0; i < 10; i++) setTimeout(addBubble, i * 30);
   });
   $('fb-purge').addEventListener('click', function () {
-    var targets = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88 };
+    var targets = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88, field: 5.0 };
     animateControls(targets);
   });
 
@@ -2339,8 +2458,9 @@
         var valEl = $('v-' + k);
         if (slider) slider.value = controlState[k];
         if (valEl) {
-          var unit = { pressure: 'PSI', temp: '°K', voltage: 'V', flow: 'mL/s', charge: '%' }[k];
-          valEl.textContent = Math.round(controlState[k]) + ' ' + unit;
+          var unit = { pressure: 'PSI', temp: '°K', voltage: 'V', flow: 'mL/s', charge: '%', field: 'T' }[k];
+          var display = (k === 'field') ? controlState[k].toFixed(1) : Math.round(controlState[k]);
+          valEl.textContent = display + ' ' + unit;
         }
       });
       updateChamberAndBrain();
@@ -2628,11 +2748,13 @@
     extraTimers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
     extraTimers = [];
     setTimeout(function () { extraContent.innerHTML = ''; }, 250);
+    if (window.bgMusic && window.bgMusic.play) window.bgMusic.play();
   }
   extraCloseBtn.addEventListener('click', closeExtra);
   extraModal.addEventListener('click', function (e) { if (e.target === extraModal) closeExtra(); });
 
   moreBtn.addEventListener('click', function () {
+    if (window.bgMusic && window.bgMusic.pause) window.bgMusic.pause();
     if (Math.random() < 0.5) showQuiz();
     else showAd();
     extraModal.classList.add('show');
