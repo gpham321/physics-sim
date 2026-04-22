@@ -397,7 +397,7 @@
       drop-shadow(0 0 22px rgba(56,225,255,0.95))
       drop-shadow(0 0 44px rgba(255,77,184,0.55))
       drop-shadow(0 0 90px rgba(56,225,255,0.35));
-    animation: brainFloat 5s ease-in-out infinite;
+    /* float animation is driven by JS (see brainFloatLoop) so slider activity doesn't jolt it */
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
@@ -1962,7 +1962,7 @@
 (function () {
   var VIDEO_ID = '7d6rzXVlbjg';
   var VOL = 30;
-  var START_AT = 5;   // seconds
+  var START_AT = 30;   // seconds
 
   // Inject the YouTube IFrame API once.
   var tag = document.createElement('script');
@@ -2297,6 +2297,36 @@
   // initial apply
   updateChamberAndBrain();
   updateStatusBanner();
+
+  // ============================================================
+  // BRAIN FLOAT (JS-driven so it never jolts when other CSS vars change)
+  // ============================================================
+  // Same motion as the old @keyframes brainFloat (-50% ↔ -54% vertical,
+  // ±3° rotation), but the period is driven by controlState.field so the
+  // student can dial the head's bob speed without the CSS animation
+  // getting retimed mid-flight.
+  //   field =  0  →  ~8 s period  (slow drift)
+  //   field =  5  →   5 s period  (default; matches the old CSS)
+  //   field = 10  →   2 s period  (agitated bobbing)
+  (function () {
+    var phase = 0;
+    var last = performance.now();
+    function tick(now) {
+      now = now || performance.now();
+      var dt = (now - last) / 1000;
+      last = now;
+      var period = 8 - 0.6 * controlState.field;
+      if (period < 0.5) period = 0.5;
+      phase += dt * (2 * Math.PI / period);
+      if (phase > 2 * Math.PI) phase -= 2 * Math.PI;
+      var c = Math.cos(phase);          //  1 at start, -1 at half cycle
+      var dy  = -52 + 2 * c;            // -50 ↔ -54
+      var rot = -3 * c;                 // -3° ↔ +3°
+      brainImg.style.transform = 'translate(-50%, ' + dy.toFixed(2) + '%) rotate(' + rot.toFixed(2) + 'deg)';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
 
   // ============================================================
   // CURSOR ELECTRICAL SPARKLES
