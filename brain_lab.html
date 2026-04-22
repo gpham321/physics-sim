@@ -514,7 +514,7 @@
 
   /* Transport tube */
   .transport-tube {
-    width: 220px;
+    width: 130px;
     height: 22px;
     position: relative;
     margin: 0 -10px;     /* overlap into canister-port and station */
@@ -571,8 +571,8 @@
   /* Receive station */
   .receive-station {
     position: relative;
-    width: 200px;
-    height: 280px;
+    width: 300px;
+    height: 310px;
     background: linear-gradient(180deg, #2a3252 0%, #161b30 100%);
     border-radius: 10px 10px 6px 6px;
     border: 2px solid #3a4467;
@@ -586,7 +586,8 @@
   .station-screen {
     position: absolute;
     top: 22px; left: 14px; right: 14px;
-    height: 80px;
+    min-height: 100px;
+    max-height: 170px;
     background:
       linear-gradient(180deg, rgba(0,255,170,0.06) 0%, rgba(0,255,170,0.02) 100%),
       #02110a;
@@ -596,16 +597,22 @@
     padding: 8px 10px;
     font-family: "Share Tech Mono", monospace;
     font-size: 10px;
+    line-height: 1.45;
     color: var(--green);
     text-shadow: 0 0 4px var(--green);
     overflow: hidden;
   }
   .station-screen .line { white-space: nowrap; }
+  .station-screen .line.wrap {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
   .station-screen .blink-cursor { animation: blink 1s infinite; }
 
   .station-lights {
     position: absolute;
-    top: 116px; left: 14px; right: 14px;
+    top: 140px; left: 14px; right: 14px;
     display: flex;
     justify-content: space-around;
     padding: 8px 0;
@@ -882,11 +889,648 @@
   footer.status-bar .lit { color: var(--green); text-shadow: 0 0 4px rgba(102,255,170,0.6); }
   footer.status-bar .warn { color: var(--amber); text-shadow: 0 0 4px rgba(255,179,71,0.6); }
 
+  /* ============ GAUGE + INLINE SLIDER ============ */
+  .gauge-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 170px;
+  }
+  .gauge-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: linear-gradient(90deg, #1a2342 0%, #2a3355 100%);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  .gauge-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #aaf0ff, var(--cyan));
+    border: 1px solid #0a0f1f;
+    box-shadow: 0 0 8px var(--cyan);
+    cursor: pointer;
+  }
+  .gauge-slider::-moz-range-thumb {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #aaf0ff, var(--cyan));
+    border: 1px solid #0a0f1f;
+    box-shadow: 0 0 8px var(--cyan);
+    cursor: pointer;
+  }
+
+  /* ============ DISPENSER COLUMN (dispenser + buttons stacked) ============ */
+  .dispenser-column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    width: 300px;
+    flex-shrink: 0;
+  }
+  .dispenser-buttons {
+    background: linear-gradient(180deg, rgba(15,19,34,0.9) 0%, rgba(10,15,31,0.9) 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(56,225,255,0.1);
+  }
+  .db-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  .db-row.fun-btns {
+    gap: 6px;
+    padding-top: 10px;
+    margin-top: 2px;
+    border-top: 1px dashed rgba(56,225,255,0.2);
+  }
+  .bubble-ctrl {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .bubble-ctrl .ctrl-val {
+    color: var(--amber);
+    text-shadow: 0 0 4px rgba(255,179,71,0.45);
+    font-size: 11px;
+    min-width: 22px;
+    text-align: right;
+  }
+
+  /* ============ BINARY TOGGLE SWITCH ============ */
+  .toggle-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    user-select: none;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .toggle-switch input { display: none; }
+  .toggle-switch .slider-track {
+    width: 42px; height: 20px;
+    background: #1a2342;
+    border-radius: 10px;
+    position: relative;
+    border: 1px solid var(--border);
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle-switch .slider-track::before {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px;
+    width: 16px; height: 16px;
+    background: linear-gradient(180deg, #888 0%, #444 100%);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  .toggle-switch input:checked + .slider-track {
+    background: linear-gradient(90deg, #2a8860 0%, var(--green) 100%);
+  }
+  .toggle-switch input:checked + .slider-track::before {
+    left: 23px;
+    background: #fff;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  /* ============ LIGHTS OFF EFFECT ============ */
+  body.lights-off .canister-liquid {
+    filter: brightness(0.22);
+    transition: filter 0.5s ease;
+  }
+  body.lights-off .canister-sparks { opacity: 0.15; }
+  body.lights-off .bubbles { filter: brightness(0.35); }
+  body.lights-off .canister-body {
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.85), 0 0 18px rgba(0,0,0,0.5) !important;
+    border-color: rgba(80,80,100,0.22) !important;
+  }
+  body.lights-off .station-collector,
+  body.lights-off .station-lights,
+  body.lights-off .station-screen {
+    filter: brightness(0.55);
+  }
+  body.lights-off .canister-port-hole { opacity: 0.3; }
+
+  /* ============ CURSOR ELECTRICAL SPARKLES ============ */
+  /* Small crackling spark cluster that follows the cursor. */
+  .cursor-spot {
+    position: fixed;
+    top: 0; left: 0;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1500;
+    transform: translate3d(-50%, -50%, 0);
+    background: transparent;
+    will-change: transform;
+  }
+  .cursor-spark {
+    position: fixed;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    pointer-events: none;
+    z-index: 1501;
+    mix-blend-mode: screen;
+    animation: cursorSparkAnim 0.55s ease-out forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes cursorSparkAnim {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    60%  { opacity: 0.9; }
+    100% {
+      transform: translate(calc(-50% + var(--sx, 0px)), calc(-50% + var(--sy, 0px))) scale(0.3);
+      opacity: 0;
+    }
+  }
+  .cursor-arc {
+    position: fixed;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #fff 40%, #fff 60%, transparent 100%);
+    pointer-events: none;
+    z-index: 1500;
+    mix-blend-mode: screen;
+    transform-origin: 0 50%;
+    opacity: 0;
+    animation: cursorArcAnim 0.22s ease-out forwards;
+  }
+  @keyframes cursorArcAnim {
+    0%   { opacity: 0; }
+    30%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ============ REDEEM ROW ============ */
+  .redeem-row {
+    margin-top: 80px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .redeem-row .redeem-btn { margin-top: 0; }
+
+  .redeem-more-btn {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 1.4px;
+    padding: 12px 18px;
+    max-width: 240px;
+    line-height: 1.3;
+    text-align: center;
+    border: 2px solid #ff9020;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #ffae3a 0%, #ff6a1a 100%);
+    color: #2a1a05;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+    box-shadow:
+      0 0 18px rgba(255,144,32,0.7),
+      inset 0 2px 0 rgba(255,255,255,0.35),
+      inset 0 -4px 0 rgba(0,0,0,0.22),
+      0 4px 0 #8a3a00;
+    transition: transform 0.12s ease, box-shadow 0.2s ease;
+    display: none;
+    animation: orangePulse 2s ease-in-out infinite;
+  }
+  .redeem-more-btn.show { display: inline-block; }
+  @keyframes orangePulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(255,144,32,0.6), inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -4px 0 rgba(0,0,0,0.22), 0 4px 0 #8a3a00; }
+    50%      { box-shadow: 0 0 32px rgba(255,144,32,1),   inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -4px 0 rgba(0,0,0,0.22), 0 4px 0 #8a3a00; }
+  }
+  .redeem-more-btn:hover {
+    transform: translateY(1px);
+  }
+  .redeem-more-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 28px rgba(255,144,32,0.95),
+      inset 0 2px 0 rgba(255,255,255,0.35),
+      inset 0 -4px 0 rgba(0,0,0,0.22),
+      0 1px 0 #8a3a00;
+  }
+
+  /* ============ CONTROL PANEL ============ */
+  .control-panel {
+    width: 100%;
+    max-width: 840px;
+    background: linear-gradient(180deg, rgba(15,19,34,0.9) 0%, rgba(10,15,31,0.9) 100%);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 22px 18px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    margin-top: 4px;
+    box-shadow: 0 4px 22px rgba(0,0,0,0.4), inset 0 1px 0 rgba(56,225,255,0.1);
+  }
+  .ctrl-title {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-shadow: 0 0 6px rgba(56,225,255,0.45);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ctrl-status {
+    font-size: 10.5px;
+    letter-spacing: 3px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--green);
+    color: var(--green);
+    background: rgba(102,255,170,0.08);
+    text-shadow: 0 0 4px var(--green);
+  }
+  .ctrl-status.warn {
+    color: var(--amber);
+    border-color: var(--amber);
+    background: rgba(255,179,71,0.08);
+    text-shadow: 0 0 4px var(--amber);
+  }
+  .ctrl-status.crit {
+    color: var(--warn);
+    border-color: var(--warn);
+    background: rgba(255,59,47,0.10);
+    text-shadow: 0 0 5px var(--warn);
+    animation: blink 1.1s infinite;
+  }
+  .ctrl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 20px;
+  }
+  .ctrl-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ctrl-item label {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .ctrl-item label .ctrl-val {
+    color: var(--amber);
+    text-shadow: 0 0 4px rgba(255,179,71,0.45);
+    font-size: 11px;
+  }
+  .ctrl-item input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: linear-gradient(90deg, #1a2342 0%, #2a3355 100%);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    margin-top: 2px;
+  }
+  .ctrl-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #aaf0ff, var(--cyan));
+    border: 1px solid #0a0f1f;
+    box-shadow: 0 0 8px var(--cyan);
+    cursor: pointer;
+  }
+  .ctrl-item input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #aaf0ff, var(--cyan));
+    border: 1px solid #0a0f1f;
+    box-shadow: 0 0 8px var(--cyan);
+    cursor: pointer;
+  }
+
+  .fun-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(56,225,255,0.2);
+  }
+  .fun-btn {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 9px 14px;
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    background: rgba(56,225,255,0.08);
+    color: var(--cyan);
+    cursor: pointer;
+    text-shadow: 0 0 4px rgba(56,225,255,0.4);
+    transition: all 0.15s ease;
+  }
+  .fun-btn:hover {
+    background: rgba(56,225,255,0.2);
+    box-shadow: 0 0 10px rgba(56,225,255,0.5);
+    transform: translateY(-1px);
+  }
+  .fun-btn:active { transform: translateY(1px); }
+  .fun-btn.magenta { border-color: var(--magenta); color: var(--magenta); text-shadow: 0 0 4px rgba(255,77,184,0.4); background: rgba(255,77,184,0.08); }
+  .fun-btn.magenta:hover { background: rgba(255,77,184,0.2); box-shadow: 0 0 10px rgba(255,77,184,0.5); }
+  .fun-btn.amber { border-color: var(--amber); color: var(--amber); text-shadow: 0 0 4px rgba(255,179,71,0.4); background: rgba(255,179,71,0.08); }
+  .fun-btn.amber:hover { background: rgba(255,179,71,0.2); box-shadow: 0 0 10px rgba(255,179,71,0.5); }
+  .fun-btn.green { border-color: var(--green); color: var(--green); text-shadow: 0 0 4px rgba(102,255,170,0.4); background: rgba(102,255,170,0.08); }
+  .fun-btn.green:hover { background: rgba(102,255,170,0.2); box-shadow: 0 0 10px rgba(102,255,170,0.5); }
+  .fun-btn.warn { border-color: var(--warn); color: var(--warn); text-shadow: 0 0 4px rgba(255,59,47,0.4); background: rgba(255,59,47,0.08); }
+  .fun-btn.warn:hover { background: rgba(255,59,47,0.2); box-shadow: 0 0 10px rgba(255,59,47,0.5); }
+
+  /* ============ CHAMBER / LIQUID DYNAMIC ============ */
+  .canister-liquid {
+    transition: background 1.2s ease;
+  }
+  .canister-body {
+    transition: box-shadow 1.2s ease, border-color 1.2s ease;
+  }
+  .brain-img {
+    transition: filter 0.8s ease;
+  }
+  .canister-liquid.dyn {
+    background:
+      radial-gradient(ellipse at 30% 20%, hsla(var(--chamber-h1, 190), 80%, 55%, 0.42) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 80%, hsla(var(--chamber-h2, 320), 75%, 55%, 0.36) 0%, transparent 55%),
+      linear-gradient(180deg, hsla(var(--chamber-h1, 190), 60%, 20%, 1) 0%, hsla(var(--chamber-h2, 320), 55%, 18%, 1) 100%);
+  }
+
+  /* Lightning flash inside canister */
+  .lightning-flash {
+    position: absolute; inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 45%);
+    opacity: 0;
+    mix-blend-mode: screen;
+  }
+  .lightning-flash.flash { animation: lightFlash 0.7s ease-out; }
+  @keyframes lightFlash {
+    0%   { opacity: 0; }
+    12%  { opacity: 1; }
+    28%  { opacity: 0.2; }
+    40%  { opacity: 0.9; }
+    65%  { opacity: 0.1; }
+    100% { opacity: 0; }
+  }
+
+  /* Shake */
+  .canister.shaking { animation: canShake 0.55s ease-in-out; }
+  @keyframes canShake {
+    0%, 100% { transform: translateX(0); }
+    12% { transform: translateX(-10px) rotate(-0.6deg); }
+    30% { transform: translateX(10px)  rotate(0.6deg); }
+    50% { transform: translateX(-7px)  rotate(-0.4deg); }
+    70% { transform: translateX(7px)   rotate(0.4deg); }
+    88% { transform: translateX(-3px); }
+  }
+
+  /* ============ MODAL FOR EXTRA BRAIN CELLS ============ */
+  .extra-modal {
+    position: fixed; inset: 0;
+    background: rgba(2,4,10,0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 20px;
+  }
+  .extra-modal.show { opacity: 1; pointer-events: auto; }
+  .extra-box {
+    width: min(640px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #0a0f1f 0%, #060912 100%);
+    border: 2px solid var(--amber);
+    border-radius: 10px;
+    padding: 26px 30px 28px;
+    color: var(--text);
+    box-shadow: 0 0 30px rgba(255,179,71,0.35), 0 0 80px rgba(255,179,71,0.15);
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .extra-modal.show .extra-box { transform: scale(1); }
+  .extra-close {
+    position: absolute;
+    top: 8px; right: 14px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: "Share Tech Mono", monospace;
+    padding: 4px 8px;
+  }
+  .extra-close:hover { color: var(--warn); }
+
+  .extra-title {
+    font-family: "Orbitron", sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    text-shadow: 0 0 6px rgba(255,179,71,0.5);
+    margin: 0 0 4px;
+  }
+  .extra-sub {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Quiz */
+  .quiz-q {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: rgba(56,225,255,0.06);
+    border-left: 3px solid var(--cyan);
+    border-radius: 4px;
+  }
+  .quiz-choices {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .quiz-choice {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 13px;
+    padding: 12px 16px;
+    text-align: left;
+    background: rgba(15,19,34,0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+  }
+  .quiz-choice:hover:not(.locked) {
+    border-color: var(--cyan);
+    background: rgba(56,225,255,0.1);
+    transform: translateX(2px);
+  }
+  .quiz-choice.correct {
+    border-color: var(--green);
+    background: rgba(102,255,170,0.15);
+    color: var(--green);
+    text-shadow: 0 0 4px var(--green);
+  }
+  .quiz-choice.wrong {
+    border-color: var(--warn);
+    background: rgba(255,59,47,0.15);
+    color: var(--warn);
+    animation: qShake 0.35s;
+  }
+  @keyframes qShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .quiz-choice.locked { cursor: not-allowed; opacity: 0.6; }
+  .quiz-status {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+  .quiz-status .tries { color: var(--amber); }
+  .quiz-result {
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 13px;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+  .quiz-result.win {
+    background: rgba(102,255,170,0.12);
+    border: 1px solid var(--green);
+    color: var(--green);
+    text-shadow: 0 0 4px var(--green);
+  }
+  .quiz-result.lose {
+    background: rgba(255,59,47,0.12);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    text-shadow: 0 0 4px var(--warn);
+  }
+
+  /* Ad */
+  .ad-frame-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .ad-frame-wrap iframe {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .ad-skip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .ad-timer {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  .skip-btn {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 3px;
+    padding: 10px 18px;
+    border: 2px solid #555;
+    border-radius: 6px;
+    background: #2a2a2a;
+    color: #888;
+    cursor: not-allowed;
+    transition: all 0.2s ease;
+  }
+  .skip-btn.ready {
+    background: linear-gradient(180deg, #ffae3a 0%, #ff6a1a 100%);
+    border-color: #ff9020;
+    color: #2a1a05;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    box-shadow: 0 0 14px rgba(255,144,32,0.55);
+  }
+  .skip-btn.ready:hover {
+    box-shadow: 0 0 22px rgba(255,144,32,0.8);
+    transform: translateY(-1px);
+  }
+
 </style>
 </head>
 <body>
 
 <div class="lab-grid"></div>
+<div class="cursor-spot" id="cursor-spot"></div>
 <div class="ambient" id="ambient"></div>
 
 <!-- Background industrial pipes -->
@@ -976,18 +1620,19 @@
   <a class="home-link" href="index.html">&larr; RETURN TO LOBBY</a>
   <div class="counter">
     <div class="label">ACTIVE BRAIN CELLS &middot; LIVE</div>
-    <div class="value" id="brain-counter">86,423,876,501</div>
+    <div class="value" id="brain-counter">186,423,876,501</div>
     <div class="unit">NEURONS ONLINE</div>
   </div>
 </header>
 
-<div class="lab-banner">
-  <span class="blink">&#9650;</span> CRYO-NEURAL TANK ONLINE &middot; PRESSURE NOMINAL &middot; AWAITING INPUT <span class="blink">&#9650;</span>
+<div class="lab-banner" id="lab-banner">
+  <span class="blink">&#9650;</span> <span id="banner-text">CRYO-NEURAL TANK ONLINE &middot; PRESSURE NOMINAL &middot; AWAITING INPUT</span> <span class="blink">&#9650;</span>
 </div>
 
 <main class="stage">
   <!-- LEFT GAUGES -->
   <div class="side-panel">
+    <div class="gauge-unit">
     <div class="gauge" id="g1">
       <div class="gauge-label">PSI</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
@@ -1014,7 +1659,10 @@
       </svg>
       <div class="gauge-value" id="g1-val">142 PSI</div>
     </div>
+    <input type="range" class="gauge-slider" id="s-pressure" min="0" max="300" value="142">
+    </div>
 
+    <div class="gauge-unit">
     <div class="gauge" id="g2">
       <div class="gauge-label">CRYO °K</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
@@ -1039,7 +1687,10 @@
       </svg>
       <div class="gauge-value" id="g2-val">077 °K</div>
     </div>
+    <input type="range" class="gauge-slider" id="s-temp" min="2" max="300" value="77">
+    </div>
 
+    <div class="gauge-unit">
     <div class="gauge" id="g3">
       <div class="gauge-label">VOLTS</div>
       <svg class="gauge-svg" viewBox="0 0 170 170">
@@ -1064,28 +1715,60 @@
       </svg>
       <div class="gauge-value" id="g3-val">5800 V</div>
     </div>
+    <input type="range" class="gauge-slider" id="s-voltage" min="0" max="10000" step="50" value="5800">
+    </div>
   </div>
 
   <!-- CENTER -->
   <div class="center-col">
 
     <div class="lab-row">
-      <div class="receive-station">
-        <div class="station-label">DISPENSER UNIT &middot; MK-VII</div>
-        <div class="station-screen">
-          <div class="line">&gt; INIT_RECLAMATION_PROTOCOL</div>
-          <div class="line">&gt; STATUS: <span style="color:#ffd54a">IDLE</span></div>
-          <div class="line">&gt; STOCK: <span id="stock-line">99,994 UNITS</span></div>
-          <div class="line">&gt; AWAIT INPUT<span class="blink-cursor">_</span></div>
+      <div class="dispenser-column">
+        <div class="receive-station">
+          <div class="station-label">DISPENSER UNIT &middot; MK-VII</div>
+          <div class="station-screen">
+            <div class="line">&gt; INIT_RECLAMATION_PROTOCOL</div>
+            <div class="line">&gt; STOCK: <span id="stock-line">99,994 UNITS</span></div>
+            <div class="line">&gt; PROFILE_LOAD:</div>
+            <div class="line wrap">&gt; <span id="typing-stat"></span><span class="blink-cursor">_</span></div>
+          </div>
+          <div class="station-lights">
+            <div class="light green"></div>
+            <div class="light amber"></div>
+            <div class="light red"></div>
+            <div class="light green"></div>
+          </div>
+          <div class="station-collector">
+            <div class="swirl"></div>
+          </div>
         </div>
-        <div class="station-lights">
-          <div class="light green"></div>
-          <div class="light amber"></div>
-          <div class="light red"></div>
-          <div class="light green"></div>
-        </div>
-        <div class="station-collector">
-          <div class="swirl"></div>
+
+        <div class="dispenser-buttons">
+          <div class="ctrl-title" style="margin-bottom: 0;">
+            <span>STATUS</span>
+            <span class="ctrl-status" id="ctrl-status">NOMINAL</span>
+          </div>
+          <div class="db-row">
+            <label class="bubble-ctrl">
+              <span>BUBBLES</span>
+              <input type="range" class="gauge-slider" id="s-bubbles" min="0" max="60" value="14">
+              <span class="ctrl-val" id="v-bubbles">14</span>
+            </label>
+          </div>
+          <div class="db-row">
+            <label class="toggle-switch">
+              <span>TANK LIGHTS</span>
+              <span style="display:inline-flex;align-items:center;">
+                <input type="checkbox" id="light-toggle" checked>
+                <span class="slider-track"></span>
+              </span>
+            </label>
+          </div>
+          <div class="db-row fun-btns">
+            <button class="fun-btn amber" id="fb-overdrive">OVERDRIVE</button>
+            <button class="fun-btn green" id="fb-shake">SHAKE TANK</button>
+            <button class="fun-btn warn" id="fb-purge">PURGE &amp; RESET</button>
+          </div>
         </div>
       </div>
 
@@ -1094,7 +1777,7 @@
       </div>
 
       <div class="canister-wrap">
-        <div class="canister">
+        <div class="canister" id="canister">
           <div class="canister-cap top"></div>
           <div class="canister-bolts-row top">
             <div class="bolt" style="left: 32px;"></div>
@@ -1107,8 +1790,9 @@
           <div class="canister-body">
             <div class="canister-liquid"></div>
             <div class="bubbles" id="bubbles"></div>
-            <img src="giuse_brain.png" alt="Giuse Brain" class="brain-img">
+            <img src="giuse_brain.png" alt="Giuse Brain" class="brain-img" id="brain-img">
             <div class="canister-sparks" id="sparks"></div>
+            <div class="lightning-flash" id="lightning-flash"></div>
           </div>
           <div class="canister-cap bottom"></div>
           <div class="canister-bolts-row bottom">
@@ -1133,87 +1817,71 @@
       </div>
     </div>
 
-    <button class="redeem-btn" id="redeem-btn">REDEEM BRAIN CELLS</button>
+    <div class="redeem-row">
+      <button class="redeem-btn" id="redeem-btn">REDEEM BRAIN CELLS</button>
+      <button class="redeem-more-btn" id="redeem-more-btn">Click Here If You Want To Redeem More Brain Cells</button>
+    </div>
 
-    <div class="btn-helper">MAX <b>5 BRAIN CELLS</b> PER DAY</div>
+    <div class="btn-helper">MAX <b>5 BRAIN CELLS TWICE A DAY</b> &middot; RESETS EVERY 12 HRS UTC</div>
 
   </div>
 
   <!-- RIGHT GAUGES -->
   <div class="side-panel">
-    <div class="gauge" id="g4">
-      <div class="gauge-label">FLOW</div>
-      <svg class="gauge-svg" viewBox="0 0 170 170">
-        <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
-        <g stroke="#5a6580" stroke-width="1.2">
-          <line x1="28" y1="130" x2="35" y2="124"/>
-          <line x1="42" y1="80"  x2="49" y2="83"/>
-          <line x1="85" y1="55"  x2="85" y2="63"/>
-          <line x1="128" y1="80" x2="121" y2="83"/>
-          <line x1="142" y1="130" x2="135" y2="124"/>
-        </g>
-        <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
-          <text x="22" y="142">0</text>
-          <text x="80" y="48">50</text>
-          <text x="146" y="142" text-anchor="end">100</text>
-        </g>
-        <line class="needle" x1="85" y1="92" x2="85" y2="38"
-              stroke="#66ffaa" stroke-width="3" stroke-linecap="round"
-              transform="rotate(-45 85 92)"
-              style="filter: drop-shadow(0 0 4px #66ffaa);"/>
-        <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
-      </svg>
-      <div class="gauge-value" id="g4-val">28 mL/s</div>
+    <div class="gauge-unit">
+      <div class="gauge" id="g4">
+        <div class="gauge-label">FLOW</div>
+        <svg class="gauge-svg" viewBox="0 0 170 170">
+          <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
+          <g stroke="#5a6580" stroke-width="1.2">
+            <line x1="28" y1="130" x2="35" y2="124"/>
+            <line x1="42" y1="80"  x2="49" y2="83"/>
+            <line x1="85" y1="55"  x2="85" y2="63"/>
+            <line x1="128" y1="80" x2="121" y2="83"/>
+            <line x1="142" y1="130" x2="135" y2="124"/>
+          </g>
+          <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
+            <text x="22" y="142">0</text>
+            <text x="80" y="48">50</text>
+            <text x="146" y="142" text-anchor="end">100</text>
+          </g>
+          <line class="needle" x1="85" y1="92" x2="85" y2="38"
+                stroke="#66ffaa" stroke-width="3" stroke-linecap="round"
+                transform="rotate(-45 85 92)"
+                style="filter: drop-shadow(0 0 4px #66ffaa);"/>
+          <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
+        </svg>
+        <div class="gauge-value" id="g4-val">28 mL/s</div>
+      </div>
+      <input type="range" class="gauge-slider" id="s-flow" min="0" max="100" value="28">
     </div>
 
-    <div class="gauge" id="g5">
-      <div class="gauge-label">CHARGE</div>
-      <svg class="gauge-svg" viewBox="0 0 170 170">
-        <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
-        <g stroke="#5a6580" stroke-width="1.2">
-          <line x1="28" y1="130" x2="35" y2="124"/>
-          <line x1="42" y1="80"  x2="49" y2="83"/>
-          <line x1="85" y1="55"  x2="85" y2="63"/>
-          <line x1="128" y1="80" x2="121" y2="83"/>
-          <line x1="142" y1="130" x2="135" y2="124"/>
-        </g>
-        <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
-          <text x="22" y="142">0%</text>
-          <text x="80" y="48">50</text>
-          <text x="146" y="142" text-anchor="end">100</text>
-        </g>
-        <line class="needle" x1="85" y1="92" x2="85" y2="38"
-              stroke="#ff4db8" stroke-width="3" stroke-linecap="round"
-              transform="rotate(40 85 92)"
-              style="filter: drop-shadow(0 0 4px #ff4db8);"/>
-        <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
-      </svg>
-      <div class="gauge-value" id="g5-val">88%</div>
-    </div>
-
-    <div class="gauge" id="g6">
-      <div class="gauge-label">YIELD</div>
-      <svg class="gauge-svg" viewBox="0 0 170 170">
-        <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
-        <g stroke="#5a6580" stroke-width="1.2">
-          <line x1="28" y1="130" x2="35" y2="124"/>
-          <line x1="42" y1="80"  x2="49" y2="83"/>
-          <line x1="85" y1="55"  x2="85" y2="63"/>
-          <line x1="128" y1="80" x2="121" y2="83"/>
-          <line x1="142" y1="130" x2="135" y2="124"/>
-        </g>
-        <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
-          <text x="22" y="142">0</text>
-          <text x="80" y="48">5</text>
-          <text x="146" y="142" text-anchor="end">10</text>
-        </g>
-        <line class="needle" x1="85" y1="92" x2="85" y2="38"
-              stroke="#ffd54a" stroke-width="3" stroke-linecap="round"
-              transform="rotate(0 85 92)"
-              style="filter: drop-shadow(0 0 4px #ffd54a);"/>
-        <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
-      </svg>
-      <div class="gauge-value" id="g6-val">5.0 / cycle</div>
+    <div class="gauge-unit">
+      <div class="gauge" id="g5">
+        <div class="gauge-label">CHARGE</div>
+        <svg class="gauge-svg" viewBox="0 0 170 170">
+          <path d="M 28 130 A 65 65 0 1 1 142 130" stroke="#3a4467" stroke-width="1.5" fill="none"/>
+          <g stroke="#5a6580" stroke-width="1.2">
+            <line x1="28" y1="130" x2="35" y2="124"/>
+            <line x1="42" y1="80"  x2="49" y2="83"/>
+            <line x1="85" y1="55"  x2="85" y2="63"/>
+            <line x1="128" y1="80" x2="121" y2="83"/>
+            <line x1="142" y1="130" x2="135" y2="124"/>
+          </g>
+          <g font-family="Share Tech Mono, monospace" fill="#7e89a6" font-size="9">
+            <text x="22" y="142">0%</text>
+            <text x="80" y="48">50</text>
+            <text x="146" y="142" text-anchor="end">100</text>
+          </g>
+          <line class="needle" x1="85" y1="92" x2="85" y2="38"
+                stroke="#ff4db8" stroke-width="3" stroke-linecap="round"
+                transform="rotate(40 85 92)"
+                style="filter: drop-shadow(0 0 4px #ff4db8);"/>
+          <circle cx="85" cy="92" r="8" fill="#3a4467" stroke="#aab1c4" stroke-width="1.5"/>
+        </svg>
+        <div class="gauge-value" id="g5-val">88%</div>
+      </div>
+      <input type="range" class="gauge-slider" id="s-charge" min="0" max="100" value="88">
     </div>
   </div>
 </main>
@@ -1225,6 +1893,14 @@
   <span><span class="lit">&#9679;</span> AUTH_<span id="auth-id">PENDING</span></span>
   <span>UTC <span id="utc-clock">--:--:--</span></span>
 </footer>
+
+<!-- Extra brain cells modal (quiz or ad) -->
+<div class="extra-modal" id="extra-modal" role="dialog" aria-modal="true">
+  <div class="extra-box">
+    <button class="extra-close" id="extra-close" aria-label="close">&times;</button>
+    <div id="extra-content"></div>
+  </div>
+</div>
 
 <!-- Golden ticket -->
 <div class="ticket-overlay" id="ticket-overlay" role="dialog" aria-modal="true">
@@ -1245,15 +1921,18 @@
 (function () {
   'use strict';
 
-  // ----- Ambient floating motes -----
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ============================================================
+  // AMBIENT FLOATING MOTES
+  // ============================================================
   (function spawnAmbient() {
-    var box = document.getElementById('ambient');
+    var box = $('ambient');
     var n = 22;
     for (var i = 0; i < n; i++) {
       var m = document.createElement('div');
       m.className = 'mote';
-      var dx = (Math.random() * 200 - 100) + 'px';
-      m.style.setProperty('--dx', dx);
+      m.style.setProperty('--dx', (Math.random() * 200 - 100) + 'px');
       m.style.setProperty('--dy', (-(window.innerHeight + 200)) + 'px');
       m.style.left = (Math.random() * 100) + '%';
       m.style.bottom = (-20 - Math.random() * 100) + 'px';
@@ -1265,26 +1944,28 @@
     }
   })();
 
-  // ----- Bubbles inside canister -----
-  (function spawnBubbles() {
-    var box = document.getElementById('bubbles');
-    var n = 14;
-    for (var i = 0; i < n; i++) {
-      var b = document.createElement('div');
-      b.className = 'bubble';
-      var sz = 4 + Math.random() * 9;
-      b.style.width = b.style.height = sz + 'px';
-      b.style.left = (8 + Math.random() * 84) + '%';
-      b.style.setProperty('--bdx', (Math.random() * 30 - 15) + 'px');
-      b.style.animationDuration = (3 + Math.random() * 4) + 's';
-      b.style.animationDelay = (-Math.random() * 6) + 's';
-      box.appendChild(b);
-    }
-  })();
+  // ============================================================
+  // BUBBLES (extensible via "MORE BUBBLES" button)
+  // ============================================================
+  var bubblesBox = $('bubbles');
+  function addBubble() {
+    var b = document.createElement('div');
+    b.className = 'bubble';
+    var sz = 4 + Math.random() * 9;
+    b.style.width = b.style.height = sz + 'px';
+    b.style.left = (8 + Math.random() * 84) + '%';
+    b.style.setProperty('--bdx', (Math.random() * 30 - 15) + 'px');
+    b.style.animationDuration = (3 + Math.random() * 4) + 's';
+    b.style.animationDelay = (-Math.random() * 6) + 's';
+    bubblesBox.appendChild(b);
+  }
+  for (var bi = 0; bi < 14; bi++) addBubble();
 
-  // ----- Sparks inside canister -----
+  // ============================================================
+  // SPARKS
+  // ============================================================
   (function spawnSparks() {
-    var box = document.getElementById('sparks');
+    var box = $('sparks');
     var n = 18;
     for (var i = 0; i < n; i++) {
       var s = document.createElement('div');
@@ -1301,17 +1982,14 @@
     }
   })();
 
-  // ----- Brain cell counter (real-time fluctuation in billions) -----
-  // Anchored around 86.4 billion neurons (the human-brain ballpark) with
-  // small random walk + a tiny upward drift so it feels alive.
-  var counterEl = document.getElementById('brain-counter');
-  var stockEl = document.getElementById('stock-line');
-  var brainCount = 86423876501;
-  function fmt(n) {
-    return n.toLocaleString('en-US');
-  }
+  // ============================================================
+  // BRAIN CELL COUNTER (anchored ~186B)
+  // ============================================================
+  var counterEl = $('brain-counter');
+  var stockEl = $('stock-line');
+  var brainCount = 186423876501;
+  function fmt(n) { return n.toLocaleString('en-US'); }
   function tickCounter() {
-    // random walk: +/- a few thousand, occasional bigger jumps
     var delta = Math.round((Math.random() - 0.48) * 7000);
     if (Math.random() < 0.05) delta += Math.round((Math.random() - 0.5) * 80000);
     brainCount += delta;
@@ -1319,47 +1997,733 @@
   }
   setInterval(tickCounter, 130);
 
-  // ----- Gauges: subtle needle wobble -----
+  // ============================================================
+  // CONTROL STATE + GAUGES (sliders drive gauge targets)
+  // ============================================================
+  var controlState = {
+    pressure: 142,   // 0-300 PSI
+    temp: 77,        // 2-300 °K
+    voltage: 5800,   // 0-10000 V
+    flow: 28,        // 0-100 mL/s
+    charge: 88       // 0-100 %
+  };
+
+  // Each gauge: pulls 'target' from controlState, needle wobbles around target angle
+  // Gauge arc spans -90 (left) to +90 (right) = 180° sweep
+  function ang(frac) { return -90 + Math.max(0, Math.min(1, frac)) * 180; }
+
   var gauges = [
-    { id: 'g1', val: 'g1-val', baseAngle: -60, range: 30, fmt: function(a){ return Math.round(((a+90)/180)*300) + ' PSI'; } },
-    { id: 'g2', val: 'g2-val', baseAngle: -30, range: 12, fmt: function(a){ return ('00' + Math.round(((a+90)/180)*300)).slice(-3) + ' °K'; } },
-    { id: 'g3', val: 'g3-val', baseAngle: 15,  range: 20, fmt: function(a){ return Math.round(((a+90)/180)*10000) + ' V'; } },
-    { id: 'g4', val: 'g4-val', baseAngle: -45, range: 35, fmt: function(a){ return Math.round(((a+90)/180)*100) + ' mL/s'; } },
-    { id: 'g5', val: 'g5-val', baseAngle: 40,  range: 10, fmt: function(a){ return Math.round(((a+90)/180)*100) + '%'; } },
-    { id: 'g6', val: 'g6-val', baseAngle: 0,   range: 6,  fmt: function(a){ return (((a+90)/180)*10).toFixed(1) + ' / cycle'; } }
+    { id: 'g1', val: 'g1-val',
+      target: function () { return ang(controlState.pressure / 300); },
+      wobble: 6,
+      fmt: function (a) { return Math.round(((a+90)/180)*300) + ' PSI'; } },
+    { id: 'g2', val: 'g2-val',
+      target: function () { return ang((controlState.temp - 2) / 298); },
+      wobble: 3,
+      fmt: function (a) { return ('00' + Math.round(((a+90)/180)*298 + 2)).slice(-3) + ' °K'; } },
+    { id: 'g3', val: 'g3-val',
+      target: function () { return ang(controlState.voltage / 10000); },
+      wobble: 7,
+      fmt: function (a) { return Math.round(((a+90)/180)*10000) + ' V'; } },
+    { id: 'g4', val: 'g4-val',
+      target: function () { return ang(controlState.flow / 100); },
+      wobble: 9,
+      fmt: function (a) { return Math.round(((a+90)/180)*100) + ' mL/s'; } },
+    { id: 'g5', val: 'g5-val',
+      target: function () { return ang(controlState.charge / 100); },
+      wobble: 4,
+      fmt: function (a) { return Math.round(((a+90)/180)*100) + '%'; } }
   ];
+
   function tickGauges() {
     gauges.forEach(function (g) {
-      var el = document.getElementById(g.id);
+      var el = $(g.id);
       var needle = el.querySelector('.needle');
-      var angle = g.baseAngle + (Math.random() - 0.5) * g.range;
+      var tgt = g.target();
+      var angle = tgt + (Math.random() - 0.5) * g.wobble;
       needle.setAttribute('transform', 'rotate(' + angle + ' 85 92)');
-      var v = document.getElementById(g.val);
+      var v = $(g.val);
       if (v) v.textContent = g.fmt(angle);
     });
   }
-  setInterval(tickGauges, 900);
+  setInterval(tickGauges, 500);
 
-  // ----- UTC clock + countdown -----
-  var utcClockEl = document.getElementById('utc-clock');
-  var countdownEl = document.getElementById('countdown');
-  var clockBox = document.getElementById('clock');
+  // Wire sliders to controlState. Gauges display the numeric readout.
+  function wireSlider(sliderId, key) {
+    var s = $(sliderId);
+    if (!s) return;
+    s.addEventListener('input', function () {
+      controlState[key] = parseFloat(s.value);
+      updateChamberAndBrain();
+      updateStatusBanner();
+      updateCursorTint();
+    });
+  }
+  wireSlider('s-pressure', 'pressure');
+  wireSlider('s-temp',     'temp');
+  wireSlider('s-voltage',  'voltage');
+  wireSlider('s-flow',     'flow');
+  wireSlider('s-charge',   'charge');
+
+  // ============================================================
+  // CHAMBER COLOR + BRAIN TINT + STATUS BANNER
+  // ============================================================
+  var liquidEl = document.querySelector('.canister-liquid');
+  var bodyEl = document.querySelector('.canister-body');
+  var brainImg = $('brain-img');
+  var bannerText = $('banner-text');
+  var ctrlStatus = $('ctrl-status');
+  var lightsOn = true;
+
+  // Activate dynamic liquid class so CSS vars drive color
+  liquidEl.classList.add('dyn');
+
+  // Default (page-load) values — used as the neutral anchor for the brain tint
+  var DEFAULTS = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88 };
+
+  function updateChamberAndBrain() {
+    var tN = (controlState.temp - 2) / 298;
+    var cN = controlState.charge / 100;
+    var vN = controlState.voltage / 10000;
+    var fN = controlState.flow / 100;
+    var pN = controlState.pressure / 300;
+
+    // Chamber hues are driven by absolute values so colors sweep with the sliders.
+    var h1 = Math.round(200 - tN * 200);            // cold→cyan (200) → hot→red (0)
+    var h2 = Math.round(320 - cN * 120 + fN * 40);  // magenta pull from charge, green nudge from flow
+    if (h2 < 0) h2 += 360; if (h2 > 360) h2 -= 360;
+
+    liquidEl.style.setProperty('--chamber-h1', h1);
+    liquidEl.style.setProperty('--chamber-h2', h2);
+
+    var glowA = 0.25 + vN * 0.5;
+    var glowB = 0.1 + cN * 0.4;
+    bodyEl.style.boxShadow =
+      'inset 0 0 50px hsla(' + h1 + ', 80%, 55%, ' + glowA + '), ' +
+      'inset 0 0 80px hsla(' + h2 + ', 75%, 55%, ' + glowB + '), ' +
+      '0 0 35px hsla(' + h1 + ', 80%, 55%, ' + (glowA * 0.8) + '), ' +
+      '0 0 70px hsla(' + h2 + ', 70%, 50%, ' + (glowB * 0.6) + ')';
+    bodyEl.style.borderColor = 'hsla(' + h1 + ', 80%, 55%, 0.55)';
+
+    // Brain tint is driven by DELTAS from defaults → unaltered at page load.
+    var tD = (controlState.temp     - DEFAULTS.temp)     / 180;
+    var cD = (controlState.charge   - DEFAULTS.charge)   / 50;
+    var vD = (controlState.voltage  - DEFAULTS.voltage)  / 5000;
+    var fD = (controlState.flow     - DEFAULTS.flow)     / 50;
+    var pD = (controlState.pressure - DEFAULTS.pressure) / 150;
+
+    var hueShift = tD * 80 - cD * 60 - vD * 30 + fD * 30 + pD * 20;
+    var sat = 1 + cD * 0.6 + vD * 0.3;
+    if (sat < 0.4) sat = 0.4;
+    var dim = lightsOn ? 1 : 0.35;
+
+    brainImg.style.filter =
+      'hue-rotate(' + hueShift.toFixed(1) + 'deg) saturate(' + sat.toFixed(2) + ') brightness(' + dim + ') ' +
+      'drop-shadow(0 0 22px hsla(' + h1 + ', 85%, 60%, 0.9)) ' +
+      'drop-shadow(0 0 44px hsla(' + h2 + ', 75%, 55%, 0.55)) ' +
+      'drop-shadow(0 0 90px hsla(' + h1 + ', 80%, 55%, 0.35))';
+  }
+
+  function classifyState() {
+    // returns {level: 'nominal'|'warn'|'crit', banner: text}
+    var issues = [];
+    var crit = false;
+    var p = controlState.pressure, t = controlState.temp, v = controlState.voltage,
+        f = controlState.flow, c = controlState.charge;
+    if (p >= 270) { issues.push('OVERPRESSURE'); crit = crit || p >= 290; }
+    if (p <= 25)  { issues.push('VACUUM BREACH'); crit = true; }
+    if (t >= 250) { issues.push('CRYO FAILURE'); crit = crit || t >= 290; }
+    if (t <= 5)   { issues.push('ABSOLUTE ZERO APPROACH'); crit = true; }
+    if (v >= 9000){ issues.push('ARC RISK'); crit = crit || v >= 9700; }
+    if (v <= 200) { issues.push('UNDERVOLT'); }
+    if (f <= 3)   { issues.push('FLOW STALL'); }
+    if (f >= 92)  { issues.push('FLOW SURGE'); crit = crit || f >= 98; }
+    if (c <= 8)   { issues.push('CHARGE DEPLETED'); }
+    if (c >= 95)  { issues.push('CHARGE OVERLOAD'); crit = crit || c >= 99; }
+    if (crit) return { level: 'crit', msg: '⚠ CRITICAL · ' + issues.slice(0,2).join(' · ') + ' · STABILIZE OR ABORT' };
+    if (issues.length) return { level: 'warn', msg: 'CAUTION · ' + issues.slice(0,2).join(' · ') + ' · ADJUST CONTROLS' };
+    return { level: 'nominal', msg: 'CRYO-NEURAL TANK ONLINE · PRESSURE NOMINAL · AWAITING INPUT' };
+  }
+
+  function updateStatusBanner() {
+    var s = classifyState();
+    bannerText.textContent = s.msg;
+    ctrlStatus.classList.remove('warn', 'crit');
+    if (s.level === 'crit')  { ctrlStatus.classList.add('crit'); ctrlStatus.textContent = 'CRITICAL'; }
+    else if (s.level === 'warn') { ctrlStatus.classList.add('warn'); ctrlStatus.textContent = 'WARNING'; }
+    else                     { ctrlStatus.textContent = 'NOMINAL'; }
+  }
+
+  // initial apply
+  updateChamberAndBrain();
+  updateStatusBanner();
+
+  // ============================================================
+  // CURSOR ELECTRICAL SPARKLES
+  // ============================================================
+  // Replaces the old radial glow with a tight cluster of short-lived sparks
+  // (and an occasional micro-arc) around the cursor. Colors tint with the
+  // current control state (see updateCursorTint — now just picks hue values).
+  var cursor = $('cursor-spot');
+  var sparkHues = [190, 310, 50]; // cyan / magenta / gold — overridden by tint
+
+  window.addEventListener('mousemove', function (e) {
+    cursor.style.transform = 'translate3d(' + e.clientX + 'px, ' + e.clientY + 'px, 0)';
+    // Rate-limit spark creation to keep DOM churn reasonable at fast flicks.
+    if (Math.random() < 0.55) spawnCursorSpark(e.clientX, e.clientY);
+    if (Math.random() < 0.08) spawnCursorArc(e.clientX, e.clientY);
+  });
+
+  function spawnCursorSpark(x, y) {
+    var s = document.createElement('div');
+    s.className = 'cursor-spark';
+    s.style.left = x + 'px';
+    s.style.top  = y + 'px';
+    var ang = Math.random() * Math.PI * 2;
+    var dist = 6 + Math.random() * 18;    // small area (~24 px radius)
+    s.style.setProperty('--sx', (Math.cos(ang) * dist).toFixed(1) + 'px');
+    s.style.setProperty('--sy', (Math.sin(ang) * dist).toFixed(1) + 'px');
+    var hue = sparkHues[Math.floor(Math.random() * sparkHues.length)];
+    s.style.boxShadow = '0 0 4px hsl(' + hue + ',100%,72%), 0 0 8px hsl(' + hue + ',100%,55%), 0 0 14px hsl(' + hue + ',100%,45%)';
+    s.style.background = 'hsl(' + hue + ',100%,92%)';
+    var life = 400 + Math.random() * 250;
+    s.style.animationDuration = life + 'ms';
+    document.body.appendChild(s);
+    setTimeout(function () { if (s.parentNode) s.remove(); }, life + 50);
+  }
+
+  function spawnCursorArc(x, y) {
+    // Thin, brief horizontal crackle from the cursor to a nearby point.
+    var a = document.createElement('div');
+    a.className = 'cursor-arc';
+    var ang = Math.random() * Math.PI * 2;
+    var len = 14 + Math.random() * 18;
+    a.style.left = x + 'px';
+    a.style.top  = y + 'px';
+    a.style.width = len + 'px';
+    a.style.transform = 'rotate(' + (ang * 180 / Math.PI).toFixed(1) + 'deg)';
+    var hue = sparkHues[Math.floor(Math.random() * sparkHues.length)];
+    a.style.boxShadow = '0 0 4px hsl(' + hue + ',100%,75%), 0 0 8px hsl(' + hue + ',100%,55%)';
+    a.style.background = 'linear-gradient(90deg, transparent 0%, hsl(' + hue + ',100%,95%) 50%, transparent 100%)';
+    document.body.appendChild(a);
+    setTimeout(function () { if (a.parentNode) a.remove(); }, 260);
+  }
+
+  function updateCursorTint() {
+    // Pick spark palette based on current control deltas (warm when hot/charged, cool when cold).
+    var tN = (controlState.temp - 2) / 298;
+    var cN = controlState.charge / 100;
+    var h1 = Math.round(200 - tN * 200);
+    var h2 = Math.round(320 - cN * 120);
+    if (h2 < 0) h2 += 360;
+    sparkHues = [h1, h2, Math.round((h1 + h2) / 2 + 60) % 360];
+  }
+  updateCursorTint();
+
+  // ============================================================
+  // DISPENSER TYPING STATS
+  // ============================================================
+  var STATS = (function buildStatsBank() {
+    // Big bank cycling through swim, academic, food, wealth, tech, hobbies,
+    // physics, trivia, and pure nonsense. Seeded literal pool + a small
+    // amount of combinatorial filler so the cycle runs for a very long time
+    // without ever feeling repetitive.
+    var literal = [
+      // ---------- SWIM (60) ----------
+      "SWIM 200M FREE: 1:47.32","PR — 50 FREE: 19.84 SEC","PR — 100 FLY: 46.12",
+      "PR — 400 IM: 4:04.77","PR — 200 IM: 1:52.98","PR — 100 BACK: 48.02",
+      "PR — 200 BACK: 1:44.55","PR — 100 BREAST: 52.19","PR — 200 BREAST: 1:57.40",
+      "PR — 500 FREE: 4:12.80","PR — 1500 FREE: 14:58.21","PR — 100 FREE: 42.91",
+      "SWIM RANK: JUNIOR NATIONAL","US OPEN QUALIFIED: YES","NCAA DIV I: RECRUITED",
+      "OLYMPIC TRIALS CUT: 3","KICK SET PR: 25×100 ON 1:20","LANE PREFERENCE: 4",
+      "DRYLAND DEADLIFT: 405 LBS","VERTICAL JUMP: 34 IN","WINGSPAN: 6'7\"",
+      "GOGGLE COUNT: 12 PAIRS","TAPER WEEK: CONFIRMED","SHAVE DOWN: MONDAY",
+      "UNDERWATER DOLPHIN: 15 M","PULL BUOY PR: 2:03 / 200","KICKBOARD 100: 1:09",
+      "SWIMSUIT BRAND: ARENA","TEAM CAPTAIN: 2 SEASONS","MORNING PRACTICE: 5 AM",
+      "MILES SWUM THIS YEAR: 1,420","CHLORINE TOLERANCE: MAX","POOL NAP COUNT: 47",
+      "HEAD COACH ERA: 1990s","DRYLAND CORE PR: 6 MIN PLANK","COLD PLUNGE: 6 MIN",
+      "MEET MEDAL COUNT: 48","NATIONAL CUTS MADE: 6","SWIM CAP PREFERENCE: LATEX",
+      "WATER TEMP IDEAL: 79 °F","TEMPO PR: 0.94 STROKE RATE","OPEN WATER: 10 KM DONE",
+      "RELAY 4x100 SPLIT: 42.7","FASTEST 50 ON RELAY: 19.1","WARMUP RITUAL: 1500 MIX",
+      "FINA POINT SCORE: 923","WORLD RECORD: APPROACHED","POWER TOWER PULL: 150 LBS",
+      "HEART RATE @ REST: 44 BPM","VO2 MAX: 68 ML/KG/MIN","LACTATE THRESHOLD: ELITE",
+      "IM ORDER: FLY-BACK-BREAST-FREE","FLIP TURN PR: 0.6 SEC","BACKSTROKE START: .52",
+      "BREAKOUT DEPTH: 0.8 M","SWIM GOAL: OLYMPIC FINAL","OFF-SEASON MILES: 0",
+      "MEET DAY FUEL: PANCAKES","POST-RACE: CHOCOLATE MILK","SWIM HERO: PHELPS",
+      "NATIONALS QUALIFYING TIME: MADE",
+      // ---------- PHYSICS (80) ----------
+      "FAVORITE EQN: E = MC²","FAVORITE CONSTANT: ħ","FAVORITE LAW: NEWTON'S 3RD",
+      "FAVORITE PARTICLE: TAU NEUTRINO","FAVORITE FORCE: STRONG","SPIN: ½",
+      "PHYSICS GPA: 4.2 / 4.0","P-SETS DUE THIS WEEK: 4","ERDŐS NUMBER: 3",
+      "PAPERS CITED: 1,204","H-INDEX: 18","FAVORITE INTEGRAL: GAUSSIAN",
+      "FAVORITE GROUP: SU(3)","FAVORITE SYMMETRY: CPT","FAVORITE FIELD: QED",
+      "FAVORITE OPERATOR: HAMILTONIAN","LAB HOURS THIS WEEK: 38","LAB SAFETY: REVOKED",
+      "FAVORITE EXPERIMENT: DOUBLE-SLIT","LAB ROTATIONS DONE: 4","FELLOWSHIP OFFERS: 5",
+      "FAVORITE PLANET: EUROPA","FAVORITE STAR: BETELGEUSE","FAVORITE QUARK: TOP",
+      "FAVORITE LEPTON: ELECTRON","FAVORITE BOSON: HIGGS","FAVORITE METRIC: MINKOWSKI",
+      "WORK FUNCTION TARGETED: CESIUM","PREFERRED GAUGE: LORENZ","NOTATION: ABSTRACT INDEX",
+      "CALCULATOR: BY HAND","TI-89 OWNED: 4","SLIDE RULE: CERTIFIED","PROTRACTOR: TITANIUM",
+      "FAVORITE UNIT: PARSEC","FAVORITE ENERGY: ELECTRONVOLT","FAVORITE WAVELENGTH: 486 NM",
+      "FAVORITE FREQUENCY: 21 CM","FAVORITE TELESCOPE: JWST","FAVORITE OBSERVATORY: PALOMAR",
+      "FAVORITE ACCELERATOR: LHC","FAVORITE DETECTOR: ATLAS","LAGRANGIAN PREFERRED: YES",
+      "HAMILTONIAN ALT: SOMETIMES","CANONICAL FORM: ALWAYS","BRACKETS: BRA-KET",
+      "FAVORITE BRAKET: ⟨ψ|H|ψ⟩","FAVORITE QUANTUM#: 42","FAVORITE ORBIT: JUPITER",
+      "FAVORITE DUALITY: WAVE-PARTICLE","FAVORITE THEORIST: DIRAC","FAVORITE EXPERIMENTALIST: RUTHERFORD",
+      "FEYNMAN DIAGRAMS DRAWN: 2,011","BLACKBOARD CHALK USED: 87 BOXES","ERASER PREFERRED: MICROFIBER",
+      "LATEX TEMPLATES: 30+","BIBTEX ENTRIES: 4,210","ARXIV CHECK COUNT: DAILY",
+      "FAVORITE JOURNAL: PRL","REJECTED FROM NATURE: 2","REFEREE REPORTS WRITTEN: 51",
+      "CONFERENCES ATTENDED: 22","POSTER PRESENTATIONS: 17","TALKS GIVEN: 34",
+      "KEYNOTE INVITES: 4","HECKLER COUNT: 0","Q&A WINS: 100%",
+      "GRANT DOLLARS SECURED: $2.1M","TEACHING EVALS: 5.0 / 5","LAB MEMBERS ADVISED: 8",
+      "MENTOR OF YEAR: 2024","FAVORITE AXIOM: 1 = 1","FAVORITE PROOF: NO-CLONING",
+      "WHITEBOARD MARKERS: BLUE ONLY","FAVORITE PAPER: 1905","BACK-OF-ENVELOPE WINS: 200+",
+      // ---------- FOOD (60) ----------
+      "FAVORITE FOOD: PAD SEE EW","FAVORITE DRINK: ESPRESSO DOPPIO","COFFEE TODAY: 7 CUPS",
+      "FAVORITE PIZZA: MARGHERITA","FAVORITE BURGER: SMASH, PICKLES","FAVORITE FRIES: SHOESTRING",
+      "FAVORITE TACO: AL PASTOR","FAVORITE SUSHI: CHU TORO","FAVORITE RAMEN: TONKOTSU",
+      "FAVORITE CURRY: MASSAMAN","FAVORITE NOODLE: UDON","FAVORITE PASTA: CACIO E PEPE",
+      "FAVORITE STEAK: RIB CAP","FAVORITE SEAFOOD: UNI","FAVORITE SANDWICH: BÁNH MÌ",
+      "FAVORITE DESSERT: CRÈME BRÛLÉE","FAVORITE CAKE: TRES LECHES","FAVORITE PIE: KEY LIME",
+      "FAVORITE COOKIE: LEVAIN","FAVORITE ICE CREAM: PISTACHIO","FAVORITE DONUT: BOMBOLONI",
+      "FAVORITE SOUP: PHO TAI","FAVORITE SALAD: CAESAR","FAVORITE BREAD: SOURDOUGH",
+      "FAVORITE CHEESE: COMTÉ","FAVORITE FRUIT: MANGO","FAVORITE VEGETABLE: BRUSSELS",
+      "FAVORITE SPICE: SAFFRON","FAVORITE HERB: THAI BASIL","FAVORITE CUISINE: THAI",
+      "FAVORITE BREAKFAST: LOCO MOCO","FAVORITE LUNCH: POKE","FAVORITE DINNER: HOT POT",
+      "FAVORITE SNACK: PISTACHIOS","FAVORITE COMFORT: MAC & CHEESE","SIGNATURE DISH: CARBONARA",
+      "KITCHEN KNIFE: GYUTO 240","CAST IRON AGE: 14 YEARS","SOURDOUGH STARTER NAME: GAUSS",
+      "FAVORITE RESTAURANT: HOME","FAVORITE CHEF: HARA","KNIVES OWNED: 17",
+      "HOT SAUCE COUNT: 31","COFFEE BEAN: ETHIOPIAN YIRG","GRINDER: BARATZA SETTE",
+      "ESPRESSO MACHINE: LA MARZOCCO","WINE COLLECTION: 240 BOTTLES","FAVORITE CHAMPAGNE: KRUG",
+      "FAVORITE WHISKEY: YAMAZAKI 18","FAVORITE MEZCAL: CLASE AZUL","FAVORITE BEER: HITACHINO",
+      "TEA PREFERENCE: JASMINE PEARL","MATCHA GRADE: CEREMONIAL","BOBA ORDER: BROWN SUGAR",
+      "FAVORITE SMOOTHIE: ACAI BOWL","FAVORITE JUICE: FRESH OJ","FAVORITE NUT: PECAN",
+      "FAVORITE CHOCOLATE: 85% LINDT","FAVORITE CANDY: SOUR PATCH","FAVORITE GUM: EXTRA POLAR",
+      // ---------- ACADEMIC (70) ----------
+      "ALMA MATER: STANFORD UNIV.","DEGREE: B.S. + M.S. + Ph.D.","GPA OVERALL: 4.0 / 4.0",
+      "GRAD THESIS: 412 PAGES","DISSERTATION DEFENSE: PASSED","ADVISOR RATING: 10/10",
+      "REC LETTERS ON FILE: 48","STANFORD FIRE YRS: 4","MATH 51-H: A+",
+      "PHYSICS 41: A+","PHYSICS 110: A","QM SEQUENCE: ACED","GR FINAL: 100%",
+      "CS 107: BALLED OUT","LINEAR ALG: CRUSHED","DIFF EQ: AUTOMATIC","NUMERICAL ANALYSIS: A+",
+      "STATS: BAYESIAN","ALGORITHMS: O(1) IRL","LA TEX PROFICIENCY: NATIVE",
+      "OFFICE HOURS LED: 300+","SECTION LEADER: 6 QUARTERS","CA COUNT: 4",
+      "PUBLICATIONS: 14","FIRST AUTHOR: 9","PRE-PRINTS: 22","CONFERENCES ORGANIZED: 3",
+      "INVITED TALKS: 19","DOCTORAL COMMITTEES: 6","QUALS PASSED: FIRST ATTEMPT",
+      "QUALS SCORE: 98%","TA AWARD: 2022","UNDERGRAD MENTOR AWARD: 2024","GRAD STUDENT AWARD: 2023",
+      "GSC REP: 2021-22","PIQ COUNT: 200+","LATE SLIP TOTAL: 0","ATTENDANCE: 100%",
+      "NOTES BINDERS: 38","HIGHLIGHTERS OWNED: 140","PEN PREF: PILOT G2 0.7",
+      "NOTEBOOK: MOLESKINE","RULER: CASIO SLIDE","CALCULATOR: HP 50G","STOPWATCH: SEIKO",
+      "READING SPEED: 620 WPM","MEMORY: EIDETIC-ISH","FLASHCARD DECK: 5,000+","ANKI STREAK: 1,400 DAYS",
+      "FAVORITE PROFESSOR: KAHN","FAVORITE SEMINAR: QUANTUM INFO","FAVORITE LECTURE HALL: 380",
+      "FAVORITE LIBRARY: MEYER","LIBRARY CARD AGE: 22 YRS","LATE FEES TOTAL: $1.17",
+      "CITATION COUNT: 4,812","SCHOLAR BADGE: H=25","DISSERTATION AWARD: 2025",
+      "POSTDOC OFFERS: 6","TENURE-TRACK: MULTIPLE","FAVORITE FORMULA SHEET: NONE NEEDED",
+      "MIDTERM RECORD: 98%","FINALS AVG: 97.2","CURVE BUSTER: CONFIRMED",
+      "GROUP PROJECT CARRY: 100%","MEETING DOODLES: 10K+","WHITEBOARD CONTROL: ALPHA",
+      "BOOKSHELF WEIGHT: 480 LBS","OVERDUE BOOKS: 2","SIGNED FIRST EDITIONS: 5",
+      // ---------- TUTORING (40) ----------
+      "TUTORING HOURS: 1,247","STUDENTS HELPED: 418","5-STAR REVIEWS: 392","CTL ROLE: LEAD",
+      "SESSION LENGTH AVG: 58 MIN","HANDOUT PAGES WRITTEN: 1,200","PROBLEM SETS GRADED: 6,800",
+      "OFFICE HOURS / WEEK: 12","REMOTE SESSIONS: 410","WHITEBOARD FILLS: 820",
+      "AVG GRADE BUMP: +1.4 LTR","STUDENT TESTIMONIES: 210","KEY TUTEE: FOUR-TIME OLYMPIAD",
+      "LATE NIGHT SESSION RECORD: 3 AM","SNACKS PROVIDED: OREOS","FAV TUTOR PROBLEM: CARNOT CYCLE",
+      "REVIEW GUIDES WRITTEN: 96","MIDTERM REVIEW ATTENDANCE: 270","FINALS REVIEW PACKETS: 62",
+      "PRACTICE EXAMS AUTHORED: 44","STUDY GUIDE PAGES: 520","SCHEDULING SOFTWARE: CALENDLY",
+      "ZOOM HOURS YTD: 612","TABLET: IPAD PRO 12.9","APPLE PENCIL CLICKS: 1.2M",
+      "GOODNOTES PAGES: 9,800","GRADESCOPE HOURS: 380","TUTOR OF YEAR: 2024","SECTION AVG: +7%",
+      "PATIENCE LEVEL: SAINTED","EXPLANATION ANALOGIES: 5,000+","FAVORITE ANALOGY: BALLS IN BUCKETS",
+      "REPEAT STUDENTS: 82%","REFERRAL COUNT: 140","QUESTION RESPONSE TIME: 23 SEC",
+      "FAV CONCEPT TO TEACH: GAUSS'S LAW","HARDEST QUESTION ASKED: NOETHER","STUDENTS TO PhD: 12",
+      "STUDENTS TO MD: 9","TUTOR BUDDY NICKNAME: PROF G",
+      // ---------- MONEY (50) ----------
+      "NET WORTH: $420,691,337","MORTGAGE: PAID OFF","CREDIT SCORE: 840",
+      "BROKERAGE: INTERACTIVE","INDEX FUND HOLDINGS: $12M","CRYPTO: OPTED OUT",
+      "REAL ESTATE PORTFOLIO: 7 UNITS","ASSETS UNDER MGMT: $48M","401K MAX'D: 20 YRS",
+      "BACKDOOR ROTH: ANNUAL","BACKDOOR ROTH AMOUNT: $6,500","EMERGENCY FUND: 24 MONTHS",
+      "TAXES DUE: REFUND","HSA BALANCE: $112K","529 PLANS: 3 KIDS, FUNDED",
+      "SIDE INCOME: TUTORING + BOOKS","BOOK ROYALTIES: $220K/YR","PATENTS: 4 PENDING",
+      "CAR COUNT: 1 USED CIVIC","WATCH COLLECTION: 2","FAVORITE WATCH: SEIKO 5",
+      "DAILY SPEND: $18","MOST EXPENSIVE MEAL: $420","CHEAPEST FLIGHT BOOKED: $8",
+      "AIRLINE STATUS: EXEC PLATINUM","HOTEL POINTS: 2.1M","AIRLINE MILES: 1.4M",
+      "RESTAURANT TIP: 25%","TIP JAR CONTRIBUTIONS: $14,211","CHARITY DONATED: $61K/YR",
+      "GIVEN TO STANFORD: $120K","FAV CAUSE: STEM EDUCATION","CREDIT CARDS: 1, AMEX",
+      "CARRYING CASH: $37","BANK: TD AMERITRADE","INVESTOR STYLE: BOGLEHEAD",
+      "INDEX FUND RATIO: 85% VTI","BONDS: 5%","SP500 YTD: +14.2%",
+      "PORTFOLIO SHARPE: 1.78","BUDGET APP: YNAB","BILL PAY: AUTOMATED",
+      "VENMO BALANCE: $3.41","PAYPAL BALANCE: $0.00","SUBSCRIPTIONS: 4",
+      "LAST IMPULSE BUY: $18","BEST DEAL: COSTCO ROTISSERIE","WORST INVESTMENT: 2015 BEANIE BABY",
+      "BIGGEST WIN: NVIDIA 2016","DIVIDENDS MONTHLY: $8,200",
+      // ---------- BODY / HABITS (50) ----------
+      "HEIGHT: 6'2\"","WINGSPAN: 6'7\"","SHOE SIZE: 13 US","RESTING HR: 44 BPM",
+      "VO2 MAX: 68 ML/KG/MIN","BODY FAT: 8%","SLEEP LAST NIGHT: 3 HRS","CAFFEINE LEVEL: CRITICAL",
+      "BENCH PRESS: 315 LBS (NATTY)","MAX SQUAT: 405 LBS","DEADLIFT: 485 LBS","PULL-UPS: 28",
+      "PUSH-UPS (1 MIN): 82","PLANK PR: 6 MIN","BLOOD TYPE: O+ ESPRESSO","HYDRATION: 4.2 L/DAY",
+      "STEPS TODAY: 18,942","STANDING HRS: 11","MOOD: STABILIZED","CALORIES EATEN: 3,800",
+      "PROTEIN GRAMS: 220","FIBER: 42 G","LAST DOCTOR VISIT: 2019","DENTIST: OVERDUE",
+      "EYESIGHT: 20/15","CONTACTS: OPTIONAL","HAIRCUT COUNT: 6/YR","MUSCLE MASS: LEAN 188 LBS",
+      "METABOLIC AGE: 22","BONE DENSITY: +1.2","INFLAMMATION: LOW","GRIP STRENGTH: 142 LBS",
+      "VERTICAL JUMP: 34 IN","40-YARD DASH: 4.72 S","40M FLYING: 4.51 S","FLEXIBILITY: SPLITS DOWN",
+      "COLD TOLERANCE: 12 °F NO COAT","HEAT TOLERANCE: DESERT TRAINED","ALTITUDE COMFORT: 14K FT",
+      "SKATE STANCE: GOOFY","SURF LEVEL: INTERMEDIATE","SKI LEVEL: EXPERT","SNOWBOARD: BLACK DIAMOND",
+      "BIKING MILES/YR: 3,400","RUN MILES/YR: 1,100","MARATHON PR: 2:58","5K PR: 17:02",
+      "PULL-UP GRIP: MIXED","AB WHEEL PR: 15 REPS","JUMP ROPE 3 MIN: 512 DOUBLES",
+      "CARDIO ZONE 2 / WEEK: 5 HRS","LAST REST DAY: 2021",
+      // ---------- BOOKS (50) ----------
+      "CURRENT READ: GRIFFITHS E&M","BOOKS READ 2025: 43","ALL-TIME FAV: BROTHERS KARAMAZOV",
+      "FAV PHYSICIST MEMOIR: FEYNMAN 'SURELY…'","FAV TEXTBOOK: GRIFFITHS QM","FAV ESSAY COLLECTION: MONTAIGNE",
+      "FAV POET: RILKE","FAV FICTION: BORGES 'FICTIONS'","FAV SCI-FI: DUNE","FAV NOVEL OF 2025: TBD",
+      "READING SPEED: 620 WPM","BOOK CLUB NAME: THE SIGMAS","SHELVES AT HOME: 14","OVERDUE: 2",
+      "E-READER: KINDLE OASIS","AUDIOBOOK HRS / WEEK: 8","PODCAST HRS / WEEK: 11","PAPERBACK BIAS: STRONG",
+      "HARDCOVER COLLECTION: 380","FIRST EDITION COUNT: 12","SIGNED COPIES: 17","BOOKMARK STYLE: DOG-EAR",
+      "UNDERLINING TOOL: KURU TOGA","MARGINALIA DENSITY: HEAVY","TO-READ STACK: 63","DNF RATE: 4%",
+      "RE-READ CHAMPION: ODYSSEY","BOOK DONATIONS / YR: 40","LIBRARY CARD YRS: 22","LOCAL BOOKSTORE: KEPLER'S",
+      "BOOK-TO-MOVIE AGREE: 8%","FAV BIOGRAPHY: EDISON ISAACSON","FAV HISTORY: POWER BROKER",
+      "CALCULUS TEXT: SPIVAK","LINEAR ALG TEXT: AXLER","TOPOLOGY: MUNKRES","PDE TEXT: EVANS",
+      "FAV PHILOSOPHY: WITTGENSTEIN","FAV ETHICS BOOK: NICOMACHEAN","FAV MATH BOOK: PRINCIPIA",
+      "FAV BIOGRAPHY OF YEAR: OPPENHEIMER","TEXTBOOK MARGIN DOODLES: 10,000+",
+      "BOOKSHOP MEMBERSHIP: YES","CATALOG APP: LIBIB","NEW RELEASE TRACKING: WEEKLY",
+      "GOODREADS CHALLENGE: 100","GOODREADS COMPLETION: 112%","BOOK OF YEAR 2024: TREES",
+      "BOOK OF YEAR 2023: EXHALATION","KID BOOKS OWNED: 480",
+      // ---------- MUSIC (40) ----------
+      "FAVORITE ARTIST: TAYLOR SWIFT","ERAS TOUR ATTENDED: 3","SPOTIFY HOURS / YR: 2,400",
+      "APPLE MUSIC: ALSO","FAV GENRE: ALT-POP","VINYL COUNT: 240","TURNTABLE: REGA P3",
+      "HEADPHONES: FOCAL CLEAR","DAC: CHORD MOJO 2","INSTRUMENT: PIANO (GRADE 10)",
+      "SECOND INSTR: VIOLIN","THIRD INSTR: UKULELE","CAN SING: YES, KEY-BLIND","BAND IN COLLEGE: YES",
+      "FAV CLASSICAL: RACH 2","FAV JAZZ: COLTRANE 'GIANT STEPS'","FAV ROCK: RADIOHEAD",
+      "FAV INDIE: PHOEBE BRIDGERS","FAV KPOP: NEWJEANS","FAV HIPHOP: KENDRICK","FAV COUNTRY: ZACH BRYAN",
+      "FAV EDM: ODESZA","FAV JAM BAND: PHISH","FAV MUSICAL: HAMILTON","FAV ALBUM: FOLKLORE",
+      "FAV SONG: LAST GREAT AMERICAN DYNASTY","KARAOKE SONG: BOHEMIAN RHAPSODY","KARAOKE SCORE AVG: 94",
+      "PIANO PRACTICE / DAY: 45 MIN","CONCERT COUNT 2024: 17","FESTIVAL COUNT: 9","FRONT ROW COUNT: 6",
+      "SPOTIFY WRAPPED RANK: TOP 0.5%","LAST SONG HEARD: YOU'RE ON YOUR OWN, KID","AIRPODS GENERATION: PRO 2",
+      "HIFI RECEIVER: MARANTZ SR5015","SPEAKERS: KEF LS50","SUBWOOFER: REL T/9X","MUSIC PLAYLIST COUNT: 81",
+      "LONGEST PLAYLIST: 2,312 SONGS","MOST PLAYED 2024: ANTI-HERO",
+      // ---------- MOVIES & TV (40) ----------
+      "FAV MOVIE: INTERSTELLAR","RUNNER-UP: PARASITE","FAV DIRECTOR: DENIS VILLENEUVE",
+      "FAV CINEMATOGRAPHER: ROGER DEAKINS","LETTERBOXD LOGGED: 1,120","CRITERION COLLECTION: 140",
+      "MOVIES SEEN 2025: 62","THEATER TRIPS / MONTH: 6","IMAX LOYALTY: PLATINUM","FAV GENRE: SCI-FI",
+      "FAV COMEDY: PARKS & REC","FAV DRAMA: THE WIRE","FAV SITCOM: BETTER OFF TED","FAV MINI: CHERNOBYL",
+      "FAV ANIME: STEINS;GATE","FAV RECENT SHOW: SEVERANCE","TV WATCHED 2025: 14 SEASONS","4K TV: LG G4",
+      "PROJECTOR: JVC NZ8","SOUNDBAR: NO — 7.2.4 ATMOS","POPCORN STYLE: CAST IRON + BUTTER",
+      "FAV FILM SCORE: HOWARD SHORE LOTR","FAV VILLAIN: HANS LANDA","FAV HERO: INDIANA JONES",
+      "FAV ANIME CHARACTER: OKABE","FAV NETFLIX DOCUMENTARY: FORMULA 1","FAV HBO SHOW: SUCCESSION",
+      "TV RATIO: 65% SUBTITLES","MOVIE SEASON PREF: FALL OSCARS","LETTERBOXD STARS AVG: 3.4",
+      "DIRECTOR RETROSPECTIVE: KUROSAWA","FILM FESTIVAL ATTENDED: TELLURIDE","ROTTEN TOMATOES TRUST: NEVER",
+      "METACRITIC TRUST: SOMETIMES","FAV REWATCH: THE OFFICE","FAV YEAR IN FILM: 1999","FAV MOVIE POSTER: VERTIGO",
+      "DVD COLLECTION: SOLD","BLU-RAY: SELECTIVE","LAST CRY IN THEATER: SOUL",
+      // ---------- GAMES (30) ----------
+      "FAV GAME: BOTW","PS5 HRS: 212","STEAM LIBRARY: 324","BACKLOG: 38 TITLES",
+      "FAV RPG: PERSONA 5","FAV STRATEGY: CIV VI","FAV INDIE: HADES","FAV FIGHTER: SSBM",
+      "MELEE RANK: TOP 200 FOX","FAV NINTENDO: ZELDA","FAV SHOOTER: ROCKET LEAGUE","RL RANK: SSL",
+      "CHESS ELO: 1,900","CHESS PUZZLES DONE: 31,200","FAV OPENING: SICILIAN NAJDORF","FAV DEFENSE: KID",
+      "GO RATING: 4 KYU","FAV BOARD GAME: SCYTHE","D&D CHARACTER: BARD / WIZARD","DM HOURS: 180",
+      "FAV VIDEO GAME BOSS: OWL FATHER","FAV BOSS BEATDOWN: 0-HIT MALENIA","AIM LABS SCORE: 97K",
+      "SPEEDRUN BEST: ANY% SMW 46:14","SPEEDRUN COMMUNITY: YES","RUNBACKS: 800","APM IN SC2: 180",
+      "TOURNEY WINS: 6","ARCADE TICKETS LIFETIME: 64,000","FAV PINBALL: MEDIEVAL MADNESS",
+      // ---------- TRAVEL (50) ----------
+      "CITIES LIVED IN: 7","COUNTRIES VISITED: 41","PASSPORT STAMPS: 128","FAV CITY: KYOTO",
+      "RUNNER UP: LISBON","FAV COUNTRY: JAPAN","FAV ISLAND: SHIKOKU","FAV BEACH: KAUAI HANALEI",
+      "FAV MOUNTAIN: DOLOMITES","FAV HIKE: TOUR DU MONT BLANC","TALLEST PEAK: KILIMANJARO",
+      "DEEPEST DIVE: 40 M","COUNTRIES LEFT TO VISIT: 43","FAV AIRPORT: SINGAPORE CHANGI",
+      "LOUNGE STATUS: MULTIPLE","BEST FLIGHT: QATAR QSUITE","WORST FLIGHT: SPIRIT MIDDLE SEAT",
+      "FAV HOTEL: AMAN TOKYO","FAV HOSTEL: GENERATOR AMSTERDAM","FAV AIRBNB: LISBON ROOFTOP",
+      "DRIVE LENGTH PR: 17 HRS","TRAIN PREFERRED: SHINKANSEN","FAV METRO: TOKYO METRO","FAV BUS: LONDON",
+      "CRUISE: NEVER","RV: CONVERTED","VAN LIFE: 2 MONTHS 2019","TENT NIGHTS: 180",
+      "BACKPACKING MILES: 3,100","ULTRALIGHT BASE WT: 11 LBS","FAV TRAIL: JMT","FAV NATIONAL PARK: SEQUOIA",
+      "STATES VISITED: 50","COUNTRIES SPOKEN IN: 12","LANGUAGES: EN, TH, ES, JP, FR","PASSPORT PAGES LEFT: 3",
+      "FAV COFFEE ABROAD: MELBOURNE","FAV MARKET: TSUKIJI","FAV MUSEUM: UFFIZI","FAV RUIN: MACHU PICCHU",
+      "FAV HOT SPRING: KUROKAWA","FAV SUNSET: SANTORINI","FAV SUNRISE: BAGAN","FAV STARGAZING: ATACAMA",
+      "FAV SNORKEL: PALAU","FAV SURF SPOT: PIPELINE","FAV SKI RESORT: NISEKO","FAV CITY WALK: SEVILLA",
+      // ---------- TECH (40) ----------
+      "LAPTOP: MBP 16 M3 MAX","DESKTOP: CUSTOM 4090 BUILD","MONITORS: 3 × 32\" 4K","KEYBOARD: HHKB PRO HYBRID",
+      "MOUSE: LOGI MX MASTER 3S","IDE: VS CODE + VIM","TERMINAL: GHOSTTY","SHELL: FISH",
+      "FONT: JETBRAINS MONO","COLOR SCHEME: CATPPUCCIN","OS DAILY: MACOS","OS HOBBY: ARCH BTW",
+      "GITHUB STARS: 4,300","OPEN SOURCE PRS: 188","PUSHES / DAY: 11","COMMITS YTD: 2,940",
+      "TYPING WPM: 132","TYPING WPM (CODE): 98","MECHANICAL KEYBOARDS OWNED: 14","KEYCAPS: GMK MODERN DOLCH",
+      "SWITCH TASTE: BANANA SPLITS","SMARTPHONE: IPHONE 16 PRO","BATTERY HEALTH: 97%","AIRPODS: PRO 2",
+      "APPLE WATCH: ULTRA 2","TABLET: IPAD PRO M4","E-READER: KINDLE OASIS","ROUTER: UNIFI UDM-PRO",
+      "NETWORK: 10 GBIT","VPN: SELF-HOSTED WG","NAS: 48 TB RAID 6","BACKUPS: 3-2-1 ENFORCED",
+      "CLOUD SPENT / MO: $140","DOMAINS OWNED: 23","GITHUB COPILOT: YES","AI TOOL DAILY: CLAUDE",
+      "LAST SYSTEM REBOOT: 81 DAYS","UPTIME PR: 412 DAYS","TERMINAL SESSIONS OPEN: 18",
+      // ---------- HOBBIES (60) ----------
+      "FAV HOBBY: WOODWORKING","HAND TOOL COUNT: 210","LATHE OWNED: YES","BANDSAW: LAGUNA 14",
+      "TABLE SAW: SAWSTOP","HOBBY #2: POTTERY","KILN: L&L E23T","WHEEL: BRENT CXC",
+      "HOBBY #3: PHOTOGRAPHY","CAMERA: FUJI X-H2","LENS COUNT: 12","FAV FOCAL LENGTH: 35 MM",
+      "HOBBY #4: BIRDWATCHING","LIFE LIST: 412","BINOCULARS: ZEISS SF 10X42","SPOTTING SCOPE: SWARO STX",
+      "HOBBY #5: FLY FISHING","ROD COUNT: 8","FAV ROD: SAGE R8","TROUT CAUGHT: 2,800",
+      "HOBBY #6: COOKING","HOBBY #7: BAKING","HOBBY #8: GARDENING","TOMATO VARIETIES: 19",
+      "HOBBY #9: BEEKEEPING","HIVES: 2","HONEY / YR: 80 LBS","HOBBY #10: ASTROPHOTOGRAPHY",
+      "TELESCOPE: CELESTRON EDGE HD 11","MOUNT: CGEM II","IMAGING CAM: ZWO ASI2600MC",
+      "HOBBY #11: DRAWING","SKETCHBOOKS FILLED: 42","FAV PENCIL: PALOMINO BLACKWING","HOBBY #12: PAINTING",
+      "WATERCOLOR SETS: 3","OIL KIT: FULL","HOBBY #13: ORIGAMI","ORIGAMI PAPER COUNT: 2,400 SHEETS",
+      "HOBBY #14: CHESS","HOBBY #15: BOULDERING","V-GRADE PR: V8","HOBBY #16: YOGA","HOBBY #17: ARCHERY",
+      "DRAW WEIGHT: 50 LB RECURVE","HOBBY #18: BLACKSMITHING","FORGE: PROPANE 2-BURNER","HOBBY #19: BREWING",
+      "GRAIN ON HAND: 180 LBS","HOBBY #20: WINE MAKING","BARREL COUNT: 3","HOBBY #21: BREAD MAKING",
+      "LEVAIN WEIGHT: 120% HYDRATION","HOBBY #22: LEATHERWORKING","HOBBY #23: GLASSBLOWING",
+      "HOBBY #24: KITE BUILDING","HOBBY #25: SOAP MAKING","HOBBY #26: CANDLE MAKING",
+      // ---------- PETS (20) ----------
+      "PET COUNT: 3","DOG: GOLDEN RETRIEVER 'MAXWELL'","CAT: RAGDOLL 'EULER'","CAT: SAVANNAH 'ENTROPY'",
+      "FISH TANK SIZE: 125 GAL","FISH SPECIES: 8","PET AGE (MAX DOG): 6","DOG TRICKS: 42",
+      "DOG WORD COUNT: 120","CAT NAP LOCATIONS: 14","FAVORITE PET VIDEO: 1.2M VIEWS","VET ON SPEED DIAL: YES",
+      "PET INSURANCE: YES","DOG PARK VISITS / WK: 5","LEASH COUNT: 7","DOG TOYS OWNED: 62",
+      "CAT TREES: 3","BIRD COUNT IN YARD: 18 REGULARS","PET PHOTOS: 44,000","AQUARIUM HOURS / WK: 6",
+      // ---------- SECRETS / CONFESSIONS (50) ----------
+      "SECRET: LOVES TAYLOR SWIFT","SECRET TALENT: JUGGLING 5 BALLS","SECRET DIET: MIDNIGHT CEREAL",
+      "SECRET FEAR: POSSIBILITY OF ALIEN CONTACT","SECRET DREAM: WIN THE BOSTON MARATHON","SECRET: SINGS IN SHOWER",
+      "SECRET: RAMEN FOR BREAKFAST","SECRET: WATCHES HGTV UNIRONICALLY","SECRET: KNITS ON FLIGHTS",
+      "SECRET: CRIES AT PIXAR SHORTS","SECRET: COLLECTS HOTEL SOAP","SECRET: TALKS TO HOUSEPLANTS",
+      "SECRET: NAMES HIS COMMITS LIKE POEMS","SECRET: OWNS A HAM RADIO","SECRET: CERTIFIED SCUBA INSTRUCTOR",
+      "SECRET: LIFTS IN CROCS","SECRET: MEMORIZED FIRST 1000 DIGITS OF π","SECRET: BAKES HIS OWN CAT FOOD",
+      "SECRET: GREW UP RANCH-BALLET","SECRET: GHOSTWRITES PHYSICS HAIKU","SECRET: PLAYED HIGH SCHOOL JAZZ",
+      "SECRET: BUILT A BACKYARD CYCLOTRON","SECRET: RUNS A SECRET MOCHI STARTUP","SECRET: REFOLDS OTHERS' ORIGAMI",
+      "SECRET: SPEEDCUBER (PB 8.3)","SECRET: HATES PEPPERONI","SECRET: CHEWS ICE","SECRET: SECRETLY HUGE PHILLIES FAN",
+      "SECRET: MEDITATES AT RED LIGHTS","SECRET: TIPS IN EVEN NUMBERS","SECRET: LIKES LIVER AND ONIONS",
+      "SECRET: HAS WATCHED TITANIC 14 TIMES","SECRET: FAVORITE EMOJI IS 🎲","SECRET: BELIEVES IN GHOSTS",
+      "SECRET: DRIVES A MANUAL","SECRET: CAN RECITE HAMLET SOLILOQUY","SECRET: HAS A COWBOY HAT",
+      "SECRET: KEEPS A DREAM JOURNAL","SECRET: OWNS 14 UMBRELLAS","SECRET: NEVER CHECKED A BAG",
+      "SECRET: NAMED HIS WIFI 'PRETTY_FLY'","SECRET: CAN SOLVE A RUBIK'S BLINDFOLDED","SECRET: INSTALLED HIS OWN TOILET",
+      "SECRET: TRAINS FOR THE ZOMBIE APOCALYPSE","SECRET: KEEPS A SOURDOUGH IN THE CAR",
+      "SECRET: WRITES ALL EMAILS IN VIM","SECRET: AFRAID OF CLOWNS","SECRET: LOVES THE MALL",
+      "SECRET: CARRIES A BACKUP CHARGER","SECRET: FOLDS HIS LAUNDRY BY COLOR WAVELENGTH",
+      // ---------- QUIRKY SUPERLATIVES (80) ----------
+      "BIGGEST W: NOBEL SHORTLIST 2032","BIGGEST L: DROPPED AN M&M ONCE","RECORDS HELD: 14",
+      "UNOFFICIAL WORLD REC: LONGEST PLANK IN A SUIT","LIFETIME PUSHUPS: 1.2M","LIFETIME WORDS WRITTEN: 41M",
+      "WORDS SPOKEN / DAY: 16,401","LAST WORD USED: ENTROPY","FAVORITE WORD: 'YONDER'","LONGEST WORD KNOWN: 189,819 LETTERS",
+      "HANDSHAKE STRENGTH: UNSETTLING","EYE CONTACT LEVEL: SNIPER","SMIRK RATIO: 32%","POKER FACE: ELITE",
+      "LUCK STAT: 99","CHARISMA STAT: 88","STRENGTH STAT: 92","INT STAT: 99","WISDOM STAT: 85",
+      "DEX STAT: 80","ALIGNMENT: CHAOTIC NERD","MYERS-BRIGGS: ENTJ-A","ENNEAGRAM: 5w4","ZODIAC: TAURUS",
+      "MOON: VIRGO","RISING: GEMINI","BLOOD MOON RITUAL: NONE","VENMO USERNAME: @giuse-g",
+      "PHONE CASE: NONE","PHONE BACKGROUND: FEYNMAN","LAST WORDLE: 3/6","WORDLE STREAK: 412",
+      "NYT CONNECTIONS: SOLVE RATE 94%","CROSSWORD TIME: SUN 17 MIN","SUDOKU: INSANE IN 9 MIN",
+      "RUBIK'S CUBE PR: 8.3 S","RUBIK'S 4X4 PR: 34 S","SPEEDCUBE COLLECTION: 22","FASTEST TEA STEEP: 43 S",
+      "FAVORITE NUMBER: 186,423","LUCKY NUMBER: 7","UNLUCKY NUMBER: 0.5","FAVORITE SHAPE: DODECAHEDRON",
+      "FAVORITE COLOR: AQUAMARINE","LEAST FAV COLOR: POO BROWN","FAVORITE DAY: FRIDAY","LEAST FAV: TAX DAY",
+      "FAVORITE MONTH: OCTOBER","FAVORITE HOLIDAY: PI DAY","FAVORITE SEASON: FALL","FAVORITE WEATHER: 62 °F",
+      "FAVORITE SCENT: VETIVER","FAVORITE TEXTURE: SUEDE","FAVORITE SOUND: RAIN ON CANOPY","FAVORITE SILENCE: 4 AM",
+      "FAVORITE RATIO: 1:φ","FAVORITE CONJECTURE: P=NP","WORST PHOBIA: EDGING-IN-A-REV-DOOR","CLAIM TO FAME: HAIR",
+      "SIGNATURE MOVE: TWIRL","PUBLIC SPEAKING RATING: 9/10","MEMORY PALACE ROOMS: 240",
+      "CAN WRITE BACKWARDS: LEFT HAND ONLY","TOUCH-TYPES ON A DVORAK: ALSO","RECITES PI TO: 1000 DIGITS",
+      "MEMORIZED PHONE NUMBERS: 47","FACE RECOGNITION: SUPER-RECOGNIZER","CLAIRVOYANCE SCORE: INCONCLUSIVE",
+      "COMMENTARY-STYLE NARRATION: YES","CALENDAR SCORE: 3 COLORS","CLOSET MINIMALISM: 50 ITEMS",
+      "PACKING SKILL: CARRY-ON ONLY","FOLD TECHNIQUE: KONMARI","SOCK DRAWER: COLOR-CODED","DRAWER LINER: CEDAR",
+      // ---------- MISC (70) ----------
+      "WAFFLE MAKER: OWNED × 3","UMBRELLA COLLECTION: 14","HATS OWNED: 38","SUNGLASSES COUNT: 11",
+      "BACKPACKS: 9","TENT COUNT: 4","BIKES: 5","SKATEBOARDS: 3","SNOWBOARDS: 2","SKIS: 4 PAIRS",
+      "SURFBOARDS: 6","PADDLEBOARDS: 1","LONGBOARD SKATE: 1","FAV SKATE TRICK: 360 FLIP","SKATE DECK PREF: POWELL",
+      "HELMETS: 3","BICYCLE HELMET BRAND: POC","SKIING: K2 MINDBENDER","FAV CAMP COFFEE METHOD: AEROPRESS",
+      "FAV EVERYDAY CARRY: LEATHERMAN WAVE","FAV LIGHTER: ZIPPO","FAV MULTITOOL: SOG PARASHEARS",
+      "FLASHLIGHTS OWNED: 7","FAV PEN COLOR: BLUE-BLACK","NOTEBOOK PREF: DOT GRID","LABEL MAKER: DYMO",
+      "STICKERS ON LAPTOP: 0","CAR STICKERS: 0","BUMPER: PRISTINE","TIRE BRAND: MICHELIN CROSSCLIMATE",
+      "OIL CHANGE CADENCE: 5K MI","INSURANCE: GEICO","PARKING TICKETS LIFETIME: 2","SPEEDING TICKETS: 0",
+      "DUI RECORD: NEVER","LICENSE PHOTO MOOD: UNREADABLE","HEIGHT ON LICENSE: 6'2\"","WEIGHT ON LICENSE: 188",
+      "FAV GAS STATION: COSTCO","GAS SPENT / YR: $420","CAR NICKNAME: 'THE CIVIC'","ODOMETER: 164,000 MI",
+      "DASHCAM: YES","FAV ROAD TRIP SNACK: JERKY","FAV DRIVE: PCH 1","FAV RADIO: NPR",
+      "FAV PODCAST: LEX FRIDMAN","FAV BACKGROUND NOISE: LIBRARY AMBIENCE","FAV AIR PURIFIER: BLUEAIR",
+      "HUMIDIFIER: 2","AIR QUALITY TODAY: 34 AQI","HOUSEPLANTS: 24","SUCCULENT COUNT: 11",
+      "OFFICE TEMP: 68 °F","LIGHT BULBS: PHILIPS HUE 2700K","CANDLE COUNT: 12","FAV CANDLE: CEDAR + SAGE",
+      "MATTRESS: CASPER HYBRID","PILLOWS: 2 FIRM","SHEET THREAD: 400 PERCALE","LAUNDRY DETERGENT: TIDE PODS",
+      "IRON OWNED: NEVER IRON","STEAMER: YES","LINT ROLLER COUNT: 6","LAST VACUUMED: WED",
+      "DISHWASHER BRAND: BOSCH 800","FRIDGE: SUB-ZERO","STOVE: WOLF 36\"","KITCHEN BACKSPLASH: SUBWAY TILE",
+      "ROOM TEMP NOW: 71 °F","WINDOW COUNT AT HOME: 24","BATHROOM COUNT: 3","DOOR HANDLES: LEVER",
+      "SMART HOME HUB: HOMEKIT","THERMOSTAT: ECOBEE","LOCKS: AUGUST","DOORBELL: LOGI CIRCLE",
+      "LAST PACKAGE DELIVERED: WED","PACKAGES / MO: 18","RETURN RATE: 3%","FAV SHIPPING: USPS PRIORITY"
+    ];
+
+    // Programmatically generate additional variant lines to push the pool
+    // into the many hundreds without hand-writing every entry.
+    var extras = [];
+    var dishes = ['SUKIYAKI','BIBIMBAP','BIRRIA TACOS','MAPO TOFU','KAO SOI','PORK BELLY BANH MI',
+      'ONIGIRI','YAKITORI','CACIO E PEPE','CHICKEN KATSU','TORTILLA ESPAÑOLA','JAMBON BEURRE',
+      'SHAKSHUKA','PHO BO','KHAO MAN GAI','KARAAGE','GELATO PISTACHIO','TIRAMISU','MACARONS',
+      'AFFOGATO','OYAKODON','CHIRASHI','TOMAHAWK RIBEYE','LAMB KEBAB','GYUDON','SAAG PANEER'];
+    dishes.forEach(function (d) { extras.push('RECENTLY ATE: ' + d); });
+
+    var cities = ['PALO ALTO','KYOTO','OAXACA','REYKJAVIK','LISBON','SEOUL','BARCELONA','DUBAI',
+      'AMSTERDAM','BANGKOK','HANOI','TAIPEI','MELBOURNE','WELLINGTON','CAPE TOWN','BUDAPEST',
+      'BERLIN','PRAGUE','EDINBURGH','DUBLIN','ISTANBUL','MARRAKECH','BUENOS AIRES','MONTREAL',
+      'VANCOUVER','QUEBEC CITY','HELSINKI','OSLO','COPENHAGEN','STOCKHOLM'];
+    cities.forEach(function (c) { extras.push('LAST VISITED: ' + c); });
+
+    var songs = ['ANTI-HERO','AUGUST','CARDIGAN','WILDEST DREAMS','ALL TOO WELL','LAVENDER HAZE',
+      'FORTNIGHT','CRUEL SUMMER','STYLE','ENCHANTED','FEARLESS','SHAKE IT OFF','22','BAD BLOOD',
+      'BLANK SPACE','OUT OF THE WOODS','GETAWAY CAR','DELICATE'];
+    songs.forEach(function (s) { extras.push('SONG ON REPEAT: ' + s); });
+
+    var books = ['DUNE','FOUNDATION','BRAVE NEW WORLD','SNOW CRASH','HYPERION','BLINDSIGHT',
+      'THREE-BODY PROBLEM','NEUROMANCER','STORIES OF YOUR LIFE','EXHALATION','ANATHEM','SEVENEVES',
+      'PROJECT HAIL MARY','THE MARTIAN','RED RISING','CHILDREN OF TIME','PERMUTATION CITY',
+      'ACCELERANDO','PRINCIPIA','FEYNMAN LECTURES'];
+    books.forEach(function (b) { extras.push('FINISHED READING: ' + b); });
+
+    var equations = ['F = MA','F = GMm/r²','E = HF','S = K·LN W','ΔX·ΔP ≥ ħ/2','E² = (PC)² + (MC²)²',
+      '∇·E = ρ/ε₀','∇×B = μ₀J + μ₀ε₀∂E/∂T','PV = NRT','∮E·DL = -DΦ/DT','KE_MAX = HF - Φ',
+      'L = T - V','H = T + V','I = V/R','P = IV','F = QE + QV×B','Ψ* OP Ψ','C² = A² + B²'];
+    equations.forEach(function (e) { extras.push('EQUATION OF THE DAY: ' + e); });
+
+    var constellations = ['ORION','CASSIOPEIA','LYRA','CYGNUS','ANDROMEDA','PERSEUS','DRACO',
+      'CEPHEUS','URSA MAJOR','URSA MINOR','BOÖTES','GEMINI','CANCER','LEO','VIRGO','SCORPIUS'];
+    constellations.forEach(function (c) { extras.push('SPOTTED LAST NIGHT: ' + c); });
+
+    var workouts = ['LEG DAY','PUSH DAY','PULL DAY','OLY LIFTING','TABATA SPRINTS','8K EASY',
+      '10 × 100 FLY','30 MIN PLANK PROGRESSION','VO2 INTERVALS','KETTLEBELL CIRCUIT'];
+    workouts.forEach(function (w) { extras.push('WORKOUT TODAY: ' + w); });
+
+    var moods = ['OPTIMISTIC','FOCUSED','MILDLY CAFFEINATED','LOCKED IN','CONTEMPLATIVE','GIDDY',
+      'HYPERACTIVE','ZEN','ACADEMIC','MONK-MODE','CHAOTIC GOOD','SLIGHTLY VIBRATING'];
+    moods.forEach(function (m) { extras.push('MOOD: ' + m); });
+
+    var todoItems = ['FINISH QFT HOMEWORK','READ GRIFFITHS CH 7','REVIEW TUTEE PROOFS',
+      'SUBMIT GRANT DRAFT','RUN 8 MILES','CALL MOM','BACKUP LAPTOP','CLEAN WHITEBOARD',
+      'REFILL ESPRESSO BEANS','SHARPEN KNIVES'];
+    todoItems.forEach(function (t) { extras.push('TODO: ' + t); });
+
+    var animals = ['GOLDEN RETRIEVER','RAGDOLL CAT','SAVANNAH CAT','NORTHERN CARDINAL',
+      'WESTERN TANAGER','DISCUS FISH','BETTA FISH','BUMBLEBEE SWARM','BARN OWL','TRAPDOOR SPIDER'];
+    animals.forEach(function (a) { extras.push('ANIMAL SPOTTED TODAY: ' + a); });
+
+    var inventions = ['AUTO-GRADING SLIDE RULE','THERMODYNAMIC ESPRESSO TAMPER','Q-BIT COFFEE GRINDER',
+      'NOETHER-THEOREM TOASTER','HAMILTONIAN VACUUM','FEYNMAN-DIAGRAM OVEN','PATH-INTEGRAL BLENDER',
+      'GAUGE-INVARIANT WAFFLE IRON','FOURIER-SERIES ROLLER','LAPLACIAN LAWN MOWER'];
+    inventions.forEach(function (i) { extras.push('PATENT PENDING: ' + i); });
+
+    var goals = ['SOLVE RIEMANN','CUT 400 IM UNDER 4:00','WRITE A NOVEL','BUILD A TOKAMAK',
+      'SUMMIT DENALI','LEARN MANDARIN','FINISH THE GARAGE','INVENT SIGMA PHYSICS','TEACH A FIELDS MEDAL',
+      'BREAK PI MEMORY RECORD'];
+    goals.forEach(function (g) { extras.push('2026 GOAL: ' + g); });
+
+    var milestones = ['FIRST PUBLICATION AGE 19','FIRST KEYNOTE AGE 22','FIRST NIH GRANT AGE 24',
+      'FIRST BOOK AGE 26','FIRST TENURE OFFER AGE 29','FIRST PATENT AGE 21',
+      'FIRST 4:00 IM AGE 17','FIRST NATIONAL MEDAL AGE 15','FIRST MARATHON AGE 20'];
+    milestones.forEach(function (m) { extras.push('MILESTONE: ' + m); });
+
+    var confessions = ['I STEAL LIBRARY SILENCE','I HOARD SHARPIES','I REUSE LATEX TEMPLATES',
+      'I CLAP AT BAD TAKEOFFS','I WHISPER TO LAB EQUIPMENT','I FOLD PIZZA BOXES NEATLY',
+      'I TIME MY SNEEZES','I READ INGREDIENT LISTS FOR FUN','I ALPHABETIZE BY MOOD',
+      'I CAN RECITE THE OSI MODEL IN MY SLEEP'];
+    confessions.forEach(function (c) { extras.push('CONFESSION: ' + c); });
+
+    return literal.concat(extras);
+  })();
+  (function typingStats() {
+    var el = $('typing-stat');
+    if (!el) return;
+    var idx = Math.floor(Math.random() * STATS.length);
+    var phase = 'typing';
+    var n = 0;
+    function step() {
+      var s = STATS[idx];
+      if (phase === 'typing') {
+        n++;
+        el.textContent = s.slice(0, n);
+        if (n >= s.length) { phase = 'hold'; setTimeout(step, 1700); return; }
+        setTimeout(step, 45 + Math.random() * 55);
+      } else if (phase === 'hold') {
+        phase = 'erasing';
+        setTimeout(step, 20);
+      } else {
+        n--;
+        el.textContent = s.slice(0, Math.max(0, n));
+        if (n <= 0) { idx = (idx + 1) % STATS.length; phase = 'typing'; setTimeout(step, 450); return; }
+        setTimeout(step, 22);
+      }
+    }
+    step();
+  })();
+
+  // ============================================================
+  // BUBBLE SLIDER (replaces the MORE BUBBLES button)
+  // ============================================================
+  function setBubbleCount(n) {
+    n = Math.max(0, Math.min(60, Math.round(n)));
+    var box = bubblesBox;
+    while (box.children.length < n) addBubble();
+    while (box.children.length > n) box.removeChild(box.lastChild);
+  }
+  (function () {
+    var s = $('s-bubbles'), v = $('v-bubbles');
+    s.addEventListener('input', function () {
+      setBubbleCount(parseInt(s.value, 10));
+      v.textContent = s.value;
+    });
+  })();
+
+  // ============================================================
+  // TANK LIGHTS TOGGLE (binary switch)
+  // ============================================================
+  $('light-toggle').addEventListener('change', function () {
+    lightsOn = $('light-toggle').checked;
+    document.body.classList.toggle('lights-off', !lightsOn);
+    updateChamberAndBrain();
+  });
+
+  // ============================================================
+  // FUN BUTTONS
+  // ============================================================
+  $('fb-overdrive').addEventListener('click', function () {
+    var targets = { pressure: 260, temp: 220, voltage: 9500, flow: 88, charge: 97 };
+    animateControls(targets);
+  });
+  $('fb-shake').addEventListener('click', function () {
+    var c = $('canister');
+    c.classList.remove('shaking');
+    void c.offsetWidth;
+    c.classList.add('shaking');
+    for (var i = 0; i < 10; i++) setTimeout(addBubble, i * 30);
+  });
+  $('fb-purge').addEventListener('click', function () {
+    var targets = { pressure: 142, temp: 77, voltage: 5800, flow: 28, charge: 88 };
+    animateControls(targets);
+  });
+
+  function animateControls(targets) {
+    var start = {};
+    Object.keys(targets).forEach(function (k) { start[k] = controlState[k]; });
+    var t0 = performance.now();
+    var dur = 900;
+    function step(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var ease = 1 - Math.pow(1 - p, 3);
+      Object.keys(targets).forEach(function (k) {
+        controlState[k] = start[k] + (targets[k] - start[k]) * ease;
+        var slider = $('s-' + k);
+        var valEl = $('v-' + k);
+        if (slider) slider.value = controlState[k];
+        if (valEl) {
+          var unit = { pressure: 'PSI', temp: '°K', voltage: 'V', flow: 'mL/s', charge: '%' }[k];
+          valEl.textContent = Math.round(controlState[k]) + ' ' + unit;
+        }
+      });
+      updateChamberAndBrain();
+      updateStatusBanner();
+      updateCursorTint();
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ============================================================
+  // UTC CLOCK + 12-HOUR REDEMPTION CYCLE
+  // ============================================================
+  var utcClockEl = $('utc-clock');
+  var countdownEl = $('countdown');
+  var clockBox = $('clock');
 
   function pad(n) { n = '' + n; return n.length < 2 ? '0' + n : n; }
 
-  function utcMidnightTomorrow() {
+  // Next 12-hour boundary: 00:00 UTC or 12:00 UTC (whichever is next)
+  function next12HourBoundaryUtc() {
     var now = new Date();
-    return Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() + 1,
-      0, 0, 0
-    );
+    var d = new Date();
+    if (now.getUTCHours() < 12) {
+      d.setUTCHours(12, 0, 0, 0);
+    } else {
+      d.setUTCHours(24, 0, 0, 0); // wraps to next day 00:00
+    }
+    return d.getTime();
   }
 
   function tickClock() {
     var now = new Date();
     utcClockEl.textContent = pad(now.getUTCHours()) + ':' + pad(now.getUTCMinutes()) + ':' + pad(now.getUTCSeconds());
+    if (state && state.id) ensureDailyBonusFresh();
 
     if (state.lockedUntil && Date.now() < state.lockedUntil) {
       var remaining = state.lockedUntil - Date.now();
@@ -1369,11 +2733,9 @@
       countdownEl.textContent = pad(hrs) + ':' + pad(min) + ':' + pad(sec);
       clockBox.classList.remove('ready');
     } else {
-      // unlocked
       if (state.lockedUntil && Date.now() >= state.lockedUntil) {
-        // auto-reset
         state.lockedUntil = 0;
-        state.dailyCount = 0;
+        state.halfDayCount = 0;
         persist();
         updateButton();
       }
@@ -1382,30 +2744,41 @@
     }
   }
   setInterval(tickClock, 1000);
-  // NOTE: don't call tickClock() here — `state` is declared below and would be
-  // undefined at this point. We call it once after init() instead.
 
-  // ----- Per-IP/device daily limit (5 brain cells per day) -----
-  // Strategy:
-  //   1. Try to fetch the public IP via api.ipify.org (no key required).
-  //   2. Fall back to a stable device fingerprint hash if fetch fails
-  //      (e.g. offline or blocked).
-  //   3. Persist { id, dailyCount, lockedUntil } in localStorage keyed by id.
-  //   4. Each redemption gives 5 cells; with a 5/day cap that's 1 redemption
-  //      per UTC day. Lock until next UTC midnight.
-
+  // ============================================================
+  // PER-DEVICE/IP REDEMPTION STATE (5 cells every 12 hrs)
+  // ============================================================
   var REDEEM_PER_CLICK = 5;
-  var DAILY_LIMIT = 5;
 
   var state = {
     id: null,
-    dailyCount: 0,
-    lockedUntil: 0,   // ms epoch
-    serial: 0
+    halfDayCount: 0,   // 0 or 1 within current 12-hour window
+    lockedUntil: 0,
+    serial: 0,
+    dailyBonus: 0,       // +1 per first-try-correct quiz, resets at UTC 00:00
+    dailyBonusDate: ''   // UTC date key last synced to
   };
 
-  var btn = document.getElementById('redeem-btn');
-  var authIdEl = document.getElementById('auth-id');
+  function currentUtcDateKey() {
+    var d = new Date();
+    return d.getUTCFullYear() + '-' + (d.getUTCMonth() + 1) + '-' + d.getUTCDate();
+  }
+  function ensureDailyBonusFresh() {
+    var today = currentUtcDateKey();
+    if (state.dailyBonusDate !== today) {
+      state.dailyBonus = 0;
+      state.dailyBonusDate = today;
+      persist();
+    }
+  }
+  function currentAward() {
+    ensureDailyBonusFresh();
+    return REDEEM_PER_CLICK + (state.dailyBonus || 0);
+  }
+
+  var btn = $('redeem-btn');
+  var moreBtn = $('redeem-more-btn');
+  var authIdEl = $('auth-id');
 
   function deviceFingerprint() {
     var fp = [
@@ -1418,14 +2791,11 @@
       navigator.platform || ''
     ].join('|');
     var h = 0;
-    for (var i = 0; i < fp.length; i++) {
-      h = ((h << 5) - h) + fp.charCodeAt(i);
-      h |= 0;
-    }
+    for (var i = 0; i < fp.length; i++) { h = ((h << 5) - h) + fp.charCodeAt(i); h |= 0; }
     return 'fp_' + Math.abs(h).toString(36);
   }
 
-  function lsKey(id) { return 'gpe_brainlab_v2_' + id; }
+  function lsKey(id) { return 'gpe_brainlab_v3_' + id; }
 
   function loadState(id) {
     state.id = id;
@@ -1434,15 +2804,16 @@
     if (raw) {
       try {
         var data = JSON.parse(raw);
-        state.dailyCount = data.dailyCount || 0;
+        state.halfDayCount = data.halfDayCount || 0;
         state.lockedUntil = data.lockedUntil || 0;
         state.serial = data.serial || 0;
+        state.dailyBonus = data.dailyBonus || 0;
+        state.dailyBonusDate = data.dailyBonusDate || '';
       } catch (e) {}
     }
-    // Expire lock if past
     if (state.lockedUntil && Date.now() >= state.lockedUntil) {
       state.lockedUntil = 0;
-      state.dailyCount = 0;
+      state.halfDayCount = 0;
       persist();
     }
   }
@@ -1451,27 +2822,27 @@
     if (!state.id) return;
     try {
       localStorage.setItem(lsKey(state.id), JSON.stringify({
-        dailyCount: state.dailyCount,
+        halfDayCount: state.halfDayCount,
         lockedUntil: state.lockedUntil,
-        serial: state.serial
+        serial: state.serial,
+        dailyBonus: state.dailyBonus,
+        dailyBonusDate: state.dailyBonusDate
       }));
     } catch (e) {}
   }
 
   function updateButton() {
-    var locked = state.dailyCount >= DAILY_LIMIT || (state.lockedUntil && Date.now() < state.lockedUntil);
+    var locked = state.halfDayCount >= 1 || (state.lockedUntil && Date.now() < state.lockedUntil);
     btn.disabled = !!locked;
-    btn.textContent = locked ? 'DAILY LIMIT REACHED' : 'REDEEM BRAIN CELLS';
+    btn.textContent = locked ? 'LOCKED — NEXT WINDOW SOON' : 'REDEEM BRAIN CELLS';
+    if (locked) moreBtn.classList.add('show'); else moreBtn.classList.remove('show');
   }
 
   function init() {
-    // Quick preload of fingerprint state so the UI works even if network fails
     var fp = deviceFingerprint();
     loadState(fp);
     authIdEl.textContent = fp.slice(0, 10).toUpperCase();
     updateButton();
-
-    // Try to upgrade ID to actual IP (preferred for cross-device limit)
     if (window.fetch) {
       var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
       var t = setTimeout(function () { if (controller) controller.abort(); }, 4000);
@@ -1480,23 +2851,22 @@
         .then(function (data) {
           clearTimeout(t);
           if (data && data.ip) {
-            // Combine IP + a short fingerprint hint so two devices on the
-            // same router still share the IP-level cap, while still being
-            // tagged with the device they're on for the auth display.
             var id = 'ip_' + data.ip.replace(/[^\w]/g, '_');
             loadState(id);
             authIdEl.textContent = data.ip;
             updateButton();
           }
         })
-        .catch(function () { /* keep fingerprint fallback */ });
+        .catch(function () {});
     }
   }
   init();
-  tickClock();   // safe to call now: state is initialized
+  tickClock();
 
-  // ----- Brain cell flow into the tube -----
-  var tubeEl = document.getElementById('tube');
+  // ============================================================
+  // BRAIN CELL FLOW THROUGH TUBE
+  // ============================================================
+  var tubeEl = $('tube');
   function fireCells(count, durationMs) {
     var spacing = durationMs / count;
     for (var i = 0; i < count; i++) {
@@ -1504,7 +2874,6 @@
         setTimeout(function () {
           var c = document.createElement('div');
           c.className = 'cell active';
-          // vertical mode on small screens
           var anim = 'cell-flow';
           if (window.matchMedia && window.matchMedia('(max-width: 980px)').matches) {
             anim = 'cell-flow-vert';
@@ -1513,33 +2882,35 @@
           c.style.top = '50%';
           c.style.left = '0';
           tubeEl.appendChild(c);
-          setTimeout(function () { tubeEl.removeChild(c); }, 1600);
+          setTimeout(function () { if (c.parentNode) c.parentNode.removeChild(c); }, 1600);
         }, idx * spacing);
       })(i);
     }
   }
 
-  // ----- Golden ticket -----
-  var overlay = document.getElementById('ticket-overlay');
-  var closeBtn = document.getElementById('ticket-close');
-  var serialEl = document.getElementById('tk-serial');
+  // ============================================================
+  // GOLDEN TICKET
+  // ============================================================
+  var overlay = $('ticket-overlay');
+  var closeBtn = $('ticket-close');
+  var serialEl = $('tk-serial');
 
-  function showTicket() {
+  var ticketAmountEl = document.querySelector('.tk-amount span');
+  function showTicket(amount) {
+    if (typeof amount !== 'number') amount = REDEEM_PER_CLICK;
+    if (ticketAmountEl) ticketAmountEl.textContent = amount;
     state.serial = (state.serial || 0) + 1;
+    persist();
     var serial = ('00000000' + (Date.now() % 100000000 + state.serial)).slice(-8);
     serialEl.textContent = 'SERIAL #' + serial;
     overlay.classList.add('show');
     spawnSparkles(40);
   }
-  function hideTicket() {
-    overlay.classList.remove('show');
-  }
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) hideTicket();
-  });
+  function hideTicket() { overlay.classList.remove('show'); }
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) hideTicket(); });
   closeBtn.addEventListener('click', hideTicket);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') hideTicket();
+    if (e.key === 'Escape') { hideTicket(); closeExtra(); }
   });
 
   function spawnSparkles(n) {
@@ -1561,38 +2932,331 @@
       s.style.animationDuration = (1.2 + Math.random() * 1.6) + 's';
       document.body.appendChild(s);
       (function (el) {
-        setTimeout(function () {
-          if (el.parentNode) el.parentNode.removeChild(el);
-        }, 3000);
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 3000);
       })(s);
     }
   }
 
-  // ----- Redeem click -----
-  btn.addEventListener('click', function () {
-    if (btn.disabled) return;
-    if (state.dailyCount >= DAILY_LIMIT) { updateButton(); return; }
-
-    state.dailyCount += REDEEM_PER_CLICK;
-    state.lockedUntil = utcMidnightTomorrow();
+  // ============================================================
+  // REDEEM CLICK (main)
+  // ============================================================
+  function handleRedemption() {
+    var amount = currentAward();
+    state.halfDayCount = 1;
+    state.lockedUntil = next12HourBoundaryUtc();
     persist();
     updateButton();
 
-    // Visual: brain cells flow through the tube
     fireCells(20, 1400);
-
-    // Bump the brain counter down by the redeemed amount (theatrical)
-    brainCount = Math.max(0, brainCount - REDEEM_PER_CLICK);
+    brainCount = Math.max(0, brainCount - amount);
     counterEl.textContent = fmt(brainCount);
 
-    // Update stock readout
-    var stockNow = parseInt(stockEl.textContent.replace(/\D/g, ''), 10) - REDEEM_PER_CLICK;
+    var stockNow = parseInt(stockEl.textContent.replace(/\D/g, ''), 10) - amount;
     if (!isFinite(stockNow)) stockNow = 99989;
     stockEl.textContent = stockNow.toLocaleString('en-US') + ' UNITS';
 
-    // Show ticket after the cells reach the station
-    setTimeout(showTicket, 1500);
+    setTimeout(function () { showTicket(amount); }, 1500);
+  }
+
+  btn.addEventListener('click', function () {
+    if (btn.disabled) return;
+    handleRedemption();
   });
+
+  // ============================================================
+  // EXTRA BRAIN CELLS MODAL (quiz 50% / ad 50%)
+  // ============================================================
+  var extraModal = $('extra-modal');
+  var extraContent = $('extra-content');
+  var extraCloseBtn = $('extra-close');
+  var extraTimers = [];
+
+  function closeExtra() {
+    extraModal.classList.remove('show');
+    extraTimers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
+    extraTimers = [];
+    setTimeout(function () { extraContent.innerHTML = ''; }, 250);
+  }
+  extraCloseBtn.addEventListener('click', closeExtra);
+  extraModal.addEventListener('click', function (e) { if (e.target === extraModal) closeExtra(); });
+
+  moreBtn.addEventListener('click', function () {
+    if (Math.random() < 0.5) showQuiz();
+    else showAd();
+    extraModal.classList.add('show');
+  });
+
+  function awardBonusCells() {
+    var amount = currentAward();
+    fireCells(20, 1400);
+    brainCount = Math.max(0, brainCount - amount);
+    counterEl.textContent = fmt(brainCount);
+    var stockNow = parseInt(stockEl.textContent.replace(/\D/g, ''), 10) - amount;
+    if (!isFinite(stockNow)) stockNow = 99989;
+    stockEl.textContent = stockNow.toLocaleString('en-US') + ' UNITS';
+    setTimeout(function () { showTicket(amount); }, 1500);
+  }
+
+  // ----- Quiz -----
+  function showQuiz() {
+    var q = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+    // Shuffle choices (track correct index)
+    var idxs = q.choices.map(function (_, i) { return i; });
+    for (var i = idxs.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = idxs[i]; idxs[i] = idxs[j]; idxs[j] = tmp;
+    }
+    var shuffled = idxs.map(function (i) { return q.choices[i]; });
+    var correctShuffledIdx = idxs.indexOf(q.correct);
+
+    var html = '';
+    html += '<h2 class="extra-title">BONUS QUIZ</h2>';
+    html += '<div class="extra-sub">Answer correctly within 3 tries to unlock 5 extra brain cells.</div>';
+    html += '<div class="quiz-q">' + escapeHtml(q.q) + '</div>';
+    html += '<div class="quiz-choices" id="quiz-choices">';
+    shuffled.forEach(function (c, i) {
+      html += '<button class="quiz-choice" data-i="' + i + '">' +
+              String.fromCharCode(65 + i) + '. ' + escapeHtml(c) + '</button>';
+    });
+    html += '</div>';
+    html += '<div class="quiz-status"><span>BONUS: <b style="color:var(--gold)">5 CELLS</b></span><span class="tries" id="quiz-tries">TRIES: 3 / 3</span></div>';
+    html += '<div id="quiz-result"></div>';
+    extraContent.innerHTML = html;
+
+    var tries = 3;
+    var done = false;
+    var firstTry = true;
+    var triesEl = $('quiz-tries');
+    var resultEl = $('quiz-result');
+    var choiceBtns = extraContent.querySelectorAll('.quiz-choice');
+
+    function lockAll() {
+      choiceBtns.forEach(function (b) { b.classList.add('locked'); b.disabled = true; });
+    }
+
+    function revealCorrect() {
+      choiceBtns.forEach(function (b) {
+        if (parseInt(b.getAttribute('data-i'), 10) === correctShuffledIdx) b.classList.add('correct');
+      });
+    }
+
+    choiceBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (done) return;
+        var pick = parseInt(btn.getAttribute('data-i'), 10);
+        if (pick === correctShuffledIdx) {
+          if (firstTry) {
+            ensureDailyBonusFresh();
+            state.dailyBonus = (state.dailyBonus || 0) + 1;
+            persist();
+          }
+          btn.classList.add('correct');
+          lockAll();
+          done = true;
+          resultEl.innerHTML = '<div class="quiz-result win">✓ CORRECT — brain cells dispatched. Well done.</div>';
+          setTimeout(function () {
+            closeExtra();
+            awardBonusCells();
+          }, 1400);
+        } else {
+          firstTry = false;
+          btn.classList.add('wrong');
+          btn.classList.add('locked');
+          btn.disabled = true;
+          tries--;
+          triesEl.textContent = 'TRIES: ' + tries + ' / 3';
+          if (tries <= 0) {
+            done = true;
+            revealCorrect();
+            lockAll();
+            resultEl.innerHTML = '<div class="quiz-result lose">✗ Out of tries. No bonus cells this round. Correct answer highlighted.</div>';
+          }
+        }
+      });
+    });
+  }
+
+  // ----- Ad -----
+  function showAd() {
+    var playlists = [
+      'PLOhdskWpz17Poos7WScgE1hqJpJe41z28',
+      'PLCeYpRAW8EfqOdmUc9Z0QIFT4mCuDUEYB'
+    ];
+    var pl = playlists[Math.floor(Math.random() * playlists.length)];
+    var url = 'https://www.youtube.com/embed/videoseries?list=' + pl + '&autoplay=1&rel=0';
+
+    var html = '';
+    html += '<h2 class="extra-title">SPONSORED INTERLUDE</h2>';
+    html += '<div class="extra-sub">Watch or skip (available after 15s) to unlock bonus brain cells.</div>';
+    html += '<div class="ad-frame-wrap"><iframe src="' + url + '" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>';
+    html += '<div class="ad-skip-row">';
+    html += '<div class="ad-timer" id="ad-timer">Skip available in 15s...</div>';
+    html += '<button class="skip-btn" id="skip-btn" disabled>SKIP &amp; CLAIM</button>';
+    html += '</div>';
+    extraContent.innerHTML = html;
+
+    var remaining = 15;
+    var timerEl = $('ad-timer');
+    var skipBtn = $('skip-btn');
+    var iv = setInterval(function () {
+      remaining--;
+      if (remaining > 0) {
+        timerEl.textContent = 'Skip available in ' + remaining + 's...';
+      } else {
+        clearInterval(iv);
+        timerEl.textContent = 'Thanks for watching — skip now to claim!';
+        skipBtn.disabled = false;
+        skipBtn.classList.add('ready');
+      }
+    }, 1000);
+    extraTimers.push(iv);
+
+    skipBtn.addEventListener('click', function () {
+      if (skipBtn.disabled) return;
+      closeExtra();
+      awardBonusCells();
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+
+  // ============================================================
+  // PHYSICS QUESTION BANK (Physics 23 + Physics 25 conceptual)
+  // ============================================================
+  var QUESTIONS = [
+    { q: "A 2 kg and a 4 kg object are dropped simultaneously from the same height in a vacuum. Which hits the ground first?",
+      choices: ["The 2 kg object", "The 4 kg object", "They hit at the same time", "Depends on their shape"], correct: 2 },
+    { q: "A car travels at constant velocity on a straight road. What is the net force on the car?",
+      choices: ["Equal to its weight", "Zero", "Equal to mg/2", "Depends on the speed"], correct: 1 },
+    { q: "Which of Newton's laws explains why a rocket engine propels the rocket forward?",
+      choices: ["First law (inertia)", "Second law (F = ma)", "Third law (action–reaction)", "Law of gravitation"], correct: 2 },
+    { q: "A ball is thrown straight up. At the highest point of its trajectory, what is the direction of its acceleration?",
+      choices: ["Upward", "Zero", "Downward (g)", "Horizontal"], correct: 2 },
+    { q: "A 10 kg box is pushed with 30 N of force on a frictionless surface. What is its acceleration?",
+      choices: ["0.3 m/s²", "3 m/s²", "30 m/s²", "300 m/s²"], correct: 1 },
+    { q: "Which quantity is always conserved in an isolated system?",
+      choices: ["Kinetic energy", "Velocity", "Momentum", "Acceleration"], correct: 2 },
+    { q: "In a perfectly elastic collision, which of the following is conserved?",
+      choices: ["Only momentum", "Only kinetic energy", "Both momentum and kinetic energy", "Neither"], correct: 2 },
+    { q: "In an inelastic collision, what happens to the total kinetic energy?",
+      choices: ["It increases", "It is conserved", "Some is lost (to heat, sound, deformation)", "It becomes zero"], correct: 2 },
+    { q: "Work done by a constant force F moving an object through displacement d at angle θ between them is:",
+      choices: ["F d sin θ", "F d cos θ", "F d tan θ", "F d / cos θ"], correct: 1 },
+    { q: "A ball of mass m moves at speed v. Its kinetic energy is:",
+      choices: ["½ m v", "m v²", "½ m v²", "2 m v²"], correct: 2 },
+    { q: "An object is in uniform circular motion. Which statement is true?",
+      choices: ["Its velocity is constant", "Its speed is constant but velocity is not", "Both speed and velocity are constant", "Its acceleration is zero"], correct: 1 },
+    { q: "The period of a simple pendulum (small angles) depends on:",
+      choices: ["The mass of the bob", "The amplitude", "The length and local g", "The color of the string"], correct: 2 },
+    { q: "For a mass on a spring, doubling the mass changes the angular frequency by a factor of:",
+      choices: ["2", "√2", "1/√2", "1/2"], correct: 2 },
+    { q: "Sound waves in air are:",
+      choices: ["Transverse waves", "Longitudinal waves", "Electromagnetic waves", "Standing waves only"], correct: 1 },
+    { q: "The Doppler effect describes:",
+      choices: ["Frequency shift due to relative motion between source and observer", "Light bending near mass", "Wave interference", "Resonance in strings"], correct: 0 },
+    { q: "In a fluid at rest, pressure at depth h below the surface is (ρ density, g gravity):",
+      choices: ["ρ g h", "ρ g / h", "ρ / (g h)", "ρ g h²"], correct: 0 },
+    { q: "Archimedes' principle says the buoyant force on a submerged object equals:",
+      choices: ["The weight of the object", "The weight of the fluid displaced", "The density of the fluid", "The pressure at the object's top"], correct: 1 },
+    { q: "The first law of thermodynamics is essentially:",
+      choices: ["Entropy always increases", "Energy is conserved (ΔU = Q − W)", "Heat flows from cold to hot spontaneously", "Absolute zero is unreachable"], correct: 1 },
+    { q: "The second law of thermodynamics implies that:",
+      choices: ["Energy can be created", "Entropy of an isolated system never decreases", "All processes are reversible", "Temperature is always conserved"], correct: 1 },
+    { q: "A Carnot engine's efficiency depends only on:",
+      choices: ["The working gas", "The hot and cold reservoir temperatures", "The number of cycles", "The volume of the piston"], correct: 1 },
+    { q: "Coulomb's law gives the force between two point charges as proportional to:",
+      choices: ["1/r", "1/r²", "r", "r²"], correct: 1 },
+    { q: "The electric field due to an isolated positive point charge points:",
+      choices: ["Radially inward always", "Radially outward from the charge", "Tangent to the charge", "Perpendicular to the line of sight"], correct: 1 },
+    { q: "The SI unit of electric potential is the:",
+      choices: ["Ampere", "Volt", "Ohm", "Tesla"], correct: 1 },
+    { q: "For a parallel-plate capacitor, capacitance increases when you:",
+      choices: ["Decrease the plate area", "Increase the plate separation", "Insert a dielectric", "Increase the applied voltage"], correct: 2 },
+    { q: "Ohm's law states V = IR. The resistance R depends on all of the following EXCEPT:",
+      choices: ["Material resistivity", "Length of the conductor", "Cross-sectional area", "The applied voltage"], correct: 3 },
+    { q: "Resistors in series:",
+      choices: ["Add reciprocals", "Add directly (R_total = R₁ + R₂ + …)", "All carry different currents", "Are always at the same voltage"], correct: 1 },
+    { q: "Resistors in parallel share:",
+      choices: ["The same current", "The same voltage", "The same resistance", "Nothing"], correct: 1 },
+    { q: "The magnetic force on a moving charged particle acts:",
+      choices: ["Parallel to its velocity", "Perpendicular to its velocity", "Opposite to its velocity", "Only on stationary charges"], correct: 1 },
+    { q: "Faraday's law says an EMF is induced by:",
+      choices: ["A steady magnetic field", "A changing magnetic flux", "Electric charges at rest", "A constant DC current"], correct: 1 },
+    { q: "Lenz's law tells us that induced currents:",
+      choices: ["Always run clockwise", "Oppose the change in flux that caused them", "Enhance the change in flux", "Flow in the direction of B"], correct: 1 },
+    { q: "The speed of light in vacuum c equals 1/√(ε₀ μ₀) where ε₀ and μ₀ are:",
+      choices: ["Mass and charge constants", "Permittivity and permeability of free space", "Index-of-refraction values", "Wave frequency values"], correct: 1 },
+    { q: "A convex (converging) lens focuses parallel rays to:",
+      choices: ["A virtual focal point behind the lens", "A real focal point on the far side", "Diverge the rays further", "A point at infinity"], correct: 1 },
+    { q: "In the photoelectric effect, increasing light intensity (with frequency fixed) increases:",
+      choices: ["The maximum KE of ejected electrons", "The stopping voltage", "The number of ejected electrons per second", "The threshold frequency"], correct: 2 },
+    { q: "The threshold frequency in the photoelectric effect depends on:",
+      choices: ["The intensity of the light", "The work function of the metal", "The temperature of the cathode", "The voltage applied"], correct: 1 },
+    { q: "Einstein's photoelectric equation is:",
+      choices: ["KE_max = hf + Φ", "KE_max = hf − Φ", "KE_max = Φ − hf", "KE_max = hf · Φ"], correct: 1 },
+    { q: "Wien's displacement law says the peak wavelength of blackbody radiation is:",
+      choices: ["Independent of temperature", "Proportional to temperature", "Inversely proportional to temperature", "A function of the object's shape"], correct: 2 },
+    { q: "The Stefan–Boltzmann law states that a blackbody's power per area scales as:",
+      choices: ["T", "T²", "T³", "T⁴"], correct: 3 },
+    { q: "The double-slit experiment performed one electron at a time shows that:",
+      choices: ["Electrons are purely classical particles", "Each electron goes through only one slit", "An interference pattern still builds up — electrons behave as waves", "Electrons cannot pass through slits"], correct: 2 },
+    { q: "In special relativity, two events simultaneous in one inertial frame are:",
+      choices: ["Always simultaneous in every frame", "Generally not simultaneous in frames moving relative to the first", "Always separated by a light-year", "Never real"], correct: 1 },
+    { q: "The Lorentz factor γ = 1/√(1 − v²/c²) does what as v → c?",
+      choices: ["Approaches 0", "Approaches 1", "Approaches ∞", "Stays at 1"], correct: 2 },
+    { q: "A moving clock, compared to a clock at rest in your frame:",
+      choices: ["Runs faster", "Runs slower (time dilation)", "Runs at the same rate", "Stops entirely"], correct: 1 },
+    { q: "An object of proper length L₀ moves at speed v past you. Its length in your frame is:",
+      choices: ["γ L₀", "L₀ / γ", "L₀", "L₀ + v t"], correct: 1 },
+    { q: "The relativistic total energy of a free particle is E = γmc². When v = 0, E equals:",
+      choices: ["0", "m c²", "½ m c²", "2 m c²"], correct: 1 },
+    { q: "The de Broglie wavelength of a particle with momentum p is:",
+      choices: ["h p", "h / p", "p / h", "h² p"], correct: 1 },
+    { q: "In the Bohr model of hydrogen, electron orbits have quantized:",
+      choices: ["Mass", "Charge", "Angular momentum", "Color"], correct: 2 },
+    { q: "Heisenberg's uncertainty principle relates:",
+      choices: ["Mass and energy", "Position and momentum (Δx · Δp ≥ ħ/2)", "Temperature and entropy", "Charge and flux"], correct: 1 },
+    { q: "When white light passes through a prism, it splits into colors because:",
+      choices: ["The frequency changes in glass", "Different wavelengths have slightly different indices of refraction (dispersion)", "The prism absorbs some colors", "The speed of light increases in glass"], correct: 1 },
+    { q: "Total internal reflection occurs when light travels from:",
+      choices: ["A less-dense to a more-dense medium at any angle", "A more-dense to a less-dense medium beyond the critical angle", "Vacuum to glass at 45°", "Any medium at normal incidence"], correct: 1 },
+    { q: "For a mass on a spring with spring constant k and mass m, the angular frequency of SHM is:",
+      choices: ["k / m", "m / k", "√(k / m)", "√(m / k)"], correct: 2 },
+    { q: "A wave has frequency f and wavelength λ. Its phase speed is:",
+      choices: ["f / λ", "λ / f", "f · λ", "f + λ"], correct: 2 },
+    { q: "Power dissipated by a resistor R with current I flowing is:",
+      choices: ["I R", "I² R", "I / R", "R / I"], correct: 1 },
+    { q: "The magnetic flux through a flat surface of area A in a uniform field B is maximized when:",
+      choices: ["The area vector is parallel to B", "The area vector is perpendicular to B", "At 45° to B", "At 30° to B"], correct: 0 },
+    { q: "A photon's energy is related to its frequency by:",
+      choices: ["E = h / f", "E = h f", "E = h c", "E = h λ"], correct: 1 },
+    { q: "Kepler's third law states that the orbital period squared (T²) is proportional to:",
+      choices: ["r", "r²", "r³", "1/r"], correct: 2 },
+    { q: "Escape velocity from a planet's surface depends on:",
+      choices: ["Only the projectile's mass", "The planet's mass and radius", "The projectile's shape", "The launch direction above the horizon"], correct: 1 },
+    { q: "A standing wave on a string fixed at both ends has nodes:",
+      choices: ["Only at the center", "At both ends and possibly interior points", "Only at one end", "Everywhere"], correct: 1 },
+    { q: "Electromagnetic waves in vacuum all travel at:",
+      choices: ["Different speeds depending on frequency", "The speed c ≈ 3 × 10⁸ m/s", "The speed of sound", "Zero"], correct: 1 },
+    { q: "In a series RLC circuit at resonance, the impedance is:",
+      choices: ["Maximum", "Minimum, equal to R", "Zero", "Infinite"], correct: 1 },
+    { q: "The Compton effect demonstrates that photons carry:",
+      choices: ["Only energy, not momentum", "Both energy and momentum", "Only charge", "Nothing measurable"], correct: 1 },
+    { q: "A charged particle in a uniform magnetic field (moving perpendicular to B) follows:",
+      choices: ["A parabola", "A straight line", "A circle", "A hyperbola"], correct: 2 },
+    { q: "Relativistic velocity addition: at what combined speed does adding v = 0.5c to u = 0.5c give?",
+      choices: ["1.0 c", "0.5 c", "0.8 c", "0.25 c"], correct: 2 },
+    { q: "Which phenomenon is best explained by treating light as a particle, not a wave?",
+      choices: ["Double-slit interference", "Diffraction through a grating", "Photoelectric effect", "Young's experiment"], correct: 2 },
+    { q: "The rest energy of a 1 kg object is approximately:",
+      choices: ["9 × 10⁹ J", "9 × 10¹⁶ J", "3 × 10⁸ J", "10 J"], correct: 1 },
+    { q: "A proton and an electron are accelerated through the same potential difference. Which acquires more kinetic energy?",
+      choices: ["Proton", "Electron", "Same kinetic energy", "Depends on direction"], correct: 2 }
+  ];
 
 })();
 </script>
