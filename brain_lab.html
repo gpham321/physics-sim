@@ -397,7 +397,7 @@
       drop-shadow(0 0 22px rgba(56,225,255,0.95))
       drop-shadow(0 0 44px rgba(255,77,184,0.55))
       drop-shadow(0 0 90px rgba(56,225,255,0.35));
-    animation: brainFloat var(--field-brain-dur, 5s) ease-in-out infinite;
+    animation: brainFloat 5s ease-in-out infinite;
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
@@ -1962,6 +1962,7 @@
 (function () {
   var VIDEO_ID = '7d6rzXVlbjg';
   var VOL = 30;
+  var START_AT = 5;   // seconds
 
   // Inject the YouTube IFrame API once.
   var tag = document.createElement('script');
@@ -1984,11 +1985,13 @@
         disablekb: 1,
         playsinline: 1,
         iv_load_policy: 3,
-        fs: 0
+        fs: 0,
+        start: START_AT
       },
       events: {
         onReady: function (e) {
           e.target.setVolume(VOL);
+          try { e.target.seekTo(START_AT, true); } catch (_) {}
           if (wantPlaying) e.target.playVideo();
         }
       }
@@ -2255,7 +2258,6 @@
     var fScale = Math.max(0.25, 2.5 - controlState.field * 0.225);
     var rootStyle = document.documentElement.style;
     rootStyle.setProperty('--field-liquid-dur', (8    * fScale).toFixed(2) + 's');
-    rootStyle.setProperty('--field-brain-dur',  (5    * fScale).toFixed(2) + 's');
     rootStyle.setProperty('--field-port-dur',   (2.2  * fScale).toFixed(2) + 's');
     rootStyle.setProperty('--field-coll-dur',   (3    * fScale).toFixed(2) + 's');
   }
