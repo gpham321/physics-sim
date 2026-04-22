@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics 21 Study Guide — Mechanics &amp; Fluids (Full Course)</title>
+<link rel="icon" type="image/jpeg" href="president_giuse.jpg">
+<meta property="og:title" content="Physics 21 Study Guide — Mechanics &amp; Fluids">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --border: #2a2f43;
+    --muted: #9aa2b6;
+    --primary: #66d9ef;
+    --accent: #66d9ef;
+    --accent2: #ffd166;
+    --eq-bg: rgba(102, 217, 239, 0.08);
+    --eq-border: #66d9ef;
+    --warn-bg: rgba(255, 209, 102, 0.09);
+    --warn-border: #ffd166;
+    --def-bg: rgba(166, 226, 46, 0.08);
+    --def-border: #a6e22e;
+    --sim-bg: rgba(192, 132, 247, 0.09);
+    --sim-border: #c084f7;
+    --section-bg: #1d2130;
+    --text: #e6e8ef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    min-height: 100vh;
+    position: relative;
+  }
+  .portrait {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 20;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  header {
+    background: linear-gradient(135deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    background: linear-gradient(180deg, #ffffff 0%, #9fd4e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header p { font-size: 1rem; color: var(--muted); }
+  header .subtitle { font-size: 0.92rem; margin-top: 0.5rem; color: var(--muted); }
+
+  /* TOC */
+  #toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 1.5rem auto;
+    max-width: 900px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  #toc-header {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.85rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.02rem;
+    user-select: none;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc-header:hover { background: #252a3d; }
+  #toc-content { padding: 1rem 1.5rem; display: block; }
+  #toc-content.hidden { display: none; }
+  #toc-content ul { list-style: none; columns: 2; gap: 1.5rem; }
+  #toc-content li { margin-bottom: 0.3rem; }
+  #toc-content a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.93rem;
+  }
+  #toc-content a:hover { text-decoration: underline; color: #9fe7f5; }
+  .toc-lec {
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: 0.3px;
+  }
+
+  /* Main layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  /* Lecture cards */
+  .lecture {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+  .lecture-header {
+    background: linear-gradient(90deg, #1b2030 0%, #2a3450 100%);
+    color: var(--text);
+    padding: 1.3rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .lecture-header h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.55rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .lecture-header .meta { font-size: 0.88rem; color: var(--muted); margin-top: 0.25rem; }
+  .lecture-body { padding: 1.5rem; }
+
+  /* Subsections */
+  .subsection { margin-bottom: 1.8rem; }
+  .subsection h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.85rem;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+  }
+  .subsection h4 {
+    font-size: 1.02rem;
+    color: var(--accent);
+    margin: 0.9rem 0 0.35rem;
+    font-weight: 600;
+  }
+
+  /* Equation boxes */
+  .eq {
+    background: var(--eq-bg);
+    border-left: 4px solid var(--eq-border);
+    border-radius: 6px;
+    padding: 0.9rem 1.3rem;
+    margin: 0.85rem 0;
+    font-family: "STIX Two Text", "Cambria Math", Cambria, "Latin Modern Math", Georgia, serif;
+    font-size: 1.18rem;
+    color: var(--text);
+    overflow-x: auto;
+    letter-spacing: 0.3px;
+  }
+  .eq strong {
+    font-style: italic;
+    font-weight: 500;
+    color: #9fe7f5;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+  }
+  .eq em { font-style: italic; color: var(--accent2); }
+  .eq-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+  }
+
+  /* Warning / Important boxes */
+  .warn {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .warn strong { color: var(--warn-border); }
+
+  /* Definition boxes */
+  .def {
+    background: var(--def-bg);
+    border-left: 4px solid var(--def-border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.7rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+  }
+  .def strong { color: var(--def-border); }
+
+  /* Simulation callout */
+  .sim {
+    background: var(--sim-bg);
+    border-left: 4px solid var(--sim-border);
+    border-radius: 6px;
+    padding: 0.8rem 1.1rem;
+    margin: 0.9rem 0;
+    font-size: 0.93rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .sim .sim-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(192, 132, 247, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sim-border);
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 18px;
+  }
+  .sim strong { color: var(--sim-border); }
+  .sim a { color: #d4b1fb; font-weight: 600; }
+
+  /* Key term */
+  .kt { font-weight: 700; color: var(--accent2); }
+
+  /* SVG diagrams */
+  .diagram {
+    background: #f2f5fb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.9rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram figcaption {
+    font-size: 0.85rem;
+    color: #4a5670;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* Two-column layout for equations */
+  .eq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin: 0.6rem 0;
+  }
+  @media (max-width: 640px) { .eq-grid { grid-template-columns: 1fr; } }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.9rem 0;
+    font-size: 0.93rem;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--panel-2);
+    color: var(--accent);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Summary lists */
+  ul.summary { padding-left: 1.3rem; }
+  ul.summary li { margin-bottom: 0.3rem; }
+
+  sup, sub { font-size: 0.72em; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  p { margin: 0.55rem 0; }
+  a { color: var(--accent); }
+
+  /* Footer */
+  .sg-footer {
+    margin: 4rem auto 1rem;
+    max-width: 960px;
+    padding: 1.5rem 1rem 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html"><img src="president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+
+<header>
+  <h1>Physics 21 Study Guide</h1>
+  <p>OpenStax College Physics 2e — Mechanics &amp; Fluids (Fall 2025, Prof. Raghu)</p>
+  <p class="subtitle">All 19 lectures &nbsp;|&nbsp; Kinematics · Dynamics · Energy · Momentum · Rotation · Gravity · Fluids</p>
+</header>
+
+<div class="container">
+
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+  <div id="toc-header" onclick="toggleTOC()">
+    📋 Table of Contents — Click to expand/collapse
+    <span id="toc-arrow">▼</span>
+  </div>
+  <div id="toc-content">
+    <ul>
+      <li><span class="toc-lec">Week 1 (Lectures 1–2)</span></li>
+      <li><a href="#lec1">L1 · Units &amp; Dimensional Analysis</a></li>
+      <li><a href="#lec2">L2 · 1-D Kinematics</a></li>
+
+      <li><span class="toc-lec">Week 2 (Lectures 3–4)</span></li>
+      <li><a href="#lec3">L3 · Vectors &amp; Coordinates</a></li>
+      <li><a href="#lec4">L4 · 2-D Kinematics &amp; Projectiles</a></li>
+
+      <li><span class="toc-lec">Week 3 (Lectures 5–6)</span></li>
+      <li><a href="#lec5">L5 · Forces &amp; Newton's Laws</a></li>
+      <li><a href="#lec6">L6 · Friction, Tension, Inclines</a></li>
+
+      <li><span class="toc-lec">Week 4 (Lectures 7–8)</span></li>
+      <li><a href="#lec7">L7 · Uniform Circular Motion</a></li>
+      <li><a href="#midterm1">★ Midterm 1 Review</a></li>
+      <li><a href="#lec8">L8 · Newton's Law of Gravitation</a></li>
+
+      <li><span class="toc-lec">Week 5 (Lectures 9–10)</span></li>
+      <li><a href="#lec9">L9 · Work &amp; Energy</a></li>
+      <li><a href="#lec10">L10 · Energy Conservation &amp; Momentum</a></li>
+
+      <li><span class="toc-lec">Week 6 (Lectures 11–12)</span></li>
+      <li><a href="#lec11">L11 · Collisions &amp; Momentum Conservation</a></li>
+      <li><a href="#lec12">L12 · Torque &amp; Static Equilibrium</a></li>
+
+      <li><span class="toc-lec">Week 7 (Lecture 13)</span></li>
+      <li><a href="#lec13">L13 · Rotational Motion &amp; Moment of Inertia</a></li>
+
+      <li><span class="toc-lec">Week 8 (Lectures 14–15)</span></li>
+      <li><a href="#lec14">L14 · Rotational KE &amp; Angular Momentum</a></li>
+      <li><a href="#midterm2">★ Midterm 2 Review</a></li>
+      <li><a href="#lec15">L15 · Rolling, Collisions, Intro to Fluids</a></li>
+
+      <li><span class="toc-lec">Week 9 (Lectures 16–17)</span></li>
+      <li><a href="#lec16">L16 · Fluid Statics &amp; Archimedes</a></li>
+      <li><a href="#lec17">L17 · Bernoulli &amp; Fluid Dynamics</a></li>
+
+      <li><span class="toc-lec">Week 10 (Lectures 18–19)</span></li>
+      <li><a href="#lec18">L18 · Viscous Flow &amp; Poiseuille</a></li>
+      <li><a href="#lec19">L19 · Course Review &amp; Applications</a></li>
+
+      <li><span class="toc-lec">Final &amp; Reference</span></li>
+      <li><a href="#final">★ Final Exam Review</a></li>
+      <li><a href="#formulas">All Key Equations</a></li>
+      <li><a href="#constants">Constants &amp; Conversions</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 1 ===================== -->
+<div class="lecture" id="lec1">
+  <div class="lecture-header">
+    <h2>Lecture 1 — Physical Quantities, Units &amp; Dimensional Analysis</h2>
+    <div class="meta">Date: September 23, 2025 &nbsp;|&nbsp; OpenStax §1.1, §1.2, §2.1</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>What Physics Is About</h3>
+      <p>Physics is the science of <em>how things move and why</em>. PHYS 21 covers two big domains: <strong>mechanics</strong> (point particles and extended solids that translate, rotate, and collide) and <strong>fluids</strong> (liquids and gases that flow, push, and float things). Both are governed by a small handful of conservation laws — momentum, energy, angular momentum — applied with care to model the real world.</p>
+
+      <div class="def">
+        <strong>The physicist's loop:</strong> read words → draw a diagram → identify knowns/unknowns → choose a principle → write equations → solve algebraically → plug numbers <em>last</em> → check units → check limiting cases. Skipping any step makes physics feel like alchemy.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§1.1–1.2 — SI Units &amp; Powers of Ten</h3>
+      <p>Every physical quantity has a <span class="kt">numerical value</span> and a <span class="kt">unit</span>. Skipping units is the #1 source of wrong answers in physics.</p>
+
+      <h4>The Seven SI Base Units</h4>
+      <table>
+        <tr><th>Quantity</th><th>Unit</th><th>Symbol</th></tr>
+        <tr><td>Length</td><td>meter</td><td>m</td></tr>
+        <tr><td>Mass</td><td>kilogram</td><td>kg</td></tr>
+        <tr><td>Time</td><td>second</td><td>s</td></tr>
+        <tr><td>Electric current</td><td>ampere</td><td>A</td></tr>
+        <tr><td>Temperature</td><td>kelvin</td><td>K</td></tr>
+        <tr><td>Amount of substance</td><td>mole</td><td>mol</td></tr>
+        <tr><td>Luminous intensity</td><td>candela</td><td>cd</td></tr>
+      </table>
+      <p>In PHYS 21 we use <strong>kg, m, s</strong>. Every other mechanical quantity is built from these (force = kg·m/s², energy = kg·m²/s², pressure = kg/(m·s²), etc.).</p>
+
+      <h4>SI Prefixes You Should Know Cold</h4>
+      <table>
+        <tr><th>Prefix</th><th>Symbol</th><th>Factor</th></tr>
+        <tr><td>giga</td><td>G</td><td>10⁹</td></tr>
+        <tr><td>mega</td><td>M</td><td>10⁶</td></tr>
+        <tr><td>kilo</td><td>k</td><td>10³</td></tr>
+        <tr><td>centi</td><td>c</td><td>10⁻²</td></tr>
+        <tr><td>milli</td><td>m</td><td>10⁻³</td></tr>
+        <tr><td>micro</td><td>μ</td><td>10⁻⁶</td></tr>
+        <tr><td>nano</td><td>n</td><td>10⁻⁹</td></tr>
+      </table>
+
+      <div class="warn">
+        <strong>Two famous SI gotchas:</strong> the kilogram (not the gram) is the SI mass unit — and 1 m³ = 1000 L (a cubic meter is a thousand liters, not one). When in doubt, write the conversion as a fraction equal to 1 and multiply through, watching units cancel.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§2.1 — Dimensional Analysis</h3>
+      <p>Every equation in physics must be <strong>dimensionally consistent</strong>: every term separated by + or − or = must have the same units. This is your free error checker.</p>
+
+      <div class="eq">
+        <span class="eq-label">Dimensions in mechanics</span>
+        [length] = L &nbsp;&nbsp; [mass] = M &nbsp;&nbsp; [time] = T<br>
+        [velocity] = L/T &nbsp;&nbsp; [acceleration] = L/T² &nbsp;&nbsp; [force] = ML/T² &nbsp;&nbsp; [energy] = ML²/T²
+      </div>
+
+      <h4>Example: Sanity-Check a Formula</h4>
+      <p>Suppose you wrote &nbsp; v² = v<sub>0</sub>² + 2a·t. Check: left side L²/T². Right side: L²/T² + (L/T²)(T) = L²/T² + L/T. Inconsistent — the second term is wrong (it should be 2a·Δx with units L²/T²).</p>
+
+      <div class="def">
+        <strong>Dimensional analysis can also <em>guess</em> the form of a formula.</strong> If a pendulum's period T depends on length L, mass m, and g, only T = k·√(L/g) is dimensionally correct (no m at all). Solving the actual ODE just delivers k = 2π.
+      </div>
+
+      <div class="warn">
+        <strong>Trig arguments are dimensionless.</strong> sin(θ), exp(x), ln(x) only accept pure numbers. If you see sin(ωt) the product ωt must be dimensionless, so [ω] = 1/T.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Strategy for End-of-Chapter Problems</h3>
+      <ul class="summary">
+        <li>Convert everything to SI <em>at the start</em>; never mix units.</li>
+        <li>Use scientific notation for numbers &lt; 10⁻³ or &gt; 10⁴.</li>
+        <li>Round only at the very end; carry 1 extra significant figure during work.</li>
+        <li>End each problem by saying "the answer is ___ units, which makes physical sense because ___."</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 2 ===================== -->
+<div class="lecture" id="lec2">
+  <div class="lecture-header">
+    <h2>Lecture 2 — Kinematics in One Dimension</h2>
+    <div class="meta">Date: September 25, 2025 &nbsp;|&nbsp; OpenStax §2.3–§2.7</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§2.3 — Position, Displacement, Velocity</h3>
+      <p>Position <em>x</em> is a coordinate on a number line; choose an origin and a positive direction first. Then:</p>
+
+      <div class="eq">
+        <span class="eq-label">Displacement</span>
+        Δx = x<sub>final</sub> − x<sub>initial</sub>
+      </div>
+      <p>Displacement is a <em>signed</em> quantity (a vector in 1-D). It is <strong>not</strong> the same as distance traveled — a runner who returns to the start has displacement 0 but distance &gt; 0.</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Average velocity</span>v̄ = Δx/Δt</div>
+        <div class="eq"><span class="eq-label">Average speed</span>(distance)/(elapsed time)</div>
+      </div>
+
+      <div class="def">
+        <strong>Instantaneous velocity</strong> is the limit of v̄ as Δt → 0 — the slope of the position-vs-time graph at that instant. <strong>Speed</strong> = |velocity|.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§2.4 — Acceleration</h3>
+      <div class="eq">
+        <span class="eq-label">Average acceleration</span>
+        ā = Δv/Δt
+      </div>
+      <p>Sign matters: <em>positive a</em> means the velocity is increasing in the +x direction (could be speeding up if v &gt; 0 or slowing down if v &lt; 0). Decelerating just means a and v point in opposite directions.</p>
+
+      <div class="warn">
+        <strong>Common pitfall:</strong> "deceleration" is not a separate kinematic variable. Always work with signed acceleration and signed velocity. A car braking has a &lt; 0 (in the +x direction) only if it was moving in +x.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§2.5 — Constant-Acceleration Kinematics ("the Big Four")</h3>
+      <p>If a is constant, integrating once gives v(t) and twice gives x(t). Memorize all four:</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Eq. 2.34 — velocity</span>v = v<sub>0</sub> + a·t</div>
+        <div class="eq"><span class="eq-label">Eq. 2.35 — position</span>x = x<sub>0</sub> + v<sub>0</sub>t + ½ a t²</div>
+        <div class="eq"><span class="eq-label">Eq. 2.36 — time-free</span>v² = v<sub>0</sub>² + 2 a (x − x<sub>0</sub>)</div>
+        <div class="eq"><span class="eq-label">Eq. 2.37 — average</span>x − x<sub>0</sub> = ½ (v<sub>0</sub> + v) · t</div>
+      </div>
+
+      <div class="def">
+        <strong>How to pick which equation:</strong> list your knowns (you'll always know 3 of {v<sub>0</sub>, v, a, t, Δx}). Pick the equation that uses your three knowns and the one you want.
+      </div>
+
+      <div class="diagram">
+        <svg width="440" height="220" viewBox="0 0 440 220">
+          <!-- axes -->
+          <line x1="50" y1="180" x2="420" y2="180" stroke="#444" stroke-width="1.2"/>
+          <line x1="50" y1="20"  x2="50"  y2="180" stroke="#444" stroke-width="1.2"/>
+          <text x="425" y="184" font-size="11" fill="#333">t</text>
+          <text x="38" y="20"  font-size="11" fill="#333">x</text>
+          <!-- straight line: constant velocity -->
+          <line x1="50" y1="160" x2="180" y2="100" stroke="#2e6da4" stroke-width="2"/>
+          <text x="115" y="92" font-size="10" fill="#2e6da4">constant v &nbsp;(slope = v)</text>
+          <!-- parabola: positive acceleration -->
+          <path d="M 180 100 Q 250 95 320 50" stroke="#d33" stroke-width="2" fill="none"/>
+          <text x="240" y="42" font-size="10" fill="#d33">accelerating (slope rising)</text>
+          <!-- v-t graph below -->
+          <text x="200" y="210" font-size="11" fill="#333" font-style="italic" text-anchor="middle">x-t graph: slope at any point = instantaneous velocity</text>
+        </svg>
+        <figcaption>x-vs-t graphs: a straight line is constant velocity; a curving line means the velocity is changing.</figcaption>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§2.7 — Free Fall</h3>
+      <p>Near Earth's surface (and ignoring air resistance), every object falls with <span class="kt">g = 9.80 m/s²</span> directed <em>downward</em>, regardless of mass. Substitute a = ±g into the Big Four with a sign convention you choose at the start.</p>
+
+      <div class="warn">
+        <strong>Sign convention discipline:</strong> the <em>most</em> common error in PHYS 21 is forgetting that g is unsigned (a positive constant ≈ 9.8 m/s²). Whether you write a = +g or a = −g depends on whether your +y axis points down or up. Pick one and stay consistent through the entire problem.
+      </div>
+
+      <h4>Worked Example</h4>
+      <p>A ball is thrown straight up from y = 0 with v<sub>0</sub> = +20 m/s. Take +y up, so a = −g = −9.8 m/s². Find the maximum height.</p>
+      <p>At the top, v = 0. Use v² = v<sub>0</sub>² + 2a·Δy:</p>
+      <div class="eq">
+        0 = (20)² + 2(−9.8)·y<sub>max</sub> &nbsp;&rArr;&nbsp; y<sub>max</sub> = 400/19.6 ≈ <em>20.4 m</em>
+      </div>
+      <p>Time to reach the top: t = (0 − 20)/(−9.8) ≈ 2.04 s. By symmetry, the round trip takes ~4.08 s.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 3 ===================== -->
+<div class="lecture" id="lec3">
+  <div class="lecture-header">
+    <h2>Lecture 3 — Vectors &amp; Coordinate Systems</h2>
+    <div class="meta">Date: September 30, 2025 &nbsp;|&nbsp; OpenStax §2.2, §3.2, §3.3</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Scalars vs. Vectors</h3>
+      <p>A <span class="kt">scalar</span> has only magnitude (mass, time, temperature, energy). A <span class="kt">vector</span> has both magnitude and direction (displacement, velocity, force).</p>
+
+      <h4>Vector Notation</h4>
+      <p>We write vectors with arrows: <strong>v⃗</strong>, or in bold, <strong>v</strong>. Magnitude is |v⃗| or just v (no arrow). In 2-D, a vector decomposes into components along chosen axes:</p>
+
+      <div class="eq">
+        <span class="eq-label">Components</span>
+        v<sub>x</sub> = |v| cos θ &nbsp;&nbsp; v<sub>y</sub> = |v| sin θ
+      </div>
+      <div class="eq">
+        <span class="eq-label">Magnitude &amp; direction</span>
+        |v| = √(v<sub>x</sub>² + v<sub>y</sub>²) &nbsp;&nbsp; θ = tan⁻¹(v<sub>y</sub>/v<sub>x</sub>)
+      </div>
+
+      <div class="diagram">
+        <svg width="420" height="220" viewBox="0 0 420 220">
+          <!-- axes -->
+          <line x1="60" y1="180" x2="380" y2="180" stroke="#444" stroke-width="1.2"/>
+          <line x1="60" y1="20"  x2="60"  y2="180" stroke="#444" stroke-width="1.2"/>
+          <text x="385" y="184" font-size="11" fill="#333">x</text>
+          <text x="48" y="22"  font-size="11" fill="#333">y</text>
+          <!-- vector v -->
+          <line x1="60" y1="180" x2="280" y2="60" stroke="#d33" stroke-width="2.4" marker-end="url(#arr3)"/>
+          <text x="170" y="110" font-size="11" fill="#d33" font-style="italic">v⃗</text>
+          <!-- components -->
+          <line x1="60" y1="180" x2="280" y2="180" stroke="#2e6da4" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="160" y="200" font-size="11" fill="#2e6da4">v<tspan font-size="9" baseline-shift="sub">x</tspan> = v cos θ</text>
+          <line x1="280" y1="180" x2="280" y2="60" stroke="#2e8b57" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="290" y="120" font-size="11" fill="#2e8b57">v<tspan font-size="9" baseline-shift="sub">y</tspan> = v sin θ</text>
+          <!-- angle -->
+          <path d="M 100 180 A 40 40 0 0 0 90 162" stroke="#444" stroke-width="1" fill="none"/>
+          <text x="100" y="170" font-size="10" fill="#333">θ</text>
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#d33"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Decomposing a vector into x- and y-components is just trigonometry on the right triangle it forms with the axes.</figcaption>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§3.2 — Vector Addition (Two Methods)</h3>
+
+      <h4>Graphical (Tip-to-Tail)</h4>
+      <p>Draw the first vector. Place the tail of the second at the tip of the first. The resultant <strong>R⃗ = A⃗ + B⃗</strong> goes from the tail of the first to the tip of the last. (Order doesn't matter — vector addition is commutative.)</p>
+
+      <h4>Component (Always Use This for Calculation)</h4>
+      <div class="eq">
+        <span class="eq-label">Component-wise</span>
+        R<sub>x</sub> = A<sub>x</sub> + B<sub>x</sub> &nbsp;&nbsp; R<sub>y</sub> = A<sub>y</sub> + B<sub>y</sub>
+      </div>
+      <p>Then |R| = √(R<sub>x</sub>² + R<sub>y</sub>²) and θ = tan⁻¹(R<sub>y</sub>/R<sub>x</sub>) (watching the quadrant).</p>
+
+      <div class="warn">
+        <strong>Quadrant trap:</strong> tan⁻¹ on a calculator returns angles in (−90°, +90°) only. If R<sub>x</sub> &lt; 0, add 180°. Always sketch the resultant first to know which quadrant it lives in.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§3.3 — Subtraction &amp; Scalar Multiplication</h3>
+      <p>Subtraction: <strong>A⃗ − B⃗ = A⃗ + (−B⃗)</strong>, where −B⃗ is B⃗ flipped. Scalar multiplication: <strong>cA⃗</strong> stretches or shrinks A⃗ by |c|, and reverses it if c &lt; 0. Components scale: (cA)<sub>x</sub> = cA<sub>x</sub>.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>The Dot Product (You'll Need This Soon)</h3>
+      <p>The scalar product picks out the component of one vector along another:</p>
+      <div class="eq">
+        <span class="eq-label">Dot product</span>
+        A⃗ · B⃗ = |A| |B| cos φ = A<sub>x</sub>B<sub>x</sub> + A<sub>y</sub>B<sub>y</sub>
+      </div>
+      <ul class="summary">
+        <li>Parallel vectors (φ = 0): A·B = AB.</li>
+        <li>Perpendicular (φ = 90°): A·B = 0. Used to test orthogonality.</li>
+        <li>Anti-parallel (φ = 180°): A·B = −AB.</li>
+      </ul>
+      <p>You'll see this in <strong>Lecture 9</strong> as work: W = F⃗·d⃗ = Fd cos φ.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 4 ===================== -->
+<div class="lecture" id="lec4">
+  <div class="lecture-header">
+    <h2>Lecture 4 — Two-Dimensional Kinematics &amp; Projectiles</h2>
+    <div class="meta">Date: October 2, 2025 &nbsp;|&nbsp; OpenStax §3.1, §3.4</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>The Big Idea: Independence of x and y</h3>
+      <p>In 2-D motion under constant acceleration (e.g., gravity), the x- and y-axes evolve <em>independently</em>. Apply the Big Four kinematic equations to each axis separately and link them only through time t.</p>
+
+      <div class="def">
+        <strong>Projectile motion = horizontal motion at constant velocity + vertical motion at constant a = −g.</strong> The two are coupled only by sharing the same clock.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§3.4 — Projectile Equations</h3>
+      <p>Initial speed v<sub>0</sub> at angle θ above horizontal: v<sub>0x</sub> = v<sub>0</sub> cos θ, v<sub>0y</sub> = v<sub>0</sub> sin θ. Take +y up, +x in launch direction; a<sub>x</sub> = 0, a<sub>y</sub> = −g.</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Horizontal</span>x(t) = v<sub>0</sub> cos θ · t</div>
+        <div class="eq"><span class="eq-label">Vertical position</span>y(t) = v<sub>0</sub> sin θ · t − ½ g t²</div>
+        <div class="eq"><span class="eq-label">Vertical velocity</span>v<sub>y</sub>(t) = v<sub>0</sub> sin θ − g t</div>
+        <div class="eq"><span class="eq-label">Trajectory (eliminate t)</span>y(x) = (tan θ) x − [g/(2v<sub>0</sub>² cos²θ)] x²</div>
+      </div>
+
+      <h4>Range, Max Height, Time of Flight (level ground, y<sub>final</sub> = y<sub>initial</sub>)</h4>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Time of flight</span>T = (2 v<sub>0</sub> sin θ) / g</div>
+        <div class="eq"><span class="eq-label">Max height</span>H = (v<sub>0</sub>² sin²θ) / (2g)</div>
+        <div class="eq"><span class="eq-label">Range (horiz.)</span>R = (v<sub>0</sub>² sin 2θ) / g</div>
+        <div class="eq"><span class="eq-label">Range maximum</span>θ = 45° &rArr; R<sub>max</sub> = v<sub>0</sub>²/g</div>
+      </div>
+
+      <div class="diagram">
+        <svg width="440" height="220" viewBox="0 0 440 220">
+          <!-- ground -->
+          <line x1="20" y1="190" x2="420" y2="190" stroke="#444" stroke-width="1.5"/>
+          <!-- parabola -->
+          <path d="M 30 190 Q 220 -20 410 190" stroke="#d33" stroke-width="2" fill="none"/>
+          <!-- launch arrow -->
+          <line x1="30" y1="190" x2="80" y2="140" stroke="#2e6da4" stroke-width="2.2" marker-end="url(#arr4)"/>
+          <text x="60" y="135" font-size="11" fill="#2e6da4" font-style="italic">v₀</text>
+          <text x="48" y="180" font-size="11" fill="#444">θ</text>
+          <!-- max height -->
+          <line x1="220" y1="190" x2="220" y2="32" stroke="#888" stroke-dasharray="3 3"/>
+          <text x="225" y="105" font-size="11" fill="#444">H</text>
+          <!-- range -->
+          <line x1="30" y1="205" x2="410" y2="205" stroke="#2e8b57" stroke-width="1.4"/>
+          <text x="220" y="218" font-size="11" fill="#2e8b57" text-anchor="middle">R</text>
+          <defs>
+            <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2e6da4"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Projectile trajectory: parabolic shape, peak at half the time of flight.</figcaption>
+      </div>
+
+      <div class="warn">
+        <strong>Symmetry in θ:</strong> two complementary launch angles (θ and 90° − θ) give the <em>same range</em> on level ground (e.g., 30° and 60°). The lower angle has a flatter, faster trajectory; the higher angle has more hang time.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Worked Example: Cliff Dive</h3>
+      <p>A diver leaves a 30-m cliff horizontally at v<sub>0</sub> = 6 m/s. How far from the base does she hit the water?</p>
+      <p>Vertical: y = h − ½ g t² = 0 &rArr; t = √(2h/g) = √(60/9.8) ≈ 2.47 s. Horizontal: x = v<sub>0</sub> t = 6(2.47) ≈ <strong>14.8 m</strong>.</p>
+      <p>Notice you never need to mix x and y in the algebra — they're independent until you read off "at the same time."</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 5 ===================== -->
+<div class="lecture" id="lec5">
+  <div class="lecture-header">
+    <h2>Lecture 5 — Forces &amp; Newton's Laws</h2>
+    <div class="meta">Date: October 7, 2025 &nbsp;|&nbsp; OpenStax §4.1–§4.6</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>The Three Laws</h3>
+
+      <div class="def">
+        <strong>1st Law (Inertia):</strong> An object at rest stays at rest, and an object in motion stays in motion at constant velocity, <em>unless acted on by a net external force</em>. There is no need for a force to <em>maintain</em> motion — only to change it.
+      </div>
+      <div class="def">
+        <strong>2nd Law (the Equation):</strong> The net force on an object equals its mass times its acceleration.
+      </div>
+      <div class="eq">
+        <span class="eq-label">Newton's Second Law (Eq. 4.3)</span>
+        <strong>F⃗</strong><sub>net</sub> = m <strong>a⃗</strong>
+      </div>
+      <div class="def">
+        <strong>3rd Law (Action–Reaction):</strong> If A exerts force F⃗ on B, then B exerts force −F⃗ on A. The two forces act on <em>different objects</em> and so don't cancel.
+      </div>
+
+      <div class="warn">
+        <strong>Action–reaction is not "balanced forces."</strong> A book on a table: gravity pulls the book down, the table pushes up. Those are <em>not</em> a 3rd-law pair (both act on the book). The pair to gravity-on-book is book's-gravity-on-Earth (acts on Earth, negligibly accelerating it).
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§4.5 — Free-Body Diagrams (FBDs)</h3>
+      <p>The single most useful tool in mechanics. Steps:</p>
+      <ol class="summary" style="padding-left:1.5rem;">
+        <li>Pick the system (one object, or a connected group treated as one).</li>
+        <li>Replace it with a dot.</li>
+        <li>Draw <em>every</em> force acting <strong>on</strong> the dot (no internal forces).</li>
+        <li>Choose axes — usually one along expected motion or along a surface.</li>
+        <li>Decompose forces into components.</li>
+        <li>Apply ΣF<sub>x</sub> = ma<sub>x</sub> and ΣF<sub>y</sub> = ma<sub>y</sub>.</li>
+      </ol>
+
+      <div class="diagram">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <!-- block on incline -->
+          <line x1="60" y1="170" x2="320" y2="50" stroke="#444" stroke-width="1.5"/>
+          <line x1="60" y1="170" x2="380" y2="170" stroke="#444" stroke-width="1.5"/>
+          <rect x="180" y="98" width="50" height="40" fill="#9fd4e6" stroke="#2e6da4" transform="rotate(-25 205 118)"/>
+          <text x="205" y="124" font-size="12" fill="#2e6da4" text-anchor="middle" transform="rotate(-25 205 124)">m</text>
+          <!-- weight -->
+          <line x1="205" y1="118" x2="205" y2="180" stroke="#d33" stroke-width="2.2" marker-end="url(#arr5)"/>
+          <text x="212" y="160" font-size="11" fill="#d33">mg</text>
+          <!-- normal -->
+          <line x1="205" y1="118" x2="178" y2="60" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arr5)"/>
+          <text x="148" y="68" font-size="11" fill="#2e8b57">N</text>
+          <!-- friction -->
+          <line x1="205" y1="118" x2="265" y2="93" stroke="#c084f7" stroke-width="2.2" marker-end="url(#arr5)"/>
+          <text x="262" y="86" font-size="11" fill="#c084f7">f</text>
+          <text x="105" y="160" font-size="10" fill="#444">θ</text>
+          <defs>
+            <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Block on an incline: weight (down), normal (⊥ surface), friction (along surface). Tilt your axes along the incline for clean algebra.</figcaption>
+      </div>
+
+      <div class="warn">
+        <strong>Common force-list errors:</strong> drawing forces from accelerations (centripetal "force" is a result, not a cause); double-counting normal force vs. its components; including a "force of motion" — there isn't one.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§4.6 — Common Forces in Mechanics</h3>
+      <table>
+        <tr><th>Force</th><th>Direction</th><th>Magnitude</th></tr>
+        <tr><td>Weight (gravity)</td><td>Toward Earth's center</td><td>W = mg, g ≈ 9.80 m/s²</td></tr>
+        <tr><td>Normal N</td><td>⊥ to contact surface</td><td>Whatever the surface needs (constraint)</td></tr>
+        <tr><td>Tension T</td><td>Along the rope</td><td>Whatever the rope needs (massless, inextensible)</td></tr>
+        <tr><td>Spring</td><td>Toward equilibrium</td><td>F = −kx (Hooke's law)</td></tr>
+        <tr><td>Friction f</td><td>Opposes relative slip / impending slip</td><td>Static: f ≤ μ<sub>s</sub>N. Kinetic: f<sub>k</sub> = μ<sub>k</sub>N</td></tr>
+      </table>
+
+      <div class="def">
+        <strong>Apparent weight</strong> is the magnitude of the normal force, not the actual gravitational pull. In an elevator accelerating up at a, you feel "heavier": N = m(g + a). Free fall: N = 0 — weightless.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 6 ===================== -->
+<div class="lecture" id="lec6">
+  <div class="lecture-header">
+    <h2>Lecture 6 — Friction, Tension, &amp; Inclines</h2>
+    <div class="meta">Date: October 9, 2025 &nbsp;|&nbsp; OpenStax §4.5–§4.7, §5.1</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§5.1 — Friction</h3>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Static friction (Eq. 5.1)</span>f<sub>s</sub> ≤ μ<sub>s</sub> N</div>
+        <div class="eq"><span class="eq-label">Kinetic friction (Eq. 5.2)</span>f<sub>k</sub> = μ<sub>k</sub> N</div>
+      </div>
+
+      <ul class="summary">
+        <li>Static friction <em>adjusts</em> up to a maximum (μ<sub>s</sub>N) to prevent slip.</li>
+        <li>Once slip starts, kinetic friction kicks in. Almost always μ<sub>k</sub> &lt; μ<sub>s</sub> — that's why a stationary car can hold a hill but starts skidding once it begins to slide.</li>
+        <li>μ depends on the <strong>pair</strong> of surfaces, not on contact area or normal force individually.</li>
+      </ul>
+
+      <div class="warn">
+        <strong>Direction of static friction is set by what would happen <em>without</em> it.</strong> If a block on a slope would slide down without friction, then f<sub>s</sub> points up the slope. Don't assume; check.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>The Inclined-Plane Recipe</h3>
+      <p>For a block of mass m on a frictionless incline of angle θ:</p>
+      <div class="eq">
+        Along the incline (down positive): &nbsp; m g sin θ = m a &nbsp;&rArr;&nbsp; a = g sin θ
+      </div>
+      <div class="eq">
+        Perpendicular to the incline: &nbsp; N − m g cos θ = 0 &nbsp;&rArr;&nbsp; N = m g cos θ
+      </div>
+      <p>With friction (block sliding down): a = g(sin θ − μ<sub>k</sub> cos θ). The block won't slide at all if μ<sub>s</sub> ≥ tan θ.</p>
+
+      <div class="def">
+        <strong>Critical angle for slipping:</strong> tan θ<sub>c</sub> = μ<sub>s</sub>. Tilt a surface until something starts to slide; record the angle; you've measured μ<sub>s</sub>.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Tension &amp; Pulleys</h3>
+      <p>A massless, frictionless pulley simply <em>redirects</em> the tension — magnitude is the same on both sides. A massless, inextensible rope means both ends share the same |a|.</p>
+
+      <h4>Atwood Machine</h4>
+      <p>Two masses m<sub>1</sub> and m<sub>2</sub> (m<sub>2</sub> &gt; m<sub>1</sub>) over a pulley. Let a be the acceleration of m<sub>2</sub> downward. Newton on each mass:</p>
+      <div class="eq">
+        m<sub>1</sub>: T − m<sub>1</sub>g = m<sub>1</sub>a<br>
+        m<sub>2</sub>: m<sub>2</sub>g − T = m<sub>2</sub>a
+      </div>
+      <p>Add: a = (m<sub>2</sub> − m<sub>1</sub>)g/(m<sub>1</sub> + m<sub>2</sub>). Then T = 2 m<sub>1</sub> m<sub>2</sub> g / (m<sub>1</sub> + m<sub>2</sub>). Limits: m<sub>1</sub> = m<sub>2</sub> → a = 0 ✓. m<sub>2</sub> ≫ m<sub>1</sub> → a → g ✓.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 7 ===================== -->
+<div class="lecture" id="lec7">
+  <div class="lecture-header">
+    <h2>Lecture 7 — Uniform Circular Motion</h2>
+    <div class="meta">Date: October 14, 2025 &nbsp;|&nbsp; OpenStax §6.1–§6.2 &nbsp;[same day as Midterm 1]</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§6.1 — Angle &amp; Angular Velocity</h3>
+      <p>Measure angles in <span class="kt">radians</span>: a full circle is 2π rad, and arc length s = r θ <em>only</em> in radians. Angular velocity ω is rate of change of angle:</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Angular velocity</span>ω = Δθ/Δt &nbsp;(rad/s)</div>
+        <div class="eq"><span class="eq-label">Linear ↔ angular speed</span>v = r ω</div>
+        <div class="eq"><span class="eq-label">Period</span>T = 2π/ω = 2πr/v</div>
+        <div class="eq"><span class="eq-label">Frequency</span>f = 1/T = ω/(2π)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§6.2 — Centripetal Acceleration</h3>
+      <p>An object moving in a circle at constant speed is <em>still accelerating</em> — its velocity vector keeps turning. The acceleration points toward the center (centripetal):</p>
+
+      <div class="eq">
+        <span class="eq-label">Centripetal acceleration (Eq. 6.16)</span>
+        a<sub>c</sub> = v²/r = r ω² &nbsp;(directed toward center)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Centripetal force (the net inward force)</span>
+        F<sub>c</sub> = m a<sub>c</sub> = m v²/r
+      </div>
+
+      <div class="warn">
+        <strong>"Centripetal force" is not a separate force.</strong> It's the <em>name for the net inward component</em> of whatever real forces (tension, gravity, normal, friction) are doing the steering. Always identify the actual force first, then equate it to mv²/r.
+      </div>
+
+      <div class="diagram">
+        <svg width="380" height="220" viewBox="0 0 380 220">
+          <circle cx="190" cy="110" r="80" fill="none" stroke="#444" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <circle cx="190" cy="110" r="3" fill="#444"/>
+          <!-- object -->
+          <circle cx="270" cy="110" r="8" fill="#9fd4e6" stroke="#2e6da4"/>
+          <!-- velocity (tangent, up) -->
+          <line x1="270" y1="110" x2="270" y2="50" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arr7)"/>
+          <text x="278" y="68" font-size="11" fill="#2e8b57" font-style="italic">v</text>
+          <!-- a_c toward center -->
+          <line x1="270" y1="110" x2="200" y2="110" stroke="#d33" stroke-width="2.2" marker-end="url(#arr7)"/>
+          <text x="225" y="100" font-size="11" fill="#d33" font-style="italic">a<tspan baseline-shift="sub" font-size="9">c</tspan></text>
+          <text x="190" y="210" font-size="11" fill="#333" font-style="italic" text-anchor="middle">v is tangent; a points to the center.</text>
+          <defs>
+            <marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Uniform circular motion: speed is constant, but the velocity vector continuously rotates, requiring a center-pointing acceleration.</figcaption>
+      </div>
+
+      <h4>Worked Example: Conical Pendulum / Banked Curve</h4>
+      <p>A car of mass m rounds a curve of radius r at speed v on a road banked at angle θ. Without friction: tan θ = v²/(rg). For larger v, friction must supply the extra inward force.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MIDTERM 1 ===================== -->
+<div class="lecture" id="midterm1">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #3a2030 0%, #6b3450 100%);">
+    <h2>★ Midterm 1 Review — Tuesday October 14, 5:30–6:30 PM</h2>
+    <div class="meta">Covers Lectures 1–7 (through Discussion 3 / PS3): Units, 1-D &amp; 2-D Kinematics, Vectors, Newton's Laws, Friction, Circular Motion</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Topics You Must Own</h3>
+      <ul class="summary">
+        <li><strong>Units &amp; Dimensions:</strong> SI base units, dimensional consistency as an error check.</li>
+        <li><strong>1-D Kinematics:</strong> all four constant-acceleration equations; signed velocity and acceleration; free fall with chosen sign convention.</li>
+        <li><strong>Vectors:</strong> decomposition into components, magnitude/direction, tip-to-tail addition, dot product.</li>
+        <li><strong>2-D &amp; Projectiles:</strong> independent x and y motion; range/height/time formulas for level launch; complementary-angle symmetry.</li>
+        <li><strong>Newton's Laws:</strong> the meaning of each, free-body diagrams, action–reaction pairs, apparent weight in elevators.</li>
+        <li><strong>Friction:</strong> static (inequality) vs. kinetic (equality), critical-angle relation tan θ<sub>c</sub> = μ<sub>s</sub>.</li>
+        <li><strong>Inclines, tension, pulleys:</strong> tilted-axes recipe; Atwood machine.</li>
+        <li><strong>Circular Motion:</strong> a<sub>c</sub> = v²/r = rω², "centripetal force" as the net inward component.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Strategy</h3>
+      <ul class="summary">
+        <li><strong>Always draw a picture first.</strong> Pictures cost nothing and prevent sign errors.</li>
+        <li><strong>Pick axes early.</strong> For inclines, tilt them. For projectiles, +y up.</li>
+        <li><strong>Solve algebraically; substitute numbers last.</strong> Catches more mistakes and makes limit-checking possible.</li>
+        <li><strong>Check a limit.</strong> "What if μ → 0? What if θ → 0?" — your answer should reduce to something familiar.</li>
+        <li><strong>Watch units.</strong> Convert km→m, g→kg, °→rad before plugging in.</li>
+      </ul>
+
+      <div class="warn">
+        <strong>Exam logistics:</strong> closed book, closed notes, no electronics. In-person. Bring a writing instrument and a watch.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 8 ===================== -->
+<div class="lecture" id="lec8">
+  <div class="lecture-header">
+    <h2>Lecture 8 — Newton's Law of Gravitation</h2>
+    <div class="meta">Date: October 16, 2025 &nbsp;|&nbsp; OpenStax §6.5–§6.6</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§6.5 — Universal Gravitation</h3>
+      <p>Every pair of point masses attracts along the line joining them with a force:</p>
+
+      <div class="eq">
+        <span class="eq-label">Newton's Law of Universal Gravitation (Eq. 6.40)</span>
+        F = G · (m<sub>1</sub> m<sub>2</sub>)/r²
+      </div>
+      <ul class="summary">
+        <li><strong>G</strong> = <span class="kt">6.674 × 10⁻¹¹ N·m²/kg²</span> (Cavendish, 1798).</li>
+        <li><strong>r</strong> is the center-to-center distance.</li>
+        <li>For a spherical body (uniform density), gravity acts as if all the mass were at its center (shell theorem).</li>
+      </ul>
+
+      <h4>Surface Gravity from First Principles</h4>
+      <div class="eq">
+        g<sub>surface</sub> = G M<sub>Earth</sub> / R<sub>Earth</sub>² ≈ (6.67×10⁻¹¹)(5.97×10²⁴) / (6.37×10⁶)² ≈ 9.81 m/s² ✓
+      </div>
+
+      <div class="def">
+        <strong>Inverse-square law:</strong> double the distance, get one-quarter the force. The Moon at 60 R<sub>E</sub> feels gravity (60)² = 3600× weaker than at Earth's surface — and indeed its centripetal acceleration matches.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§6.6 — Satellites &amp; Kepler's Laws</h3>
+      <p>For a circular orbit at radius r around a body of mass M, gravity supplies the centripetal force:</p>
+      <div class="eq">
+        G M m / r² = m v²/r &nbsp;&rArr;&nbsp; v<sub>orbit</sub> = √(G M / r)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Kepler's 3rd Law (Eq. 6.45)</span>
+        T² = (4π²/GM) · r³
+      </div>
+
+      <h4>Worked Example: ISS</h4>
+      <p>Altitude 400 km above Earth, so r = 6.37 × 10⁶ + 4 × 10⁵ = 6.77 × 10⁶ m. v ≈ √[(6.67×10⁻¹¹)(5.97×10²⁴)/(6.77×10⁶)] ≈ <strong>7.67 km/s</strong>; T ≈ 5550 s ≈ <strong>92 minutes</strong>. Matches reality.</p>
+
+      <div class="warn">
+        <strong>Astronauts in orbit are not "weightless because there's no gravity."</strong> Gravity at 400 km is still ~89% of surface g. They're weightless because they (and the station) are in <em>free fall</em> — perpetually missing Earth.
+      </div>
+
+      <h4>Kepler in Words</h4>
+      <ul class="summary">
+        <li><strong>1st Law:</strong> Planets orbit on ellipses with the Sun at one focus.</li>
+        <li><strong>2nd Law:</strong> Equal areas swept in equal times (a consequence of angular momentum conservation, Lecture 14).</li>
+        <li><strong>3rd Law:</strong> T² ∝ r³. Constant of proportionality only depends on the central mass.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Non-Uniform Circular Motion (Discussion 4 Topic)</h3>
+      <p>If speed is changing in addition to direction, total acceleration has two components:</p>
+      <div class="eq">
+        a<sub>c</sub> = v²/r &nbsp;(radial, toward center) &nbsp;&nbsp; a<sub>t</sub> = dv/dt &nbsp;(tangential)
+      </div>
+      <p>|a| = √(a<sub>c</sub>² + a<sub>t</sub>²), and a points inward and forward/backward by the angle tan⁻¹(a<sub>t</sub>/a<sub>c</sub>).</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 9 ===================== -->
+<div class="lecture" id="lec9">
+  <div class="lecture-header">
+    <h2>Lecture 9 — Work &amp; Energy</h2>
+    <div class="meta">Date: October 21, 2025 &nbsp;|&nbsp; OpenStax §7.1–§7.3</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§7.1 — Work Done by a Constant Force</h3>
+      <div class="eq">
+        <span class="eq-label">Work (Eq. 7.4)</span>
+        W = F⃗ · d⃗ = F d cos φ
+      </div>
+      <ul class="summary">
+        <li>Work is a <em>scalar</em> measured in <strong>joules</strong> (J = N·m = kg·m²/s²).</li>
+        <li>φ is the angle between F⃗ and d⃗. F ⊥ d → W = 0 (e.g., gravity does no work on horizontal motion; centripetal force does no work, ever).</li>
+        <li>Sign of W matches the sign of cos φ: pushing along motion does + work; friction does − work.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>§7.2 — Kinetic Energy &amp; the Work-Energy Theorem</h3>
+      <div class="eq">
+        <span class="eq-label">Kinetic energy</span>
+        KE = ½ m v²
+      </div>
+      <div class="eq">
+        <span class="eq-label">Work-Energy Theorem (Eq. 7.10)</span>
+        W<sub>net</sub> = ΔKE = ½ m v<sub>f</sub>² − ½ m v<sub>0</sub>²
+      </div>
+      <p>The total work done by every force adds up to the change in kinetic energy. This is one of the most important and reliable problem-solving tools in mechanics.</p>
+
+      <div class="def">
+        <strong>Why energy methods are powerful:</strong> they are time-blind. You don't need to track <em>when</em> the speed changes — only the start and end. Especially useful when force or path is complicated.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§7.3 — Variable Force &amp; "Area Under F-x"</h3>
+      <p>For a position-dependent force, work is the area under the F-vs-x curve:</p>
+      <div class="eq">
+        W = ∫ F(x) dx &nbsp;(area under F-x graph)
+      </div>
+      <p>For a spring (Hooke's law F = −kx) stretched from 0 to x:</p>
+      <div class="eq">
+        <span class="eq-label">Work to stretch a spring</span>
+        W<sub>by you</sub> = ½ k x² &nbsp;&nbsp; W<sub>by spring</sub> = −½ k x²
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Power</h3>
+      <div class="eq">
+        <span class="eq-label">Power</span>
+        P = dW/dt = F⃗ · v⃗ &nbsp;(watts: 1 W = 1 J/s)
+      </div>
+      <p>A 1-horsepower motor delivers 746 W. A bright LED bulb consumes ~10 W; a treadmill at jogging speed dissipates ~600 W; a Tesla Model S can pull ~500 kW for a few seconds.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 10 ===================== -->
+<div class="lecture" id="lec10">
+  <div class="lecture-header">
+    <h2>Lecture 10 — Energy Conservation, Springs, &amp; Linear Momentum</h2>
+    <div class="meta">Date: October 23, 2025 &nbsp;|&nbsp; OpenStax §7.4–§7.6, §8.1</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§7.4 — Conservative Forces &amp; Potential Energy</h3>
+      <p>A force is <span class="kt">conservative</span> if the work it does between two points is path-independent (equivalently: the work around any closed loop is zero). Gravity and springs are conservative; friction and air drag are <em>not</em>.</p>
+
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Gravitational PE (near Earth)</span>U<sub>grav</sub> = m g h</div>
+        <div class="eq"><span class="eq-label">Spring PE</span>U<sub>spring</sub> = ½ k x²</div>
+      </div>
+      <p>The zero of potential energy is your choice; only differences matter.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§7.5–7.6 — Mechanical Energy &amp; Conservation</h3>
+      <div class="eq">
+        <span class="eq-label">Mechanical energy</span>
+        E<sub>mech</sub> = KE + U
+      </div>
+      <p>If only conservative forces act:</p>
+      <div class="eq">
+        <span class="eq-label">Conservation of Mechanical Energy</span>
+        ½ m v<sub>0</sub>² + U<sub>0</sub> = ½ m v<sub>f</sub>² + U<sub>f</sub>
+      </div>
+      <p>If non-conservative forces (friction, drag, applied push) also act:</p>
+      <div class="eq">
+        W<sub>nc</sub> = ΔKE + ΔU = ΔE<sub>mech</sub>
+      </div>
+
+      <div class="warn">
+        <strong>Energy is never destroyed</strong> — friction converts mechanical energy into thermal energy (heat). For a sliding block on a level rough surface: the kinetic energy lost equals the friction force times the distance slid: ΔKE = −f<sub>k</sub> · d.
+      </div>
+
+      <h4>Worked Example: Loop-the-Loop</h4>
+      <p>A ball starts at rest at height h on a frictionless track that curves into a vertical loop of radius R. Minimum h for the ball to complete the loop: at the top, gravity supplies the entire centripetal force, so v<sub>top</sub>² = gR. Energy conservation between start and top:</p>
+      <div class="eq">
+        m g h = ½ m v<sub>top</sub>² + m g (2R) &nbsp;&rArr;&nbsp; h<sub>min</sub> = 2.5 R
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§8.1 — Linear Momentum &amp; Impulse</h3>
+      <div class="eq">
+        <span class="eq-label">Momentum</span>
+        <strong>p⃗</strong> = m <strong>v⃗</strong> &nbsp;(units kg·m/s)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Newton's 2nd Law (true form)</span>
+        <strong>F⃗</strong><sub>net</sub> = d<strong>p⃗</strong>/dt
+      </div>
+      <p>For constant mass this reduces to F⃗ = ma⃗. But the momentum form survives even when mass changes (rockets, raindrops collecting water).</p>
+
+      <div class="eq">
+        <span class="eq-label">Impulse-momentum theorem (Eq. 8.6)</span>
+        <strong>J⃗</strong> = ∫ F⃗ dt = Δ<strong>p⃗</strong>
+      </div>
+
+      <div class="def">
+        <strong>Why airbags work:</strong> the collision changes Δp by the same amount whether you hit a windshield or an airbag. Spreading the impulse over a longer time Δt lowers the average force F̄ = Δp/Δt — and your body cares about force, not momentum change.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 11 ===================== -->
+<div class="lecture" id="lec11">
+  <div class="lecture-header">
+    <h2>Lecture 11 — Linear Momentum &amp; Collisions</h2>
+    <div class="meta">Date: October 28, 2025 &nbsp;|&nbsp; OpenStax §8.3, §8.5</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§8.3 — Conservation of Momentum</h3>
+      <p>If the net <em>external</em> force on a system is zero, the total momentum of the system is conserved:</p>
+      <div class="eq">
+        <span class="eq-label">Conservation of Momentum</span>
+        p⃗<sub>total, before</sub> = p⃗<sub>total, after</sub>
+      </div>
+
+      <div class="def">
+        <strong>What "system" means:</strong> all interacting particles whose internal forces (3rd-law pairs) cancel inside the sum. Pick the system so that all messy forces are internal — then only external forces matter.
+      </div>
+
+      <p>Momentum conservation holds <em>even when energy isn't conserved</em>. Collisions, explosions, and even sticky bumps all conserve momentum as long as you can ignore external forces during the brief impact.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§8.5 — Types of Collisions</h3>
+      <table>
+        <tr><th>Type</th><th>Momentum?</th><th>Kinetic Energy?</th><th>Example</th></tr>
+        <tr><td>Elastic</td><td>Conserved</td><td>Conserved</td><td>Billiard balls (approx.); atomic-scale</td></tr>
+        <tr><td>Inelastic</td><td>Conserved</td><td>Decreases</td><td>Most everyday bumps</td></tr>
+        <tr><td>Perfectly inelastic</td><td>Conserved</td><td>Maximum loss; objects stick together</td><td>Clay hits wall; rail-car coupling</td></tr>
+      </table>
+
+      <h4>1-D Elastic Collision (Eq. 8.32)</h4>
+      <p>m<sub>1</sub> hits m<sub>2</sub> (initially at rest). Conservation of p and KE gives:</p>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">v<sub>1f</sub></span>v<sub>1f</sub> = ((m<sub>1</sub> − m<sub>2</sub>)/(m<sub>1</sub> + m<sub>2</sub>)) v<sub>1i</sub></div>
+        <div class="eq"><span class="eq-label">v<sub>2f</sub></span>v<sub>2f</sub> = (2 m<sub>1</sub>/(m<sub>1</sub> + m<sub>2</sub>)) v<sub>1i</sub></div>
+      </div>
+
+      <ul class="summary">
+        <li><strong>Equal masses</strong>: v<sub>1f</sub> = 0, v<sub>2f</sub> = v<sub>1i</sub> — they swap velocities (Newton's cradle).</li>
+        <li><strong>Big hits small</strong> (m<sub>1</sub> ≫ m<sub>2</sub>): v<sub>1f</sub> ≈ v<sub>1i</sub>, v<sub>2f</sub> ≈ 2v<sub>1i</sub> (gravitational slingshot).</li>
+        <li><strong>Small hits big</strong> (m<sub>1</sub> ≪ m<sub>2</sub>): v<sub>1f</sub> ≈ −v<sub>1i</sub>, v<sub>2f</sub> ≈ 0 (ball bouncing off a wall).</li>
+      </ul>
+
+      <h4>Perfectly Inelastic (Stick Together)</h4>
+      <div class="eq">
+        m<sub>1</sub> v<sub>1i</sub> + m<sub>2</sub> v<sub>2i</sub> = (m<sub>1</sub> + m<sub>2</sub>) v<sub>f</sub>
+      </div>
+      <p>Maximum KE is lost (consistent with momentum conservation). The lost KE goes to deformation, heat, and sound.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>2-D Collisions &amp; Center of Mass</h3>
+      <p>In 2-D, momentum is conserved component-wise (two scalar equations). For a system of particles, define:</p>
+      <div class="eq">
+        <span class="eq-label">Center of Mass</span>
+        x<sub>CM</sub> = (Σ m<sub>i</sub> x<sub>i</sub>) / (Σ m<sub>i</sub>)
+      </div>
+      <p>The CM moves as if all the mass were concentrated there and all external forces acted on it: M<sub>tot</sub> a⃗<sub>CM</sub> = F⃗<sub>ext, net</sub>. Internal forces shift particles relative to the CM but never move the CM itself.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 12 ===================== -->
+<div class="lecture" id="lec12">
+  <div class="lecture-header">
+    <h2>Lecture 12 — Torque &amp; Static Equilibrium</h2>
+    <div class="meta">Date: October 30, 2025 &nbsp;|&nbsp; OpenStax §9.1–§9.4</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§9.1 — The First Condition for Equilibrium</h3>
+      <p>For a rigid body to be in <strong>translational</strong> equilibrium, the net external force must vanish: ΣF⃗ = 0. This gives two scalar equations in 2-D.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§9.2 — Torque &amp; the Second Condition</h3>
+      <p>A force can cause an object to rotate. The rotational analog of force is <span class="kt">torque</span> τ:</p>
+
+      <div class="eq">
+        <span class="eq-label">Torque (Eq. 9.4)</span>
+        τ = r F sin φ = r<sub>⊥</sub> F = r F<sub>⊥</sub>
+      </div>
+      <ul class="summary">
+        <li><strong>r</strong>: distance from pivot to point of application.</li>
+        <li><strong>φ</strong>: angle between r⃗ and F⃗.</li>
+        <li><strong>r<sub>⊥</sub> = r sin φ</strong> is the "lever arm" — perpendicular distance from pivot to the line of action of F.</li>
+        <li>Sign convention: counterclockwise (+), clockwise (−). Or pick whatever you want — just stay consistent.</li>
+      </ul>
+
+      <div class="def">
+        <strong>Second condition for equilibrium:</strong> Σ τ = 0 about <em>any</em> chosen pivot. If the body is also in translational equilibrium, the choice of pivot doesn't matter — pick a point that kills as many unknown forces as possible.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§9.3–9.4 — Static Equilibrium Recipe</h3>
+      <ol class="summary" style="padding-left:1.5rem;">
+        <li>Draw a free-body diagram showing every force and where it's applied.</li>
+        <li>Write ΣF<sub>x</sub> = 0 and ΣF<sub>y</sub> = 0.</li>
+        <li>Choose a clever pivot — usually where the most unknowns act — and write Στ = 0.</li>
+        <li>Solve the resulting 3 equations for up to 3 unknowns.</li>
+      </ol>
+
+      <h4>Worked Example: Seesaw Balance (OpenStax 9.1 generalized)</h4>
+      <p>A child of mass m<sub>1</sub> = 25 kg sits 1.6 m left of the pivot. A larger child of mass m<sub>2</sub> sits 1.0 m right. Find m<sub>2</sub> for balance.</p>
+      <p>Στ = 0 about pivot: m<sub>1</sub> g (1.6) − m<sub>2</sub> g (1.0) = 0 &rArr; m<sub>2</sub> = 1.6 × 25 = <strong>40 kg</strong>.</p>
+
+      <h4>Worked Example: Ladder Against a Wall</h4>
+      <p>Uniform ladder of length L, mass M, leaning at angle θ against a frictionless vertical wall. The ground has coefficient of static friction μ<sub>s</sub>. Find the minimum θ before slipping.</p>
+      <p>Forces: weight Mg (down at center), normal N from ground (up), normal N<sub>w</sub> from wall (horizontal toward ladder), friction f<sub>s</sub> at base (horizontal toward wall).</p>
+      <p>ΣF<sub>x</sub>: f<sub>s</sub> = N<sub>w</sub>. ΣF<sub>y</sub>: N = Mg. Στ about base: N<sub>w</sub> L sin θ − Mg (L/2) cos θ = 0 &rArr; N<sub>w</sub> = (Mg/2) cot θ. At slip: f<sub>s</sub> = μ<sub>s</sub> N = μ<sub>s</sub> Mg, so:</p>
+      <div class="eq">
+        tan θ<sub>min</sub> = 1/(2 μ<sub>s</sub>)
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§9.5–9.6 — Stability &amp; Levers (Discussion 6)</h3>
+      <p>An object is <strong>stable</strong> if its center of gravity, when slightly displaced, returns toward the original position (lower CM). A <strong>simple machine</strong> (lever, pulley, wheel-and-axle) trades distance for force; ideal mechanical advantage = (effort arm)/(load arm).</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 13 ===================== -->
+<div class="lecture" id="lec13">
+  <div class="lecture-header">
+    <h2>Lecture 13 — Rotational Motion &amp; Moment of Inertia</h2>
+    <div class="meta">Date: November 6, 2025 &nbsp;|&nbsp; OpenStax §10.1–§10.3 &nbsp;[after Democracy Day]</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§10.1 — Angular Quantities &amp; Their Linear Analogs</h3>
+      <table>
+        <tr><th>Linear</th><th>Angular</th><th>Connection (point at radius r)</th></tr>
+        <tr><td>x (m)</td><td>θ (rad)</td><td>s = r θ</td></tr>
+        <tr><td>v (m/s)</td><td>ω (rad/s)</td><td>v = r ω</td></tr>
+        <tr><td>a (m/s²)</td><td>α (rad/s²)</td><td>a<sub>t</sub> = r α; &nbsp; a<sub>c</sub> = r ω²</td></tr>
+        <tr><td>F (N)</td><td>τ (N·m)</td><td>τ = r F<sub>⊥</sub></td></tr>
+        <tr><td>m (kg)</td><td>I (kg·m²)</td><td>I = Σ m<sub>i</sub> r<sub>i</sub>²</td></tr>
+        <tr><td>p = m v</td><td>L = I ω</td><td>L = m v r (point particle)</td></tr>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>§10.2 — Constant Angular Acceleration ("the Big Four, Rotated")</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Angular vel.</span>ω = ω<sub>0</sub> + α t</div>
+        <div class="eq"><span class="eq-label">Angle</span>θ = θ<sub>0</sub> + ω<sub>0</sub> t + ½ α t²</div>
+        <div class="eq"><span class="eq-label">Time-free</span>ω² = ω<sub>0</sub>² + 2 α (θ − θ<sub>0</sub>)</div>
+        <div class="eq"><span class="eq-label">Average</span>θ − θ<sub>0</sub> = ½ (ω<sub>0</sub> + ω) t</div>
+      </div>
+      <p>Identical structure to the linear Big Four — same problem-solving recipe, different letters.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§10.3 — Newton's 2nd Law for Rotation &amp; Moment of Inertia</h3>
+      <div class="eq">
+        <span class="eq-label">Rotational F = ma (Eq. 10.16)</span>
+        Σ τ = I α
+      </div>
+      <p>The moment of inertia <strong>I</strong> measures how the mass is <em>distributed</em> about the rotation axis. More mass farther from the axis → larger I → harder to spin up. Same mass closer in → smaller I → easier to spin.</p>
+
+      <h4>Moments of Inertia You Should Know Cold</h4>
+      <table>
+        <tr><th>Object (mass M)</th><th>Axis</th><th>I</th></tr>
+        <tr><td>Point particle at distance r</td><td>Through pivot, ⊥ to r</td><td>M r²</td></tr>
+        <tr><td>Hoop / thin ring (radius R)</td><td>Through center, ⊥ to plane</td><td>M R²</td></tr>
+        <tr><td>Solid disk / cylinder (R)</td><td>Through center, along axis</td><td>½ M R²</td></tr>
+        <tr><td>Solid sphere (R)</td><td>Through center</td><td>(2/5) M R²</td></tr>
+        <tr><td>Hollow sphere (R)</td><td>Through center</td><td>(2/3) M R²</td></tr>
+        <tr><td>Rod (length L)</td><td>Through center, ⊥ rod</td><td>(1/12) M L²</td></tr>
+        <tr><td>Rod (length L)</td><td>Through end, ⊥ rod</td><td>(1/3) M L²</td></tr>
+      </table>
+
+      <div class="def">
+        <strong>Parallel-axis theorem:</strong> if I<sub>CM</sub> is the moment of inertia about an axis through the center of mass, then about a parallel axis a distance d away: I = I<sub>CM</sub> + M d². This converts known table entries to almost any pivot you need.
+      </div>
+
+      <div class="warn">
+        <strong>Ranking race down a ramp:</strong> all objects of the same R but different I/(MR²) accelerate at <em>different</em> rates because some of the gravitational PE goes into rotational KE. Order from fastest to slowest down a ramp: solid sphere &gt; solid cylinder &gt; hollow sphere &gt; hoop. The smaller I/(MR²), the faster it rolls.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 14 ===================== -->
+<div class="lecture" id="lec14">
+  <div class="lecture-header">
+    <h2>Lecture 14 — Rotational Kinetic Energy &amp; Angular Momentum</h2>
+    <div class="meta">Date: November 11, 2025 &nbsp;|&nbsp; OpenStax §10.4–§10.5 &nbsp;[same day as Midterm 2]</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§10.4 — Rotational Kinetic Energy</h3>
+      <div class="eq">
+        <span class="eq-label">Rotational KE</span>
+        KE<sub>rot</sub> = ½ I ω²
+      </div>
+      <p>Same form as ½ m v², with mass replaced by moment of inertia and speed replaced by angular speed.</p>
+
+      <h4>Rolling Without Slipping</h4>
+      <p>An object rolling without slipping has total kinetic energy equal to translational + rotational:</p>
+      <div class="eq">
+        <span class="eq-label">Total KE for a rolling body</span>
+        KE<sub>total</sub> = ½ M v<sub>CM</sub>² + ½ I<sub>CM</sub> ω²,&nbsp;&nbsp; with v<sub>CM</sub> = R ω
+      </div>
+      <p>This explains the racing-down-a-ramp puzzle of Lec 13: more I means more rotational KE for the same total energy, so less goes into translation, so smaller v<sub>CM</sub>.</p>
+
+      <h4>Worked Example (OpenStax 10.13/10.14)</h4>
+      <p>A solid sphere (I = (2/5)MR²) rolls without slipping down a ramp of height h. Find v<sub>CM</sub> at the bottom.</p>
+      <p>Mgh = ½ M v² + ½ (2/5)MR² (v/R)² = ½ M v²(1 + 2/5) = (7/10) M v². So v = √(10gh/7) ≈ 0.845 √(2gh) — slower than a frictionless slide (v = √(2gh)).</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§10.5 — Angular Momentum &amp; Its Conservation</h3>
+      <div class="eq">
+        <span class="eq-label">Angular momentum</span>
+        L = I ω &nbsp;(rigid body) &nbsp;&nbsp; L = m v r sin φ &nbsp;(point particle, r⃗ from origin)
+      </div>
+      <div class="eq">
+        <span class="eq-label">Newton's 2nd Law for rotation</span>
+        Σ τ<sub>ext</sub> = dL/dt
+      </div>
+
+      <div class="def">
+        <strong>Conservation of Angular Momentum:</strong> if Σ τ<sub>ext</sub> = 0, then L is constant. Like linear momentum conservation but about a chosen pivot.
+      </div>
+
+      <h4>Classic Example: Spinning Skater</h4>
+      <p>An ice skater spins with arms extended at ω<sub>0</sub>, then pulls them in. With no external torque, L is conserved: I<sub>0</sub> ω<sub>0</sub> = I<sub>f</sub> ω<sub>f</sub>. Since I drops, ω rises.</p>
+      <p>Where does the KE come from? KE<sub>rot</sub> = ½ I ω² = ½ L²/I. Smaller I → larger KE. The <em>skater does work</em> pulling the arms in against the centrifugal pseudo-force; that work shows up as added rotational KE.</p>
+
+      <div class="diagram">
+        <svg width="380" height="200" viewBox="0 0 380 200">
+          <!-- arms out -->
+          <text x="90" y="22" font-size="11" fill="#333" font-style="italic" text-anchor="middle">arms out: I large, ω small</text>
+          <circle cx="90" cy="100" r="14" fill="#9fd4e6" stroke="#2e6da4"/>
+          <line x1="90" y1="100" x2="20"  y2="100" stroke="#2e6da4" stroke-width="3"/>
+          <line x1="90" y1="100" x2="160" y2="100" stroke="#2e6da4" stroke-width="3"/>
+          <circle cx="20"  cy="100" r="6" fill="#2e6da4"/>
+          <circle cx="160" cy="100" r="6" fill="#2e6da4"/>
+          <text x="90" y="150" font-size="22" fill="#2e6da4" text-anchor="middle">↻</text>
+          <!-- arrow -->
+          <path d="M 200 100 L 230 100" stroke="#444" stroke-width="2" marker-end="url(#arr14)"/>
+          <!-- arms in -->
+          <text x="300" y="22" font-size="11" fill="#333" font-style="italic" text-anchor="middle">arms in: I small, ω large</text>
+          <circle cx="300" cy="100" r="14" fill="#ffd166" stroke="#b89500"/>
+          <line x1="300" y1="100" x2="280" y2="100" stroke="#b89500" stroke-width="3"/>
+          <line x1="300" y1="100" x2="320" y2="100" stroke="#b89500" stroke-width="3"/>
+          <circle cx="280" cy="100" r="6" fill="#b89500"/>
+          <circle cx="320" cy="100" r="6" fill="#b89500"/>
+          <text x="300" y="150" font-size="32" fill="#d33" text-anchor="middle">↻</text>
+          <defs>
+            <marker id="arr14" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#444"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Pulling the arms in shrinks I, so ω must grow to keep L = Iω constant.</figcaption>
+      </div>
+
+      <h4>Other Examples</h4>
+      <ul class="summary">
+        <li>Diver tucks to spin faster, opens up to slow before entering water.</li>
+        <li>A neutron star spinning at 700 Hz is a stellar core that collapsed from R ~ 10⁶ km to ~10 km — I dropped by 10¹⁰, so ω rose by 10¹⁰.</li>
+        <li>Helicopter tail rotor is a torque counter-balance: spinning the main rotor would otherwise spin the body the opposite way (L conservation).</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MIDTERM 2 ===================== -->
+<div class="lecture" id="midterm2">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #3a2030 0%, #6b3450 100%);">
+    <h2>★ Midterm 2 Review — Tuesday November 11, 5:30–6:30 PM</h2>
+    <div class="meta">Covers Lectures 8–14: Gravity, Energy, Momentum, Collisions, Torque/Statics, Rotation, Angular Momentum</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Topics You Must Own</h3>
+      <ul class="summary">
+        <li><strong>Universal Gravitation:</strong> F = G m<sub>1</sub>m<sub>2</sub>/r², g<sub>surface</sub> derivation, satellite v = √(GM/r), Kepler's 3rd Law T² ∝ r³.</li>
+        <li><strong>Work &amp; Energy:</strong> W = F⃗·d⃗, KE = ½mv², work-energy theorem W<sub>net</sub> = ΔKE, spring W = ½kx².</li>
+        <li><strong>Energy Conservation:</strong> KE + U<sub>grav</sub> + U<sub>spring</sub> constant when only conservative forces act; W<sub>nc</sub> = ΔE<sub>mech</sub>.</li>
+        <li><strong>Momentum &amp; Impulse:</strong> p = mv, J = ∫F dt = Δp, conservation when ΣF<sub>ext</sub> = 0.</li>
+        <li><strong>Collisions:</strong> elastic (both p &amp; KE), inelastic (only p), perfectly inelastic (stick); 1-D elastic formulas.</li>
+        <li><strong>Center of Mass:</strong> M a<sub>CM</sub> = F<sub>ext</sub>; CM moves like a point particle.</li>
+        <li><strong>Torque &amp; Equilibrium:</strong> τ = rF sin φ, ΣF = 0 and Στ = 0 about any pivot.</li>
+        <li><strong>Rotational Kinematics &amp; Dynamics:</strong> Big Four with θ, ω, α; Στ = Iα; moments of inertia for hoop/disk/sphere/rod; parallel-axis theorem.</li>
+        <li><strong>Rotational Energy &amp; Rolling:</strong> KE<sub>rot</sub> = ½Iω², total KE = ½Mv² + ½Iω², v = Rω for rolling without slipping.</li>
+        <li><strong>Angular Momentum:</strong> L = Iω, conserved when Στ<sub>ext</sub> = 0; skater spins, neutron stars.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Strategy</h3>
+      <ul class="summary">
+        <li><strong>Energy method beats kinematics</strong> when path or force is messy and you only care about start/end.</li>
+        <li><strong>Momentum method</strong> for collisions (always conserved) — then use energy conservation only if elastic.</li>
+        <li><strong>Pick a pivot to kill unknowns</strong> when computing torques. Often the point where the most unknown forces act.</li>
+        <li><strong>Linear ↔ angular dictionary</strong>: if a linear-mechanics intuition works, the angular analog likely does too.</li>
+        <li><strong>Check rolling-without-slipping</strong>: the contact point is instantaneously at rest. v<sub>CM</sub> = Rω, a<sub>CM</sub> = Rα.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LECTURE 15 ===================== -->
+<div class="lecture" id="lec15">
+  <div class="lecture-header">
+    <h2>Lecture 15 — Rolling Collisions &amp; Introduction to Fluid Statics</h2>
+    <div class="meta">Date: November 13, 2025 &nbsp;|&nbsp; OpenStax §10.6, §11.1–§11.5</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§10.6 — Extended-Body Collisions &amp; Rotation</h3>
+      <p>When a free particle strikes an extended object, both <em>linear</em> and <em>angular</em> momentum are conserved (assuming no external impulsive forces).</p>
+
+      <h4>Worked Example: Bullet Embeds in a Door</h4>
+      <p>A bullet of mass m at velocity v hits a vertical door (mass M, width L, hinged at one side) at distance d from the hinge and embeds. Find the angular velocity of door + bullet just after impact.</p>
+      <p>Conservation of L about the hinge: m v d = (I<sub>door</sub> + m d²) ω. With I<sub>door</sub> = (1/3) M L²:</p>
+      <div class="eq">
+        ω = m v d / [(1/3) M L² + m d²]
+      </div>
+      <p>Linear momentum is <em>not</em> conserved because the hinge exerts an impulsive horizontal force. Angular momentum about the hinge is conserved because the hinge force has zero torque about itself.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§11.1 — What Is a Fluid?</h3>
+      <p>A <span class="kt">fluid</span> is a substance that flows — it has no fixed shape and conforms to its container. Liquids (nearly incompressible) and gases (highly compressible) are both fluids.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§11.2 — Density</h3>
+      <div class="eq">
+        <span class="eq-label">Density</span>
+        ρ = m/V &nbsp;(SI unit kg/m³)
+      </div>
+      <p>Water: ρ ≈ 1000 kg/m³ at 4 °C. Air at sea level: ρ ≈ 1.29 kg/m³. Mercury: ρ ≈ 13,600 kg/m³. <strong>Specific gravity</strong> = ρ/ρ<sub>water</sub> (a dimensionless ratio).</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§11.3–11.4 — Pressure</h3>
+      <div class="eq">
+        <span class="eq-label">Pressure</span>
+        P = F<sub>⊥</sub> / A &nbsp;(SI unit pascal: 1 Pa = 1 N/m²)
+      </div>
+      <ul class="summary">
+        <li>Atmospheric: 1 atm = 101,325 Pa = 14.7 psi = 760 mmHg.</li>
+        <li>Pressure is a <em>scalar</em> — it pushes equally in all directions on a fluid element.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>§11.5 — Pressure with Depth in a Static Fluid</h3>
+      <div class="eq">
+        <span class="eq-label">Hydrostatic pressure (Eq. 11.10)</span>
+        P(h) = P<sub>0</sub> + ρ g h
+      </div>
+      <p>Where h is depth below a free surface at pressure P<sub>0</sub>. Two consequences:</p>
+      <ul class="summary">
+        <li><strong>Pascal's principle:</strong> a pressure change applied anywhere in an enclosed incompressible fluid is transmitted undiminished to every point — basis of hydraulic lifts.</li>
+        <li>Pressure depends only on depth, not container shape ("hydrostatic paradox"): a thin tall tube and a wide shallow tank can give the same pressure at the bottom.</li>
+      </ul>
+
+      <h4>Hydraulic Lift</h4>
+      <div class="eq">
+        F<sub>1</sub>/A<sub>1</sub> = F<sub>2</sub>/A<sub>2</sub> &nbsp;&rArr;&nbsp; F<sub>2</sub> = F<sub>1</sub> · (A<sub>2</sub>/A<sub>1</sub>)
+      </div>
+      <p>Volume conservation requires F<sub>1</sub> · d<sub>1</sub> = F<sub>2</sub> · d<sub>2</sub>: you trade distance for force, with no free lunch in energy.</p>
+
+      <div class="diagram">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <!-- container -->
+          <path d="M 30 60 L 30 170 L 180 170 L 180 110 L 320 110 L 320 170 L 390 170 L 390 60 L 320 60 L 320 80 L 180 80 L 180 60 Z"
+                fill="none" stroke="#444" stroke-width="1.4"/>
+          <!-- water -->
+          <path d="M 32 75 L 32 168 L 178 168 L 178 108 L 318 108 L 318 168 L 388 168 L 388 75 L 320 75 L 320 78 L 178 78 L 178 75 Z"
+                fill="#9fd4e6" stroke="none"/>
+          <!-- piston small -->
+          <rect x="35" y="68" width="140" height="8" fill="#aaa" stroke="#444"/>
+          <line x1="100" y1="68" x2="100" y2="35" stroke="#d33" stroke-width="2.4" marker-end="url(#arr15)"/>
+          <text x="106" y="48" font-size="11" fill="#d33">F₁ (small)</text>
+          <!-- piston big -->
+          <rect x="245" y="68" width="140" height="8" fill="#aaa" stroke="#444"/>
+          <line x1="315" y1="68" x2="315" y2="20" stroke="#2e8b57" stroke-width="2.6" marker-end="url(#arr15)"/>
+          <text x="322" y="32" font-size="11" fill="#2e8b57">F₂ (large)</text>
+          <text x="105" y="195" font-size="11" fill="#444" text-anchor="middle">A₁</text>
+          <text x="315" y="195" font-size="11" fill="#444" text-anchor="middle">A₂</text>
+          <defs>
+            <marker id="arr15" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Hydraulic lift: a small force on a small piston creates the same pressure that lifts a large weight on a big piston.</figcaption>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 16 ===================== -->
+<div class="lecture" id="lec16">
+  <div class="lecture-header">
+    <h2>Lecture 16 — Fluid Statics &amp; Archimedes' Principle</h2>
+    <div class="meta">Date: November 18, 2025 &nbsp;|&nbsp; OpenStax §11.6–§11.7</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§11.6 — Gauge vs. Absolute Pressure</h3>
+      <p>Most pressure gauges (tire, blood pressure cuff) read pressure <em>above</em> atmospheric:</p>
+      <div class="eq">
+        P<sub>abs</sub> = P<sub>atm</sub> + P<sub>gauge</sub>
+      </div>
+      <p>A "32 psi" tire has absolute pressure ~46.7 psi. A flat tire has gauge 0, absolute 1 atm.</p>
+
+      <h4>Manometers &amp; Barometers</h4>
+      <p>A U-tube manometer measures gauge pressure as a height difference: ΔP = ρ g Δh. A mercury barometer reads atmospheric pressure: 1 atm pushes up a column of Hg by 760 mm.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§11.7 — Archimedes' Principle</h3>
+      <div class="def">
+        <strong>Archimedes' principle:</strong> A body wholly or partially submerged in a fluid is buoyed up by a force equal to the weight of the fluid the body displaces.
+      </div>
+      <div class="eq">
+        <span class="eq-label">Buoyant Force (Eq. 11.16)</span>
+        F<sub>B</sub> = ρ<sub>fluid</sub> · V<sub>displaced</sub> · g
+      </div>
+
+      <p>Mathematically, F<sub>B</sub> arises because the pressure on the bottom of the submerged volume is greater than the pressure on the top — that pressure difference times the cross-section area equals ρ V g.</p>
+
+      <h4>Floats vs. Sinks</h4>
+      <ul class="summary">
+        <li>Object density &lt; fluid density → floats; submerged fraction = ρ<sub>obj</sub>/ρ<sub>fluid</sub>.</li>
+        <li>Object density = fluid density → neutrally buoyant.</li>
+        <li>Object density &gt; fluid density → sinks (apparent weight = (ρ<sub>obj</sub> − ρ<sub>fluid</sub>) V g).</li>
+      </ul>
+
+      <div class="diagram">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <!-- water -->
+          <rect x="40" y="80" width="340" height="110" fill="#9fd4e6" stroke="#2e6da4" stroke-width="1.4"/>
+          <line x1="40" y1="80" x2="380" y2="80" stroke="#2e6da4" stroke-width="2"/>
+          <!-- floating block -->
+          <rect x="120" y="60" width="80" height="60" fill="#ffd166" stroke="#b89500" stroke-width="1.5"/>
+          <text x="160" y="95" font-size="11" fill="#333" text-anchor="middle">block</text>
+          <!-- weight arrow down -->
+          <line x1="160" y1="120" x2="160" y2="170" stroke="#d33" stroke-width="2.2" marker-end="url(#arr16)"/>
+          <text x="166" y="155" font-size="11" fill="#d33">mg</text>
+          <!-- buoyant arrow up -->
+          <line x1="160" y1="60"  x2="160" y2="20"  stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arr16)"/>
+          <text x="166" y="40" font-size="11" fill="#2e8b57">F<tspan baseline-shift="sub" font-size="9">B</tspan></text>
+          <!-- submerged dashes -->
+          <line x1="120" y1="80" x2="200" y2="80" stroke="#444" stroke-dasharray="3 3"/>
+          <text x="245" y="106" font-size="11" fill="#444">submerged volume</text>
+          <defs>
+            <marker id="arr16" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>
+          </defs>
+        </svg>
+        <figcaption>A floating object's weight is balanced by the buoyant force from the displaced water.</figcaption>
+      </div>
+
+      <h4>Worked Example: Iceberg Above Water</h4>
+      <p>ρ<sub>ice</sub> = 920 kg/m³, ρ<sub>seawater</sub> = 1025 kg/m³. Submerged fraction = 920/1025 ≈ 0.898 → about <strong>10% above water</strong>. (Hence "tip of the iceberg.")</p>
+
+      <div class="warn">
+        <strong>Why a steel ship floats:</strong> the average density of the hull + interior air is much less than water. Make the hull from a solid steel cube and it sinks; spread the same steel out over a hollow shape and it displaces enough water to float.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 17 ===================== -->
+<div class="lecture" id="lec17">
+  <div class="lecture-header">
+    <h2>Lecture 17 — Fluid Dynamics &amp; Bernoulli's Principle</h2>
+    <div class="meta">Date: November 20, 2025 &nbsp;|&nbsp; OpenStax §12.1–§12.3</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§12.1 — Flow Rate &amp; Continuity</h3>
+      <p>For an incompressible fluid in steady flow, the same mass passes every cross-section per unit time. With Q = volume flow rate (m³/s):</p>
+      <div class="eq">
+        <span class="eq-label">Continuity (Eq. 12.4)</span>
+        Q = A v = constant &nbsp;&rArr;&nbsp; A<sub>1</sub> v<sub>1</sub> = A<sub>2</sub> v<sub>2</sub>
+      </div>
+      <p>Pinch a hose: smaller A → larger v. The water comes out faster.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§12.2 — Bernoulli's Equation</h3>
+      <p>Conservation of energy per unit volume along a streamline of an incompressible, non-viscous, steady flow:</p>
+      <div class="eq">
+        <span class="eq-label">Bernoulli's Equation (Eq. 12.16)</span>
+        P + ½ ρ v² + ρ g h = constant along a streamline
+      </div>
+      <p>Three energy densities, each with units of pressure (Pa = J/m³):</p>
+      <ul class="summary">
+        <li><strong>P</strong> — static (pressure) energy density.</li>
+        <li><strong>½ ρ v²</strong> — kinetic energy density.</li>
+        <li><strong>ρ g h</strong> — gravitational potential energy density.</li>
+      </ul>
+
+      <div class="def">
+        <strong>The Bernoulli moral:</strong> faster-moving fluid has <em>lower</em> pressure (at the same height). This explains airplane lift, the curveball, the carburetor, and why a shower curtain bows in toward you.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>§12.3 — Applications</h3>
+
+      <h4>Torricelli's Theorem (Tank Drain)</h4>
+      <p>A large tank has a small hole at depth h below the water surface. Apply Bernoulli between the surface (large area, v ≈ 0, P = P<sub>atm</sub>) and the exit (P = P<sub>atm</sub>):</p>
+      <div class="eq">
+        v<sub>exit</sub> = √(2 g h)
+      </div>
+      <p>Same as a free-fall from height h. Deep water exits faster.</p>
+
+      <h4>Venturi Meter (Constricted Pipe)</h4>
+      <p>Horizontal pipe narrows from A<sub>1</sub> to A<sub>2</sub>. Continuity: v<sub>2</sub> = (A<sub>1</sub>/A<sub>2</sub>) v<sub>1</sub>. Bernoulli (h<sub>1</sub> = h<sub>2</sub>):</p>
+      <div class="eq">
+        P<sub>1</sub> − P<sub>2</sub> = ½ ρ (v<sub>2</sub>² − v<sub>1</sub>²)
+      </div>
+      <p>Pressure drops at the constriction. Carburetors and atomizers exploit this to draw fuel into the airflow.</p>
+
+      <div class="diagram">
+        <svg width="420" height="180" viewBox="0 0 420 180">
+          <!-- pipe walls -->
+          <path d="M 30 60 L 160 60 L 200 90 L 270 90 L 310 60 L 400 60" fill="none" stroke="#444" stroke-width="1.5"/>
+          <path d="M 30 130 L 160 130 L 200 100 L 270 100 L 310 130 L 400 130" fill="none" stroke="#444" stroke-width="1.5"/>
+          <!-- fluid color -->
+          <path d="M 30 60 L 160 60 L 200 90 L 270 90 L 310 60 L 400 60 L 400 130 L 310 130 L 270 100 L 200 100 L 160 130 L 30 130 Z"
+                fill="#9fd4e6" opacity="0.5" stroke="none"/>
+          <!-- arrows velocity -->
+          <line x1="60" y1="95" x2="100" y2="95" stroke="#2e6da4" stroke-width="2" marker-end="url(#arr17)"/>
+          <text x="80" y="55" font-size="11" fill="#2e6da4" text-anchor="middle">v₁ (slow)</text>
+          <text x="80" y="155" font-size="11" fill="#d33" text-anchor="middle">P₁ (high)</text>
+          <line x1="220" y1="95" x2="270" y2="95" stroke="#d33" stroke-width="2.4" marker-end="url(#arr17)"/>
+          <text x="245" y="80" font-size="11" fill="#d33" text-anchor="middle">v₂ (fast)</text>
+          <text x="245" y="155" font-size="11" fill="#2e8b57" text-anchor="middle">P₂ (low)</text>
+          <line x1="345" y1="95" x2="385" y2="95" stroke="#2e6da4" stroke-width="2" marker-end="url(#arr17)"/>
+          <defs>
+            <marker id="arr17" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>
+          </defs>
+        </svg>
+        <figcaption>Venturi tube: in the narrow section, speed increases and pressure decreases.</figcaption>
+      </div>
+
+      <h4>Why Wings Lift</h4>
+      <p>A cambered (curved) airfoil shape forces air over the top to travel a longer path, increasing v above the wing. Bernoulli says P drops there, and the resulting pressure imbalance lifts the wing. (Reality is more subtle than the "equal-time" simplification, but Bernoulli + Newton's 3rd law is the right starting picture.)</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 18 ===================== -->
+<div class="lecture" id="lec18">
+  <div class="lecture-header">
+    <h2>Lecture 18 — Viscous Fluids &amp; Poiseuille's Law</h2>
+    <div class="meta">Date: December 2, 2025 &nbsp;|&nbsp; OpenStax §12.4–§12.6</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>§12.4 — Viscosity</h3>
+      <p>Real fluids resist relative motion of adjacent layers — that resistance is <span class="kt">viscosity</span> η, measured in Pa·s. Honey is more viscous than water; air is even less viscous.</p>
+
+      <div class="eq">
+        <span class="eq-label">Viscous shear (Newtonian fluid)</span>
+        F/A = η · (Δv/Δy)
+      </div>
+      <p>Two parallel plates separated by fluid: the force per unit area to slide one plate relative to the other is proportional to the velocity gradient. Honey is η ≈ 10 Pa·s; water is ~0.001 Pa·s; air is ~10⁻⁵ Pa·s.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>§12.5 — Laminar vs. Turbulent Flow &amp; Reynolds Number</h3>
+      <p>At low speeds, fluid layers slide smoothly past each other (<span class="kt">laminar</span>); at high speeds, swirling chaos sets in (<span class="kt">turbulent</span>). The dimensionless <span class="kt">Reynolds number</span> tells you which regime:</p>
+      <div class="eq">
+        <span class="eq-label">Reynolds number</span>
+        N<sub>R</sub> = (2 ρ v r)/η &nbsp;(in a pipe of radius r)
+      </div>
+      <ul class="summary">
+        <li>N<sub>R</sub> &lt; ~2000 → laminar.</li>
+        <li>N<sub>R</sub> ~ 2000–3000 → unstable transition.</li>
+        <li>N<sub>R</sub> &gt; ~3000 → turbulent.</li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>§12.6 — Poiseuille's Law (Laminar Pipe Flow)</h3>
+      <div class="eq">
+        <span class="eq-label">Poiseuille's Law (Eq. 12.32)</span>
+        Q = (π r⁴ ΔP) / (8 η L)
+      </div>
+      <p>Volume flow rate through a pipe of radius r and length L driven by pressure difference ΔP. The dramatic <strong>r⁴</strong> dependence means a small change in pipe radius has a huge effect on flow.</p>
+
+      <div class="warn">
+        <strong>Why this matters in physiology:</strong> reducing an artery's radius by half drops blood flow to (½)⁴ = <strong>1/16</strong> of normal at the same blood pressure. The body responds by raising pressure (hypertension) — and the heart pays the metabolic cost.
+      </div>
+
+      <h4>Worked Examples</h4>
+      <ul class="summary">
+        <li><strong>OS 12.8</strong>: Water flow through a tap — picking r and L.</li>
+        <li><strong>OS 12.9</strong>: IV bag height needed to overcome venous pressure.</li>
+        <li><strong>OS 12.10</strong>: Estimating turbulence onset in arteries during exercise (when N<sub>R</sub> crosses 2000).</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== LECTURE 19 ===================== -->
+<div class="lecture" id="lec19">
+  <div class="lecture-header">
+    <h2>Lecture 19 — Course Review &amp; Fun Applications</h2>
+    <div class="meta">Date: December 4, 2025 &nbsp;|&nbsp; Synthesis lecture before the final</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>The Three Master Conservation Laws of PHYS 21</h3>
+      <ol class="summary" style="padding-left:1.5rem;">
+        <li><strong>Energy</strong> (KE + PE + thermal + …) — useful when forces are conservative or when you only care about start/end states.</li>
+        <li><strong>Linear momentum</strong> (Σ p⃗) — useful for collisions and any system with no net external force during a brief interval.</li>
+        <li><strong>Angular momentum</strong> (Σ L⃗) — useful for rotations and orbits with no net external torque about a chosen pivot.</li>
+      </ol>
+      <p>Most "hard" problems on the final yield to one of these. Always ask: what is conserved here, and between which two instants?</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Fun Synthesis Examples</h3>
+
+      <h4>1. Ballistic Pendulum (momentum + energy, in sequence)</h4>
+      <p>A bullet (m, v) embeds in a hanging block (M, at rest). The combined mass swings up to height h. Find v.</p>
+      <p>During impact (very fast): <strong>momentum</strong> conservation, mv = (m+M)V.</p>
+      <p>After impact (slow swing): <strong>energy</strong> conservation, ½(m+M)V² = (m+M)gh, so V = √(2gh).</p>
+      <p>Combine: v = (1 + M/m) √(2gh). You can't use energy through the impact (some KE went to heat) and you can't use momentum through the swing (gravity is external) — pick the right tool for each phase.</p>
+
+      <h4>2. Spinning Stool (angular momentum)</h4>
+      <p>You sit on a frictionless rotating stool holding a spinning bicycle wheel horizontally with L<sub>wheel</sub> = +L<sub>0</sub>. You flip the wheel over so its L is now −L<sub>0</sub>. Total system L is conserved → you and the stool spin in the +direction with L = 2L<sub>0</sub>.</p>
+
+      <h4>3. Hot-Air Balloon (Archimedes for gas)</h4>
+      <p>Hot air at temperature T inside the balloon has lower density ρ' = ρ<sub>air</sub>(T<sub>0</sub>/T). The buoyant force (ρ<sub>air</sub> V g) exceeds the gas weight (ρ' V g), and the balloon rises until ρ' equals the local atmospheric density.</p>
+
+      <h4>4. Falling vs. Rolling Race</h4>
+      <p>A solid sphere released from rest down a frictionless ramp of height h reaches v = √(2gh). Released as rolling-without-slipping down the same ramp, it reaches v = √(10gh/7) ≈ 0.85√(2gh) — slower because some PE went into rotational KE.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Common Final-Exam Pitfalls</h3>
+      <ul class="summary">
+        <li>Forgetting that <strong>g is unsigned</strong>; chosen sign comes from your axis convention.</li>
+        <li>Treating <strong>"centripetal force" as a separate force</strong> rather than the net inward component of real forces.</li>
+        <li>Using <strong>energy conservation through inelastic collisions</strong>, where it doesn't hold.</li>
+        <li>Computing torque about a moving point that isn't the CM — torque equation gets ugly.</li>
+        <li>Confusing <strong>moment arm with distance</strong> — only the perpendicular component of r matters for τ.</li>
+        <li>Mixing <strong>angular and linear quantities without converting</strong> via v = rω.</li>
+        <li>Ignoring <strong>Bernoulli's altitude term</strong> ρgh when fluid moves vertically.</li>
+        <li>Forgetting that <strong>Poiseuille goes as r⁴</strong> — a 20% change in r is a 100% change in flow.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== FINAL EXAM ===================== -->
+<div class="lecture" id="final">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #3a2030 0%, #6b3450 100%);">
+    <h2>★ Final Exam Review — Monday December 8, 12:15–3:15 PM</h2>
+    <div class="meta">Cumulative: All 19 lectures, OpenStax Ch. 1–12 (selected sections)</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Coverage Map (by Topic Cluster)</h3>
+      <table>
+        <tr><th>Cluster</th><th>Lectures</th><th>OpenStax</th></tr>
+        <tr><td>Units, dimensions, kinematics</td><td>1, 2, 4</td><td>Ch. 1, 2, 3</td></tr>
+        <tr><td>Vectors</td><td>3</td><td>§3.2, 3.3</td></tr>
+        <tr><td>Newton's laws, friction, inclines</td><td>5, 6</td><td>Ch. 4, 5</td></tr>
+        <tr><td>Circular motion &amp; gravity</td><td>7, 8</td><td>Ch. 6</td></tr>
+        <tr><td>Work, energy, conservation</td><td>9, 10</td><td>Ch. 7</td></tr>
+        <tr><td>Momentum &amp; collisions</td><td>10, 11</td><td>Ch. 8</td></tr>
+        <tr><td>Torque &amp; static equilibrium</td><td>12</td><td>Ch. 9</td></tr>
+        <tr><td>Rotational motion &amp; angular momentum</td><td>13, 14, 15</td><td>Ch. 10</td></tr>
+        <tr><td>Fluid statics</td><td>15, 16</td><td>Ch. 11</td></tr>
+        <tr><td>Fluid dynamics &amp; viscosity</td><td>17, 18</td><td>Ch. 12</td></tr>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>3-Hour Strategy</h3>
+      <ul class="summary">
+        <li><strong>Read every problem first.</strong> Do the easy ones to bank points before time pressure mounts.</li>
+        <li><strong>Allocate roughly equal time per problem.</strong> If a problem is sucking up &gt; 1.5× its share, move on and come back.</li>
+        <li><strong>Always draw a picture and label knowns/unknowns.</strong> Even a partial-credit picture earns points.</li>
+        <li><strong>Sanity-check signs and limits</strong> before submitting an answer.</li>
+        <li><strong>Use the formula sheet (if any)</strong> sparingly — knowing where formulas come from beats memorization under pressure.</li>
+      </ul>
+
+      <div class="warn">
+        <strong>No revisions on the final.</strong> Unlike midterms, you cannot recover lost points after the fact. Do the best you can in the room.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== FORMULA REFERENCE ===================== -->
+<div class="lecture" id="formulas">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #2e4a2e 0%, #2e8b57 100%);">
+    <h2>Quick Reference — All Key Equations</h2>
+    <div class="meta">One-page formula sheet for the entire course</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Kinematics (1-D &amp; 2-D)</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Avg velocity</span>v̄ = Δx/Δt</div>
+        <div class="eq"><span class="eq-label">Avg acceleration</span>ā = Δv/Δt</div>
+        <div class="eq"><span class="eq-label">v(t)</span>v = v<sub>0</sub> + a t</div>
+        <div class="eq"><span class="eq-label">x(t)</span>x = x<sub>0</sub> + v<sub>0</sub> t + ½ a t²</div>
+        <div class="eq"><span class="eq-label">Time-free</span>v² = v<sub>0</sub>² + 2 a (x − x<sub>0</sub>)</div>
+        <div class="eq"><span class="eq-label">Avg form</span>x − x<sub>0</sub> = ½ (v<sub>0</sub> + v) t</div>
+        <div class="eq"><span class="eq-label">Projectile range</span>R = v<sub>0</sub>² sin 2θ / g</div>
+        <div class="eq"><span class="eq-label">Projectile max H</span>H = v<sub>0</sub>² sin²θ / (2g)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Vectors</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Components</span>v<sub>x</sub> = v cos θ, &nbsp; v<sub>y</sub> = v sin θ</div>
+        <div class="eq"><span class="eq-label">Magnitude</span>|v| = √(v<sub>x</sub>² + v<sub>y</sub>²)</div>
+        <div class="eq"><span class="eq-label">Direction</span>θ = tan⁻¹(v<sub>y</sub>/v<sub>x</sub>)</div>
+        <div class="eq"><span class="eq-label">Dot product</span>A · B = AB cos φ = A<sub>x</sub>B<sub>x</sub> + A<sub>y</sub>B<sub>y</sub></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Newton's Laws &amp; Forces</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">2nd Law</span>F<sub>net</sub> = m a</div>
+        <div class="eq"><span class="eq-label">Weight</span>W = m g</div>
+        <div class="eq"><span class="eq-label">Hooke (spring)</span>F = − k x</div>
+        <div class="eq"><span class="eq-label">Static friction</span>f<sub>s</sub> ≤ μ<sub>s</sub> N</div>
+        <div class="eq"><span class="eq-label">Kinetic friction</span>f<sub>k</sub> = μ<sub>k</sub> N</div>
+        <div class="eq"><span class="eq-label">Critical incline</span>tan θ<sub>c</sub> = μ<sub>s</sub></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Circular Motion &amp; Gravity</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Centripetal a</span>a<sub>c</sub> = v²/r = r ω²</div>
+        <div class="eq"><span class="eq-label">Centripetal F</span>F<sub>c</sub> = m v²/r</div>
+        <div class="eq"><span class="eq-label">Universal grav.</span>F = G m<sub>1</sub> m<sub>2</sub> / r²</div>
+        <div class="eq"><span class="eq-label">Surface g</span>g = G M / R²</div>
+        <div class="eq"><span class="eq-label">Orbit speed</span>v = √(G M / r)</div>
+        <div class="eq"><span class="eq-label">Kepler's 3rd</span>T² = 4π²r³/(GM)</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Work, Energy, Power</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Work (constant F)</span>W = F d cos φ = F⃗ · d⃗</div>
+        <div class="eq"><span class="eq-label">KE</span>KE = ½ m v²</div>
+        <div class="eq"><span class="eq-label">Work-energy</span>W<sub>net</sub> = ΔKE</div>
+        <div class="eq"><span class="eq-label">Grav PE (near Earth)</span>U = m g h</div>
+        <div class="eq"><span class="eq-label">Spring PE</span>U = ½ k x²</div>
+        <div class="eq"><span class="eq-label">Mech energy</span>E = KE + U (constant if W<sub>nc</sub> = 0)</div>
+        <div class="eq"><span class="eq-label">Power</span>P = dW/dt = F⃗ · v⃗</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Momentum &amp; Collisions</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Momentum</span>p = m v</div>
+        <div class="eq"><span class="eq-label">Impulse</span>J = ∫ F dt = Δp</div>
+        <div class="eq"><span class="eq-label">2nd Law (general)</span>F<sub>net</sub> = dp/dt</div>
+        <div class="eq"><span class="eq-label">Conservation</span>Σ p<sub>before</sub> = Σ p<sub>after</sub></div>
+        <div class="eq"><span class="eq-label">Center of mass</span>x<sub>CM</sub> = Σ m<sub>i</sub> x<sub>i</sub> / Σ m<sub>i</sub></div>
+        <div class="eq"><span class="eq-label">CM motion</span>M a<sub>CM</sub> = F<sub>ext</sub></div>
+        <div class="eq"><span class="eq-label">Elastic 1-D, m₂ at rest</span>v<sub>1f</sub> = ((m₁−m₂)/(m₁+m₂)) v<sub>1i</sub></div>
+        <div class="eq"><span class="eq-label">Elastic 1-D, m₂ at rest</span>v<sub>2f</sub> = (2 m₁/(m₁+m₂)) v<sub>1i</sub></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Rotation</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Linear ↔ angular</span>s = r θ, &nbsp; v = r ω, &nbsp; a<sub>t</sub> = r α</div>
+        <div class="eq"><span class="eq-label">ω(t)</span>ω = ω<sub>0</sub> + α t</div>
+        <div class="eq"><span class="eq-label">θ(t)</span>θ = θ<sub>0</sub> + ω<sub>0</sub> t + ½ α t²</div>
+        <div class="eq"><span class="eq-label">Time-free</span>ω² = ω<sub>0</sub>² + 2 α (θ − θ<sub>0</sub>)</div>
+        <div class="eq"><span class="eq-label">Torque</span>τ = r F sin φ = r<sub>⊥</sub> F</div>
+        <div class="eq"><span class="eq-label">Rotational 2nd Law</span>Σ τ = I α</div>
+        <div class="eq"><span class="eq-label">Moment of inertia</span>I = Σ m<sub>i</sub> r<sub>i</sub>²</div>
+        <div class="eq"><span class="eq-label">Parallel-axis</span>I = I<sub>CM</sub> + M d²</div>
+        <div class="eq"><span class="eq-label">Rotational KE</span>KE<sub>rot</sub> = ½ I ω²</div>
+        <div class="eq"><span class="eq-label">Rolling KE</span>KE = ½ M v² + ½ I<sub>CM</sub> ω²</div>
+        <div class="eq"><span class="eq-label">Angular momentum</span>L = I ω &nbsp;(rigid)</div>
+        <div class="eq"><span class="eq-label">Conservation</span>L<sub>i</sub> = L<sub>f</sub> if Σ τ<sub>ext</sub> = 0</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Fluids</h3>
+      <div class="eq-grid">
+        <div class="eq"><span class="eq-label">Density</span>ρ = m/V</div>
+        <div class="eq"><span class="eq-label">Pressure</span>P = F<sub>⊥</sub>/A</div>
+        <div class="eq"><span class="eq-label">Hydrostatic</span>P = P<sub>0</sub> + ρ g h</div>
+        <div class="eq"><span class="eq-label">Pascal (hydraulic)</span>F<sub>1</sub>/A<sub>1</sub> = F<sub>2</sub>/A<sub>2</sub></div>
+        <div class="eq"><span class="eq-label">Buoyancy</span>F<sub>B</sub> = ρ<sub>fluid</sub> V<sub>disp</sub> g</div>
+        <div class="eq"><span class="eq-label">Continuity</span>A v = constant</div>
+        <div class="eq"><span class="eq-label">Bernoulli</span>P + ½ ρ v² + ρ g h = const</div>
+        <div class="eq"><span class="eq-label">Torricelli</span>v<sub>exit</sub> = √(2 g h)</div>
+        <div class="eq"><span class="eq-label">Viscous shear</span>F/A = η · Δv/Δy</div>
+        <div class="eq"><span class="eq-label">Reynolds number</span>N<sub>R</sub> = 2ρvr/η</div>
+        <div class="eq"><span class="eq-label">Poiseuille</span>Q = π r⁴ ΔP / (8 η L)</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== CONSTANTS ===================== -->
+<div class="lecture" id="constants">
+  <div class="lecture-header" style="background: linear-gradient(90deg, #2e3a6b 0%, #6b5aa8 100%);">
+    <h2>Constants &amp; Conversions</h2>
+    <div class="meta">Numbers worth memorizing for PHYS 21</div>
+  </div>
+  <div class="lecture-body">
+
+    <div class="subsection">
+      <h3>Physical Constants</h3>
+      <table>
+        <tr><th>Constant</th><th>Symbol</th><th>Value</th></tr>
+        <tr><td>Surface gravity (Earth)</td><td>g</td><td>9.80 m/s² (sometimes rounded to 9.81 or 10)</td></tr>
+        <tr><td>Universal gravitation</td><td>G</td><td>6.674 × 10⁻¹¹ N·m²/kg²</td></tr>
+        <tr><td>Earth mass</td><td>M<sub>⊕</sub></td><td>5.97 × 10²⁴ kg</td></tr>
+        <tr><td>Earth radius</td><td>R<sub>⊕</sub></td><td>6.37 × 10⁶ m</td></tr>
+        <tr><td>Sun mass</td><td>M<sub>☉</sub></td><td>1.99 × 10³⁰ kg</td></tr>
+        <tr><td>Sun–Earth distance (1 AU)</td><td>—</td><td>1.50 × 10¹¹ m</td></tr>
+        <tr><td>Speed of sound (air, 20 °C)</td><td>v<sub>s</sub></td><td>343 m/s</td></tr>
+        <tr><td>Density of water</td><td>ρ<sub>water</sub></td><td>1000 kg/m³</td></tr>
+        <tr><td>Density of air (sea level)</td><td>ρ<sub>air</sub></td><td>1.29 kg/m³</td></tr>
+        <tr><td>Density of mercury</td><td>ρ<sub>Hg</sub></td><td>13,600 kg/m³</td></tr>
+        <tr><td>Atmospheric pressure</td><td>P<sub>atm</sub></td><td>1.013 × 10⁵ Pa = 1 atm = 760 mmHg</td></tr>
+        <tr><td>Viscosity of water (20 °C)</td><td>η</td><td>1.00 × 10⁻³ Pa·s</td></tr>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>Useful Conversions</h3>
+      <table>
+        <tr><th>Quantity</th><th>Conversion</th></tr>
+        <tr><td>Length</td><td>1 mile = 1.609 km; 1 ft = 0.3048 m; 1 inch = 2.54 cm</td></tr>
+        <tr><td>Mass</td><td>1 lb-mass ≈ 0.4536 kg; 1 ton (metric) = 1000 kg</td></tr>
+        <tr><td>Speed</td><td>1 mph = 0.447 m/s; 1 km/h = 0.278 m/s</td></tr>
+        <tr><td>Force</td><td>1 lb-force = 4.448 N</td></tr>
+        <tr><td>Energy</td><td>1 cal = 4.186 J; 1 Cal (food) = 4186 J; 1 kWh = 3.6 × 10⁶ J</td></tr>
+        <tr><td>Pressure</td><td>1 atm = 1.013 × 10⁵ Pa = 14.7 psi = 760 torr</td></tr>
+        <tr><td>Volume</td><td>1 L = 10⁻³ m³; 1 gallon (US) = 3.785 L</td></tr>
+        <tr><td>Angle</td><td>1 rev = 2π rad = 360°; 1 rad = 57.30°</td></tr>
+        <tr><td>Power</td><td>1 hp = 746 W</td></tr>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>Useful Approximations</h3>
+      <ul class="summary">
+        <li><strong>g ≈ 10 m/s²</strong> for fast estimates (introduces ~2% error).</li>
+        <li><strong>π² ≈ 10</strong> for back-of-envelope (4π² ≈ 40, useful in Kepler's 3rd Law).</li>
+        <li><strong>√2 ≈ 1.414, √3 ≈ 1.732, √10 ≈ 3.162.</strong></li>
+        <li><strong>sin θ ≈ θ, cos θ ≈ 1 − θ²/2, tan θ ≈ θ</strong> for small θ in radians.</li>
+        <li><strong>1 m/s ≈ 2.24 mph</strong> — quick speed conversion.</li>
+        <li><strong>1 N ≈ ¼ pound</strong>, so a 70-kg person weighs ~700 N ≈ 154 lb.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end .container -->
+
+<footer class="sg-footer">Giuse Pham Enterprises &middot; Est. 2026</footer>
+
+<script>
+function toggleTOC() {
+  const content = document.getElementById('toc-content');
+  const arrow = document.getElementById('toc-arrow');
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    arrow.textContent = '▼';
+  } else {
+    content.classList.add('hidden');
+    arrow.textContent = '►';
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,835 @@
+# Brain Cell Bonus Quiz — question bank (Physics 21 + Physics 23 + Physics 25)
+#
+# SCOPE: strictly material covered in Stanford
+#   PHYS 21 (Fall, OpenStax Ch 1–12: units/dimensional analysis, 1D/2D
+#     kinematics, vectors, Newton's laws, friction, uniform circular motion,
+#     gravitation, work/energy, momentum/collisions, rotation & torque,
+#     angular momentum, statics, fluid statics & dynamics)
+#   PHYS 23 (Winter, Giancoli Ch 16–25: E&M, circuits, EM induction,
+#     Maxwell's eqns, EM waves, geometric and wave optics, optical instruments)
+#   PHYS 25 (Spring, OpenStax Ch 27–30 + nuclear: special relativity,
+#     blackbody radiation, photoelectric effect, wave–particle duality,
+#     atomic/Bohr model, periodic table, lasers, semiconductors, nuclear physics)
+#
+# FORMAT: one JSON object per line. Fields:
+#   q        — question text
+#   choices  — array of exactly 4 choice strings
+#   correct  — index (0–3) of the correct choice
+# Lines starting with # and blank lines are ignored.
+# Order does not matter; the runtime shuffles both the pick and the choices.
+
+# ================================================================
+# PHYSICS 23 — Chapter 16: Electric Charge & Coulomb's Law
+# ================================================================
+{"q":"Two like electric charges placed near each other will:","choices":["Attract","Repel","Exert no force","Annihilate"],"correct":1}
+{"q":"Two opposite electric charges placed near each other will:","choices":["Attract","Repel","Exert no force","Cancel each other out"],"correct":0}
+{"q":"The SI unit of electric charge is the:","choices":["Volt","Ampere","Coulomb","Tesla"],"correct":2}
+{"q":"The fundamental charge e is approximately:","choices":["1.6 × 10⁻¹⁹ C","9.1 × 10⁻³¹ C","6.6 × 10⁻³⁴ C","3 × 10⁸ C"],"correct":0}
+{"q":"Coulomb's law gives the force between two point charges as proportional to:","choices":["1/r","1/r²","r","r²"],"correct":1}
+{"q":"If the distance between two point charges is doubled, the electrostatic force between them becomes:","choices":["Twice as large","Half as large","One-fourth as large","Four times as large"],"correct":2}
+{"q":"If the distance between two point charges is halved, the electrostatic force between them becomes:","choices":["Twice as large","Half as large","Four times as large","One-fourth as large"],"correct":2}
+{"q":"Doubling both charges in Coulomb's law while keeping the separation fixed changes the force by a factor of:","choices":["2","4","1/2","1/4"],"correct":1}
+{"q":"Coulomb's constant k ≈ 9 × 10⁹ has SI units of:","choices":["N/C","V/m","N·m²/C²","C/N"],"correct":2}
+{"q":"Charge is conserved. This means:","choices":["Charge can be created out of nothing","Total charge in an isolated system is constant","Charge always increases with time","Charge depends on the frame of reference"],"correct":1}
+{"q":"Charge quantization means:","choices":["Charge is always positive","Charge comes only in integer multiples of e","Charge depends on velocity","Charge can take any continuous value"],"correct":1}
+{"q":"An insulator and a conductor differ primarily in:","choices":["Mass density","How freely their charges can move","Color","Whether they are transparent"],"correct":1}
+{"q":"Rubbing a plastic rod with fur can give the rod:","choices":["A net charge by transferring electrons","Mass","Velocity","A magnetic field independent of motion"],"correct":0}
+{"q":"Charging by induction on a conductor involves:","choices":["Direct contact that transfers electrons","Rearranging the conductor's free electrons via a nearby charge, then grounding","Heating the conductor above its Curie temperature","Rubbing the conductor with silk"],"correct":1}
+{"q":"Three equal positive charges are placed at the corners of an equilateral triangle. The net force on any one of them points:","choices":["Toward the center of the triangle","Away from the center of the triangle","Parallel to one of the sides","Zero by symmetry"],"correct":1}
+{"q":"A +2 μC and a −2 μC charge are separated by 1 m. If the separation is tripled, the force between them is multiplied by:","choices":["3","1/3","9","1/9"],"correct":3}
+{"q":"Two charges q₁ and q₂ separated by r repel with force F. If you replace q₂ with 4q₂ at the same distance, the new force is:","choices":["F/4","F","4F","16F"],"correct":2}
+{"q":"The principle of superposition for electrostatic forces means:","choices":["Charges average out at large distances","The total force on a charge is the vector sum of forces from each other charge","Only the nearest charge matters","Forces from different charges cancel"],"correct":1}
+{"q":"A proton and electron have charges:","choices":["Equal in magnitude but opposite in sign","Equal in magnitude and the same sign","Different in magnitude with the same sign","Different in magnitude and opposite sign"],"correct":0}
+{"q":"Which best describes electrostatic force between objects of equal charge?","choices":["Always attractive","Always repulsive","Zero at any distance","Depends on color"],"correct":1}
+{"q":"A glass rod rubbed with silk becomes positively charged. This happens because:","choices":["Protons transfer from silk to glass","Electrons transfer from glass to silk","Neutrons transfer from glass to silk","Charge appears spontaneously"],"correct":1}
+{"q":"The force between two 1 C point charges separated by 1 m in vacuum is approximately:","choices":["1 N","9 × 10⁹ N","9 N","1 μN"],"correct":1}
+{"q":"A point charge +Q is placed at the origin. Where is the net electric force on a test charge at distance r minimized (non-zero r)?","choices":["Near the origin","Far from the origin","At r = 0","Only on the x-axis"],"correct":1}
+{"q":"When a conductor is charged, in electrostatic equilibrium the excess charge resides:","choices":["Uniformly throughout its volume","On the surface","At its geometric center","In its chemical bonds only"],"correct":1}
+{"q":"Two identical metal spheres carry +Q and −3Q. They are briefly touched and separated. Each now carries:","choices":["−2Q","−Q","+Q","+2Q"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 16: Electric Fields & Gauss's Law
+# ================================================================
+{"q":"The electric field at a point due to a positive point charge points:","choices":["Radially inward","Radially outward from the charge","Tangentially","Along gravity"],"correct":1}
+{"q":"The electric field due to a negative point charge points:","choices":["Radially outward","Radially inward toward the charge","Perpendicular to its motion","In the direction of motion"],"correct":1}
+{"q":"The SI unit of electric field is the:","choices":["V/m or N/C","T·m","J/C","A·m"],"correct":0}
+{"q":"The force on a charge q in an electric field E is given by:","choices":["F = qE","F = q/E","F = qE²","F = q²E"],"correct":0}
+{"q":"Electric field lines:","choices":["Start on negative charges and end on positive charges","Start on positive charges and end on negative charges","Form closed loops in electrostatics","Always cross each other at right angles"],"correct":1}
+{"q":"Electric field lines never:","choices":["Point radially","Cross each other","Start on a charge","Leave an isolated positive charge"],"correct":1}
+{"q":"The magnitude of the electric field at distance r from a point charge Q is:","choices":["kQ/r","kQ/r²","kQ²/r","kQr"],"correct":1}
+{"q":"The field inside a conductor in electrostatic equilibrium is:","choices":["Very large","Zero","Equal to the field outside","Perpendicular to the surface"],"correct":1}
+{"q":"Just outside a charged conductor, the electric field is:","choices":["Parallel to the surface","Perpendicular to the surface","Zero","Uniform throughout space"],"correct":1}
+{"q":"Gauss's law relates:","choices":["Current to magnetic flux","Electric flux through a closed surface to the charge enclosed","Voltage to current","Mass to energy"],"correct":1}
+{"q":"Gauss's law is written as:","choices":["∮E·dA = Q_enc/ε₀","∮B·dA = 0","∮E·dℓ = -dΦ_B/dt","∮B·dℓ = μ₀I"],"correct":0}
+{"q":"Electric flux Φ_E through a flat surface with area vector A in a uniform field E is:","choices":["E × A","E·A (dot product)","|E|/|A|","E² A"],"correct":1}
+{"q":"A closed surface encloses no net charge. The net electric flux through it is:","choices":["Large and positive","Zero","Large and negative","Depends on the surface shape"],"correct":1}
+{"q":"By Gauss's law, the electric field a distance r outside a uniformly charged sphere of total charge Q is:","choices":["Zero","kQ/r²","kQ/r","kQr²"],"correct":1}
+{"q":"Inside a uniformly charged thin spherical shell, the electric field is:","choices":["kQ/r²","Zero","Constant and nonzero","Very large"],"correct":1}
+{"q":"Near an infinite sheet of uniform surface charge density σ, the electric field magnitude is:","choices":["σ/ε₀","σ/(2ε₀)","σr/ε₀","σ²/(2ε₀)"],"correct":1}
+{"q":"Near an infinite line of uniform linear charge density λ, the electric field a distance r away has magnitude:","choices":["λ/(4πε₀r²)","λ/(2πε₀r)","kλ r","λr/ε₀"],"correct":1}
+{"q":"A Gaussian surface is most useful when the underlying charge distribution has:","choices":["No symmetry at all","Symmetry that lets E be constant over parts of the surface","Only positive charges","Exactly two point charges"],"correct":1}
+{"q":"A positive test charge placed in an electric field experiences force:","choices":["Opposite to E","In the direction of E","Perpendicular to E","Zero regardless of field"],"correct":1}
+{"q":"An electric dipole consists of:","choices":["Two equal positive charges","Two equal and opposite charges separated by a small distance","A single point charge near a conductor","Two free electrons"],"correct":1}
+{"q":"Far from an electric dipole, the field magnitude falls off as:","choices":["1/r","1/r²","1/r³","1/r⁴"],"correct":2}
+{"q":"An electric dipole placed in a uniform external field experiences:","choices":["A net force only","A net torque only","Both a net force and a net torque","Neither"],"correct":1}
+{"q":"The electric field between two large parallel plates with surface charge densities +σ and −σ is (in the gap):","choices":["σ/ε₀","Zero","σ/(2ε₀)","2σ/ε₀"],"correct":0}
+{"q":"A point charge Q is placed at the center of a cubical Gaussian surface. The flux through each of the six faces is:","choices":["Q/ε₀","Q/(6ε₀)","6Q/ε₀","Zero"],"correct":1}
+{"q":"Electric field lines are densely packed where the field is:","choices":["Weak","Zero","Strong","Changing direction"],"correct":2}
+
+# ================================================================
+# PHYSICS 23 — Chapter 17: Electric Potential & Potential Energy
+# ================================================================
+{"q":"The electric potential V at a point due to a point charge Q at distance r is:","choices":["kQ/r","kQ/r²","kQr","kQ² / r"],"correct":0}
+{"q":"The SI unit of electric potential is the:","choices":["Ampere","Volt","Ohm","Tesla"],"correct":1}
+{"q":"The electric potential energy of a charge q at a point where the potential is V is:","choices":["U = qV","U = q/V","U = qV²","U = V/q"],"correct":0}
+{"q":"1 electron-volt (eV) equals approximately:","choices":["1.6 × 10⁻¹⁹ J","9 × 10⁹ J","6.63 × 10⁻³⁴ J","1 J"],"correct":0}
+{"q":"The work done by the electric force on a charge q moving from A to B equals:","choices":["q(V_A − V_B)","q(V_B − V_A)","qV_A + qV_B","qV_AV_B"],"correct":0}
+{"q":"An equipotential surface is a surface on which:","choices":["The electric field is zero","The electric potential is the same everywhere","The potential energy is maximum","Only positive charges can exist"],"correct":1}
+{"q":"Electric field lines are always:","choices":["Parallel to equipotential surfaces","Perpendicular to equipotential surfaces","At 45° to equipotentials","Along equipotentials"],"correct":1}
+{"q":"Inside a conductor in equilibrium, the electric potential is:","choices":["Zero always","Constant throughout the conductor","Varies linearly with position","Equal to the external field magnitude"],"correct":1}
+{"q":"A positive test charge, released from rest, naturally moves toward regions of:","choices":["Higher potential","Lower potential","Equal potential","No motion possible"],"correct":1}
+{"q":"A negative test charge, released from rest, naturally moves toward regions of:","choices":["Higher potential","Lower potential","Equal potential","Zero field only"],"correct":0}
+{"q":"The relationship between the electric field and potential along a direction x is:","choices":["E_x = dV/dx","E_x = −dV/dx","E_x = V/x","E_x = V·x"],"correct":1}
+{"q":"If two points are at the same potential, the work to move a charge between them is:","choices":["Infinite","Zero","Equal to qV","Negative"],"correct":1}
+{"q":"A proton is accelerated through a potential difference of 1000 V. Its kinetic energy gained is:","choices":["1000 J","1000 eV","1 eV","Zero"],"correct":1}
+{"q":"The potential from multiple point charges is:","choices":["The vector sum of individual potentials","The scalar sum of individual potentials","Always zero","Only the nearest contribution"],"correct":1}
+{"q":"Two equal +Q point charges are placed at two corners of a square. The potential at the center is:","choices":["Zero","Positive","Negative","Infinite"],"correct":1}
+{"q":"A +Q and a −Q point charge sit at opposite corners of a square. The potential at the center is:","choices":["Zero","Positive","Negative","Infinite"],"correct":0}
+{"q":"The potential of an isolated point charge taken to be zero at:","choices":["Its own location","Infinity","The nearest conductor","Ground"],"correct":1}
+{"q":"Potential difference and electric field are related by:","choices":["V = E·d (uniform field over distance d along E)","V = E/d","V = Ed²","V = E²/d"],"correct":0}
+{"q":"A van de Graaff generator can reach very high potentials because:","choices":["Charge accumulates only on its surface to a limit set by the air breakdown field","Friction heats the belt","It contains a large battery","It uses magnetic fields"],"correct":0}
+{"q":"Work W done by an external agent against the electric force to move charge q from V_A to V_B:","choices":["W = q(V_A − V_B)","W = q(V_B − V_A)","W = qV_A/V_B","W = 0 always"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 17: Capacitance & Dielectrics
+# ================================================================
+{"q":"The definition of capacitance is:","choices":["C = Q × V","C = Q / V","C = V / Q","C = Q²V"],"correct":1}
+{"q":"The SI unit of capacitance is the:","choices":["Coulomb","Farad","Henry","Tesla"],"correct":1}
+{"q":"For a parallel-plate capacitor (vacuum, plate area A, separation d):","choices":["C = ε₀A·d","C = ε₀A/d","C = ε₀d/A","C = A/(ε₀d)"],"correct":1}
+{"q":"Inserting a dielectric of dielectric constant κ into a parallel-plate capacitor (with plates held at fixed voltage):","choices":["Decreases C","Increases C by a factor of κ","Does not change C","Only affects the voltage"],"correct":1}
+{"q":"The energy stored in a capacitor of capacitance C at voltage V is:","choices":["CV","½CV","½CV²","CV²"],"correct":2}
+{"q":"The energy stored in a capacitor can also be written as:","choices":["Q²/C","Q²/(2C)","2Q²C","Q/(2C)"],"correct":1}
+{"q":"Two capacitors C₁ and C₂ in parallel combine as:","choices":["C_p = C₁C₂/(C₁+C₂)","C_p = C₁ + C₂","1/C_p = 1/C₁ + 1/C₂","C_p = (C₁ + C₂)/2"],"correct":1}
+{"q":"Two capacitors C₁ and C₂ in series combine as:","choices":["C_s = C₁C₂/(C₁+C₂)","C_s = C₁ + C₂","C_s = C₁ − C₂","C_s = (C₁+C₂)²"],"correct":0}
+{"q":"Two identical capacitors C connected in series produce an equivalent capacitance of:","choices":["2C","C/2","C","4C"],"correct":1}
+{"q":"Two identical capacitors C connected in parallel produce an equivalent capacitance of:","choices":["2C","C/2","C","4C"],"correct":0}
+{"q":"Doubling the plate area of a parallel-plate capacitor while keeping d fixed:","choices":["Halves C","Doubles C","Leaves C unchanged","Quadruples C"],"correct":1}
+{"q":"Doubling the plate separation d of a parallel-plate capacitor with fixed A:","choices":["Doubles C","Halves C","Leaves C unchanged","Quadruples C"],"correct":1}
+{"q":"A dielectric between capacitor plates:","choices":["Increases the voltage for a given charge","Decreases the voltage for a given charge (at fixed Q)","Destroys the capacitor","Has no effect"],"correct":1}
+{"q":"Breakdown voltage of a capacitor is set by:","choices":["Its capacitance alone","The dielectric strength of the insulator between its plates","Its physical color","The ambient temperature only"],"correct":1}
+{"q":"A capacitor in a DC steady state draws a current of:","choices":["Infinite","Zero","V/R","Equal to the battery current"],"correct":1}
+{"q":"Energy density u in an electric field E (vacuum) is:","choices":["u = ε₀E","u = ½ε₀E²","u = ε₀E²","u = E²/(2ε₀)"],"correct":1}
+{"q":"Connecting two capacitors in series and charging them to total voltage V stores:","choices":["More energy than parallel for the same V","Less energy than parallel for the same V","The same energy as parallel","Zero energy"],"correct":1}
+{"q":"A capacitor disconnected from a battery and then has a dielectric inserted. What happens to Q?","choices":["Q decreases","Q stays the same","Q increases proportional to κ","Q goes to zero"],"correct":1}
+{"q":"A capacitor disconnected from a battery and has a dielectric inserted. What happens to V?","choices":["V stays the same","V decreases by a factor of κ","V increases by a factor of κ","V doubles"],"correct":1}
+{"q":"Common units for capacitance in circuits are often:","choices":["mF, μF, nF, pF","T, mT, μT","Ω, kΩ, MΩ","H, mH, μH"],"correct":0}
+
+# ================================================================
+# PHYSICS 23 — Chapter 18: Current, Resistance, Ohm's Law
+# ================================================================
+{"q":"Electric current is defined as:","choices":["I = dQ/dt (charge per time)","I = dQ/dx","I = Q × V","I = V/R²"],"correct":0}
+{"q":"The SI unit of current is the:","choices":["Ampere","Volt","Coulomb","Ohm"],"correct":0}
+{"q":"Conventional current flows in the direction of:","choices":["Electron motion","Positive charge motion","Proton motion only","Neutron flux"],"correct":1}
+{"q":"Ohm's law is:","choices":["V = IR","V = I/R","V = I²R","I = VR"],"correct":0}
+{"q":"The SI unit of resistance is the:","choices":["Ohm","Siemens","Farad","Watt"],"correct":0}
+{"q":"Resistance of a uniform wire of length L and cross-sectional area A with resistivity ρ is:","choices":["R = ρ A / L","R = ρ L / A","R = ρ L A","R = ρ / (LA)"],"correct":1}
+{"q":"Doubling the length of a wire (same material and cross-section) changes its resistance by:","choices":["Doubles it","Halves it","Leaves it unchanged","Quadruples it"],"correct":0}
+{"q":"Doubling the cross-sectional area of a wire (same material and length) changes its resistance by:","choices":["Doubles it","Halves it","Leaves it unchanged","Quadruples it"],"correct":1}
+{"q":"Electric power dissipated by a resistor R carrying current I is:","choices":["IR","I²R","I/R","I²/R"],"correct":1}
+{"q":"Electric power delivered to a resistor at voltage V across it is:","choices":["V/R","V·I","V²·R","V/R²"],"correct":1}
+{"q":"A resistor with current I and voltage drop V dissipates power:","choices":["V²R","V/I²","VI","I/V"],"correct":2}
+{"q":"As temperature increases, the resistance of a typical metal:","choices":["Decreases","Stays the same","Increases","Goes to zero"],"correct":2}
+{"q":"Semiconductors typically show resistance that:","choices":["Decreases with temperature","Increases with temperature","Is exactly constant","Is always zero"],"correct":0}
+{"q":"A 60 W bulb connected to 120 V draws a current of:","choices":["2 A","0.5 A","60 A","120 A"],"correct":1}
+{"q":"The resistance of a 60 W bulb operating at 120 V is:","choices":["60 Ω","120 Ω","240 Ω","0.5 Ω"],"correct":2}
+{"q":"Electrons in a metal drift at a speed that is typically:","choices":["Close to c","Much slower than their random thermal speed","Instantaneous across the wire","Supersonic"],"correct":1}
+{"q":"Conductance is the:","choices":["Reciprocal of resistance","Same as current","Same as voltage","Square of resistance"],"correct":0}
+{"q":"An ohmic device obeys:","choices":["V ∝ I²","V ∝ I (constant R)","V ∝ 1/I","V ∝ I^(3/2)"],"correct":1}
+{"q":"A 1.5 V battery with internal resistance 0.5 Ω delivers current I to a 1.0 Ω load. I equals:","choices":["1.5 A","1 A","0.5 A","0.75 A"],"correct":1}
+{"q":"Power rating of household devices in the US (typical voltage):","choices":["12 V","120 V","240 V","1200 V"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 19: DC Circuits, Kirchhoff's Rules
+# ================================================================
+{"q":"Resistors in series:","choices":["Add reciprocals","Add directly: R_s = R₁ + R₂ + …","All have different currents","Are at the same voltage"],"correct":1}
+{"q":"Resistors in parallel:","choices":["All have the same current","All have the same voltage across them","Add directly","Are the same resistance"],"correct":1}
+{"q":"For two resistors in parallel:","choices":["1/R = 1/R₁ + 1/R₂","R = R₁ + R₂","R = R₁R₂","R = √(R₁² + R₂²)"],"correct":0}
+{"q":"Two identical resistors R in parallel give equivalent resistance:","choices":["2R","R/2","R","4R"],"correct":1}
+{"q":"Two identical resistors R in series give equivalent resistance:","choices":["2R","R/2","R","4R"],"correct":0}
+{"q":"Kirchhoff's junction (current) rule expresses conservation of:","choices":["Energy","Charge","Momentum","Flux"],"correct":1}
+{"q":"Kirchhoff's loop (voltage) rule expresses conservation of:","choices":["Energy","Charge","Momentum","Mass"],"correct":0}
+{"q":"Kirchhoff's junction rule states:","choices":["Sum of currents into a node = sum of currents out","Sum of voltages around a loop = 0","Sum of currents around any loop is zero","Current is the same everywhere"],"correct":0}
+{"q":"Kirchhoff's loop rule states:","choices":["Sum of currents at a node = 0","Sum of EMFs and voltage drops around any closed loop = 0","Sum of currents around a loop is zero","The highest current sets the loop"],"correct":1}
+{"q":"An ideal ammeter has resistance:","choices":["Very large","Zero (ideal)","Equal to the circuit resistance","Infinite"],"correct":1}
+{"q":"An ideal voltmeter has resistance:","choices":["Zero","Infinite (ideal)","Equal to the circuit resistance","Negative"],"correct":1}
+{"q":"An ammeter must be placed:","choices":["In series with the element whose current is measured","In parallel with that element","Connected to ground only","Outside the circuit"],"correct":0}
+{"q":"A voltmeter must be placed:","choices":["In series with the element whose voltage is measured","In parallel with that element","Connected to ground only","Anywhere"],"correct":1}
+{"q":"Terminal voltage of a real battery of EMF ε and internal resistance r, supplying current I, is:","choices":["V = ε + Ir","V = ε − Ir","V = ε × I × r","V = ε/(Ir)"],"correct":1}
+{"q":"A 12 V battery with 1 Ω internal resistance is short-circuited. Short-circuit current:","choices":["0 A","12 A","1 A","∞"],"correct":1}
+{"q":"Three identical bulbs in series are each dimmer than the same bulbs in parallel because in series:","choices":["They see a lower voltage each","They see a higher voltage each","They dissipate more power","They have infinite resistance"],"correct":0}
+{"q":"When two identical resistors are in series, the voltage drop across each is:","choices":["Equal to the source voltage","Half of the source voltage","Twice the source voltage","Zero"],"correct":1}
+{"q":"If one bulb in a parallel branch burns out, the others:","choices":["Go out","Stay lit","Burn brighter by a large factor","Catch fire"],"correct":1}
+{"q":"If one bulb in a series circuit burns out, the others:","choices":["Stay lit","All go out","Burn brighter","Explode"],"correct":1}
+{"q":"Two resistors 6 Ω and 3 Ω in parallel give:","choices":["9 Ω","2 Ω","3 Ω","18 Ω"],"correct":1}
+{"q":"Two resistors 6 Ω and 3 Ω in series give:","choices":["9 Ω","2 Ω","3 Ω","18 Ω"],"correct":0}
+{"q":"A circuit draws 2 A from a 12 V source through a single resistor. R equals:","choices":["6 Ω","24 Ω","2 Ω","14 Ω"],"correct":0}
+{"q":"The power delivered by an EMF source of voltage ε providing current I is:","choices":["εI","ε/I","ε²I","I²/ε"],"correct":0}
+
+# ================================================================
+# PHYSICS 23 — Chapter 19: RC Circuits & AC Basics
+# ================================================================
+{"q":"The time constant τ of a simple RC circuit is:","choices":["R + C","R · C","R / C","R² C"],"correct":1}
+{"q":"In one time constant τ = RC, a discharging capacitor's voltage drops to approximately:","choices":["37% of initial","63% of initial","10% of initial","0%"],"correct":0}
+{"q":"In one time constant τ = RC, a charging capacitor reaches approximately:","choices":["63% of final voltage","37% of final voltage","10% of final","100% of final"],"correct":0}
+{"q":"After 5 time constants, an RC circuit is typically considered:","choices":["Just started","Fully charged/discharged (~99%)","Half charged","Unstable"],"correct":1}
+{"q":"The current in an RC circuit during charging:","choices":["Grows exponentially","Decays exponentially toward zero","Is constant","Oscillates"],"correct":1}
+{"q":"AC stands for:","choices":["Absolute current","Alternating current","Active capacitance","Analog circuit"],"correct":1}
+{"q":"The peak and RMS voltages of a sinusoidal AC signal are related by:","choices":["V_rms = V_peak / √2","V_rms = V_peak × √2","V_rms = V_peak","V_rms = 2V_peak"],"correct":0}
+{"q":"Typical household 120 V AC in the US refers to:","choices":["Peak voltage","RMS voltage","Peak-to-peak voltage","DC voltage"],"correct":1}
+{"q":"Average power delivered to a resistor in AC (sinusoidal) is:","choices":["V_peak I_peak","V_rms I_rms","Zero","V_peak²/R"],"correct":1}
+{"q":"Frequency of US household AC is typically:","choices":["50 Hz","60 Hz","100 Hz","1000 Hz"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 20: Magnetism & Magnetic Force
+# ================================================================
+{"q":"The SI unit of magnetic field is the:","choices":["Weber","Tesla","Henry","Farad"],"correct":1}
+{"q":"A magnetic force on a charged particle acts:","choices":["Parallel to its velocity","Perpendicular to its velocity","Opposite to its velocity","Only on stationary charges"],"correct":1}
+{"q":"The magnetic force on a particle of charge q moving with velocity v in a field B is:","choices":["F = qv × B","F = qv · B","F = q(v + B)","F = qB/v"],"correct":0}
+{"q":"The magnetic force on a moving charged particle does work at a rate:","choices":["F·v = nonzero always","Zero, because F is perpendicular to v","Equal to qvB","Equal to qE"],"correct":1}
+{"q":"A charged particle moving parallel to a uniform magnetic field experiences:","choices":["Maximum force","Zero force","A force perpendicular to B","Oscillatory force"],"correct":1}
+{"q":"A charged particle moving perpendicular to a uniform magnetic field moves in:","choices":["A straight line","A circle","A parabola","An ellipse"],"correct":1}
+{"q":"The radius of a charged particle's circular motion in a magnetic field is:","choices":["r = mv/(qB)","r = qB/(mv)","r = mBv/q","r = qmv/B"],"correct":0}
+{"q":"The angular frequency of cyclotron motion (cyclotron frequency) is:","choices":["ω = qB/m","ω = m/(qB)","ω = qvB","ω = B/m"],"correct":0}
+{"q":"The cyclotron frequency is independent of:","choices":["The mass","The charge","The magnetic field strength","The particle's speed"],"correct":3}
+{"q":"A mass spectrometer separates ions by:","choices":["Their colors","Their mass-to-charge ratios","Their densities","Their kinetic energies only"],"correct":1}
+{"q":"The Hall effect measures:","choices":["The sign of the charge carriers and their density","The temperature","The voltage of a battery","Only resistance"],"correct":0}
+{"q":"The force per unit length on a current-carrying wire in a magnetic field is:","choices":["F/L = IL × B (or IB sin θ per unit length)","F/L = I/B","F/L = B/I","F/L = IBL"],"correct":0}
+{"q":"Two parallel wires carrying currents in the same direction:","choices":["Attract each other","Repel each other","Exert no net force","Oscillate"],"correct":0}
+{"q":"Two parallel wires carrying currents in opposite directions:","choices":["Attract each other","Repel each other","Exert no net force","Rotate around each other"],"correct":1}
+{"q":"The magnetic field around a long straight wire carrying current I, at distance r, has magnitude:","choices":["B = μ₀I/(2πr)","B = μ₀I/(4πr²)","B = Ir","B = μ₀I·r"],"correct":0}
+{"q":"The direction of the magnetic field around a straight current-carrying wire is given by:","choices":["Left-hand rule","Right-hand rule (thumb along I, fingers curl in direction of B)","Lenz's rule","None of the above"],"correct":1}
+{"q":"Ampere's law (magnetostatics) is:","choices":["∮B·dℓ = μ₀I_enc","∮E·dA = Q/ε₀","∮B·dA = 0","∮E·dℓ = -dΦ/dt"],"correct":0}
+{"q":"Inside a long solenoid with n turns per unit length carrying current I, the magnetic field is approximately:","choices":["B = μ₀ n I","B = μ₀ I / n","B = n I / μ₀","B = μ₀ I / (2πn)"],"correct":0}
+{"q":"The torque on a current loop of magnetic moment m in a field B is:","choices":["τ = m × B","τ = m·B","τ = m/B","τ = mB²"],"correct":0}
+{"q":"Magnetic moment of a planar current loop of area A carrying current I is:","choices":["m = I/A","m = IA","m = I²A","m = A/I"],"correct":1}
+{"q":"A simple DC motor operates using:","choices":["Electromagnetic induction only","The torque on a current loop in a magnetic field","Capacitance","Radioactive decay"],"correct":1}
+{"q":"A compass needle aligns with:","choices":["Gravity","The local magnetic field","The nearest wall","Any nearby current"],"correct":1}
+{"q":"Gauss's law for magnetism states:","choices":["∮B·dA = 0 (no magnetic monopoles)","∮B·dA = Q/ε₀","∮B·dA = μ₀I","B = 0 always"],"correct":0}
+{"q":"The magnetic force between two parallel wires carrying currents I₁ and I₂ separated by d per unit length is:","choices":["F/L = μ₀ I₁ I₂ / (2π d)","F/L = I₁ I₂ d","F/L = μ₀ I₁ + I₂","F/L = 2πd/(I₁ I₂)"],"correct":0}
+{"q":"A particle with q > 0 moves in +x direction in a field B = +y. The magnetic force points:","choices":["+z","−z","+x","+y"],"correct":0}
+
+# ================================================================
+# PHYSICS 23 — Chapter 21: Electromagnetic Induction
+# ================================================================
+{"q":"Faraday's law states that the induced EMF around a loop is:","choices":["ε = −dΦ_B/dt","ε = Φ_B × t","ε = dB/dt × area","ε = 0 always"],"correct":0}
+{"q":"The magnetic flux through a flat loop of area A in field B at angle θ between B and the normal is:","choices":["Φ = BA sin θ","Φ = BA cos θ","Φ = BA tan θ","Φ = B/A"],"correct":1}
+{"q":"Magnetic flux is maximized when the area vector is:","choices":["Parallel to B","Perpendicular to B","At 45° to B","Antiparallel to B"],"correct":0}
+{"q":"Lenz's law says the induced current opposes:","choices":["The motion of the loop","The change in magnetic flux through the loop","Ohm's law","Both gravity and EMF"],"correct":1}
+{"q":"A bar magnet is pushed north-pole first toward a coil. The induced current in the coil:","choices":["Produces a magnetic moment that repels the approaching magnet","Attracts the magnet","Is zero","Equals the magnet's field"],"correct":0}
+{"q":"A loop moving into a region of uniform magnetic field experiences:","choices":["No induced EMF (uniform field, flux changes)","An induced EMF as flux through the loop changes","Only an electric force","A gravitational EMF"],"correct":1}
+{"q":"Motional EMF in a rod of length L moving at speed v through perpendicular field B:","choices":["ε = BLv","ε = BL/v","ε = BLv²","ε = B/(Lv)"],"correct":0}
+{"q":"An induced EMF exists in a loop when:","choices":["B is constant and the loop is at rest","B is changing or the area of the loop is changing","The resistance changes but flux does not","Current flows through the loop only"],"correct":1}
+{"q":"Eddy currents are:","choices":["Induced currents in bulk conductors caused by changing flux","Steady DC currents in wires","Leakage currents in capacitors","Currents in superconductors only"],"correct":0}
+{"q":"A generator converts:","choices":["Chemical to electrical energy","Mechanical (rotational) energy into electrical energy via induction","Light to heat","Gravity into electricity directly"],"correct":1}
+{"q":"The EMF of a rotating coil generator has maximum magnitude when:","choices":["The coil's plane is parallel to B (area vector perpendicular to B)","The coil is perpendicular to B (area vector parallel to B)","The coil is at rest","The field is zero"],"correct":0}
+{"q":"A transformer works on the principle of:","choices":["Conservation of charge","Mutual induction","Electrostatic repulsion","Conservation of momentum"],"correct":1}
+{"q":"An ideal transformer with primary turns N_p and secondary turns N_s has:","choices":["V_p/V_s = N_p/N_s","V_p/V_s = N_s/N_p","V_p V_s = N_p N_s","V_p/V_s = 1 always"],"correct":0}
+{"q":"In an ideal transformer, V_p/V_s = N_p/N_s and power is conserved, so currents obey:","choices":["I_p/I_s = N_p/N_s","I_p/I_s = N_s/N_p","I_p/I_s = 1","I_p I_s = 0"],"correct":1}
+{"q":"A step-up transformer increases:","choices":["Voltage but decreases current","Both voltage and current","Only current","Only frequency"],"correct":0}
+{"q":"A step-down transformer:","choices":["Decreases voltage and increases current (in an ideal transformer)","Decreases both voltage and current","Increases voltage and decreases current","Does nothing"],"correct":0}
+{"q":"Transformers require AC (not DC) because:","choices":["DC cannot be induced since the flux is constant","AC is less efficient","Transformers run on chemicals","DC has no electric field"],"correct":0}
+{"q":"Inductance L is defined by:","choices":["ε = −L dI/dt","ε = L/I","ε = LI","ε = L/t"],"correct":0}
+{"q":"The SI unit of inductance is the:","choices":["Henry","Tesla","Farad","Weber"],"correct":0}
+{"q":"Energy stored in an inductor with current I and inductance L is:","choices":["½ L I²","L I","L I²","½ L / I"],"correct":0}
+{"q":"The time constant of an RL circuit is:","choices":["τ = RL","τ = L/R","τ = R/L","τ = L² R"],"correct":1}
+{"q":"An LC circuit oscillates at an angular frequency:","choices":["ω = 1/√(LC)","ω = LC","ω = √(L/C)","ω = L + C"],"correct":0}
+{"q":"Immediately after closing the switch in an LR circuit, the current is:","choices":["Zero (inductor resists change)","Maximum","Equal to V/R instantly","Undefined"],"correct":0}
+{"q":"At steady state in a DC LR circuit, the voltage across the inductor is:","choices":["Zero","Maximum","Equal to the EMF","Negative EMF"],"correct":0}
+{"q":"In a purely inductive AC circuit, the voltage:","choices":["Is in phase with the current","Leads the current by 90°","Lags the current by 90°","Is exactly opposite to the current"],"correct":1}
+{"q":"Inductive reactance is given by:","choices":["X_L = ωL","X_L = 1/(ωL)","X_L = L/ω","X_L = ω/L"],"correct":0}
+{"q":"Capacitive reactance is given by:","choices":["X_C = ωC","X_C = 1/(ωC)","X_C = C/ω","X_C = ω/C"],"correct":1}
+{"q":"In a series RLC circuit at resonance:","choices":["X_L = X_C and impedance Z = R (minimum)","Impedance is maximum","Current is zero","X_L + X_C = 0"],"correct":0}
+{"q":"At resonance of a series RLC driven circuit, the current amplitude is:","choices":["Zero","Maximum","Independent of R","Dependent only on C"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 22: Maxwell's Equations & EM Waves
+# ================================================================
+{"q":"Maxwell's equations number:","choices":["Two","Three","Four","Six"],"correct":2}
+{"q":"Which of the following is NOT one of Maxwell's equations?","choices":["Gauss's law for E","Gauss's law for B (∮B·dA = 0)","Faraday's law","Ohm's law"],"correct":3}
+{"q":"Maxwell added the ______ term to complete the Ampère-Maxwell law.","choices":["Displacement current","Electric potential","Magnetic monopole","Faraday induction"],"correct":0}
+{"q":"Displacement current is ε₀ times:","choices":["dE/dt through a surface (dΦ_E/dt)","dB/dt","V/R","Q × B"],"correct":0}
+{"q":"In vacuum, EM waves propagate at speed c = 1/√(ε₀ μ₀). ε₀ and μ₀ are:","choices":["Permittivity and permeability of free space","Mass and charge","Frequency and wavelength","Energy and momentum"],"correct":0}
+{"q":"c ≈ 3 × 10⁸ m/s. This is the speed of:","choices":["Sound in air","Light in vacuum","Flow of water","Radio antennas"],"correct":1}
+{"q":"In an EM wave in vacuum, E and B fields are:","choices":["Parallel to each other and to the propagation direction","Perpendicular to each other and to the propagation direction","Parallel to propagation, perpendicular to each other","Randomly oriented"],"correct":1}
+{"q":"In an EM wave in vacuum, the ratio of E to B magnitudes is:","choices":["c","1","1/c","c²"],"correct":0}
+{"q":"Which list orders EM radiation from lowest to highest frequency correctly?","choices":["Radio, microwave, infrared, visible, UV, X-ray, gamma","Gamma, X-ray, UV, visible, infrared, microwave, radio","Visible, radio, UV, X-ray","Radio, UV, IR, visible"],"correct":0}
+{"q":"Visible light wavelengths are approximately:","choices":["10–100 nm","400–700 nm","700–1000 μm","1–10 mm"],"correct":1}
+{"q":"Which visible color has the longest wavelength?","choices":["Violet","Blue","Green","Red"],"correct":3}
+{"q":"Which visible color has the highest frequency?","choices":["Red","Yellow","Green","Violet"],"correct":3}
+{"q":"The Poynting vector S = (1/μ₀) E × B represents:","choices":["Charge density","Energy flux per unit area for an EM wave","Magnetic monopole flux","Electric field squared"],"correct":1}
+{"q":"Time-averaged energy density of an EM wave in vacuum is:","choices":["u = ½ ε₀ E_rms² + B_rms²/(2μ₀)","u = ε₀ E","u = E × B","u = σ T⁴"],"correct":0}
+{"q":"The radiation pressure from a perfectly absorbing surface with incident intensity I is:","choices":["I/c","I c","I/c²","Ic²"],"correct":0}
+{"q":"The radiation pressure on a perfectly reflecting surface (normal incidence) is:","choices":["I/c","2I/c","I c","Zero"],"correct":1}
+{"q":"A radio antenna receives EM waves by the oscillating field driving:","choices":["Charges in the antenna","Mass of the antenna","The Earth's core","Nuclear decay"],"correct":0}
+{"q":"A microwave oven works by:","choices":["Exciting water molecules via rotational/vibrational absorption of ~GHz waves","Exciting nuclei via gamma rays","Heating objects by UV","Cooling via X-ray absorption"],"correct":0}
+{"q":"Frequency f and wavelength λ of an EM wave in vacuum are related by:","choices":["fλ = c","f/λ = c","f + λ = c","fλ² = c"],"correct":0}
+{"q":"Blue light in vacuum has a frequency of about:","choices":["6 × 10¹⁴ Hz","6 × 10⁸ Hz","3 × 10¹⁰ Hz","1 × 10²⁰ Hz"],"correct":0}
+
+# ================================================================
+# PHYSICS 23 — Chapter 23: Geometric Optics (Reflection, Refraction, Lenses, Mirrors)
+# ================================================================
+{"q":"The law of reflection states:","choices":["The angle of incidence equals the angle of refraction","The angle of incidence equals the angle of reflection (measured from the normal)","The incident ray is parallel to the reflected ray","The reflected ray is always perpendicular to the surface"],"correct":1}
+{"q":"The index of refraction n of a medium is defined as:","choices":["n = v/c","n = c/v","n = c + v","n = cv"],"correct":1}
+{"q":"The index of refraction of vacuum is:","choices":["0","1","c","Depends on color"],"correct":1}
+{"q":"Snell's law of refraction is:","choices":["n₁ sin θ₁ = n₂ sin θ₂","n₁ cos θ₁ = n₂ cos θ₂","n₁ tan θ₁ = n₂ tan θ₂","n₁ θ₁ = n₂ θ₂"],"correct":0}
+{"q":"Light traveling from a less dense to a more dense medium (n₂ > n₁) bends:","choices":["Away from the normal","Toward the normal","Parallel to the normal","Along the surface"],"correct":1}
+{"q":"Light traveling from denser to less dense medium bends:","choices":["Toward the normal","Away from the normal","Reflects back always","Doesn't refract"],"correct":1}
+{"q":"Total internal reflection requires:","choices":["Going from less dense to more dense at any angle","Going from more dense to less dense beyond the critical angle","Vacuum everywhere","A reflecting metal surface"],"correct":1}
+{"q":"The critical angle θ_c for total internal reflection at a glass–air interface is given by:","choices":["sin θ_c = n_air/n_glass","sin θ_c = n_glass/n_air","tan θ_c = n_glass","cos θ_c = n_air"],"correct":0}
+{"q":"Optical fibers exploit:","choices":["Diffraction","Total internal reflection","Doppler shift","Compton scattering"],"correct":1}
+{"q":"When white light goes through a prism it splits into colors because:","choices":["Frequency changes in glass","Different wavelengths have slightly different indices of refraction (dispersion)","The prism absorbs certain colors","The prism has moving parts"],"correct":1}
+{"q":"Which color typically refracts the most in glass?","choices":["Red","Orange","Blue/Violet","They all refract the same"],"correct":2}
+{"q":"A plane mirror produces an image that is:","choices":["Real and inverted","Virtual, upright, and the same size as the object","Real and magnified","Virtual and magnified"],"correct":1}
+{"q":"For a concave mirror, parallel rays close to the axis converge to:","choices":["The center of curvature","The focal point (real)","A virtual point behind the mirror","Infinity"],"correct":1}
+{"q":"For a convex mirror, the image of a real object is always:","choices":["Real, inverted, magnified","Virtual, upright, diminished","Real, upright","Virtual, inverted"],"correct":1}
+{"q":"The mirror equation relates object distance d_o, image distance d_i, and focal length f by:","choices":["1/d_o + 1/d_i = 1/f","d_o + d_i = f","d_o d_i = f²","f = d_o d_i/(d_o + d_i)"],"correct":0}
+{"q":"Magnification m for a mirror/lens is:","choices":["m = −d_i/d_o","m = d_o/d_i","m = d_i × d_o","m = 1 always"],"correct":0}
+{"q":"A converging (convex) lens focuses parallel rays to:","choices":["A virtual focal point behind the lens","A real focal point on the far side","Parallel rays (no focus)","Randomly"],"correct":1}
+{"q":"A diverging (concave) lens with a real object produces an image that is:","choices":["Real and magnified","Real and diminished","Virtual, upright, diminished","Virtual and magnified only"],"correct":2}
+{"q":"The thin lens equation is:","choices":["1/d_o + 1/d_i = 1/f","d_o − d_i = f","d_o + d_i = f","f² = d_o d_i"],"correct":0}
+{"q":"A converging lens has a focal length f = 10 cm. An object placed at d_o = 20 cm produces an image at:","choices":["d_i = 20 cm (real, inverted, same size)","d_i = 5 cm","d_i = 10 cm","Virtual image only"],"correct":0}
+{"q":"For a converging lens with f = 10 cm and object at d_o = 10 cm (at the focal point):","choices":["Image at 10 cm","Image at 20 cm","Image at infinity","No image"],"correct":2}
+{"q":"The focal length of a lens with a larger n (optically denser glass) keeping shape fixed becomes:","choices":["Larger","Smaller","Unchanged","Zero"],"correct":1}
+{"q":"An image formed on the far side of a converging lens is:","choices":["Real","Virtual","Imaginary","Always upright"],"correct":0}
+{"q":"If magnification m = −2, the image is:","choices":["Virtual, upright, same size","Real, inverted, twice as large","Real, upright, half size","Virtual, inverted"],"correct":1}
+{"q":"A converging lens creates a virtual image when the object is:","choices":["Beyond 2f","Between f and 2f","Inside the focal length (d_o < f)","At 2f"],"correct":2}
+
+# ================================================================
+# PHYSICS 23 — Chapter 24: Wave Optics (Interference, Diffraction, Polarization)
+# ================================================================
+{"q":"Young's double-slit interference produces bright fringes where:","choices":["Path difference = (m + ½)λ","Path difference = mλ (m integer)","Wavelength is zero","Slits are closed"],"correct":1}
+{"q":"Young's double-slit interference produces dark fringes where:","choices":["Path difference = mλ","Path difference = (m + ½)λ (m integer)","Slits overlap","Never, there are always bright fringes"],"correct":1}
+{"q":"For double-slit fringe spacing on a screen at distance D with slit separation d:","choices":["Δy = λD/d","Δy = λd/D","Δy = λ/(Dd)","Δy = D²/(λd)"],"correct":0}
+{"q":"Increasing the slit separation d in a double-slit experiment (fixed D and λ):","choices":["Increases fringe spacing","Decreases fringe spacing","Leaves it unchanged","Eliminates fringes"],"correct":1}
+{"q":"Coherent sources are required for observing stable interference because:","choices":["They have exactly the same color","They maintain a constant phase relationship","They are mechanically connected","They are very bright"],"correct":1}
+{"q":"Single-slit diffraction produces minima at:","choices":["a sin θ = mλ, m nonzero integer","a sin θ = (m + ½)λ","a cos θ = mλ","No minima form"],"correct":0}
+{"q":"A diffraction grating with N slits per unit length creates sharp principal maxima at angles where:","choices":["d sin θ = mλ","d cos θ = mλ","d = mλ","d sin θ = λ/2"],"correct":0}
+{"q":"Diffraction is most noticeable when the wavelength is:","choices":["Much smaller than the aperture","Comparable to or larger than the aperture","Zero","Irrelevant to the aperture"],"correct":1}
+{"q":"A thin oil film appears colored in reflected light due to:","choices":["Interference between reflections from the top and bottom surfaces","Absorption of specific colors","Diffraction alone","Compton scattering"],"correct":0}
+{"q":"The condition for constructive thin-film interference (normal incidence, no π phase shift) is:","choices":["2nt = mλ","2nt = (m + ½)λ","t = mλ","nt = mλ/2"],"correct":0}
+{"q":"A 180° phase shift happens on reflection at:","choices":["Any interface","An interface going from lower to higher index of refraction","An interface from higher to lower n","A perfect absorber"],"correct":1}
+{"q":"Rayleigh's criterion for resolution through a circular aperture gives the minimum angular separation:","choices":["θ_min = 1.22 λ/D","θ_min = λ/(2D)","θ_min = D/λ","θ_min = 2πλ/D"],"correct":0}
+{"q":"Light is polarized in which geometric sense?","choices":["Direction of the electric field vector","Direction of propagation","Color wavelength","Temperature"],"correct":0}
+{"q":"Malus's law: if polarized light of intensity I₀ passes through a polarizer whose axis is at angle θ to the light's polarization, transmitted intensity is:","choices":["I = I₀ sin θ","I = I₀ cos θ","I = I₀ cos² θ","I = I₀ sin² θ"],"correct":2}
+{"q":"Unpolarized light passing through an ideal polarizer emerges with intensity:","choices":["Unchanged","Half of the incident intensity","Zero","Twice the incident intensity"],"correct":1}
+{"q":"Light can be polarized by:","choices":["Transmission through a polarizing filter","Reflection at Brewster's angle","Scattering (e.g., blue sky)","All of the above"],"correct":3}
+{"q":"Brewster's angle is defined by:","choices":["tan θ_B = n₂/n₁","sin θ_B = 1/n","θ_B = 90°","θ_B = 45°"],"correct":0}
+{"q":"The central maximum in single-slit diffraction is:","choices":["Exactly as wide as the side maxima","Twice as wide as the side maxima (in angle)","Much narrower than side maxima","Absent"],"correct":1}
+{"q":"Why does the sky appear blue?","choices":["Blue photons travel faster","Rayleigh scattering scatters shorter wavelengths (blue) more strongly","The atmosphere absorbs red light","The Sun is intrinsically blue"],"correct":1}
+{"q":"Two coherent sources of light with zero path difference between them produce at the center screen:","choices":["Dark fringe","Bright fringe","No pattern","Rainbow"],"correct":1}
+
+# ================================================================
+# PHYSICS 23 — Chapter 25: Optical Instruments
+# ================================================================
+{"q":"The eye's lens focuses images on the:","choices":["Pupil","Iris","Retina","Cornea"],"correct":2}
+{"q":"Accommodation of the human eye refers to:","choices":["The pupil changing size with light","The lens changing focal length to focus at different distances","Color vision adaptation","Tear production"],"correct":1}
+{"q":"Myopia (nearsightedness) is corrected with:","choices":["A converging (positive) lens","A diverging (negative) lens","A prism","No lens"],"correct":1}
+{"q":"Hyperopia (farsightedness) is corrected with:","choices":["A converging (positive) lens","A diverging (negative) lens","No correction possible","A flat mirror"],"correct":0}
+{"q":"The 'near point' of a normal young human eye is typically about:","choices":["2 cm","25 cm","1 m","infinity"],"correct":1}
+{"q":"A magnifying glass produces a virtual image with angular magnification M ≈ N/f at the near point, where:","choices":["N is the near-point distance","N is the far-point distance","N is focal length","N is aperture size"],"correct":0}
+{"q":"A compound microscope uses:","choices":["One lens","An objective lens to form a real image, magnified by an eyepiece","Only mirrors","A single prism"],"correct":1}
+{"q":"For a refracting telescope, angular magnification is approximately:","choices":["M = f_eye/f_obj","M = f_obj/f_eye","M = f_obj × f_eye","M = 1"],"correct":1}
+{"q":"The resolution of a telescope's ability to separate close objects depends on its:","choices":["Magnification only","Objective aperture diameter (larger is better)","Focal length alone","Eyepiece color"],"correct":1}
+{"q":"Camera aperture (f-number) is defined as:","choices":["f/D where D is the aperture diameter","D/f","fD","f + D"],"correct":0}
+{"q":"A smaller camera f-number (e.g., f/2) means:","choices":["Smaller aperture, less light","Larger aperture, more light","Larger depth of field","Slower lens"],"correct":1}
+{"q":"Reflecting telescopes avoid chromatic aberration because:","choices":["Mirrors focus all wavelengths at the same point","They use color filters","They block UV","They have no lenses"],"correct":0}
+{"q":"Chromatic aberration occurs because:","choices":["Lenses dim colors","Different wavelengths have different focal lengths in a single lens","Light always travels in a straight line","Colors do not exist in lenses"],"correct":1}
+{"q":"Spherical aberration is the:","choices":["Failure of a perfect spherical surface to focus all rays to the same point","Bending of light around obstacles","Diffraction from sphere edges","Loss of color fidelity"],"correct":0}
+{"q":"The resolving power of a microscope is ultimately limited by:","choices":["Diffraction","Chromatic aberration only","Pupil size","Temperature"],"correct":0}
+
+# ================================================================
+# PHYSICS 25 — Chapter 28: Special Relativity
+# ================================================================
+{"q":"The two postulates of special relativity are:","choices":["Laws of physics are the same in inertial frames; the speed of light in vacuum is the same in all inertial frames","Speed of light changes with motion; Newton's laws only hold at rest","Time is absolute; space is relative","Mass is conserved; energy is not"],"correct":0}
+{"q":"The Lorentz factor γ is:","choices":["γ = 1/√(1 − v²/c²)","γ = √(1 − v²/c²)","γ = 1 + v/c","γ = v/c"],"correct":0}
+{"q":"As v → c, γ approaches:","choices":["0","1","∞","1/c"],"correct":2}
+{"q":"At v = 0, γ equals:","choices":["0","1","∞","c"],"correct":1}
+{"q":"Time dilation: a clock moving at speed v with proper-time interval Δτ ticks in the lab frame as:","choices":["Δt = Δτ/γ","Δt = γ Δτ","Δt = Δτ + v","Δt = Δτ"],"correct":1}
+{"q":"Moving clocks run:","choices":["Faster","Slower (time dilation)","At the same rate","Backwards"],"correct":1}
+{"q":"An object's proper length L₀ is measured at:","choices":["Any frame","Its rest frame","Half the speed of light","Infinity"],"correct":1}
+{"q":"Length contraction along the direction of motion: an object of proper length L₀ appears in a frame moving at v as:","choices":["L = L₀ γ","L = L₀ / γ","L = L₀ + v t","L = L₀"],"correct":1}
+{"q":"Length contraction applies only:","choices":["In the direction perpendicular to motion","In the direction parallel to the motion","To massive objects","To solid objects only"],"correct":1}
+{"q":"In special relativity, two events simultaneous in one frame are:","choices":["Always simultaneous in every frame","Generally not simultaneous in frames moving relative to the first","Never simultaneous in any other frame","Separated by a light-year"],"correct":1}
+{"q":"The relativistic velocity addition formula for parallel velocities is:","choices":["u' = (u + v)/(1 + uv/c²)","u' = u + v","u' = u − v","u' = (u − v)/(1 − uv/c²)"],"correct":0}
+{"q":"Two objects approach each other at 0.5c each (as measured in Earth's frame). Their relative speed is approximately:","choices":["1.0 c","0.8 c","0.5 c","c/2"],"correct":1}
+{"q":"Relativistic momentum is:","choices":["p = γ m v","p = m v","p = m c","p = m v²"],"correct":0}
+{"q":"Relativistic kinetic energy is:","choices":["½ m v²","(γ − 1) m c²","γ m v²","m c² / 2"],"correct":1}
+{"q":"Rest energy of a particle of mass m is:","choices":["m c²","½ m c²","m c","2 m c²"],"correct":0}
+{"q":"Relativistic total energy E = γ m c². When v = 0, E equals:","choices":["0","m c²","½ m c²","∞"],"correct":1}
+{"q":"The energy–momentum relation (invariant) is:","choices":["E² = (pc)² + (mc²)²","E = p c","E = mc² only","E² = p c + m c²"],"correct":0}
+{"q":"For a photon (mass = 0), E and p are related by:","choices":["E = p c","E = p² c²","E = mc²","E = (1/2) p c"],"correct":0}
+{"q":"A particle with rest mass m is accelerated so its total energy is 2mc². Its kinetic energy is:","choices":["0","mc²","2mc²","½mc²"],"correct":1}
+{"q":"The rest energy of an electron (m_e ≈ 9.1 × 10⁻³¹ kg) is approximately:","choices":["511 keV","1.022 MeV","0.511 eV","511 MeV"],"correct":0}
+{"q":"The rest energy of 1 kg of mass is approximately:","choices":["9 × 10⁹ J","9 × 10¹⁶ J","3 × 10⁸ J","10 J"],"correct":1}
+{"q":"A muon with proper lifetime 2.2 μs travels at v = 0.99 c. Observer on Earth measures its lifetime as:","choices":["2.2 μs (same)","Longer (by factor γ ≈ 7)","Shorter","Zero"],"correct":1}
+{"q":"In the 'train and tunnel' scenario, whether both doors of the tunnel close around the train simultaneously depends on:","choices":["The reference frame (simultaneity is frame-dependent)","The speed of sound in the train","The color of the tunnel","Only the proper frame"],"correct":0}
+{"q":"An astronaut travels to a distant star at high speed. Compared to Earth clocks, the astronaut's onboard clock:","choices":["Runs faster","Runs slower (as measured by Earth)","Runs at the same rate","Stops entirely"],"correct":1}
+{"q":"Spacetime intervals Δs² = (cΔt)² − Δx² − Δy² − Δz² are:","choices":["Frame-dependent","Lorentz invariant","Always zero","Always negative"],"correct":1}
+{"q":"Two events separated by a positive Δs² (timelike) can be connected by:","choices":["A photon only","A physical object traveling slower than c","Only a tachyon","Neither"],"correct":1}
+{"q":"Two events with Δs² = 0 are separated by:","choices":["A spacelike interval","A null (lightlike) interval, connectable by a light ray","A timelike interval","No interval"],"correct":1}
+{"q":"For a photon in vacuum, the proper time Δτ between its emission and absorption is:","choices":["Zero","Infinite","1 s","Frame-dependent and nonzero"],"correct":0}
+{"q":"As v approaches c, the kinetic energy required to accelerate a massive particle:","choices":["Stays finite and small","Grows without bound (diverges)","Goes to zero","Becomes negative"],"correct":1}
+{"q":"A massless particle always travels at:","choices":["Rest","Speed c in vacuum","Half of c","Any speed"],"correct":1}
+{"q":"The relativistic Doppler effect for a source receding at speed v has frequency:","choices":["f = f₀ √[(1−β)/(1+β)] (redshift for receding)","f = f₀ (unchanged)","f = f₀ (1 + v/c)","f = f₀ √(1 − v²/c²)"],"correct":0}
+{"q":"Energy–mass equivalence E = mc² implies:","choices":["Mass can be converted into energy and vice versa","Mass is always conserved separately","Energy cannot come from nuclear reactions","Light has no energy"],"correct":0}
+{"q":"In nuclear fission/fusion, the energy released comes from:","choices":["Conservation of charge","A small decrease in total rest mass (mass–energy equivalence)","Gravity","Electrostatic repulsion only"],"correct":1}
+
+# ================================================================
+# PHYSICS 25 — Chapter 29: Blackbody Radiation & UV Catastrophe
+# ================================================================
+{"q":"A blackbody is an ideal object that:","choices":["Reflects all light","Absorbs all incident radiation and emits a characteristic thermal spectrum","Emits no radiation","Only absorbs X-rays"],"correct":1}
+{"q":"Stefan–Boltzmann law: a blackbody's radiated power per unit area scales as:","choices":["T","T²","T³","T⁴"],"correct":3}
+{"q":"The Stefan–Boltzmann constant σ appears in:","choices":["P/A = σ T⁴","P = σ ε V","E = σ T","F = σ q"],"correct":0}
+{"q":"Wien's displacement law states that the peak wavelength of blackbody emission:","choices":["Is proportional to T","Is independent of T","Is inversely proportional to T (λ_peak T = constant)","Is proportional to T²"],"correct":2}
+{"q":"A hotter star emits its peak radiation at:","choices":["Longer wavelengths (redder)","Shorter wavelengths (bluer)","The same wavelength as a cooler star","Zero wavelength"],"correct":1}
+{"q":"The ultraviolet catastrophe referred to:","choices":["The failure of classical physics (Rayleigh–Jeans) to predict blackbody spectra at short wavelengths","The damage of UV light to human skin","The coldness of the universe","A failed experiment in 1930"],"correct":0}
+{"q":"Planck resolved the UV catastrophe by postulating:","choices":["Energy of oscillators is quantized in units of hf","Light travels in straight lines","Temperature is quantized","Oscillators cannot emit light"],"correct":0}
+{"q":"Planck's constant h has a numerical value of approximately:","choices":["6.63 × 10⁻³⁴ J·s","3 × 10⁸ m/s","1.6 × 10⁻¹⁹ C","9 × 10⁹ N·m²/C²"],"correct":0}
+{"q":"The energy of a photon of frequency f is:","choices":["E = h f","E = h/f","E = h c","E = h/λ²"],"correct":0}
+{"q":"The energy of a photon of wavelength λ is:","choices":["E = hλ","E = hc/λ","E = hc λ","E = h/(c λ)"],"correct":1}
+{"q":"The Sun's surface temperature is approximately 5800 K. Its peak emission wavelength is approximately:","choices":["500 nm (in the visible)","10 μm (infrared)","50 nm (UV)","1 cm (microwave)"],"correct":0}
+{"q":"An object at 300 K (room temperature) peaks its blackbody emission at:","choices":["~100 nm (UV)","~10 μm (infrared)","~10 cm (radio)","~500 nm (visible)"],"correct":1}
+{"q":"Doubling a blackbody's temperature increases its total radiated power per area by a factor of:","choices":["2","4","8","16"],"correct":3}
+{"q":"Doubling a blackbody's temperature shifts its peak wavelength to:","choices":["Twice the previous value","Half the previous value","The same value","Four times the previous value"],"correct":1}
+
+# ================================================================
+# PHYSICS 25 — Chapter 27/29: Photoelectric Effect
+# ================================================================
+{"q":"Einstein's photoelectric equation states:","choices":["KE_max = hf + Φ","KE_max = hf − Φ","KE_max = Φ − hf","KE_max = h/f · Φ"],"correct":1}
+{"q":"The work function Φ is:","choices":["The minimum energy needed to eject an electron from a metal","The maximum KE of photoelectrons","The photon energy always","The cathode temperature"],"correct":0}
+{"q":"The threshold frequency for the photoelectric effect is:","choices":["f₀ = Φ/h","f₀ = h/Φ","f₀ = c/Φ","f₀ = Φ c"],"correct":0}
+{"q":"Below the threshold frequency, no electrons are emitted:","choices":["Unless the light is very bright","No matter how bright the light","Only at low temperatures","Only in a magnetic field"],"correct":1}
+{"q":"Increasing intensity (above threshold) increases:","choices":["Maximum KE of photoelectrons","Number of photoelectrons per second","Threshold frequency","Nothing"],"correct":1}
+{"q":"Increasing frequency (above threshold) increases:","choices":["Number of photoelectrons","Maximum KE of photoelectrons","Work function","Temperature"],"correct":1}
+{"q":"The stopping voltage V_s in the photoelectric effect satisfies:","choices":["eV_s = KE_max","V_s = h f","eV_s = h/Φ","V_s = Φ/e"],"correct":0}
+{"q":"The stopping voltage is independent of:","choices":["Light frequency","Light intensity","Work function","Material"],"correct":1}
+{"q":"The photoelectric effect shows that light:","choices":["Is a pure classical wave","Carries energy in discrete quanta (photons)","Has no energy","Is purely magnetic"],"correct":1}
+{"q":"In the photoelectric effect, a photon either:","choices":["Gives all or none of its energy to a single electron","Gradually heats the metal","Splits into fragments","Is always absorbed by multiple electrons"],"correct":0}
+{"q":"A metal has work function 2 eV. Photons of energy 1.5 eV will:","choices":["Eject electrons with KE = 0","Eject electrons with KE = 0.5 eV","Not eject any electrons","Heat the metal only"],"correct":2}
+{"q":"A metal has work function 2 eV. Photons of 3 eV will eject electrons with max KE:","choices":["3 eV","1 eV","5 eV","0 eV"],"correct":1}
+{"q":"The photoelectric effect is strong evidence for:","choices":["Wave nature of light only","Particle (photon) nature of light","Ether","Thermodynamics"],"correct":1}
+{"q":"A low-Φ material like cesium can emit photoelectrons with:","choices":["Only X-rays","Visible light","Only gamma rays","Radio waves"],"correct":1}
+{"q":"Copper has a higher work function than cesium, so copper requires:","choices":["Lower-frequency light to eject electrons","Higher-frequency light (e.g., UV) to eject electrons","No light at all","Always a magnetic field"],"correct":1}
+{"q":"In the photoelectric effect, the time between illumination onset and electron emission is:","choices":["Long (hours)","Essentially instantaneous (< 10⁻⁹ s)","Predicted by classical physics as long","Frame-dependent"],"correct":1}
+{"q":"Which was Einstein's Nobel-cited contribution?","choices":["Special relativity","Photoelectric effect explanation","General relativity","E = mc²"],"correct":1}
+{"q":"Photons with higher frequency carry:","choices":["More energy per photon","Less energy per photon","The same energy","More momentum but less energy"],"correct":0}
+{"q":"Photon momentum is related to wavelength by:","choices":["p = h / λ","p = h λ","p = hc / λ","p = h c λ"],"correct":0}
+{"q":"A 2 eV photon has wavelength approximately:","choices":["310 nm","620 nm","1240 nm","62 nm"],"correct":1}
+
+# ================================================================
+# PHYSICS 25 — Chapter 29/30: Wave-Particle Duality, de Broglie, Uncertainty
+# ================================================================
+{"q":"The de Broglie wavelength of a particle with momentum p is:","choices":["λ = h p","λ = h / p","λ = p / h","λ = h² p"],"correct":1}
+{"q":"Davisson–Germer experiment provided evidence for:","choices":["Electrons have wave nature","The Earth is flat","The speed of light is infinite","Cathode rays are photons"],"correct":0}
+{"q":"The double-slit experiment performed with single electrons, one at a time, shows:","choices":["Electrons always go through one slit","An interference pattern still builds up — electrons have wave nature","Electrons cannot reach the screen","Classical trajectories hold perfectly"],"correct":1}
+{"q":"Heisenberg's uncertainty principle for position and momentum states:","choices":["Δx · Δp ≥ ħ/2","Δx · Δp = 0","Δx + Δp = ħ","Δx · Δp > c"],"correct":0}
+{"q":"Heisenberg's uncertainty principle for time and energy states:","choices":["ΔE · Δt ≥ ħ/2","ΔE · Δt = 0","ΔE + Δt = 1","ΔE · Δt ≤ 0"],"correct":0}
+{"q":"The uncertainty principle is:","choices":["A limitation of our measuring instruments","A fundamental property of quantum systems","An effect of relativity","Only valid for photons"],"correct":1}
+{"q":"The wave function Ψ in quantum mechanics gives probability via:","choices":["|Ψ|² (probability density)","Ψ directly (probability)","Re(Ψ)","Ψ + Ψ*"],"correct":0}
+{"q":"The Compton effect demonstrates that photons carry:","choices":["Only energy, not momentum","Both energy and momentum","Only charge","Nothing measurable"],"correct":1}
+{"q":"Compton scattering increases the photon's wavelength because:","choices":["The photon loses energy to the recoiling electron","The photon loses mass","The photon changes into an electron","The electron speeds up faster than light"],"correct":0}
+{"q":"The Compton wavelength of the electron is approximately:","choices":["2.4 × 10⁻¹² m","2.4 × 10⁻¹⁰ m","2.4 × 10⁻⁸ m","2.4 × 10⁻¹⁴ m"],"correct":0}
+{"q":"Wave–particle duality means:","choices":["Light is only a wave","Light is only a particle","Light (and matter) exhibits both wave-like and particle-like behavior","Light exhibits neither"],"correct":2}
+{"q":"Which phenomenon is best explained by treating light as a particle (not a wave)?","choices":["Double-slit interference","Diffraction","Photoelectric effect","Young's experiment"],"correct":2}
+{"q":"Which phenomenon is best explained by treating light as a wave?","choices":["Photoelectric effect","Compton scattering","Double-slit interference","Blackbody emission"],"correct":2}
+{"q":"The de Broglie wavelength of a macroscopic baseball is extremely small because:","choices":["Its momentum is huge compared to h","The baseball has no wavelength","Air resistance blocks the wave","Macroscopic objects do not obey QM"],"correct":0}
+{"q":"A 1 eV electron has de Broglie wavelength of approximately:","choices":["1.2 nm","12 nm","0.12 nm","120 nm"],"correct":0}
+{"q":"Observing which slit a photon passes through in a double-slit experiment:","choices":["Destroys the interference pattern","Increases the fringe contrast","Has no effect on the pattern","Flips the pattern upside down"],"correct":0}
+{"q":"The uncertainty principle implies that the ground state of a quantum system:","choices":["Has zero energy","Has nonzero energy (zero-point energy)","Requires no space","Is classical"],"correct":1}
+{"q":"A photon and an electron have the same wavelength. They have:","choices":["The same energy","Different energies, same momentum","The same speed","The same spin"],"correct":1}
+{"q":"Matter waves are:","choices":["Classical vibrations","Probability amplitudes","Purely electromagnetic","Sound waves"],"correct":1}
+{"q":"According to quantum mechanics, measurement:","choices":["Has no effect on the system","Generally affects the state of the system","Always returns the same value","Does not follow probability rules"],"correct":1}
+
+# ================================================================
+# PHYSICS 25 — Chapter 30: Atomic Physics & Bohr Model
+# ================================================================
+{"q":"Rutherford's scattering experiment established that atoms have:","choices":["A uniform density of charge (plum pudding)","A small, dense positively charged nucleus surrounded by electrons","Only electrons","A cubic structure"],"correct":1}
+{"q":"The Bohr model postulates that electron angular momentum is quantized in units of:","choices":["ħ","h","e","mc"],"correct":0}
+{"q":"In the Bohr model, electron angular momentum L in orbit n is:","choices":["L = n ħ","L = h/n","L = m v r/n","L = n"],"correct":0}
+{"q":"The radius of the n=1 (ground state) Bohr orbit of hydrogen is the Bohr radius a₀ ≈:","choices":["5.29 × 10⁻¹¹ m","5.29 × 10⁻⁹ m","5.29 × 10⁻⁸ m","5.29 × 10⁻⁷ m"],"correct":0}
+{"q":"The Bohr-model radius of the n-th orbit scales as:","choices":["n","n²","1/n","√n"],"correct":1}
+{"q":"The energy of the n-th hydrogen level (Bohr) is:","choices":["E_n = −13.6 eV / n²","E_n = +13.6 eV × n","E_n = 13.6 eV / n","E_n = 13.6 n² eV"],"correct":0}
+{"q":"The ground-state energy of hydrogen is about:","choices":["−1.36 eV","−13.6 eV","−136 eV","−1 eV"],"correct":1}
+{"q":"An electron transitioning from n = 2 to n = 1 in hydrogen releases a photon of energy approximately:","choices":["3.4 eV","10.2 eV","13.6 eV","17 eV"],"correct":1}
+{"q":"Lyman series transitions end at n = 1 and emit photons in which region?","choices":["Radio","Visible","Ultraviolet","X-ray"],"correct":2}
+{"q":"Balmer series transitions end at n = 2 and emit photons in which region?","choices":["Ultraviolet","Visible","Infrared","Microwave"],"correct":1}
+{"q":"Paschen series transitions end at n = 3 and emit photons in which region?","choices":["Ultraviolet","Visible","Infrared","X-ray"],"correct":2}
+{"q":"The Rydberg formula predicts photon wavelengths in hydrogen via:","choices":["1/λ = R(1/n_f² − 1/n_i²)","1/λ = R(1/n_f + 1/n_i)","λ = R n_i n_f","λ = R(n_i − n_f)"],"correct":0}
+{"q":"The ionization energy of hydrogen from the ground state is:","choices":["3.4 eV","13.6 eV","0.54 eV","27.2 eV"],"correct":1}
+{"q":"Quantum numbers for an electron in a hydrogen atom include:","choices":["Only n","n, ℓ, m_ℓ, m_s","Only n and ℓ","Only spin"],"correct":1}
+{"q":"The principal quantum number n can take values:","choices":["0, 1, 2, …","1, 2, 3, …","−∞ to ∞","0, ½, 1, …"],"correct":1}
+{"q":"The orbital angular momentum quantum number ℓ (for given n) takes values:","choices":["0, 1, 2, …, n","0, 1, 2, …, n − 1","1, 2, …, n","−n, …, n"],"correct":1}
+{"q":"The magnetic quantum number m_ℓ (for given ℓ) takes values:","choices":["0, 1, 2, …, ℓ","−ℓ, …, 0, …, +ℓ (2ℓ+1 values)","0, ½, 1, …","Any real number"],"correct":1}
+{"q":"Electron spin quantum number m_s takes values:","choices":["−½ or +½","0, 1, 2","−1, 0, +1","Any integer"],"correct":0}
+{"q":"The Pauli exclusion principle states that:","choices":["No two electrons in the same atom can have the same four quantum numbers","Electrons always repel","Electrons cannot occupy s-orbitals","Electrons cannot exist in magnetic fields"],"correct":0}
+{"q":"The magnitude of orbital angular momentum for quantum number ℓ is:","choices":["|L| = ℏ √(ℓ(ℓ+1))","|L| = ℓ ℏ","|L| = ℓ² ℏ","|L| = ℏ / ℓ"],"correct":0}
+{"q":"An s-orbital (ℓ = 0) is:","choices":["Spherically symmetric","Dumbbell-shaped","Cloverleaf-shaped","Cubic"],"correct":0}
+{"q":"A p-orbital (ℓ = 1) has:","choices":["Spherical symmetry","A dumbbell shape with a node at the nucleus","No angular dependence","Three electrons by default"],"correct":1}
+{"q":"The number of orbitals for principal quantum number n is:","choices":["n","n²","2n","n(n+1)"],"correct":1}
+{"q":"Maximum number of electrons in a shell n (including spin) is:","choices":["n","n²","2n²","2n"],"correct":2}
+{"q":"Hydrogen's spectrum is discrete because:","choices":["Energies are quantized","The electron is too fast","The nucleus is too small","Photons are forbidden"],"correct":0}
+{"q":"The fine structure of hydrogen spectral lines arises from:","choices":["Spin-orbit coupling (and relativistic corrections)","Gravitation","External magnetic fields only","Molecular vibrations"],"correct":0}
+
+# ================================================================
+# PHYSICS 25 — Chapter 30: Periodic Table & Electron Configurations
+# ================================================================
+{"q":"Noble gases have:","choices":["Partially filled outer shells","Fully filled outer (valence) shells","Extra protons","No electrons"],"correct":1}
+{"q":"The 'Aufbau' principle states that:","choices":["Electrons fill higher-energy orbitals first","Electrons fill the lowest-energy orbitals first","Orbitals cannot be filled","Only s-orbitals exist"],"correct":1}
+{"q":"Hund's rule says that in filling degenerate orbitals:","choices":["All electrons pair up first before occupying separate orbitals","Each orbital gets one electron (with parallel spins) before pairing","Only ℓ = 0 orbitals are filled","Electrons avoid degenerate orbitals"],"correct":1}
+{"q":"The ground-state electron configuration of hydrogen is:","choices":["1s¹","1s²","2s¹","2p¹"],"correct":0}
+{"q":"The ground-state electron configuration of helium is:","choices":["1s¹","1s²","2s¹","1s² 2s¹"],"correct":1}
+{"q":"The ground-state electron configuration of carbon (Z = 6) is:","choices":["1s² 2s² 2p²","1s² 2p⁴","1s² 2s⁴","1s² 2s² 2p⁴"],"correct":0}
+{"q":"Alkali metals (Li, Na, K, …) have:","choices":["One valence electron in the outermost s-orbital","Two valence electrons in p-orbitals","No valence electrons","A full outer shell"],"correct":0}
+{"q":"Within a period, atomic radius generally:","choices":["Decreases as you go right (increasing Z)","Increases as you go right","Is constant","Is unrelated to Z"],"correct":0}
+{"q":"Within a group (column), atomic radius:","choices":["Decreases down the column","Increases down the column","Stays the same","Is maximum at the top"],"correct":1}
+{"q":"Ionization energy generally:","choices":["Decreases across a period (left to right)","Increases across a period","Is unrelated to atomic structure","Increases down a column"],"correct":1}
+{"q":"The electron shells in order of increasing energy (approximately) are:","choices":["1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, …","1s, 2p, 2s, 3s, 3d, 3p, …","1s, 1p, 2s, 2p, …","1s, 2s, 2p only"],"correct":0}
+{"q":"Noble gas configurations are associated with:","choices":["High chemical reactivity","Low chemical reactivity (stability)","Zero electrons","High radioactivity"],"correct":1}
+{"q":"The element with Z = 18 is:","choices":["Argon","Chlorine","Potassium","Neon"],"correct":0}
+{"q":"The number of valence electrons determines:","choices":["The element's mass","The element's chemical behavior","Nothing significant","The speed of light"],"correct":1}
+
+# ================================================================
+# PHYSICS 25 — Lasers & Stimulated Emission
+# ================================================================
+{"q":"LASER stands for:","choices":["Light Amplification by Stimulated Emission of Radiation","Light Absorbed by Scattering Emitted Radiation","Low-Amplitude Sine Emission Radiation","Light Array from Stable Emission Resonance"],"correct":0}
+{"q":"Stimulated emission occurs when:","choices":["A photon is spontaneously emitted with random phase","A photon induces an excited atom to emit a second photon of the same phase, frequency, and direction","An electron is absorbed into the nucleus","A photon is absorbed by a metal"],"correct":1}
+{"q":"Population inversion means:","choices":["More atoms in the excited state than in the lower state","Atoms are all in the ground state","Protons outnumber electrons","Temperature is negative"],"correct":0}
+{"q":"Laser light is characterized by:","choices":["High coherence, monochromaticity, and directionality","Random phases across the beam","Broad wavelength spectrum","Strong divergence"],"correct":0}
+{"q":"The two main requirements for laser action are:","choices":["Population inversion and an optical cavity (resonator)","A magnet and a heat source","Ionization and quenching","High voltage and low temperature"],"correct":0}
+{"q":"A metastable state is important in a laser because:","choices":["It allows population inversion via a long-lived excited level","It absorbs light","It prevents stimulated emission","It reduces coherence"],"correct":0}
+{"q":"A common three-level laser scheme:","choices":["Uses pumping from ground to upper state, rapid decay to metastable, then stimulated emission","Requires only two levels","Does not need pumping","Works in the ground state only"],"correct":0}
+{"q":"Helium-neon (HeNe) lasers emit primarily at:","choices":["632.8 nm (red)","350 nm (UV)","1064 nm (IR)","500 nm (green)"],"correct":0}
+{"q":"Semiconductor laser diodes operate by:","choices":["Recombination of electrons and holes across a p–n junction producing photons","Ionizing a gas","Heating a filament","Applying a magnetic field only"],"correct":0}
+{"q":"Coherent light has:","choices":["A fixed phase relationship","No phase relationship","No wavelength","Zero intensity"],"correct":0}
+
+# ================================================================
+# PHYSICS 25 — Semiconductors & Solid-State Physics
+# ================================================================
+{"q":"In solid-state physics, electrons occupy:","choices":["Discrete atomic levels only","Energy bands formed from overlapping atomic orbitals","No states","Only d-orbitals"],"correct":1}
+{"q":"An electrical conductor has:","choices":["A gap between valence and conduction bands","A partially filled conduction band","No electrons","Only heavy atoms"],"correct":1}
+{"q":"An insulator has:","choices":["A small band gap","A large band gap separating a filled valence band from an empty conduction band","Free electrons","A negative band gap"],"correct":1}
+{"q":"Silicon is a semiconductor because:","choices":["Its band gap is intermediate (~1.1 eV)","Its band gap is huge","It has no band gap","It is magnetic"],"correct":0}
+{"q":"Doping a semiconductor with donor atoms produces:","choices":["n-type material (extra electrons)","p-type material (extra holes)","An insulator","A magnet"],"correct":0}
+{"q":"Doping a semiconductor with acceptor atoms produces:","choices":["n-type material","p-type material (extra holes)","A superconductor","Nothing"],"correct":1}
+{"q":"A p–n junction diode allows current to flow:","choices":["Only from n to p (forward bias)","Primarily in one direction (forward-biased p-to-n, blocking reverse)","Equally in both directions","Never"],"correct":1}
+{"q":"LEDs emit photons via:","choices":["Black-body radiation","Recombination of electrons and holes at the junction","Stimulated emission","Fluorescent conversion"],"correct":1}
+{"q":"A photovoltaic cell (solar cell) generates electricity by:","choices":["Photons generating electron–hole pairs in a semiconductor that are separated by a p–n junction","Thermal expansion","Chemical reactions","Tesla coils"],"correct":0}
+{"q":"Transistors are fundamental to:","choices":["Amplifying and switching electronic signals","Only mechanical relays","Blackbody radiation","Nuclear reactions"],"correct":0}
+{"q":"The band gap of an ideal insulator is typically:","choices":["0 eV","~0.1 eV","Several eV (much larger than kT)","Negative"],"correct":2}
+{"q":"A small band gap favors:","choices":["Semiconductor behavior with measurable conductivity","Insulator behavior","Superconductor behavior","No conduction at any T"],"correct":0}
+
+# ================================================================
+# PHYSICS 25 — Nuclear Physics (Isotopes, Decay, Fission, Fusion)
+# ================================================================
+{"q":"An atomic nucleus consists of:","choices":["Protons and electrons","Protons and neutrons","Neutrons and electrons","Photons and neutrinos"],"correct":1}
+{"q":"The atomic number Z is the number of:","choices":["Protons in the nucleus","Neutrons","Electrons plus neutrons","Total nucleons"],"correct":0}
+{"q":"The mass number A equals:","choices":["Number of protons","Number of neutrons","Protons + neutrons (nucleons)","Electrons"],"correct":2}
+{"q":"Isotopes are nuclei with:","choices":["Same Z, different A (different neutron numbers)","Same A, different Z","Different elements","Different numbers of electrons in the atom"],"correct":0}
+{"q":"The notation ²³⁵U means:","choices":["Uranium with 92 protons and 143 neutrons","Uranium with 235 protons","Uranium with 92 electrons only","Mass 92, not 235"],"correct":0}
+{"q":"Binding energy of a nucleus is:","choices":["The energy to assemble the nucleus from its constituents","The kinetic energy of protons","Always zero","The Coulomb repulsion only"],"correct":0}
+{"q":"Alpha decay emits a(n):","choices":["Helium-4 nucleus (²He⁴, 2p + 2n)","Electron","Photon","Neutron"],"correct":0}
+{"q":"In alpha decay, the parent nucleus loses:","choices":["Z by 1 and A by 2","Z by 2 and A by 4","Z by 4 and A by 2","Nothing"],"correct":1}
+{"q":"Beta-minus (β⁻) decay emits a(n):","choices":["Electron (and antineutrino)","Positron","Photon","Alpha particle"],"correct":0}
+{"q":"In β⁻ decay, a neutron converts into a proton plus:","choices":["An electron and an antineutrino","A positron and a neutrino","Only a photon","An alpha particle"],"correct":0}
+{"q":"Beta-plus (β⁺) decay emits a(n):","choices":["Electron","Positron (and neutrino)","Neutron","Alpha particle"],"correct":1}
+{"q":"Gamma decay emits a(n):","choices":["High-energy photon","Electron","Neutron","Alpha particle"],"correct":0}
+{"q":"The half-life of a radioactive substance is the time for:","choices":["Its mass to double","Half of a given quantity of nuclei to decay","All atoms to decay","The sample to become an atom"],"correct":1}
+{"q":"Number of nuclei remaining after n half-lives is:","choices":["N₀ / 2^n","N₀ × n","N₀ × 2^n","N₀ / n²"],"correct":0}
+{"q":"Radioactive decay rate follows:","choices":["Exponential decay: N(t) = N₀ e^{−λt}","Linear: N(t) = N₀ − λt","Quadratic: N(t) = N₀ t²","Sinusoidal"],"correct":0}
+{"q":"Nuclear fission is:","choices":["Fusing two small nuclei","Splitting a heavy nucleus (like U-235) into two smaller nuclei plus neutrons","An atomic electron transition","A chemical reaction"],"correct":1}
+{"q":"Nuclear fusion is:","choices":["Combining light nuclei into a heavier one","Splitting nuclei","Annihilating a positron","A purely chemical process"],"correct":0}
+{"q":"The Sun produces energy primarily by:","choices":["Chemical combustion","Fusion of hydrogen into helium","Fission of uranium","Gravitational potential conversion"],"correct":1}
+{"q":"The proton–proton chain in the Sun ultimately fuses:","choices":["Four protons into a helium-4 nucleus","Two helium atoms into carbon","Four neutrons into helium","A proton and electron"],"correct":0}
+{"q":"Fission chain reactions require:","choices":["A critical mass of fissile material","A magnetic field","Only uranium atoms at room temperature","A large battery"],"correct":0}
+{"q":"Controlled fission in a reactor uses ______ to slow neutrons for capture:","choices":["Moderators (e.g., water, graphite)","Magnets","Lasers","Compressed air"],"correct":0}
+{"q":"Which nuclei are at or near the peak binding energy per nucleon?","choices":["Hydrogen","Uranium","Iron (around A ≈ 56–62)","Gold"],"correct":2}
+{"q":"The mass defect of a nucleus equals:","choices":["Sum of free nucleon masses minus actual nuclear mass","Number of protons","Zero","Number of neutrons"],"correct":0}
+{"q":"Binding energy per nucleon is typically largest near:","choices":["Hydrogen","Iron","Uranium","Uranium fission products"],"correct":1}
+{"q":"Energy release from fusion of light nuclei or fission of heavy nuclei both occur because of:","choices":["Negative charges","Climbing the binding-energy-per-nucleon curve toward iron","Gravitational collapse","Magnetic fields"],"correct":1}
+{"q":"A positron is:","choices":["A negatively charged electron-like particle","The antiparticle of the electron (positive charge)","A proton","A neutron"],"correct":1}
+{"q":"When an electron and positron meet, they:","choices":["Form hydrogen","Annihilate into photons (typically two 511 keV photons)","Fuse into a neutron","Reflect off each other"],"correct":1}
+{"q":"Neutrinos interact primarily via:","choices":["Electromagnetic force","Strong force","Weak force","Gravity only"],"correct":2}
+{"q":"Radioactive dating (e.g., carbon-14) works by:","choices":["Measuring age via decay of a known-half-life isotope","Measuring molecular bonds","Counting electrons","Weighing atoms"],"correct":0}
+{"q":"Carbon-14 has a half-life of approximately:","choices":["5700 years","10 years","100 million years","1 day"],"correct":0}
+{"q":"The strong force holds the nucleus together against:","choices":["Gravity","Coulomb (electromagnetic) repulsion of protons","Weak interactions only","Air pressure"],"correct":1}
+{"q":"The range of the strong nuclear force is approximately:","choices":["1 m","~10⁻¹⁵ m (femtometer)","~10⁻⁹ m","Infinite"],"correct":1}
+{"q":"Radiation dose equivalent measured in the SI unit:","choices":["Sievert (Sv)","Curie","Joule","Tesla"],"correct":0}
+{"q":"Which of the following radiations has the highest ionizing effect per unit distance in tissue?","choices":["Gamma rays","X-rays","Alpha particles","Radio waves"],"correct":2}
+{"q":"Which of the following radiations penetrates most deeply into materials?","choices":["Alpha","Beta","Gamma","All the same"],"correct":2}
+{"q":"A nuclear reaction conserves:","choices":["Charge, energy, momentum, and nucleon number","Mass only","Protons only","Velocity"],"correct":0}
+
+# ================================================================
+# PHYSICS 21 — Chapter 1: Units & Dimensional Analysis
+# ================================================================
+{"q":"The SI base unit of length is the:","choices":["Foot","Meter","Inch","Mile"],"correct":1}
+{"q":"The SI base unit of mass is the:","choices":["Gram","Pound","Kilogram","Slug"],"correct":2}
+{"q":"The SI base unit of time is the:","choices":["Minute","Hour","Second","Day"],"correct":2}
+{"q":"Which is NOT an SI base unit?","choices":["Meter","Kilogram","Newton","Ampere"],"correct":2}
+{"q":"One kilometer equals:","choices":["10 meters","100 meters","1000 meters","10,000 meters"],"correct":2}
+{"q":"The prefix 'milli-' means:","choices":["10⁻⁶","10⁻³","10⁻⁹","10³"],"correct":1}
+{"q":"The prefix 'micro-' (μ) means:","choices":["10⁻³","10⁻⁶","10⁻⁹","10⁻¹²"],"correct":1}
+{"q":"The prefix 'mega-' means:","choices":["10³","10⁶","10⁹","10⁻³"],"correct":1}
+{"q":"Dimensional analysis is useful for:","choices":["Checking that both sides of an equation have the same units","Finding exact numerical answers","Replacing experiments","Converting temperatures only"],"correct":0}
+{"q":"Which equation is dimensionally inconsistent?","choices":["v = at","x = ½at²","v² = v₀² + 2ax","v = x + t"],"correct":3}
+{"q":"The number 0.00450 has how many significant figures?","choices":["2","3","4","5"],"correct":1}
+{"q":"The number 1.200 × 10³ has how many significant figures?","choices":["2","3","4","1"],"correct":2}
+{"q":"A typical human height (~1.7 m) has an order of magnitude of:","choices":["10⁻¹","10⁰","10¹","10²"],"correct":1}
+{"q":"1 mL of water has a mass of approximately:","choices":["1 g","10 g","100 g","1 kg"],"correct":0}
+{"q":"A good estimate for the speed of a walking person is:","choices":["0.1 m/s","1 m/s","10 m/s","100 m/s"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapter 2: 1D Kinematics
+# ================================================================
+{"q":"Average velocity is defined as:","choices":["Total distance / total time","Displacement / time interval","Average speed × mass","Change in acceleration"],"correct":1}
+{"q":"The difference between speed and velocity is that:","choices":["Speed is a vector, velocity is a scalar","Velocity is a vector, speed is a scalar","They are identical","Speed has direction, velocity does not"],"correct":1}
+{"q":"Acceleration is defined as:","choices":["Change in position per time","Change in velocity per time","Change in force per time","Change in energy per time"],"correct":1}
+{"q":"An object moving with constant velocity has:","choices":["Zero acceleration","Constant positive acceleration","Changing velocity","Infinite acceleration"],"correct":0}
+{"q":"For constant acceleration, v = v₀ + at gives:","choices":["Velocity as a function of time","Position as a function of time","Force as a function of time","Mass as a function of time"],"correct":0}
+{"q":"For constant acceleration, x − x₀ = v₀t + ½at² gives:","choices":["Velocity","Position as a function of time","Acceleration","Momentum"],"correct":1}
+{"q":"The equation v² = v₀² + 2a(x − x₀) is useful when:","choices":["Time is unknown","Velocity is zero","Acceleration varies","Mass is unknown"],"correct":0}
+{"q":"An object is in free fall near Earth's surface (neglecting air resistance). Its acceleration is approximately:","choices":["9.8 m/s² downward","9.8 m/s² upward","Zero","Depends on its mass"],"correct":0}
+{"q":"A ball is dropped from rest. After 2 seconds, its downward speed is approximately:","choices":["9.8 m/s","19.6 m/s","4.9 m/s","2 m/s"],"correct":1}
+{"q":"A ball is thrown straight up and returns to its starting height. At the top, its velocity is:","choices":["Equal to initial velocity","Zero","Equal to g","Maximum"],"correct":1}
+{"q":"At the highest point of a ball thrown straight up, its acceleration is:","choices":["Upward","Zero","Downward (g)","Horizontal"],"correct":2}
+{"q":"A ball thrown up returns to its starting height at what speed (no air resistance)?","choices":["Zero","Half the initial","Same magnitude, opposite direction","Twice the initial"],"correct":2}
+{"q":"The slope of a position-vs-time graph gives the:","choices":["Acceleration","Velocity","Distance","Jerk"],"correct":1}
+{"q":"The slope of a velocity-vs-time graph gives the:","choices":["Position","Velocity","Acceleration","Momentum"],"correct":2}
+{"q":"The area under a velocity-vs-time graph gives:","choices":["Acceleration","Displacement","Distance traveled (if v > 0)","Force"],"correct":2}
+{"q":"A position-vs-time graph that is a straight line with positive slope indicates:","choices":["Constant positive velocity","Positive acceleration","Negative velocity","Object at rest"],"correct":0}
+{"q":"A position-vs-time curve that is concave up indicates:","choices":["Negative acceleration","Positive acceleration","Zero velocity","Constant velocity"],"correct":1}
+{"q":"A car decelerating uniformly from 30 m/s to 0 in 10 s has acceleration:","choices":["−3 m/s²","+3 m/s²","−30 m/s²","+30 m/s²"],"correct":0}
+{"q":"A car accelerates from rest at 2 m/s² for 5 s. Its final speed is:","choices":["2 m/s","5 m/s","10 m/s","25 m/s"],"correct":2}
+{"q":"A car accelerates from rest at 2 m/s² for 5 s. Distance traveled is:","choices":["10 m","25 m","50 m","5 m"],"correct":1}
+{"q":"Instantaneous velocity is:","choices":["Average velocity over the whole trip","Velocity at a specific instant in time","Always zero","Same as average speed"],"correct":1}
+{"q":"A ball dropped from rest falls h in time t. The distance fallen is:","choices":["gt","½gt²","2gt","g²t"],"correct":1}
+{"q":"On the Moon (g_Moon ≈ 1.6 m/s²), dropped objects would:","choices":["Fall faster than on Earth","Fall slower than on Earth","Fall at the same rate","Float upward"],"correct":1}
+{"q":"A car starts at rest, accelerates uniformly for t seconds, and travels distance d. If acceleration doubles (same t), distance becomes:","choices":["d/2","d","2d","4d"],"correct":2}
+{"q":"A runner's speed averaged over 100 m in 10 s is:","choices":["1 m/s","5 m/s","10 m/s","100 m/s"],"correct":2}
+
+# ================================================================
+# PHYSICS 21 — Chapter 3: Vectors & 2D Kinematics
+# ================================================================
+{"q":"A vector has:","choices":["Only magnitude","Only direction","Both magnitude and direction","Neither"],"correct":2}
+{"q":"A scalar has:","choices":["Only magnitude","Only direction","Both magnitude and direction","Components"],"correct":0}
+{"q":"Which is a vector quantity?","choices":["Temperature","Mass","Velocity","Time"],"correct":2}
+{"q":"Which is a scalar quantity?","choices":["Velocity","Force","Displacement","Speed"],"correct":3}
+{"q":"The x-component of a vector of magnitude V at angle θ from the x-axis is:","choices":["V sin θ","V cos θ","V tan θ","V / cos θ"],"correct":1}
+{"q":"The y-component of a vector of magnitude V at angle θ from the x-axis is:","choices":["V sin θ","V cos θ","V tan θ","V/sin θ"],"correct":0}
+{"q":"The magnitude of a 2D vector with components (V_x, V_y) is:","choices":["V_x + V_y","√(V_x² + V_y²)","V_x · V_y","(V_x + V_y)/2"],"correct":1}
+{"q":"The dot product A·B equals:","choices":["|A||B| cos θ","|A||B| sin θ","|A||B| tan θ","|A|+|B|"],"correct":0}
+{"q":"The cross product magnitude |A × B| equals:","choices":["|A||B| cos θ","|A||B| sin θ","|A|/|B|","|A|+|B|"],"correct":1}
+{"q":"If A · B = 0, then A and B are:","choices":["Parallel","Perpendicular","Antiparallel","The same vector"],"correct":1}
+{"q":"If |A × B| = 0 and both are nonzero, A and B are:","choices":["Parallel or antiparallel","Perpendicular","At 45°","Zero"],"correct":0}
+{"q":"For a projectile with no air resistance, the horizontal velocity during flight:","choices":["Changes due to gravity","Remains constant","Oscillates","Becomes zero at the top"],"correct":1}
+{"q":"For a projectile, the vertical motion is governed by:","choices":["Constant velocity","Constant downward acceleration g","Zero acceleration","Upward acceleration"],"correct":1}
+{"q":"The range R of a projectile launched at angle θ with initial speed v₀ on level ground is:","choices":["R = v₀²/g","R = v₀² sin(2θ)/g","R = v₀²/(2g)","R = v₀ sin θ / g"],"correct":1}
+{"q":"Projectile range is maximum when the launch angle (on flat ground) is:","choices":["30°","45°","60°","90°"],"correct":1}
+{"q":"Launch angles θ and (90° − θ) produce the same projectile:","choices":["Maximum height","Range","Time of flight","Kinetic energy"],"correct":1}
+{"q":"For a projectile launched horizontally from height h with speed v₀, time in the air depends on:","choices":["v₀ only","h and g","g only","v₀ and h"],"correct":1}
+{"q":"At the peak of a projectile's trajectory, the vertical velocity is:","choices":["Equal to initial vertical velocity","Zero","Equal to horizontal velocity","Maximum"],"correct":1}
+{"q":"At the peak of a projectile's trajectory, the horizontal velocity is:","choices":["Zero","Equal to v₀ cos θ","Equal to v₀","Maximum"],"correct":1}
+{"q":"The maximum height of a projectile launched at angle θ with initial speed v₀ is:","choices":["v₀² sin²θ /(2g)","v₀² /(2g)","v₀ sin θ/g","v₀² cos²θ /(2g)"],"correct":0}
+
+# ================================================================
+# PHYSICS 21 — Chapter 4: Newton's Laws & Forces
+# ================================================================
+{"q":"Newton's first law states that:","choices":["F = ma","An object at rest or in uniform motion stays so unless acted on by a net force","Every action has a reaction","Energy is conserved"],"correct":1}
+{"q":"Newton's second law states that:","choices":["F = mv","F = ma","F = mg","F = mv²"],"correct":1}
+{"q":"Newton's third law states that:","choices":["Objects fall at g","For every action there is an equal and opposite reaction","F = ma","The net force is zero at equilibrium"],"correct":1}
+{"q":"Which is the correct unit of force?","choices":["Joule","Watt","Newton","Tesla"],"correct":2}
+{"q":"1 Newton equals:","choices":["1 kg·m/s","1 kg·m/s²","1 kg·m²/s²","1 kg/m²"],"correct":1}
+{"q":"A 5 kg object subject to a net force of 20 N has acceleration:","choices":["4 m/s²","0.25 m/s²","100 m/s²","5 m/s²"],"correct":0}
+{"q":"An object has no net force on it. It:","choices":["Must be at rest","Must be moving","Has zero acceleration (Newton's first law)","Has changing velocity"],"correct":2}
+{"q":"Mass is a measure of:","choices":["Weight","Inertia (resistance to acceleration)","Volume","Speed"],"correct":1}
+{"q":"Weight equals:","choices":["m/g","mg","mg²","m²g"],"correct":1}
+{"q":"On Earth, a 10 kg object has weight approximately:","choices":["10 N","98 N","1 N","1000 N"],"correct":1}
+{"q":"Your apparent weight in an accelerating elevator going up is:","choices":["Greater than mg","Less than mg","Equal to mg","Zero"],"correct":0}
+{"q":"Your apparent weight in a freely falling elevator is:","choices":["Double your normal weight","Equal to mg","Zero","Negative"],"correct":2}
+{"q":"Normal force on a box sitting on a horizontal floor equals:","choices":["Zero","mg (equal and opposite to weight)","μmg","2mg"],"correct":1}
+{"q":"A block on a frictionless incline at angle θ has net force down the incline equal to:","choices":["mg cos θ","mg sin θ","mg tan θ","mg"],"correct":1}
+{"q":"The normal force on a block on an incline at angle θ is:","choices":["mg cos θ","mg sin θ","mg","mg tan θ"],"correct":0}
+{"q":"Newton's third-law pair of a ball's weight (Earth pulls ball down) is:","choices":["The normal force from the table","The ball pulling Earth up with equal force","Friction","Air resistance"],"correct":1}
+{"q":"Tension in a massless, inextensible string is:","choices":["Different at different points","The same throughout the string","Zero","Negative"],"correct":1}
+{"q":"Inertial frames are:","choices":["Frames accelerating at g","Frames in which Newton's first law holds (non-accelerating)","Frames tied to Earth's rotation only","Any rotating frame"],"correct":1}
+{"q":"A 10 kg box is pushed with 30 N on a frictionless surface. Its acceleration is:","choices":["0.3 m/s²","3 m/s²","30 m/s²","300 m/s²"],"correct":1}
+{"q":"A rocket engine propels a rocket forward by:","choices":["Newton's first law","Newton's second law only","Newton's third law (exhaust pushed back → rocket pushed forward)","Conservation of mass"],"correct":2}
+{"q":"Two blocks connected by a rope: force F pulls block m₁, dragging m₂. Acceleration is:","choices":["F/m₁","F/m₂","F/(m₁+m₂)","F(m₁+m₂)"],"correct":2}
+{"q":"A 2 kg object has two forces on it: 6 N east and 8 N west. Its acceleration is:","choices":["1 m/s² east","1 m/s² west","7 m/s² east","7 m/s² west"],"correct":1}
+{"q":"A bullet is fired from a gun. The recoil on the shooter is an example of:","choices":["Newton's 1st law","Newton's 2nd law","Newton's 3rd law","Conservation of energy"],"correct":2}
+{"q":"Galileo's contribution to mechanics included:","choices":["Inventing calculus","The principle of inertia (objects don't need force to maintain motion)","Discovering electrons","Defining entropy"],"correct":1}
+{"q":"Three forces of 5 N, 5 N, and 5 N pull an object in mutually perpendicular 3D directions. The magnitude of the net force is:","choices":["5 N","5√3 N","15 N","25 N"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapter 5: Friction & Applications
+# ================================================================
+{"q":"Static friction opposes:","choices":["Any motion","Intended or impending motion","Motion only when sliding occurs","Gravity always"],"correct":1}
+{"q":"Kinetic friction occurs:","choices":["When an object is at rest","Once surfaces are sliding relative to each other","Only on ice","In vacuum only"],"correct":1}
+{"q":"The coefficient of kinetic friction μ_k is typically:","choices":["Greater than μ_s","Less than μ_s","Equal to μ_s","Always 1"],"correct":1}
+{"q":"Friction force magnitude (sliding) is:","choices":["f = μN","f = μ/N","f = N/μ","f = μm"],"correct":0}
+{"q":"In Coulomb's simple friction model, friction is independent of:","choices":["The normal force","The coefficient of friction","The apparent area of contact","Whether the object slides"],"correct":2}
+{"q":"A block just barely starts to slide on an incline when tan θ equals:","choices":["μ_k","μ_s","1/μ_s","g"],"correct":1}
+{"q":"Air resistance:","choices":["Is independent of speed","Generally increases with speed","Is always zero","Always equals gravity"],"correct":1}
+{"q":"Terminal velocity occurs when:","choices":["Gravity exceeds air resistance","Air resistance equals gravity (net force zero)","The object first starts falling","The object leaves Earth"],"correct":1}
+{"q":"A 10 kg block on a level surface needs at least 30 N to start sliding. The coefficient of static friction is approximately:","choices":["0.3","3","0.03","0.1"],"correct":0}
+{"q":"Kinetic friction acts:","choices":["In the direction of motion","Opposite to relative motion","Perpendicular to motion","Randomly"],"correct":1}
+{"q":"Pushing a box harder into the ground:","choices":["Decreases friction","Increases friction (higher normal force)","Does not affect friction","Reverses friction direction"],"correct":1}
+{"q":"The friction force on an object at rest on a level floor, with no horizontal applied force, is:","choices":["μ_s mg","μ_k mg","Zero","mg"],"correct":2}
+{"q":"Rolling friction is typically:","choices":["Much larger than sliding friction","Much smaller than sliding friction","Exactly the same","Zero"],"correct":1}
+{"q":"A block slides down a frictionless incline of angle θ. Its acceleration is:","choices":["g cos θ","g sin θ","g tan θ","g"],"correct":1}
+{"q":"Static friction force can range from:","choices":["0 to μ_s N","μ_s N to μ_k N","μ_s N to 2μ_s N","Always μ_k N"],"correct":0}
+
+# ================================================================
+# PHYSICS 21 — Chapter 6: Uniform Circular Motion & Gravity
+# ================================================================
+{"q":"Centripetal acceleration magnitude is:","choices":["a = v²/r","a = vr","a = v/r","a = r/v²"],"correct":0}
+{"q":"Centripetal force on an object of mass m in uniform circular motion (radius r, speed v) is:","choices":["mv/r","mv²/r","mr/v²","mrv"],"correct":1}
+{"q":"Centripetal acceleration points:","choices":["Tangent to the circle","Toward the center","Away from the center","In the direction of motion"],"correct":1}
+{"q":"An object in uniform circular motion has:","choices":["Constant velocity","Constant speed, changing velocity direction","Constant acceleration vector","Zero acceleration"],"correct":1}
+{"q":"The period T and frequency f of circular motion are related by:","choices":["T = f","T = 1/f","T = 2πf","T = f²"],"correct":1}
+{"q":"For an object moving in a circle of radius r with period T, speed is:","choices":["v = 2πr/T","v = T/r","v = r/T","v = πT/r"],"correct":0}
+{"q":"Angular velocity ω (rad/s) of uniform circular motion relates to speed v by:","choices":["v = ωr","v = ω/r","v = ω","v = r/ω"],"correct":0}
+{"q":"Newton's law of universal gravitation is:","choices":["F = Gm₁m₂/r","F = Gm₁m₂/r²","F = Gm₁m₂r","F = G/(m₁m₂r²)"],"correct":1}
+{"q":"Newton's gravitational constant G has approximate value:","choices":["6.67 × 10⁻¹¹ N·m²/kg²","9.8 N/kg","3 × 10⁸ N/m","1.6 × 10⁻¹⁹ C"],"correct":0}
+{"q":"The gravitational acceleration at Earth's surface is approximately:","choices":["9.8 m/s²","1.6 m/s²","100 m/s²","0.98 m/s²"],"correct":0}
+{"q":"Kepler's first law states that planetary orbits are:","choices":["Circles","Ellipses with the sun at one focus","Parabolas","Straight lines"],"correct":1}
+{"q":"Kepler's second law (equal areas) is equivalent to conservation of:","choices":["Energy","Angular momentum","Mass","Charge"],"correct":1}
+{"q":"Kepler's third law says orbital period squared (T²) is proportional to:","choices":["r","r²","r³","1/r"],"correct":2}
+{"q":"The orbital speed at radius r around a mass M (circular orbit) is:","choices":["v = √(GM/r)","v = GM/r","v = √(GMr)","v = GM/r²"],"correct":0}
+{"q":"Escape velocity from a planet's surface depends on:","choices":["Only the projectile's mass","The planet's mass and radius","The projectile's shape","The direction of launch only"],"correct":1}
+{"q":"Escape velocity formula from a planet of mass M and radius R is:","choices":["v = √(GM/R)","v = √(2GM/R)","v = GM/R","v = 2GM/R"],"correct":1}
+{"q":"Escape velocity from Earth's surface is approximately:","choices":["3 km/s","11 km/s","300 km/s","30 km/s"],"correct":1}
+{"q":"A satellite in low Earth orbit has orbital period approximately:","choices":["5 min","90 min","1 day","1 year"],"correct":1}
+{"q":"A car rounding an unbanked curve relies on ______ to supply centripetal force.","choices":["Gravity","Friction between tires and road","Air resistance","Normal force only"],"correct":1}
+{"q":"In uniform circular motion, the net force does work on the object equal to:","choices":["mv²","Zero (force is always perpendicular to velocity)","KE change","mgh"],"correct":1}
+{"q":"On a banked, frictionless curve of radius r, the ideal speed depends on:","choices":["Only mass of the vehicle","The banking angle and radius","Just the radius","Just gravity"],"correct":1}
+{"q":"Gravitational potential energy (taking U→0 at infinity) is:","choices":["U = Gm₁m₂/r","U = −Gm₁m₂/r","U = Gm₁m₂r","U = G/(m₁m₂r)"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapter 7: Work & Energy
+# ================================================================
+{"q":"Work done by a constant force F through displacement d at angle θ between them is:","choices":["F d sin θ","F d cos θ","F d tan θ","F d / cos θ"],"correct":1}
+{"q":"The SI unit of work (and energy) is the:","choices":["Watt","Newton","Joule","Pascal"],"correct":2}
+{"q":"1 Joule equals:","choices":["1 N·m","1 N/m","1 kg·m²","1 kg·m/s"],"correct":0}
+{"q":"Work done by a force perpendicular to displacement is:","choices":["Fd","Zero","−Fd","½Fd"],"correct":1}
+{"q":"Kinetic energy of a particle of mass m moving with speed v is:","choices":["mv","½mv","mv²","½mv²"],"correct":3}
+{"q":"Work–energy theorem states:","choices":["W_net = ΔKE","W = ΔPE","W = F·t","W = mg"],"correct":0}
+{"q":"Gravitational potential energy (near Earth's surface, height h) is:","choices":["mgh","mgh²","mg/h","½mgh"],"correct":0}
+{"q":"Elastic (spring) potential energy with spring constant k and displacement x from equilibrium is:","choices":["kx","½kx","kx²","½kx²"],"correct":3}
+{"q":"Power is:","choices":["Force × distance","Work / time","Force × time","Energy × time"],"correct":1}
+{"q":"The SI unit of power is the:","choices":["Joule","Watt","Newton","Volt"],"correct":1}
+{"q":"1 watt equals:","choices":["1 J/s","1 J·s","1 N·m","1 kg·m/s"],"correct":0}
+{"q":"A 60 W light bulb uses how much energy in 10 seconds?","choices":["6 J","60 J","600 J","6000 J"],"correct":2}
+{"q":"For a constant force, average power equals:","choices":["F·v_avg (along F)","Fd","F/v","Fd²"],"correct":0}
+{"q":"Conservation of mechanical energy (no non-conservative forces) means:","choices":["KE + PE = constant","KE − PE = constant","KE × PE = constant","Only KE is conserved"],"correct":0}
+{"q":"A conservative force is one whose work depends:","choices":["Only on the path taken","Only on the endpoints, not the path","On time taken","On frictional heating"],"correct":1}
+{"q":"Friction is:","choices":["A conservative force","A non-conservative force (dissipates energy as heat)","A centripetal force","None of the above"],"correct":1}
+{"q":"A 2 kg ball is dropped from height 5 m. Its speed just before hitting the ground (no air resistance) is:","choices":["~10 m/s","~5 m/s","~20 m/s","~50 m/s"],"correct":0}
+{"q":"A spring with k = 100 N/m is compressed by 0.2 m. Stored elastic PE is:","choices":["2 J","10 J","20 J","0.4 J"],"correct":0}
+{"q":"A car doubles its speed. Its kinetic energy:","choices":["Doubles","Quadruples","Halves","Stays the same"],"correct":1}
+{"q":"Work done by gravity on an object that falls height h is:","choices":["Zero","+mgh","−mgh","½mgh"],"correct":1}
+{"q":"An 80 kg person walks up 3 m of stairs. Work done against gravity is:","choices":["24 J","240 J","2400 J","24000 J"],"correct":2}
+{"q":"Mechanical energy is:","choices":["Kinetic energy only","Potential energy only","KE + PE","Thermal energy only"],"correct":2}
+{"q":"Energy lost to friction becomes primarily:","choices":["Sound","Thermal energy","Kinetic energy","Gravitational PE"],"correct":1}
+{"q":"If the speed of an object is tripled, its kinetic energy becomes:","choices":["3× original","6× original","9× original","12× original"],"correct":2}
+{"q":"Average power of a 150 W motor working for 2 minutes supplies energy:","choices":["300 J","18,000 J","75 J","600 J"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapter 8: Linear Momentum & Collisions
+# ================================================================
+{"q":"Linear momentum is defined as:","choices":["p = mv","p = mv²","p = m/v","p = v/m"],"correct":0}
+{"q":"The SI unit of momentum is:","choices":["N","kg·m/s","J·s","kg/m²"],"correct":1}
+{"q":"Impulse is defined as:","choices":["F·Δt","F·Δx","F·v","F/Δt"],"correct":0}
+{"q":"Impulse–momentum theorem states:","choices":["Impulse equals change in momentum","Impulse equals force","Impulse equals kinetic energy","Impulse equals potential energy"],"correct":0}
+{"q":"Momentum is always conserved when:","choices":["Energy is conserved","Net external force is zero","Objects move slowly","Objects have same mass"],"correct":1}
+{"q":"In an elastic collision, which are conserved?","choices":["Only momentum","Only kinetic energy","Both momentum and kinetic energy","Neither"],"correct":2}
+{"q":"In an inelastic collision, what happens to kinetic energy?","choices":["Conserved fully","Increased","Some lost (to heat, sound, deformation)","Equal to zero after"],"correct":2}
+{"q":"A perfectly inelastic collision is one where the objects:","choices":["Bounce apart","Stick together afterward","Pass through each other","Stop immediately"],"correct":1}
+{"q":"Momentum conservation follows from:","choices":["Newton's first law","Newton's second law","Newton's third law","Conservation of energy"],"correct":2}
+{"q":"A 2 kg object moving at 3 m/s collides and sticks with a 1 kg object at rest. Final speed is:","choices":["1 m/s","2 m/s","3 m/s","6 m/s"],"correct":1}
+{"q":"Two equal-mass objects have a head-on elastic 1D collision, one at rest. After collision:","choices":["Both move together","Incoming one stops, other moves at the incoming speed","They both bounce back","They pass through"],"correct":1}
+{"q":"A force applied for a longer time produces:","choices":["Smaller impulse","Larger impulse (for same force)","No change in impulse","Equal impulse always"],"correct":1}
+{"q":"An airbag increases survival in a crash by:","choices":["Increasing the impact force","Decreasing the collision time, reducing force","Increasing collision time, reducing peak force","Giving momentum back to the passenger"],"correct":2}
+{"q":"Center of mass of an isolated system:","choices":["Moves at constant velocity (zero external force)","Always accelerates","Is always at the origin","Is meaningless"],"correct":0}
+{"q":"Two skaters on frictionless ice push off each other. After pushing:","choices":["They both move in the same direction","They move in opposite directions with equal and opposite momenta","They stop immediately","They orbit each other"],"correct":1}
+{"q":"Impulse has SI units of:","choices":["kg·m/s (same as momentum)","N·m","J","kg·m/s²"],"correct":0}
+{"q":"A 1000 kg car moving at 20 m/s has momentum of:","choices":["2000 kg·m/s","20000 kg·m/s","50 kg·m/s","200000 kg·m/s"],"correct":1}
+{"q":"If two objects have different masses but the same momentum, the one with smaller mass has:","choices":["Smaller KE","Greater KE","Same KE","Zero KE"],"correct":1}
+{"q":"A rocket moves forward by expelling mass backward. Newton's law implies:","choices":["Only Newton's 1st law","The rocket gains momentum equal and opposite to the ejected gas (3rd law + momentum conservation)","Nothing about rockets","The rocket must lose energy to move"],"correct":1}
+{"q":"A 2 kg block moving at 5 m/s collides elastically with a 2 kg block at rest. Final speed of the incoming block:","choices":["5 m/s","0 m/s","2.5 m/s","10 m/s"],"correct":1}
+{"q":"A 500 g ball bounces off a wall with speed 10 m/s after arriving at 10 m/s. Change in momentum magnitude:","choices":["5 kg·m/s","10 kg·m/s","0","20 kg·m/s"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapters 9–10: Rotation, Torque, Angular Momentum
+# ================================================================
+{"q":"Angular velocity ω has SI units of:","choices":["rad/s","m/s","rad","Hz only"],"correct":0}
+{"q":"Angular displacement of 1 revolution equals:","choices":["π rad","2π rad","360 rad","1 rad"],"correct":1}
+{"q":"For a rotating rigid body, linear speed v at radius r relates to angular speed ω by:","choices":["v = ωr","v = ω/r","v = ω+r","v = ωr²"],"correct":0}
+{"q":"For constant angular acceleration α, ω = ω₀ + αt is analogous to:","choices":["x = x₀ + v₀t","v = v₀ + at","F = ma","E = mc²"],"correct":1}
+{"q":"Torque due to a force F applied at position r from the axis is:","choices":["τ = r × F","τ = r + F","τ = r · F","τ = r / F"],"correct":0}
+{"q":"The magnitude of torque is:","choices":["rF","rF sin θ","rF cos θ","rF tan θ"],"correct":1}
+{"q":"The SI unit of torque is:","choices":["N·m","J","W","N/m"],"correct":0}
+{"q":"A force applied at the pivot of a door produces torque:","choices":["Maximum","Zero","Negative","Infinite"],"correct":1}
+{"q":"The rotational analog of Newton's 2nd law is:","choices":["F = ma","τ = Iα","τ = Fr","L = Iω"],"correct":1}
+{"q":"Moment of inertia plays the role of ______ in rotational motion.","choices":["Force","Mass (rotational inertia)","Acceleration","Velocity"],"correct":1}
+{"q":"For a thin uniform rod of length L rotating about its center, the moment of inertia is:","choices":["(1/12) ML²","(1/3) ML²","ML²","½ ML²"],"correct":0}
+{"q":"For a thin uniform rod of length L rotating about one end, the moment of inertia is:","choices":["(1/12) ML²","(1/3) ML²","ML²","½ ML²"],"correct":1}
+{"q":"For a solid uniform disk of radius R rotating about its center, the moment of inertia is:","choices":["MR²","½ MR²","(2/5) MR²","(1/3) MR²"],"correct":1}
+{"q":"For a uniform hoop (thin ring) of radius R rotating about its center, I equals:","choices":["MR²","½ MR²","(2/5) MR²","(1/3) MR²"],"correct":0}
+{"q":"For a solid sphere of radius R about an axis through its center, I equals:","choices":["MR²","½ MR²","(2/5) MR²","(1/3) MR²"],"correct":2}
+{"q":"Rotational kinetic energy is:","choices":["½ mv²","½ Iω²","Iω","½ Iω"],"correct":1}
+{"q":"For an object rolling without slipping, the total KE is:","choices":["½mv² only","½Iω² only","½mv² + ½Iω²","mgh"],"correct":2}
+{"q":"For rolling without slipping, v (center of mass) and ω are related by:","choices":["v = ωr","v = ω/r","v = 1","v = ω²r"],"correct":0}
+{"q":"Angular momentum of a rigid body rotating with ω is:","choices":["L = Iω","L = I/ω","L = Iω²","L = ½Iω²"],"correct":0}
+{"q":"Angular momentum is conserved when:","choices":["Linear momentum is conserved","Net external torque is zero","Energy is conserved","Objects are symmetric"],"correct":1}
+{"q":"A figure skater pulls her arms in to spin faster. This is:","choices":["Conservation of energy","Conservation of linear momentum","Conservation of angular momentum (reducing I increases ω)","Violation of physics"],"correct":2}
+{"q":"Parallel-axis theorem: for axis parallel to axis through center of mass, I = I_cm + Md². Here d is:","choices":["Zero","Distance between the two axes","Radius of the object","Perpendicular to rotation"],"correct":1}
+{"q":"Torque's dot product with angular velocity yields:","choices":["Rotational KE","Power delivered to the rotation","Torque magnitude","Force"],"correct":1}
+{"q":"The conditions for static equilibrium are:","choices":["ΣF = 0 only","Στ = 0 only","ΣF = 0 and Στ = 0","ΣKE = 0"],"correct":2}
+{"q":"A meter stick balances at its midpoint (50 cm). Its center of gravity is:","choices":["At 0 cm","At 50 cm","At 100 cm","Anywhere"],"correct":1}
+{"q":"Stable equilibrium corresponds to a potential energy minimum. Unstable corresponds to:","choices":["PE minimum","PE maximum","Zero PE","Infinite PE"],"correct":1}
+
+# ================================================================
+# PHYSICS 21 — Chapters 11–12: Fluid Statics & Dynamics
+# ================================================================
+{"q":"Density ρ is defined as:","choices":["ρ = m × V","ρ = m / V","ρ = V / m","ρ = m + V"],"correct":1}
+{"q":"The SI unit of density is:","choices":["kg/m³","g/cm","kg/L","N/m³"],"correct":0}
+{"q":"Density of fresh water (4 °C) is approximately:","choices":["1000 kg/m³","10 kg/m³","100 kg/m³","10000 kg/m³"],"correct":0}
+{"q":"Pressure is defined as:","choices":["F/A","F·A","F × d","A/F"],"correct":0}
+{"q":"The SI unit of pressure is the:","choices":["Newton","Pascal","Bar","Atmosphere"],"correct":1}
+{"q":"1 Pa equals:","choices":["1 N/m²","1 kg/m²","1 J/m³","1 N·m"],"correct":0}
+{"q":"Atmospheric pressure at sea level is approximately:","choices":["10⁵ Pa (≈ 101 kPa)","10² Pa","10³ Pa","10⁸ Pa"],"correct":0}
+{"q":"In a fluid at rest, pressure at depth h below a free surface with external pressure P₀ is:","choices":["P = P₀ + ρgh","P = P₀ − ρgh","P = ρgh / P₀","P = P₀ × ρgh"],"correct":0}
+{"q":"Pascal's principle states:","choices":["Pressure applied to an enclosed fluid is transmitted undiminished throughout","Fluids don't transmit pressure","Fluid pressure acts only downward","Pressure depends only on depth"],"correct":0}
+{"q":"A hydraulic lift multiplies force because:","choices":["Energy is created","Pressure is constant throughout the connected fluid; small area gives large force on larger area","Newton's laws are violated","Fluid becomes denser"],"correct":1}
+{"q":"Archimedes' principle states:","choices":["Pressure = force per area","Buoyant force on a submerged object = weight of displaced fluid","Net force is zero in equilibrium","Density is constant"],"correct":1}
+{"q":"An object floats if its average density is:","choices":["Greater than the fluid's density","Less than or equal to the fluid's density","Equal to zero","Equal to air density"],"correct":1}
+{"q":"A 0.1 m³ submerged object in water experiences buoyant force approximately:","choices":["100 N","1000 N (1 atm ish)","10 N","10,000 N"],"correct":1}
+{"q":"A fully submerged object in water displaces:","choices":["Its own weight in fluid","Its own volume in fluid","Double its weight","Half its volume"],"correct":1}
+{"q":"Apparent weight of a submerged object equals:","choices":["True weight − buoyant force","True weight + buoyant force","Twice the true weight","Zero"],"correct":0}
+{"q":"An object has the same density as water. When placed in water it will:","choices":["Float at the top","Sink to the bottom","Remain suspended anywhere","Accelerate downward"],"correct":2}
+{"q":"Continuity equation for an incompressible fluid in a pipe is:","choices":["A₁v₁ = A₂v₂","A₁ + v₁ = A₂ + v₂","A₁/v₁ = A₂/v₂","A₁v₁² = A₂v₂²"],"correct":0}
+{"q":"Continuity expresses conservation of:","choices":["Energy","Mass (volume flow rate)","Momentum","Charge"],"correct":1}
+{"q":"Fluid speed through a narrower region of pipe:","choices":["Increases (continuity)","Decreases","Is unchanged","Reverses"],"correct":0}
+{"q":"Bernoulli's equation is (for ideal incompressible flow, no viscosity):","choices":["P + ½ρv² + ρgy = constant along a streamline","P + ρv + ρgy = constant","P + ½ρv² = 0","P = ρgy only"],"correct":0}
+{"q":"Bernoulli's principle implies that where fluid speed is high:","choices":["Pressure is also high","Pressure is lower","Temperature rises","Density increases"],"correct":1}
+{"q":"An airplane wing gets lift partly because:","choices":["Air flows faster over the curved top → lower pressure above than below","Gravity reverses above wings","Air is heavier above","Engines directly lift the plane only"],"correct":0}
+{"q":"A Venturi meter uses Bernoulli's principle to measure:","choices":["Temperature","Fluid flow speed via pressure difference","Density","Viscosity"],"correct":1}
+{"q":"Viscosity is a measure of:","choices":["A fluid's resistance to flow (internal friction)","Density","Compressibility","Temperature"],"correct":0}
+{"q":"Poiseuille's law gives volumetric flow rate Q through a cylindrical tube; Q scales with radius as:","choices":["r","r²","r⁴","r^(1/2)"],"correct":2}
+{"q":"Halving the radius of a pipe (with fixed pressure difference) in Poiseuille flow changes flow rate by factor:","choices":["1/2","1/4","1/8","1/16"],"correct":3}
+{"q":"Laminar flow is characterized by:","choices":["Chaotic mixing","Smooth, layered, parallel flow","Supersonic speed","Constant temperature only"],"correct":1}
+{"q":"Turbulent flow tends to occur at:","choices":["Low Reynolds numbers","High Reynolds numbers","Zero velocity","Zero viscosity only"],"correct":1}
+{"q":"Reynolds number is:","choices":["Dimensionless ratio of inertial to viscous forces","SI unit of viscosity","Pressure constant","Density constant"],"correct":0}
+{"q":"A person can float more easily in saltwater than fresh water because:","choices":["Saltwater has higher density, giving more buoyant force","Saltwater is colder","Saltwater has lower pressure","It doesn't; they float the same"],"correct":0}
+{"q":"Hydrostatic pressure depends on depth but not on:","choices":["Fluid density","The shape of the container","Local gravity","Depth itself"],"correct":1}
+{"q":"A diver in a lake experiences pressure that increases by approximately how much per meter of depth?","choices":["1 Pa/m","100 Pa/m","10,000 Pa/m (≈ 1 atm per 10 m)","10⁸ Pa/m"],"correct":2}

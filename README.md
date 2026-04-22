@@ -18,8 +18,9 @@ Once Pages is enabled, the site will be available at:
 | `relativistic_velocity_addition.html` | Relativistic velocity addition — four animated cases of `u = (u'+v)/(1+u'v/c²)` and its inverse |
 | `simultaneity.html` | Relativity of simultaneity — the spaceship duel |
 | `thermal_radiation.html` | Stefan–Boltzmann, Wien, Planck — why hot things glow, and the ultraviolet catastrophe |
+| `physics_21_study_guide.html` | Physics 21 (Mechanics &amp; Fluids) full-course study guide — OpenStax College Physics 2e Ch. 1–12, all 19 lectures, both midterms, final review |
 | `physics_23_study_guide.html` | Full Physics 23 study guide covering Giancoli chapters 16–25 (lectures 1A–10B) |
-| `physics_25_study_guide.html` | Physics 25 (Modern Physics) study guide — Lectures 1–7 through Midterm #1 |
+| `physics_25_study_guide.html` | Physics 25 (Modern Physics) full-course study guide — OpenStax Ch. 28–30 plus instructor materials, all 19 lectures, both midterms, final review |
 | `brain_lab.html` | **Hidden** — Giuse Pham Enterprises Brain Cell Reclamation Lab. Cryo-canister, pink-cell transport tube, golden-ticket payout, pressure gauges, live brain-cell counter. Reachable by clicking "Giuse Pham Enterprises" in the index footer. |
 | `president_giuse.jpg` | Portrait shown in the top-right corner of every page (and favicon / link preview) |
 | `giuse_brain.png` | The brain-in-a-jar render used inside the canister on `brain_lab.html` |
