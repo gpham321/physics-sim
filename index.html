@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Giuse's Physics 25 Simulations</title>
-<link rel="icon" type="image/jpeg" href="president_giuse.jpg">
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
 <meta property="og:title" content="Giuse's Physics 25 Simulations">
-<meta property="og:image" content="https://gpham321.github.io/physics-sim/president_giuse.jpg">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
 <meta property="og:url" content="https://gpham321.github.io/physics-sim/">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -208,7 +208,7 @@
 </head>
 <body>
 
-<img src="president_giuse.jpg" alt="President Giuse" class="portrait">
+<img src="images/president_giuse.jpg" alt="President Giuse" class="portrait">
 
 <div class="wrap">
 
@@ -522,6 +522,214 @@
     <div class="card-body">
       <h2>Relativistic Velocity Addition</h2>
       <p>A rocket flies past at 0.6&thinsp;c and shoots a ball forward at 0.8&thinsp;c. You don't see the ball at 1.4&thinsp;c &mdash; you see it at 0.946&thinsp;c. Four animated cases show how velocities really add (and subtract) at relativistic speeds.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="bohr_model.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bohr-nuc" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffba6b"/>
+          <stop offset="100%" stop-color="#ff8240" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="bohr-e" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#9fe7f5"/>
+          <stop offset="100%" stop-color="#66d9ef" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="320" height="150" fill="#04060d"/>
+      <!-- Bohr orbits -->
+      <g fill="none" stroke="#3a4467" stroke-width="0.8" stroke-dasharray="3 3">
+        <circle cx="160" cy="75" r="24"/>
+        <circle cx="160" cy="75" r="44"/>
+        <circle cx="160" cy="75" r="62"/>
+      </g>
+      <!-- Nucleus -->
+      <circle cx="160" cy="75" r="20" fill="url(#bohr-nuc)"/>
+      <circle cx="160" cy="75" r="9" fill="#ffba6b"/>
+      <!-- Photon flying in -->
+      <g>
+        <circle cy="75" r="3.5" fill="#9fd4e6">
+          <animate attributeName="cx" values="20;115" dur="1.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <!-- Electron jumping outward (orbit hop) -->
+      <circle r="5" fill="url(#bohr-e)">
+        <animate attributeName="cx" values="184;204;184" dur="2.6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="75;75;75" dur="2.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle r="3" fill="#9fe7f5">
+        <animate attributeName="cx" values="184;204;184" dur="2.6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="75;75;75" dur="2.6s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Emitted photon -->
+      <g fill="#ff66cc">
+        <circle r="3" opacity="0.85">
+          <animate attributeName="cx" values="160;260" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;30"  dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;0" keyTimes="0;0.5;1" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <!-- Energy level labels -->
+      <text x="190" y="56" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="9">n=2</text>
+      <text x="210" y="40" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="9">n=3</text>
+      <text x="160" y="142" fill="#66d9ef" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle" font-style="italic">E_n = −13.6 eV / n²</text>
+    </svg>
+    <div class="card-body">
+      <h2>The Bohr Model — Atomic Energy Levels</h2>
+      <p>Tune a laser onto an electron and watch it jump up an orbit, then drop back down emitting a photon of just the right wavelength. Switch atoms (H, He⁺, Li²⁺) to see how the spectral lines slide with Z². Built-in transition table highlights the active line in real time.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="double_slit.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ds-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#66d9ef" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#66d9ef" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <!-- Glowing cyan light source + rays -->
+      <g stroke="#66d9ef" stroke-width="1.2" opacity="0.55">
+        <line x1="36" y1="75" x2="10" y2="40"/>
+        <line x1="36" y1="75" x2="6" y2="75"/>
+        <line x1="36" y1="75" x2="10" y2="110"/>
+        <line x1="46" y1="55" x2="70" y2="30"/>
+        <line x1="46" y1="95" x2="70" y2="120"/>
+      </g>
+      <circle cx="36" cy="75" r="24" fill="url(#ds-glow)">
+        <animate attributeName="r" values="22;26;22" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="36" cy="75" r="9" fill="#66d9ef"/>
+      <!-- Photons traveling from light source toward the slit barrier -->
+      <g fill="#aaf0ff">
+        <circle cy="68" r="3.2">
+          <animate attributeName="cx" values="54;152" dur="1.3s" begin="0s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.3s" begin="0s" repeatCount="indefinite"/>
+        </circle>
+        <circle cy="82" r="3.2">
+          <animate attributeName="cx" values="54;152" dur="1.3s" begin="0.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.3s" begin="0.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cy="75" r="3.2">
+          <animate attributeName="cx" values="54;152" dur="1.3s" begin="0.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.3s" begin="0.8s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <!-- Barrier with two slits -->
+      <rect x="158" y="0"   width="7" height="58" fill="#7a8095" stroke="#aab1c4"/>
+      <rect x="158" y="72"  width="7" height="10" fill="#7a8095" stroke="#aab1c4"/>
+      <rect x="158" y="92"  width="7" height="58" fill="#7a8095" stroke="#aab1c4"/>
+      <!-- Circular wave fronts emerging from each slit -->
+      <g fill="none" stroke="#66d9ef" stroke-width="1" opacity="0.55">
+        <circle cx="165" cy="65" r="18"/>
+        <circle cx="165" cy="65" r="34"/>
+        <circle cx="165" cy="65" r="50"/>
+        <circle cx="165" cy="65" r="66"/>
+        <circle cx="165" cy="65" r="82"/>
+        <circle cx="165" cy="87" r="18"/>
+        <circle cx="165" cy="87" r="34"/>
+        <circle cx="165" cy="87" r="50"/>
+        <circle cx="165" cy="87" r="66"/>
+        <circle cx="165" cy="87" r="82"/>
+      </g>
+      <!-- Right-side screen -->
+      <rect x="293" y="0" width="7" height="150" fill="#1a2030" stroke="#aab1c4"/>
+      <!-- Fringe pattern on screen -->
+      <g fill="#66d9ef">
+        <rect x="293" y="12"  width="7" height="6"  opacity="0.3"/>
+        <rect x="293" y="25"  width="7" height="10" opacity="0.6"/>
+        <rect x="293" y="42"  width="7" height="14" opacity="0.85"/>
+        <rect x="293" y="62"  width="7" height="22" opacity="1"/>
+        <rect x="293" y="90"  width="7" height="22" opacity="1"/>
+        <rect x="293" y="118" width="7" height="14" opacity="0.85"/>
+        <rect x="293" y="138" width="7" height="6"  opacity="0.6"/>
+      </g>
+    </svg>
+    <div class="card-body">
+      <h2>Double-Slit &amp; Multi-Slit Interference</h2>
+      <p>Three demos in one: vary λ and slit separation d, vary slit width a, or vary the number of slits N from 2 to 20 (a diffraction grating). Top-down view shows the wave field; sideways graph shows the screen-intensity pattern with the m-th fringe positions marked.</p>
+      <div class="arrow">Open simulation &rarr;</div>
+    </div>
+  </a>
+
+  <a class="card" href="uncertainty.html">
+    <svg class="thumb" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="320" height="150" fill="#0a0c12"/>
+      <!-- Parallel photon stream entering from the left -->
+      <g fill="#66d9ef">
+        <circle cy="60" r="3">
+          <animate attributeName="cx" values="10;152" dur="1.4s" begin="0s"   repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.85;1" dur="1.4s" begin="0s"   repeatCount="indefinite"/>
+        </circle>
+        <circle cy="68" r="3">
+          <animate attributeName="cx" values="10;152" dur="1.4s" begin="0.25s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.85;1" dur="1.4s" begin="0.25s" repeatCount="indefinite"/>
+        </circle>
+        <circle cy="75" r="3">
+          <animate attributeName="cx" values="10;152" dur="1.4s" begin="0.5s"  repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.85;1" dur="1.4s" begin="0.5s"  repeatCount="indefinite"/>
+        </circle>
+        <circle cy="82" r="3">
+          <animate attributeName="cx" values="10;152" dur="1.4s" begin="0.8s"  repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.85;1" dur="1.4s" begin="0.8s"  repeatCount="indefinite"/>
+        </circle>
+        <circle cy="90" r="3">
+          <animate attributeName="cx" values="10;152" dur="1.4s" begin="1.05s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.85;1" dur="1.4s" begin="1.05s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <!-- Tight single-slit barrier -->
+      <rect x="156" y="0"  width="7" height="70" fill="#7a8095" stroke="#aab1c4"/>
+      <rect x="156" y="80" width="7" height="70" fill="#7a8095" stroke="#aab1c4"/>
+      <!-- Δx marker on the slit opening -->
+      <g stroke="#a6e22e" stroke-width="1" stroke-dasharray="2 2" opacity="0.75">
+        <line x1="148" y1="70" x2="172" y2="70"/>
+        <line x1="148" y1="80" x2="172" y2="80"/>
+      </g>
+      <text x="140" y="78" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10" text-anchor="middle">Δx</text>
+      <!-- Diffraction cone: dashed guides emphasizing angular spread -->
+      <g stroke="#66d9ef" stroke-width="1" stroke-dasharray="3 3" opacity="0.3" fill="none">
+        <line x1="165" y1="75" x2="300" y2="16"/>
+        <line x1="165" y1="75" x2="300" y2="134"/>
+      </g>
+      <!-- Photons diffracting outward from the slit at varied angles -->
+      <g fill="#66d9ef">
+        <circle r="3">
+          <animate attributeName="cx" values="165;300" dur="1.2s" begin="0.3s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;22"   dur="1.2s" begin="0.3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3">
+          <animate attributeName="cx" values="165;300" dur="1.2s" begin="0.5s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;50"   dur="1.2s" begin="0.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" begin="0.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3">
+          <animate attributeName="cx" values="165;300" dur="1.2s" begin="0.7s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;75"   dur="1.2s" begin="0.7s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" begin="0.7s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3">
+          <animate attributeName="cx" values="165;300" dur="1.2s" begin="0.9s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;100"  dur="1.2s" begin="0.9s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" begin="0.9s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3">
+          <animate attributeName="cx" values="165;300" dur="1.2s" begin="1.1s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="75;128"  dur="1.2s" begin="1.1s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" begin="1.1s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      <text x="160" y="145" fill="#9aa2b6" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle" font-style="italic">Δx · Δp ≥ ℏ/2</text>
+    </svg>
+    <div class="card-body">
+      <h2>Heisenberg Uncertainty Principle</h2>
+      <p>Three demos: shrink a single slit and watch the diffraction pattern spread (position–momentum tradeoff in real photons), drag a Gaussian wavepacket and see its momentum-space twin breathe inversely, or shorten an excited-state lifetime to broaden the spectral line (energy–time uncertainty).</p>
       <div class="arrow">Open simulation &rarr;</div>
     </div>
   </a>

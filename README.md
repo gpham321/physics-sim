@@ -18,6 +18,9 @@ Once Pages is enabled, the site will be available at:
 | `relativistic_velocity_addition.html` | Relativistic velocity addition — four animated cases of `u = (u'+v)/(1+u'v/c²)` and its inverse |
 | `simultaneity.html` | Relativity of simultaneity — the spaceship duel |
 | `thermal_radiation.html` | Stefan–Boltzmann, Wien, Planck — why hot things glow, and the ultraviolet catastrophe |
+| `bohr_model.html` | Interactive Bohr atom — fire photons of variable wavelength, watch the electron absorb and jump up, then spontaneously emit and drop down. Switch between H, He⁺, Li²⁺ and see the transition table light up the matched line |
+| `double_slit.html` | Double-slit and multi-slit interference with three demos: vary λ &amp; slit separation d, vary slit width a, vary number of slits N (up to a 20-slit grating). Top-down wave field + sideways intensity profile with `d sin θ = m λ` fringe markers |
+| `uncertainty.html` | Heisenberg's uncertainty principle in three demos: single-slit diffraction (Δx·Δp_y), Gaussian wavepacket Fourier pair (position vs. momentum), and excited-state lifetime ↔ Lorentzian linewidth (ΔE·Δt) |
 | `physics_21_study_guide.html` | Physics 21 (Mechanics &amp; Fluids) full-course study guide — OpenStax College Physics 2e Ch. 1–12, all 19 lectures, both midterms, final review |
 | `physics_23_study_guide.html` | Full Physics 23 study guide covering Giancoli chapters 16–25 (lectures 1A–10B) |
 | `physics_25_study_guide.html` | Physics 25 (Modern Physics) full-course study guide — OpenStax Ch. 28–30 plus instructor materials, all 19 lectures, both midterms, final review |

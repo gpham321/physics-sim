@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Double-Slit &amp; Multi-Slit Interference</title>
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
+<meta property="og:title" content="Double-Slit &amp; Multi-Slit Interference">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/double_slit.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --magenta: #ff4db8;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55; position: relative;
+  }
+  .portrait {
+    position: absolute; top: 22px; right: 28px;
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; color: var(--accent); font-weight: 600; }
+  h3 { margin: 0 0 12px; color: var(--text); font-weight: 600; }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    margin: 24px 0; box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .panel.compact { padding: 14px 18px; }
+  .grid {
+    display: grid; grid-template-columns: 1.65fr 1fr; gap: 14px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+  }
+  canvas {
+    display: block; width: 100%;
+    background: #04060d;
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  canvas.scene   { height: 460px; }
+  canvas.profile { height: 460px; }
+  .meters {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+  }
+  .meter {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .meter-label {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .meter-val {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 17px; color: var(--accent);
+  }
+  .slider-grid { display: grid; gap: 16px; }
+  .slider-row label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 6px; font-size: 14px;
+  }
+  .slider-row input[type="range"] {
+    width: 100%; accent-color: var(--accent); cursor: pointer;
+  }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--accent); }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .btn-row button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 7px 12px; border-radius: 6px;
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .btn-row button:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-row button.active {
+    background: var(--accent); color: var(--bg); border-color: var(--accent);
+  }
+  .btn-row-label {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.6px; margin-right: 4px; align-self: center;
+  }
+  .demo-tabs {
+    display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .demo-tabs button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 18px; border-radius: 8px;
+    font-family: inherit; font-size: 14px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .demo-tabs button:hover { border-color: var(--accent); }
+  .demo-tabs button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .control-group { display: none; }
+  .control-group.active { display: grid; }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+  .swatch {
+    display: inline-block; width: 18px; height: 18px;
+    border-radius: 50%; vertical-align: middle; margin-left: 8px;
+    box-shadow: 0 0 10px currentColor;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .formula-box {
+    background: rgba(102, 217, 239, 0.06);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px; border-radius: 6px;
+    margin: 12px 0;
+  }
+  .ctrl-grid {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 16px;
+    align-items: end;
+  }
+  @media (max-width: 760px) { .ctrl-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="images/president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Double-Slit, Single-Slit, &amp; Multi-Slit Interference</h1>
+<p class="lead">When light passes through narrow slits, each slit becomes a Huygens point source. The waves that emerge overlap and interfere — bright bands where crest meets crest, dark bands where crest meets trough. Three demos let you isolate what controls the pattern: the wavelength, the gap between slits, the width of each slit, and the number of slits.</p>
+
+<div class="panel">
+  <h2>The master formulas</h2>
+  <p>For \(N\) identical slits separated by distance \(d\) (center-to-center) and illuminated by light of wavelength \(\lambda\), <strong>bright fringes</strong> appear at angles \(\theta\) from the central axis where the path-length difference between adjacent slits is an integer number of wavelengths:</p>
+  <div class="formula-box">
+    $$ \boxed{\,d\,\sin\theta \;=\; m\,\lambda\,} \qquad m = 0, \pm 1, \pm 2, \ldots $$
+  </div>
+  <p>For small angles (\(\sin\theta \approx \tan\theta = y/L\)), the fringes land on a screen a distance \(L\) away at heights \(y_m \approx m\,\lambda L / d\). So the spacing between bright fringes is \(\Delta y = \lambda L / d\).</p>
+  <p>Each individual slit also diffracts on its own. If a slit has width \(a\), its <strong>dark fringes</strong> are at:</p>
+  $$ a\,\sin\theta \;=\; m'\,\lambda \qquad (m' = \pm 1, \pm 2, \ldots) $$
+  <p>The full intensity for \(N\) slits of width \(a\) and spacing \(d\) is the product of the multi-slit interference and the single-slit envelope:</p>
+  $$ I(\theta) \;=\; I_0 \left[\frac{\sin(N\beta)}{N\,\sin\beta}\right]^2 \left[\frac{\sin\alpha}{\alpha}\right]^2,
+     \quad \beta = \tfrac{\pi d \sin\theta}{\lambda},\quad \alpha = \tfrac{\pi a \sin\theta}{\lambda}. $$
+</div>
+
+<div class="demo-tabs" id="demoTabs">
+  <button type="button" data-demo="1" class="active">Demo 1 — Two slits: vary λ &amp; spacing d</button>
+  <button type="button" data-demo="2">Demo 2 — Single slit: vary slit width a</button>
+  <button type="button" data-demo="3">Demo 3 — Multi-slit grating: vary N</button>
+</div>
+
+<div class="panel">
+  <h2 id="demoTitle">Demo 1 — Two-slit interference</h2>
+  <p id="demoIntro" class="hint" style="margin-bottom: 12px;">Two narrow slits of fixed width. As you change λ or the slit separation d, the bright-fringe spacing on the screen changes as Δy = λL/d.</p>
+
+  <div class="slider-grid">
+    <div class="slider-row">
+      <label for="wlSlider"><span>Wavelength λ<span class="swatch" id="wlSwatch"></span></span><span id="wlReadout" class="mono">550 nm</span></label>
+      <input type="range" id="wlSlider" min="380" max="780" step="1" value="550">
+      <div class="hint">Visible spectrum: 380 nm (violet) → 780 nm (deep red). Longer wavelength → wider fringe spacing.</div>
+    </div>
+
+    <div class="control-group active" id="ctrl1">
+      <div class="slider-row">
+        <label for="dSlider"><span>Slit separation d</span><span id="dReadout" class="mono">25 μm</span></label>
+        <input type="range" id="dSlider" min="5" max="80" step="0.5" value="25">
+        <div class="hint">Center-to-center distance between the two slits. Smaller d → wider fringes.</div>
+      </div>
+    </div>
+
+    <div class="control-group" id="ctrl2">
+      <div class="slider-row">
+        <label for="aSlider"><span>Slit width a</span><span id="aReadout" class="mono">8 μm</span></label>
+        <input type="range" id="aSlider" min="0.5" max="40" step="0.2" value="8">
+        <div class="hint">A <strong>single</strong> slit of width a. Narrower slit → wider diffraction (light spreads more). First dark fringe at a sinθ = ±λ.</div>
+      </div>
+    </div>
+
+    <div class="control-group" id="ctrl3">
+      <div class="slider-row">
+        <label for="nSlider"><span>Number of slits N</span><span id="nReadout" class="mono">2</span></label>
+        <input type="range" id="nSlider" min="2" max="20" step="1" value="2">
+        <div class="hint">Each extra slit makes the bright fringes <em>sharper</em> (and the dark regions deeper). With N large, you have a diffraction <strong>grating</strong> — the principal maxima stay at d sinθ = mλ but they collapse to thin spectral lines.</div>
+      </div>
+      <div class="slider-row">
+        <label for="d3Slider"><span>Slit separation d</span><span id="d3Readout" class="mono">25 μm</span></label>
+        <input type="range" id="d3Slider" min="5" max="80" step="0.5" value="25">
+      </div>
+    </div>
+
+    <!-- Speed control (always visible) -->
+    <div class="ctrl-grid">
+      <div></div>
+      <div>
+        <div class="btn-row" id="speedBtns">
+          <span class="btn-row-label">Speed:</span>
+          <button type="button" data-speed="0.25">0.25×</button>
+          <button type="button" data-speed="0.5">0.5×</button>
+          <button type="button" data-speed="1" class="active">1×</button>
+          <button type="button" data-speed="2">2×</button>
+          <button type="button" data-speed="4">4×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Top-down view of the apparatus</h3>
+    <canvas id="scene" class="scene"></canvas>
+    <p class="hint" style="margin-top: 10px;">A plane wave (left) passes through the slit barrier. The brightness at every point in the gap shows the local light intensity — bright where spreading waves add, dark where they cancel. Animated wave fronts emanate from each slit. The wide vertical strip on the right is the screen — its bright spots line up horizontally with the peaks in the intensity graph.</p>
+  </div>
+  <div class="card">
+    <h3>Intensity along the screen</h3>
+    <canvas id="profile" class="profile"></canvas>
+    <p class="hint" style="margin-top: 10px;">Sideways view of the screen at distance L = 1 m. Numbered tick marks show predicted bright-fringe orders \(y_m = m \lambda L / d\). The dashed gold curve in Demos 1 and 3 is the single-slit envelope. Demo 2 shows just the single-slit pattern itself.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Live readout</h2>
+  <div class="meters">
+    <div class="meter">
+      <span class="meter-label">Wavelength λ</span>
+      <span class="meter-val" id="wlMeter">550 nm</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label">Slit separation d</span>
+      <span class="meter-val" id="dMeter">25 μm</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label">Slit width a</span>
+      <span class="meter-val" id="aMeter">8 μm</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label">Number of slits N</span>
+      <span class="meter-val" id="nMeter">2</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label" id="dyLabel">Fringe spacing Δy = λL/d</span>
+      <span class="meter-val" id="dyMeter">2.20 mm</span>
+    </div>
+    <div class="meter">
+      <span class="meter-label">Highest visible m</span>
+      <span class="meter-val" id="mmaxMeter">±45</span>
+    </div>
+  </div>
+  <div class="hint" style="margin-top: 10px;">L = 1.0 m (screen distance). For grating spectrometers, count maxima out to where \(|m\lambda/d| &gt; 1\) — beyond that, no real angle satisfies the formula.</div>
+</div>
+
+<div class="panel">
+  <h2>How to use \(d\sin\theta = m\lambda\)</h2>
+  <p>Three flavors of the same equation, depending on what you know and want:</p>
+  <ol>
+    <li><strong>Find a fringe angle.</strong> Given d, λ, and order m: \(\theta_m = \sin^{-1}(m\lambda/d)\).</li>
+    <li><strong>Find a wavelength.</strong> Spectroscopy: measure the angle \(\theta_m\) of a known order m of a spectral line: \(\lambda = (d\sin\theta_m)/m\). This is exactly how we measured atomic spectra and discovered quantum mechanics.</li>
+    <li><strong>Find slit spacing.</strong> Given a known wavelength and the measured fringe angle: \(d = m\lambda/\sin\theta_m\).</li>
+  </ol>
+  <p>For small angles (\(\theta &lt; \sim 10°\)) you can use \(\sin\theta \approx \theta \approx y/L\), giving the <strong>fringe spacing</strong> \(\Delta y = \lambda L/d\).</p>
+
+  <h3 style="margin-top: 18px;">Worked example</h3>
+  <p>A laser pointer at \(\lambda = 632\) nm shines on a double slit with \(d = 0.1\) mm. The screen is \(L = 2.0\) m away. Where does the \(m = 1\) bright fringe appear?</p>
+  <p>\(\sin\theta_1 = (1)(6.32\times 10^{-7})/(1.0 \times 10^{-4}) = 6.32 \times 10^{-3}\), so \(\theta_1 \approx 0.36°\). On the screen: \(y_1 \approx (2.0)(6.32 \times 10^{-3}) = 1.26\) cm from center.</p>
+</div>
+
+<div class="panel">
+  <h2>What to look for</h2>
+  <ul>
+    <li><strong>Demo 1:</strong> drag wavelength higher (red) and watch the fringes spread out. Drag separation d higher and they squeeze together. The product λ/d controls everything.</li>
+    <li><strong>Demo 2 (single slit):</strong> shrink a and the diffraction pattern fans out — narrow slit, wide spread. This is exactly the position-momentum tradeoff (see the Heisenberg sim).</li>
+    <li><strong>Demo 3:</strong> raise N from 2 to 5 to 20. The maxima get sharper and the regions between get blacker. This is why diffraction gratings are spectroscopy's go-to tool.</li>
+    <li><strong>Highest visible order:</strong> if mλ/d &gt; 1, no real angle works, so the fringe doesn't exist. With small d, only a couple of orders fit at all.</li>
+    <li><strong>Strip ↔ graph alignment:</strong> the vertical positions of bright bands on the screen strip exactly match the peaks in the intensity profile to its right. The two views are the same data shown two ways.</li>
+  </ul>
+</div>
+
+<script>
+// ============================================================
+// State
+// ============================================================
+const state = {
+  demo: 1,
+  wavelength: 550,
+  d: 25,            // μm
+  a: 8,             // μm
+  N: 2,
+  speed: 1.0,
+};
+const L_SCREEN = 1.0;       // meters
+
+const $ = id => document.getElementById(id);
+const sceneCanvas   = $('scene');
+const profileCanvas = $('profile');
+const sceneCtx      = sceneCanvas.getContext('2d');
+const profileCtx    = profileCanvas.getContext('2d');
+
+// ============================================================
+// Color from wavelength
+// ============================================================
+function wavelengthToColor(wl) {
+  let R, G, B;
+  if      (wl < 380)  { R = 0.55; G = 0.30; B = 1.0; }
+  else if (wl < 440)  { R = -(wl - 440)/60; G = 0; B = 1; }
+  else if (wl < 490)  { R = 0; G = (wl - 440)/50; B = 1; }
+  else if (wl < 510)  { R = 0; G = 1; B = -(wl - 510)/20; }
+  else if (wl < 580)  { R = (wl - 510)/70; G = 1; B = 0; }
+  else if (wl < 645)  { R = 1; G = -(wl - 645)/65; B = 0; }
+  else if (wl <= 780) { R = 1; G = 0.05; B = 0; }
+  else                { R = 0.65; G = 0.05; B = 0; }
+  let f = 1;
+  if (wl > 700)      f = Math.max(0.55, 0.55 + 0.45*(780 - wl)/80);
+  else if (wl < 420) f = Math.max(0.55, 0.55 + 0.45*(wl - 380)/40);
+  R = Math.max(0, Math.min(1, R)) * f;
+  G = Math.max(0, Math.min(1, G)) * f;
+  B = Math.max(0, Math.min(1, B)) * f;
+  return [R, G, B];
+}
+function rgbStr(rgb, alpha=1) {
+  return `rgba(${(rgb[0]*255)|0}, ${(rgb[1]*255)|0}, ${(rgb[2]*255)|0}, ${alpha})`;
+}
+
+// ============================================================
+// DPR fit
+// ============================================================
+function fitCanvas(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  if (rect.width === 0) return;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', () => { fitCanvas(sceneCanvas); fitCanvas(profileCanvas); });
+
+// ============================================================
+// Demo tabs
+// ============================================================
+document.querySelectorAll('#demoTabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    state.demo = parseInt(b.dataset.demo, 10);
+    document.querySelectorAll('#demoTabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.control-group').forEach(g => g.classList.remove('active'));
+    $('ctrl' + state.demo).classList.add('active');
+
+    if (state.demo === 1) {
+      $('demoTitle').textContent = 'Demo 1 — Two-slit interference';
+      $('demoIntro').innerHTML = 'Two narrow slits of fixed width. As you change λ or the slit separation d, the bright-fringe spacing on the screen changes as Δy = λL/d.';
+      state.N = 2; state.a = 4;
+      $('dyLabel').textContent = 'Fringe spacing Δy = λL/d';
+    } else if (state.demo === 2) {
+      $('demoTitle').textContent = 'Demo 2 — Single-slit diffraction';
+      $('demoIntro').innerHTML = 'A <strong>single</strong> slit of variable width a. Narrow slit → wide diffraction. The first dark fringe is at a sinθ = ±λ. There is no multi-slit interference here — just the one-slit envelope.';
+      state.N = 1;
+      $('dyLabel').textContent = 'First dark @ y = λL/a';
+    } else {
+      $('demoTitle').textContent = 'Demo 3 — Multi-slit gratings';
+      $('demoIntro').innerHTML = 'Each extra slit makes the maxima sharper. With N large enough, the pattern collapses to thin spectral lines — that\'s a diffraction grating.';
+      state.a = 4;
+      $('dyLabel').textContent = 'Fringe spacing Δy = λL/d';
+    }
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([$('demoIntro')]);
+    refreshUI();
+  });
+});
+
+// ============================================================
+// Sliders
+// ============================================================
+$('wlSlider').addEventListener('input', e => { state.wavelength = +e.target.value; refreshUI(); });
+$('dSlider').addEventListener('input',  e => { state.d = +e.target.value; refreshUI(); });
+$('aSlider').addEventListener('input',  e => { state.a = +e.target.value; refreshUI(); });
+$('nSlider').addEventListener('input',  e => { state.N = +e.target.value; refreshUI(); });
+$('d3Slider').addEventListener('input', e => { state.d = +e.target.value; refreshUI(); });
+
+document.querySelectorAll('#speedBtns button').forEach(b => {
+  b.addEventListener('click', () => {
+    state.speed = parseFloat(b.dataset.speed);
+    document.querySelectorAll('#speedBtns button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
+
+// ============================================================
+// Intensity computation (full multi-slit + single-slit envelope)
+// ============================================================
+function intensityAt(theta) {
+  const lam_um = state.wavelength * 1e-3;
+  const d = state.d, a = state.a, N = state.N;
+  const s = Math.sin(theta);
+  const beta  = Math.PI * d * s / lam_um;
+  const alpha = Math.PI * a * s / lam_um;
+  let multi;
+  if (N === 1)                             multi = 1;
+  else if (Math.abs(Math.sin(beta)) < 1e-9) multi = 1;
+  else multi = Math.pow(Math.sin(N * beta) / (N * Math.sin(beta)), 2);
+  let env;
+  if (Math.abs(alpha) < 1e-9) env = 1;
+  else env = Math.pow(Math.sin(alpha) / alpha, 2);
+  return multi * env;
+}
+function singleSlitEnvelope(theta) {
+  const lam_um = state.wavelength * 1e-3;
+  const a = state.a;
+  const s = Math.sin(theta);
+  const alpha = Math.PI * a * s / lam_um;
+  if (Math.abs(alpha) < 1e-9) return 1;
+  return Math.pow(Math.sin(alpha) / alpha, 2);
+}
+
+// ============================================================
+// Shared y-range so the strip aligns with the profile graph
+// ============================================================
+function getYRangeMeters() {
+  const lam_m = state.wavelength * 1e-9;
+  const d_m   = state.d * 1e-6;
+  const a_m   = state.a * 1e-6;
+  const dy_pred = lam_m * L_SCREEN / d_m;
+  // Show ~10 fringes for multi-slit; show first 3 dark fringes for single slit
+  if (state.demo === 2) {
+    const yFirstDark = lam_m * L_SCREEN / a_m;       // single-slit first dark
+    return Math.min(0.10, Math.max(2 * yFirstDark, 0.005));
+  }
+  return Math.min(0.10, Math.max(8 * dy_pred, 0.005));
+}
+
+// ============================================================
+// Drawing — top-down scene
+// ============================================================
+function drawScene() {
+  const W = sceneCanvas.clientWidth;
+  const H = sceneCanvas.clientHeight;
+  const ctx = sceneCtx;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#04060d'; ctx.fillRect(0, 0, W, H);
+
+  const xBarrier = Math.round(W * 0.30);
+  const stripW   = 28;
+  const xScreen  = W - 30 - stripW;
+  const yMid = H / 2;
+
+  // Incoming plane wave (animated)
+  drawIncomingWaves(ctx, 0, xBarrier, H);
+
+  // Slit positions
+  const N = state.N;
+  const yRange_m = getYRangeMeters();
+  const totalPattern_um = N === 1 ? state.a : (N - 1) * state.d + state.a;
+  const margin = 60;
+  const availPx = H - 2 * margin;
+  const pxPerUm = Math.min(8, availPx / Math.max(20, totalPattern_um));
+  const slitYs = [];
+  for (let i = 0; i < N; i++) {
+    const offsetUm = (i - (N-1)/2) * state.d;
+    slitYs.push(yMid + offsetUm * pxPerUm);
+  }
+  const aPx = Math.max(2, state.a * pxPerUm);
+
+  // Diffraction heatmap
+  drawIntensityField(ctx, xBarrier, xScreen, H, slitYs, aPx);
+
+  // Animated wave fronts emanating from each slit
+  drawWaveFronts(ctx, xBarrier, xScreen, H, slitYs);
+
+  // Barrier
+  ctx.fillStyle = '#1a2030';
+  ctx.fillRect(xBarrier - 5, 0, 10, H);
+  ctx.strokeStyle = '#3a4467';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(xBarrier - 5, 0, 10, H);
+  // cut slit holes
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-out';
+  for (const y of slitYs) ctx.fillRect(xBarrier - 6, y - aPx/2, 12, aPx);
+  ctx.restore();
+
+  // Screen strip — wider, mapped using shared yRange (aligns with profile)
+  drawScreenStrip(ctx, xScreen, stripW, H, yMid, yRange_m);
+
+  // Labels
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace, monospace';
+  ctx.fillText('source', 8, 18);
+  ctx.fillText('barrier — ' + (N === 1 ? '1 slit' : N + ' slits'), xBarrier - 50, 18);
+  ctx.fillText('screen view', xScreen - 5, 18);
+
+  // Dimension labels (d, a)
+  if (N >= 2) {
+    const y0 = slitYs[0], y1 = slitYs[1];
+    ctx.strokeStyle = 'rgba(102, 217, 239, 0.6)';
+    ctx.beginPath(); ctx.moveTo(xBarrier - 28, y0); ctx.lineTo(xBarrier - 28, y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xBarrier - 32, y0); ctx.lineTo(xBarrier - 24, y0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xBarrier - 32, y1); ctx.lineTo(xBarrier - 24, y1); ctx.stroke();
+    ctx.fillStyle = '#66d9ef';
+    ctx.fillText('d = ' + state.d.toFixed(0) + ' μm', xBarrier - 95, (y0+y1)/2 + 3);
+  }
+  ctx.fillStyle = '#ffd166';
+  ctx.fillText('a = ' + state.a.toFixed(1) + ' μm', xBarrier + 10, slitYs[0] - aPx/2 - 4);
+}
+
+function drawIncomingWaves(ctx, x0, x1, H) {
+  const t = (performance.now() / 1000) * state.speed;
+  const wlPx = Math.max(8, Math.min(40, state.wavelength / 14));
+  const colorRGB = wavelengthToColor(state.wavelength);
+  ctx.save();
+  ctx.globalAlpha = 0.55;
+  for (let x = x0; x < x1; x += 2) {
+    const phase = (x - t * 70) / wlPx;
+    const wave = 0.5 + 0.5 * Math.cos(2 * Math.PI * phase);
+    ctx.fillStyle = `rgba(${(colorRGB[0]*255*wave)|0}, ${(colorRGB[1]*255*wave)|0}, ${(colorRGB[2]*255*wave)|0}, 0.7)`;
+    ctx.fillRect(x, 0, 2, H);
+  }
+  ctx.restore();
+}
+
+// Offscreen low-resolution cache, only re-rendered when sim parameters change.
+// Then drawImage()-scaled into the main canvas with smoothing on, which yields
+// soft interference fringes instead of chunky 4×4 cells.
+const FIELD_W = 240, FIELD_H = 180;
+let fieldCache = null;
+let fieldCacheKey = '';
+
+function ensureFieldCache() {
+  const key = `${state.wavelength}|${state.d}|${state.a}|${state.N}`;
+  if (fieldCacheKey === key && fieldCache) return;
+  fieldCacheKey = key;
+  if (!fieldCache) {
+    fieldCache = document.createElement('canvas');
+    fieldCache.width = FIELD_W;
+    fieldCache.height = FIELD_H;
+  }
+  const off = fieldCache.getContext('2d');
+  const img = off.createImageData(FIELD_W, FIELD_H);
+
+  // Field-local slit positions (independent of main canvas size)
+  const totalPattern_um = state.N === 1 ? state.a : (state.N - 1) * state.d + state.a;
+  const margin_f = 16;
+  const availPx_f = FIELD_H - 2 * margin_f;
+  const pxPerUm_f = Math.min(2.6, availPx_f / Math.max(20, totalPattern_um));
+  const yMid_f = FIELD_H / 2;
+  const slitYs_f = [];
+  for (let i = 0; i < state.N; i++) {
+    slitYs_f.push(yMid_f + (i - (state.N-1)/2) * state.d * pxPerUm_f);
+  }
+  const aPx_f = Math.max(1, state.a * pxPerUm_f);
+  const lam_um = state.wavelength * 1e-3;
+  const k_per_px = (2 * Math.PI / lam_um) / pxPerUm_f;
+  const colorRGB = wavelengthToColor(state.wavelength);
+
+  // Single slit: integrate across slit width as sub-sources.
+  // Multi-slit: each slit is a point source (good enough at this resolution).
+  const NSrc = state.N === 1 ? 12 : 1;
+
+  // First pass: compute raw intensities and find max for normalization
+  const Iraw = new Float32Array(FIELD_W * FIELD_H);
+  let Imax = 1e-9;
+  for (let y = 0; y < FIELD_H; y++) {
+    for (let x = 0; x < FIELD_W; x++) {
+      let sumR = 0, sumI = 0;
+      for (const ys of slitYs_f) {
+        for (let i = 0; i < NSrc; i++) {
+          const ysub = NSrc === 1 ? ys : ys - aPx_f/2 + (i + 0.5) * aPx_f / NSrc;
+          const dx = x + 1;
+          const dy = y - ysub;
+          const r = Math.hypot(dx, dy);
+          const phase = k_per_px * r;
+          const amp = 1 / Math.sqrt(Math.max(2, r));
+          sumR += amp * Math.cos(phase);
+          sumI += amp * Math.sin(phase);
+        }
+      }
+      const I = (sumR*sumR + sumI*sumI);
+      Iraw[y * FIELD_W + x] = I;
+      if (I > Imax) Imax = I;
+    }
+  }
+  // Use a softer normalization (95th-percentile-ish) so the bright peaks don't
+  // wash out and the dark fringes aren't crushed.
+  const norm = 1 / (Imax * 0.85);
+  for (let y = 0; y < FIELD_H; y++) {
+    for (let x = 0; x < FIELD_W; x++) {
+      const v = Math.min(1, Iraw[y * FIELD_W + x] * norm);
+      // Apply a mild gamma so the bright/dark contrast is gentler
+      const g = Math.pow(v, 0.85);
+      const idx = (y * FIELD_W + x) * 4;
+      img.data[idx]   = (colorRGB[0] * g * 255) | 0;
+      img.data[idx+1] = (colorRGB[1] * g * 255) | 0;
+      img.data[idx+2] = (colorRGB[2] * g * 255) | 0;
+      img.data[idx+3] = 255;
+    }
+  }
+  off.putImageData(img, 0, 0);
+}
+
+function drawIntensityField(ctx, x0, x1, H, slitYs, aPx) {
+  ensureFieldCache();
+  ctx.save();
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(fieldCache, x0 + 6, 0, x1 - x0 - 14, H);
+  ctx.restore();
+}
+
+// Animated semi-transparent wave fronts. Skip when N is large (visual clutter)
+// and only show fronts from the outermost slits when N is moderate.
+function drawWaveFronts(ctx, xBarrier, xScreen, H, slitYs) {
+  const N = slitYs.length;
+  if (N > 6) return;     // grating regime — fronts overlap into noise; skip entirely
+
+  // For 4–6 slits, only show fronts from the two outermost; for 1–3, show all.
+  let drawSlits;
+  if (N <= 3) drawSlits = slitYs;
+  else        drawSlits = [slitYs[0], slitYs[N - 1]];
+
+  const t = (performance.now() / 1000) * state.speed;
+  const colorRGB = wavelengthToColor(state.wavelength);
+  const fieldW = xScreen - xBarrier;
+  const period = 60;
+  const frontSpeed = 80;
+  const drift = (t * frontSpeed) % period;
+  // Soften alpha as you add more slits so it doesn't pile up
+  const baseAlpha = N <= 2 ? 0.5 : N <= 4 ? 0.32 : 0.22;
+  ctx.save();
+  ctx.lineWidth = 1.2;
+  for (const ys of drawSlits) {
+    for (let r = drift; r < fieldW + 60; r += period) {
+      const alpha = baseAlpha * Math.max(0, 1 - r / (fieldW + 60));
+      if (alpha < 0.04) continue;
+      ctx.strokeStyle = rgbStr(colorRGB, alpha);
+      ctx.beginPath();
+      ctx.arc(xBarrier, ys, r, -Math.PI/2, Math.PI/2);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+// Wider strip aligned with profile graph
+function drawScreenStrip(ctx, x, w, H, yMid, yRange_m) {
+  const colorRGB = wavelengthToColor(state.wavelength);
+  // Border / housing
+  ctx.fillStyle = '#1a2030';
+  ctx.fillRect(x - 2, 0, w + 4, H);
+  ctx.strokeStyle = '#3a4467';
+  ctx.strokeRect(x - 2, 0, w + 4, H);
+
+  // Compute intensity per pixel using physical y mapping
+  const yPxPerM = (H / 2 - 6) / yRange_m;
+  let Imax = 1e-9;
+  const samples = [];
+  for (let yPx = 0; yPx < H; yPx++) {
+    const y_m = (yMid - yPx) / yPxPerM;
+    const theta = Math.atan2(y_m, L_SCREEN);
+    const I = intensityAt(theta);
+    samples.push(I);
+    if (I > Imax) Imax = I;
+  }
+  for (let yPx = 0; yPx < H; yPx++) {
+    const v = Math.min(1, samples[yPx] / Imax);
+    ctx.fillStyle = `rgb(${(colorRGB[0]*v*255)|0}, ${(colorRGB[1]*v*255)|0}, ${(colorRGB[2]*v*255)|0})`;
+    ctx.fillRect(x, yPx, w, 1);
+  }
+  // tick label at center
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '10px ui-monospace, monospace';
+  ctx.fillText('±' + (yRange_m*1000).toFixed(1) + ' mm', x - 30, H - 8);
+}
+
+// ============================================================
+// Drawing — vertical intensity profile
+// ============================================================
+function drawProfile() {
+  const W = profileCanvas.clientWidth;
+  const H = profileCanvas.clientHeight;
+  const ctx = profileCtx;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#04060d'; ctx.fillRect(0, 0, W, H);
+
+  const colorRGB = wavelengthToColor(state.wavelength);
+  const yMid = H / 2;
+  const yRange_m = getYRangeMeters();
+  const yPxPerM = (H / 2 - 20) / yRange_m;
+
+  // Axis
+  ctx.strokeStyle = '#2a2f43';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 0); ctx.lineTo(60, H); ctx.stroke();
+  ctx.fillStyle = '#7e89a6';
+  ctx.font = '10px ui-monospace, monospace';
+  ctx.fillText('0', 38, yMid + 4);
+
+  // Tick marks at predicted bright-fringe positions (for multi-slit)
+  const lam_m = state.wavelength * 1e-9;
+  const d_m   = state.d * 1e-6;
+  const a_m   = state.a * 1e-6;
+  if (state.N >= 2) {
+    const dpx = (lam_m * L_SCREEN / d_m) * yPxPerM;
+    for (let m = -50; m <= 50; m++) {
+      if (m === 0) continue;
+      const yy = yMid - m * dpx;
+      if (yy < 4 || yy > H - 4) continue;
+      const sinTheta = m * lam_m / d_m;
+      if (Math.abs(sinTheta) > 1) continue;
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(102, 217, 239, 0.35)';
+      ctx.moveTo(56, yy); ctx.lineTo(64, yy); ctx.stroke();
+      ctx.fillStyle = '#66d9ef';
+      ctx.fillText(String(m), 38, yy + 3);
+    }
+  }
+  // Single slit: mark first few dark fringes
+  if (state.N === 1) {
+    for (let mp = -3; mp <= 3; mp++) {
+      if (mp === 0) continue;
+      const sinTheta = mp * lam_m / a_m;
+      if (Math.abs(sinTheta) > 1) continue;
+      const y_m = Math.tan(Math.asin(sinTheta)) * L_SCREEN;
+      const yy = yMid - y_m * yPxPerM;
+      if (yy < 4 || yy > H - 4) continue;
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255, 209, 102, 0.45)';
+      ctx.moveTo(56, yy); ctx.lineTo(64, yy); ctx.stroke();
+      ctx.fillStyle = '#ffd166';
+      ctx.fillText("m'=" + mp, 30, yy + 3);
+    }
+  }
+
+  // Compute intensity samples
+  const samples = [];
+  let Imax = 1e-9;
+  for (let yPx = 0; yPx < H; yPx++) {
+    const y_m = (yMid - yPx) / yPxPerM;
+    const theta = Math.atan2(y_m, L_SCREEN);
+    const I = intensityAt(theta);
+    samples.push(I);
+    if (I > Imax) Imax = I;
+  }
+
+  // Filled curve
+  const xLeft = 60;
+  const xRight = W - 30;
+  const wPx = xRight - xLeft;
+  ctx.beginPath();
+  ctx.moveTo(xLeft, 0);
+  for (let yPx = 0; yPx < H; yPx++) {
+    const v = samples[yPx] / Imax;
+    ctx.lineTo(xLeft + v * wPx, yPx);
+  }
+  ctx.lineTo(xLeft, H);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(xLeft, 0, xRight, 0);
+  grad.addColorStop(0, rgbStr(colorRGB, 0.15));
+  grad.addColorStop(1, rgbStr(colorRGB, 0.85));
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.beginPath();
+  for (let yPx = 0; yPx < H; yPx++) {
+    const v = samples[yPx] / Imax;
+    if (yPx === 0) ctx.moveTo(xLeft + v*wPx, yPx);
+    else           ctx.lineTo(xLeft + v*wPx, yPx);
+  }
+  ctx.strokeStyle = rgbStr(colorRGB);
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Single-slit envelope dashed gold (when there's also multi-slit interference)
+  if (state.N >= 2) {
+    ctx.beginPath();
+    for (let yPx = 0; yPx < H; yPx++) {
+      const y_m = (yMid - yPx) / yPxPerM;
+      const theta = Math.atan2(y_m, L_SCREEN);
+      const env = singleSlitEnvelope(theta);
+      if (yPx === 0) ctx.moveTo(xLeft + env*wPx, yPx);
+      else           ctx.lineTo(xLeft + env*wPx, yPx);
+    }
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.7)';
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ffd166';
+    ctx.fillText('single-slit envelope', xRight - 130, H - 12);
+  }
+
+  // Title labels
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace, monospace';
+  ctx.fillText('y on screen (m)', 8, 16);
+  ctx.fillText('I(θ) →', xRight - 50, 16);
+  ctx.fillText('±' + (yRange_m*1000).toFixed(1) + ' mm', 8, H - 8);
+}
+
+// ============================================================
+// UI text
+// ============================================================
+function refreshUI() {
+  $('wlReadout').textContent = state.wavelength.toFixed(0) + ' nm';
+  $('wlSwatch').style.background = rgbStr(wavelengthToColor(state.wavelength));
+  $('dReadout').textContent  = state.d.toFixed(1) + ' μm';
+  $('aReadout').textContent  = state.a.toFixed(1) + ' μm';
+  $('d3Readout').textContent = state.d.toFixed(1) + ' μm';
+  $('nReadout').textContent  = state.N.toString();
+  $('wlMeter').textContent = state.wavelength.toFixed(0) + ' nm';
+  $('dMeter').textContent  = state.demo === 2 ? 'n/a' : state.d.toFixed(1) + ' μm';
+  $('aMeter').textContent  = state.a.toFixed(1) + ' μm';
+  $('nMeter').textContent  = state.N.toString();
+  if (state.demo === 2) {
+    const yfd_mm = (state.wavelength * 1e-9) * L_SCREEN / (state.a * 1e-6) * 1000;
+    $('dyMeter').textContent = yfd_mm.toFixed(2) + ' mm';
+    $('mmaxMeter').textContent = '—';
+  } else {
+    const dy_m = (state.wavelength * 1e-9) * L_SCREEN / (state.d * 1e-6);
+    $('dyMeter').textContent = (dy_m * 1000).toFixed(2) + ' mm';
+    const mmax = Math.floor(state.d / state.wavelength * 1000);
+    $('mmaxMeter').textContent = '±' + mmax;
+  }
+}
+
+// ============================================================
+// Loop
+// ============================================================
+function render() { drawScene(); drawProfile(); }
+function loop() { render(); requestAnimationFrame(loop); }
+
+// ============================================================
+// Init
+// ============================================================
+window.addEventListener('load', () => {
+  fitCanvas(sceneCanvas);
+  fitCanvas(profileCanvas);
+  refreshUI();
+  requestAnimationFrame(loop);
+});
+</script>
+</body>
+</html>
