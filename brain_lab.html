@@ -3557,41 +3557,24 @@
   }
 
   // ----- Horse game -----
-  // Preload apple_logo.png and strip its white background once so both
-  // Apple Park and the finish flag can stamp a clean logo on any backdrop.
-  var _appleLogoProcessed = null;
+  // apple_logo.png ships with pre-baked alpha (transparent background, RGB=0),
+  // so we just need to load it once and produce tinted variants via a composite.
+  var _appleLogoImg = null;
   var _appleLogoVariants = {};
   (function () {
     var img = new Image();
-    img.onload = function () {
-      var off = document.createElement('canvas');
-      off.width = img.naturalWidth;
-      off.height = img.naturalHeight;
-      var octx = off.getContext('2d');
-      octx.drawImage(img, 0, 0);
-      try {
-        var data = octx.getImageData(0, 0, off.width, off.height);
-        var d = data.data;
-        for (var p = 0; p < d.length; p += 4) {
-          var lum = (d[p] + d[p + 1] + d[p + 2]) / 3;
-          if (lum > 240) d[p + 3] = 0;
-          else d[p + 3] = Math.min(255, 255 - lum + 30);
-        }
-        octx.putImageData(data, 0, 0);
-      } catch (e) { /* CORS tainting — leave as-is */ }
-      _appleLogoProcessed = off;
-    };
+    img.onload = function () { _appleLogoImg = img; };
     img.src = 'images/apple_logo.png';
   })();
 
   function getTintedAppleLogo(color) {
-    if (!_appleLogoProcessed) return null;
+    if (!_appleLogoImg || !_appleLogoImg.complete || !_appleLogoImg.naturalWidth) return null;
     if (_appleLogoVariants[color]) return _appleLogoVariants[color];
-    var src = _appleLogoProcessed;
     var t = document.createElement('canvas');
-    t.width = src.width; t.height = src.height;
+    t.width = _appleLogoImg.naturalWidth;
+    t.height = _appleLogoImg.naturalHeight;
     var tctx = t.getContext('2d');
-    tctx.drawImage(src, 0, 0);
+    tctx.drawImage(_appleLogoImg, 0, 0);
     tctx.globalCompositeOperation = 'source-in';
     tctx.fillStyle = color;
     tctx.fillRect(0, 0, t.width, t.height);
