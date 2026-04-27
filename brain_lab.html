@@ -2358,9 +2358,15 @@
    Exposes window.bgMusic.{play, pause, setVolume} for the main IIFE.
    ================================================================ */
 (function () {
-  var VIDEO_ID = '9EBv8FVa4Pk';
+  // Lobby (brain-lab) background music. The horse game temporarily swaps in
+  // its own track via bgMusic.switchTo() and bgMusic.restore() — see below.
+  var LOBBY_VIDEO_ID = '9EBv8FVa4Pk';
+  var LOBBY_START_AT = 0;
   var VOL = 30;
-  var START_AT = 0;    // seconds
+
+  // Currently-playing track (mutated by switchTo/restore).
+  var currentVideoId = LOBBY_VIDEO_ID;
+  var currentStartAt = LOBBY_START_AT;
 
   // Inject the YouTube IFrame API once.
   var tag = document.createElement('script');
@@ -2374,31 +2380,31 @@
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('bg-music-host', {
       height: '1', width: '1',
-      videoId: VIDEO_ID,
+      videoId: currentVideoId,
       playerVars: {
         autoplay: 1,
         loop: 1,
-        playlist: VIDEO_ID,   // required for single-video looping
+        playlist: currentVideoId,   // required for single-video looping
         controls: 0,
         modestbranding: 1,
         disablekb: 1,
         playsinline: 1,
         iv_load_policy: 3,
         fs: 0,
-        start: START_AT
+        start: currentStartAt
       },
       events: {
         onReady: function (e) {
           e.target.setVolume(VOL);
-          try { e.target.seekTo(START_AT, true); } catch (_) {}
+          try { e.target.seekTo(currentStartAt, true); } catch (_) {}
           if (wantMuted) e.target.mute();
           if (wantPlaying) e.target.playVideo();
         },
         // Belt-and-suspenders looping: YT's loop flag can drop out, so when
-        // the video ends we manually seek back to START_AT and replay.
+        // the video ends we manually seek back to the active track's start.
         onStateChange: function (e) {
           if (e.data === YT.PlayerState.ENDED) {
-            try { e.target.seekTo(START_AT, true); } catch (_) {}
+            try { e.target.seekTo(currentStartAt, true); } catch (_) {}
             if (wantPlaying) { try { e.target.playVideo(); } catch (_) {} }
           }
         }
@@ -2416,6 +2422,16 @@
   }
   document.addEventListener('click', kick);
   document.addEventListener('keydown', kick);
+
+  function loadTrack(videoId, startAt) {
+    currentVideoId = videoId;
+    currentStartAt = startAt || 0;
+    if (!player || !player.loadVideoById) return;
+    player.loadVideoById({ videoId: currentVideoId, startSeconds: currentStartAt });
+    player.setVolume(VOL);
+    if (wantMuted) { try { player.mute(); } catch (_) {} }
+    if (!wantPlaying) { try { player.pauseVideo(); } catch (_) {} }
+  }
 
   window.bgMusic = {
     play: function () {
@@ -2441,6 +2457,18 @@
     isPlaying: function () {
       if (!player || !player.getPlayerState) return false;
       try { return player.getPlayerState() === 1; } catch (_) { return false; }
+    },
+    // Swap the lobby track for a different video (e.g., horse-game theme).
+    // Caller is responsible for restore() when its scene exits.
+    switchTo: function (videoId, startAt) {
+      wantPlaying = true;
+      loadTrack(videoId, startAt || 0);
+    },
+    // Return to the lobby (brain-lab) music. Idempotent.
+    restore: function () {
+      if (currentVideoId === LOBBY_VIDEO_ID) return;
+      wantPlaying = true;
+      loadTrack(LOBBY_VIDEO_ID, LOBBY_START_AT);
     }
   };
 })();
@@ -3389,17 +3417,31 @@
     extraTimers = [];
     if (extraModal._horseCleanup) { extraModal._horseCleanup(); extraModal._horseCleanup = null; }
     setTimeout(function () { extraContent.innerHTML = ''; }, 250);
-    if (window.bgMusic && window.bgMusic.play) window.bgMusic.play();
+    // Swap horse-game music back to the lobby track (no-op if already lobby),
+    // then make sure music is playing.
+    if (window.bgMusic) {
+      if (window.bgMusic.restore) window.bgMusic.restore();
+      if (window.bgMusic.play) window.bgMusic.play();
+    }
   }
   extraCloseBtn.addEventListener('click', closeExtra);
   extraModal.addEventListener('click', function (e) { if (e.target === extraModal) closeExtra(); });
 
   moreBtn.addEventListener('click', function () {
-    if (window.bgMusic && window.bgMusic.pause) window.bgMusic.pause();
     var r = Math.random();
-    if (r < 1 / 3) showQuiz();
-    else if (r < 2 / 3) showAd();
-    else showHorse();
+    if (r < 1 / 3) {
+      if (window.bgMusic && window.bgMusic.pause) window.bgMusic.pause();
+      showQuiz();
+    } else if (r < 2 / 3) {
+      if (window.bgMusic && window.bgMusic.pause) window.bgMusic.pause();
+      showAd();
+    } else {
+      // Horse game gets its own theme (starts 30s in to skip the intro).
+      if (window.bgMusic && window.bgMusic.switchTo) {
+        window.bgMusic.switchTo('7d6rzXVlbjg', 30);
+      }
+      showHorse();
+    }
     extraModal.classList.add('show');
   });
 
