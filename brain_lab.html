@@ -2354,13 +2354,13 @@
 <script>
 /* ================================================================
    BACKGROUND MUSIC (YouTube IFrame API, 30% volume, looped)
-   Video: https://www.youtube.com/watch?v=7d6rzXVlbjg
+   Video: https://www.youtube.com/watch?v=9EBv8FVa4Pk
    Exposes window.bgMusic.{play, pause, setVolume} for the main IIFE.
    ================================================================ */
 (function () {
-  var VIDEO_ID = '7d6rzXVlbjg';
+  var VIDEO_ID = '9EBv8FVa4Pk';
   var VOL = 30;
-  var START_AT = 30;   // seconds
+  var START_AT = 0;    // seconds
 
   // Inject the YouTube IFrame API once.
   var tag = document.createElement('script');
@@ -2393,6 +2393,14 @@
           try { e.target.seekTo(START_AT, true); } catch (_) {}
           if (wantMuted) e.target.mute();
           if (wantPlaying) e.target.playVideo();
+        },
+        // Belt-and-suspenders looping: YT's loop flag can drop out, so when
+        // the video ends we manually seek back to START_AT and replay.
+        onStateChange: function (e) {
+          if (e.data === YT.PlayerState.ENDED) {
+            try { e.target.seekTo(START_AT, true); } catch (_) {}
+            if (wantPlaying) { try { e.target.playVideo(); } catch (_) {} }
+          }
         }
       }
     });
@@ -3981,8 +3989,9 @@
       ctx.ellipse(cx, roofY, innerR, innerR * sq, 0, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Apple logo floating above the courtyard (slight vertical offset for 3D feel)
-      drawAppleLogo(cx, roofY - r * 0.05, innerR * 0.62, '#111');
+      // Apple logo centered on the courtyard, sized so the new (tall-aspect)
+      // PNG fits inside the inner ring.
+      drawAppleLogo(cx, roofY, innerR * 0.5, '#111');
 
       // Label
       ctx.font = 'bold 20px Orbitron, "Share Tech Mono", monospace';
@@ -3995,12 +4004,15 @@
     }
 
     function drawAppleLogo(cx, cy, size, color) {
-      // Uses the preloaded apple_logo.png (white-stripped, tinted per color).
+      // Uses the preloaded apple_logo.png (alpha pre-baked, tinted per color).
+      // `size` is the half-extent of the logo's longer dimension, so wide and
+      // tall source images both stay inside a 2*size box.
       var img = getTintedAppleLogo(color || '#111');
       if (!img) return;
       var aspect = img.width / img.height;
-      var w = size * 2;
-      var h = w / aspect;
+      var w, h;
+      if (aspect >= 1) { w = size * 2; h = w / aspect; }
+      else             { h = size * 2; w = h * aspect; }
       ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
     }
 
@@ -4155,8 +4167,6 @@
           ctx.fillRect(fx + c * fw / 6, fy + r * fh / 5, fw / 6, fh / 5);
         }
       }
-      // Apple logo on the flag
-      drawAppleLogo(fx + fw / 2, fy + fh / 2, fh * 0.45, '#a80000');
     }
 
     function drawHorse(h) {

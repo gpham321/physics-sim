@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Electron Diffraction — Davisson–Germer &amp; Bragg</title>
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
+<meta property="og:title" content="Electron Diffraction — Davisson–Germer & Bragg">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/electron_diffraction.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --magenta: #ff4db8;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55; position: relative;
+  }
+  .portrait {
+    position: absolute; top: 22px; right: 28px;
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; color: var(--accent); font-weight: 600; }
+  h3 { margin: 0 0 12px; color: var(--text); font-weight: 600; }
+  h4 { margin: 0 0 8px; font-weight: 600; font-size: 13.5px; letter-spacing: 0.4px; }
+  h4.bad  { color: var(--bad); }
+  h4.good { color: var(--good); }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    margin: 24px 0; box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0;
+  }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  canvas {
+    display: block; width: 100%;
+    background: #04060d;
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  canvas.dg-schem { height: 360px; cursor: grab; }
+  canvas.dg-schem.dragging { cursor: grabbing; }
+  canvas.dg-plot  { height: 220px; }
+  canvas.dg-strip { height: 60px;  margin-top: 4px; }
+  canvas.dg-screen { height: 160px; }
+  canvas.bragg    { height: 380px; }
+  canvas.bragg-screen { height: 160px; }
+  .dg-meters {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; margin-top: 14px;
+  }
+  .dg-meter {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .dg-meter-label {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .dg-meter-val {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 17px; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .dg-meter-val.good { color: var(--good); }
+  .dg-meter-val.bad  { color: var(--bad); }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--accent); }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 11px; font-family: ui-monospace, monospace;
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .pill.good { color: var(--good); border-color: var(--good); }
+  .pill.bad  { color: var(--bad);  border-color: var(--bad); }
+  .pill.warn { color: var(--warn); border-color: var(--warn); }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+
+  /* Bragg controls */
+  .bragg-controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .bragg-controls label {
+    display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 220px;
+  }
+  .bragg-controls input[type="range"] {
+    width: 100%; accent-color: var(--accent); cursor: pointer;
+  }
+  .bragg-readout {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    color: var(--accent);
+    font-size: 13px;
+  }
+  .bragg-state {
+    padding: 6px 12px; border-radius: 8px; font-size: 12.5px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    border: 1px solid var(--border);
+  }
+  .bragg-state.good { color: var(--good); border-color: var(--good); background: rgba(166,226,46,0.06); }
+  .bragg-state.bad  { color: var(--bad);  border-color: var(--bad);  background: rgba(255,95,109,0.06); }
+  button.bragg-snap {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 7px 12px; border-radius: 6px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12.5px; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  button.bragg-snap:hover {
+    border-color: var(--good); color: var(--good);
+    background: rgba(166,226,46,0.08);
+  }
+  button.bragg-snap.active {
+    background: var(--good); color: var(--bg); border-color: var(--good);
+  }
+
+  /* Comparison table */
+  table.compare {
+    width: 100%; border-collapse: collapse; margin-top: 8px;
+    font-size: 13px;
+  }
+  table.compare th, table.compare td {
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    text-align: left; vertical-align: top;
+  }
+  table.compare th { color: var(--muted); font-weight: 600; }
+  table.compare th:first-child { color: var(--accent); }
+  table.compare td.dg     { color: var(--good); }
+  table.compare td.bragg  { color: var(--warn); }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="images/president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Electron Diffraction — Davisson–Germer &amp; Bragg</h1>
+<p class="lead">If de Broglie's idea is right and electrons have a wavelength \(\lambda = h/p\), then they should diffract off crystal lattices the same way X-rays do. Two experiments — one in reflection (Davisson &amp; Germer, 1927) and one in transmission (Bragg-style, refined by G.&nbsp;P.&nbsp;Thomson) — confirmed it.</p>
+
+<div class="panel">
+  <h2>The physics</h2>
+  <p>Louis de Broglie proposed in 1924 that any particle has an associated wave with</p>
+  $$ \lambda \;=\; \frac{h}{p} \;=\; \frac{h}{\sqrt{2 m_e E}} \quad\text{(non-relativistic electron)}.$$
+  <p>For a 54&nbsp;eV electron, \(\lambda \approx 1.67\)&nbsp;Å — comparable to atomic spacings in metals. So a crystal lattice acts as a natural diffraction grating for electrons, and the same Bragg condition that works for X-rays should work here:</p>
+  $$ 2d\,\sin\theta \;=\; n\lambda. $$
+  <p>The two experiments below test this prediction with different geometries:</p>
+  <ul>
+    <li><strong>Davisson &amp; Germer (1927):</strong> low-energy electrons scattered <em>off the surface</em> of a single nickel crystal. A movable detector measures intensity as a function of scattering angle. A sharp peak appears at \(\sim 50^\circ\) from the normal — exactly where the Bragg-like surface-grating condition is satisfied.</li>
+    <li><strong>Bragg / G.&nbsp;P.&nbsp;Thomson (1927):</strong> high-energy electrons fired <em>through</em> a thin metal foil. Each crystallite acts as a Bragg reflector for whichever orientation matches \(2d\sin\theta = n\lambda\). The result on a screen is a set of concentric rings (powder pattern) — the famous Debye–Scherrer rings, the same ring pattern X-rays produce.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Davisson–Germer experiment</h2>
+  <p>Inside a vacuum chamber, a heated filament boils off electrons that are accelerated by a positive anode into a narrow beam. The beam strikes a nickel single crystal head-on; a yellow Faraday-cup detector mounted on a swing-arm measures how many electrons emerge at each angle <span class="mono">θ</span> (measured from the back-along-beam direction). <strong>Drag the detector along the dashed arc</strong> — the readouts and the live indicator on the I(θ) plot follow.</p>
+  <canvas id="dgSchematic" class="dg-schem"></canvas>
+  <div class="dg-meters">
+    <div class="dg-meter">
+      <span class="dg-meter-label">Detector angle</span>
+      <span class="dg-meter-val" id="dgAngleVal">50°</span>
+    </div>
+    <div class="dg-meter">
+      <span class="dg-meter-label">Wave intensity I(θ)</span>
+      <span class="dg-meter-val good" id="dgIWaveVal">1.00</span>
+    </div>
+    <div class="dg-meter">
+      <span class="dg-meter-label">Classical I(θ)</span>
+      <span class="dg-meter-val bad" id="dgIClassVal">0.42</span>
+    </div>
+    <div class="dg-meter">
+      <span class="dg-meter-label">Verdict</span>
+      <span class="dg-meter-val" id="dgVerdictVal">peak</span>
+    </div>
+  </div>
+  <h3 style="margin-top: 22px;">Intensity vs. detector angle (with the "what classical particles would give" comparison)</h3>
+  <canvas id="dgPlot" class="dg-plot"></canvas>
+  <p class="hint"><strong>Green solid:</strong> what was actually measured — a sharp peak near θ ≈ 50° caused by constructive interference of the de Broglie wave off the regular nickel surface lattice. <strong>Red dashed:</strong> what classical billiard-ball electrons would produce — a smooth, featureless distribution with no peak at all. The sharp peak in the green curve is the entire reason this experiment was historic.</p>
+  <h3 style="margin-top: 22px;">What an angular "screen" would look like</h3>
+  <canvas id="dgStrip" class="dg-strip"></canvas>
+  <p class="hint">If you replaced the single movable detector with a long, curved imaging screen covering the same arc, this is roughly the brightness pattern you'd record. The bright band at θ ≈ 50° (and its faint side-lobes) corresponds to constructive interference; the rest of the arc receives almost no electrons. The blue tick is your current detector position.</p>
+  <h3 style="margin-top: 22px;">Angular screen — what each model predicts</h3>
+  <canvas id="dgScreenCompare" class="dg-screen"></canvas>
+  <p class="hint">Same idea as the Bragg screen below, but for Davisson–Germer. Each dot is one electron landing on the curved screen at the angle it scattered to. <span class="pill bad">WRONG (classical particles)</span>: a smooth Lambertian-ish dust — no sharp peak anywhere. <span class="pill good">RIGHT (matter waves)</span>: a tight stripe at θ ≈ 50° (with faint side-lobes) and almost nothing else. The big visual difference between these two patterns is exactly what made the 1927 result historic.</p>
+</div>
+
+<div class="panel">
+  <h2>Bragg geometry — interference between atomic planes</h2>
+  <p>Inside a crystal, parallel planes of atoms (separated by lattice spacing \(d\)) act as partial reflectors. Two parallel rays, one reflecting off the top plane and one off the next plane down, interfere. The bottom ray travels an extra \(2d\sin\theta\); when this equals an integer number of de Broglie wavelengths, the reflected beams add constructively.</p>
+  <canvas id="braggCanvas" class="bragg"></canvas>
+  <div class="bragg-controls">
+    <label>
+      <span>Bragg angle θ <span class="bragg-readout" id="thetaReadout">30.0°</span></span>
+      <input type="range" id="thetaSlider" min="6" max="84" step="0.1" value="30">
+    </label>
+    <div class="bragg-readout" id="pathReadout">2d sin θ = 2.00 λ</div>
+    <div class="bragg-state good" id="braggState">CONSTRUCTIVE  •  n = 2</div>
+  </div>
+  <div class="bragg-controls" style="margin-top: 8px;">
+    <span class="bragg-readout" style="flex: 0 0 auto;">Snap to Bragg order:</span>
+    <button type="button" class="bragg-snap" data-n="1">n = 1 &nbsp;(θ ≈ 14.5°)</button>
+    <button type="button" class="bragg-snap" data-n="2">n = 2 &nbsp;(θ = 30°)</button>
+    <button type="button" class="bragg-snap" data-n="3">n = 3 &nbsp;(θ ≈ 48.6°)</button>
+  </div>
+  <p class="hint">Drag θ or use the snap buttons. Wavelet packets travel along each ray; the "extra" segments on the bottom ray (highlighted gold) sum to the path difference \(2d\sin\theta\). When that equals an integer multiple of λ — orders <span class="pill good">n = 1</span>, <span class="pill good">2</span>, <span class="pill good">3</span>, … — the two reflected beams arrive in phase and the diffraction pattern lights up. Anywhere else the two beams interfere destructively and no electrons reach the detector. (Demo uses \(d/\lambda = 2.0\); first three Bragg orders sit at θ ≈ 14.5°, 30°, 48.6°.)</p>
+  <h3 style="margin-top: 22px;">Angular screen — what each model predicts</h3>
+  <canvas id="braggScreen" class="bragg-screen"></canvas>
+  <p class="hint">Imagine putting a long detector strip along the outgoing-beam direction and counting where electrons land. <span class="pill bad">WRONG (classical particles)</span>: with no wave nature there's no interference — billiard-ball electrons would scatter in every direction with no preferred angle, so the screen is just a uniform dust of dots. <span class="pill good">RIGHT (matter waves)</span>: dots pile up sharply at the Bragg-condition angles \(2d\sin\theta = n\lambda\) and almost nowhere else. The narrow stripes at <span class="mono">14.5°, 30°, 48.6°</span> are the n = 1, 2, 3 diffraction orders — the same orders the snap buttons jump to.</p>
+</div>
+
+<div class="panel">
+  <h2>Comparison</h2>
+  <table class="compare">
+    <tr><th></th><th>Davisson–Germer (1927)</th><th>Bragg / G. P. Thomson (1927)</th></tr>
+    <tr><th>Geometry</th><td class="dg">Reflection from a crystal surface</td><td class="bragg">Transmission through a thin foil</td></tr>
+    <tr><th>Electron energy</th><td class="dg">~50 eV (low; long λ ≈ 1.7 Å)</td><td class="bragg">~10–50 keV (short λ ≈ 0.05–0.1 Å)</td></tr>
+    <tr><th>Sample</th><td class="dg">Nickel single crystal</td><td class="bragg">Polycrystalline metal foil (e.g. gold)</td></tr>
+    <tr><th>What's measured</th><td class="dg">Intensity vs. scattering angle (single peak)</td><td class="bragg">2-D ring pattern on a screen (Debye–Scherrer)</td></tr>
+    <tr><th>Diffraction condition</th><td class="dg">\(d\sin\varphi = n\lambda\) (surface row)</td><td class="bragg">\(2d\sin\theta = n\lambda\) (planes)</td></tr>
+    <tr><th>What it proves</th><td class="dg" colspan="2">Electrons have a wavelength \(\lambda = h/p\). Matter is wavy.</td></tr>
+  </table>
+</div>
+
+<div class="panel">
+  <h2>Why both matter</h2>
+  <ul>
+    <li><strong>Independent confirmations.</strong> Davisson &amp; Germer and Thomson published in the same year (1927) using completely different geometries and energy scales. Both gave the same answer: \(\lambda = h/p\). They shared the 1937 Nobel Prize.</li>
+    <li><strong>The wave nature is intrinsic, not an artifact.</strong> If only one experiment had worked, you might suspect the geometry. Two different geometries giving the same \(\lambda\) means electrons really do carry a wavelength.</li>
+    <li><strong>This generalizes.</strong> Neutron diffraction, atom interferometry, even big-molecule diffraction (C₆₀, peptides) all obey the same de Broglie relation. The wave nature is a property of <em>matter</em>, not a quirk of electrons.</li>
+  </ul>
+</div>
+
+</div>
+
+<script>
+'use strict';
+
+// ============================================================
+// Shared utilities
+// ============================================================
+function setupCanvas(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  cv.width  = Math.floor(rect.width * dpr);
+  cv.height = Math.floor(rect.height * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+// ============================================================
+// Davisson–Germer experiment (interactive)
+// ============================================================
+//
+// One schematic showing the actual apparatus from the textbook image:
+// vacuum chamber, heated filament, accelerating anode, electron beam,
+// nickel target, dashed detector arc, and a yellow Faraday-cup detector
+// the user can drag along the arc.
+//
+// Two analysis canvases are slaved to the schematic state:
+//  • dgPlot  — I(θ) curves (wave vs. classical) with a live marker
+//  • dgStrip — angular "screen" brightness map of the wave I(θ)
+//
+// Intensity model (relative units, peak = 1.0):
+//   wave     : Gaussian peak at θ = 50°, σ = 9°, plus a tiny side-lobe at 130°
+//   classical: smooth Lambertian-like sin(θ), no peak
+(function () {
+  const cv     = document.getElementById('dgSchematic');
+  const cvPlot = document.getElementById('dgPlot');
+  const cvStrip= document.getElementById('dgStrip');
+  let env      = setupCanvas(cv);
+  let envPlot  = setupCanvas(cvPlot);
+  let envStrip = setupCanvas(cvStrip);
+
+  const angleEl  = document.getElementById('dgAngleVal');
+  const iWaveEl  = document.getElementById('dgIWaveVal');
+  const iClassEl = document.getElementById('dgIClassVal');
+  const verdictEl= document.getElementById('dgVerdictVal');
+
+  // θ is measured from the back-along-beam direction (-x) going up,
+  // matching the convention drawn in the BYJU\'s reference image.
+  const state = {
+    thetaDeg: 50,
+    dragging: false
+  };
+
+  function intensityWave(thetaDeg) {
+    const main  = Math.exp(-Math.pow((thetaDeg - 50)  / 9, 2));
+    const side1 = 0.10 * Math.exp(-Math.pow((thetaDeg - 30)  / 4, 2));
+    const side2 = 0.10 * Math.exp(-Math.pow((thetaDeg - 70)  / 4, 2));
+    const back  = 0.05 * Math.exp(-Math.pow((thetaDeg - 130) / 12, 2));
+    return Math.min(1, main + side1 + side2 + back);
+  }
+  function intensityClassical(thetaDeg) {
+    return 0.55 * Math.sin(thetaDeg * Math.PI / 180);
+  }
+
+  // ----------------------------------------------------------
+  // Interaction: drag-to-move the detector along the arc
+  // ----------------------------------------------------------
+  function pointToTheta(mx, my, geom) {
+    const dx = mx - geom.TX;
+    const dy = my - geom.TY;
+    if (dy >= 0) return null;                          // below the beam → ignore
+    const mathAng = Math.atan2(-dy, dx);               // CCW from +x, in (0, π) for upper half
+    if (mathAng <= 0 || mathAng >= Math.PI) return null;
+    const theta = (Math.PI - mathAng) * 180 / Math.PI; // convert to "from -x going up"
+    return Math.max(8, Math.min(172, theta));
+  }
+  function localPos(e) {
+    const rect = cv.getBoundingClientRect();
+    const t = e.touches && e.touches[0];
+    const cx = (t ? t.clientX : e.clientX) - rect.left;
+    const cy = (t ? t.clientY : e.clientY) - rect.top;
+    return { x: cx, y: cy };
+  }
+  function tryDrag(e) {
+    const { x, y } = localPos(e);
+    const g = currentGeom();
+    const θ = pointToTheta(x, y, g);
+    if (θ != null) state.thetaDeg = θ;
+  }
+  cv.addEventListener('mousedown', e => {
+    state.dragging = true; cv.classList.add('dragging'); tryDrag(e);
+  });
+  cv.addEventListener('touchstart', e => {
+    state.dragging = true; tryDrag(e); e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('mousemove', e => { if (state.dragging) tryDrag(e); });
+  window.addEventListener('touchmove', e => {
+    if (state.dragging) { tryDrag(e); e.preventDefault(); }
+  }, { passive: false });
+  window.addEventListener('mouseup', () => {
+    state.dragging = false; cv.classList.remove('dragging');
+  });
+  window.addEventListener('touchend', () => {
+    state.dragging = false;
+  });
+
+  // ----------------------------------------------------------
+  // Geometry that depends on canvas size
+  // ----------------------------------------------------------
+  function currentGeom() {
+    const w = env.w, h = env.h;
+    return {
+      W: w, H: h,
+      TX: w * 0.74,         // target x
+      TY: h * 0.62,          // target y (beam line)
+      R:  Math.min(w * 0.50, h * 0.55),  // detector arc radius
+      ANODE_X: w * 0.12,
+      ANODE_W: w * 0.22,
+      FIL_X:   w * 0.07
+    };
+  }
+
+  // ----------------------------------------------------------
+  // Animated electrons (purely decorative)
+  // ----------------------------------------------------------
+  const electronsBeam = [];
+  const electronsDiff = [];
+  let beamSpawnAcc = 0, diffSpawnAcc = 0;
+  let lastT = performance.now() / 1000;
+
+  function spawnBeamElectron(g) {
+    electronsBeam.push({
+      x: g.FIL_X + 8, y: g.TY + (Math.random() - 0.5) * 4,
+      vx: 230, vy: 0
+    });
+  }
+  function spawnDiffElectron(g) {
+    // Sample θ from the wave intensity distribution (rejection sampling)
+    let θ;
+    for (let i = 0; i < 30; i++) {
+      const candidate = 8 + Math.random() * 164;
+      const accept = intensityWave(candidate);
+      if (Math.random() < accept) { θ = candidate; break; }
+      if (i === 29) θ = 50 + (Math.random() - 0.5) * 6;
+    }
+    const t = θ * Math.PI / 180;
+    // Direction from target outward toward angle θ:
+    const dx = -Math.cos(t), dy = -Math.sin(t);   // (-cos θ, -sin θ) in canvas (y-down)
+    const speed = 200;
+    electronsDiff.push({
+      x: g.TX, y: g.TY,
+      vx: speed * dx, vy: speed * dy,
+      θ: θ
+    });
+  }
+
+  function update(dt) {
+    const g = currentGeom();
+    beamSpawnAcc += dt * 9;
+    while (beamSpawnAcc >= 1) { spawnBeamElectron(g); beamSpawnAcc--; }
+    diffSpawnAcc += dt * 14;
+    while (diffSpawnAcc >= 1) { spawnDiffElectron(g); diffSpawnAcc--; }
+
+    for (let i = electronsBeam.length - 1; i >= 0; i--) {
+      const e = electronsBeam[i];
+      e.x += e.vx * dt; e.y += e.vy * dt;
+      if (e.x >= g.TX - 6) electronsBeam.splice(i, 1);
+    }
+    for (let i = electronsDiff.length - 1; i >= 0; i--) {
+      const e = electronsDiff[i];
+      e.x += e.vx * dt; e.y += e.vy * dt;
+      const dx = e.x - g.TX, dy = e.y - g.TY;
+      if (Math.hypot(dx, dy) > g.R + 20) electronsDiff.splice(i, 1);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // Schematic drawing
+  // ----------------------------------------------------------
+  function drawSchematic() {
+    const { ctx, w, h } = env;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#04060d';
+    ctx.fillRect(0, 0, w, h);
+
+    const g = currentGeom();
+
+    // --- Vacuum chamber rounded rectangle outline ---
+    ctx.strokeStyle = 'rgba(180, 130, 200, 0.55)';
+    ctx.lineWidth = 1.5;
+    const r = 18, mx = 18, my = 18;
+    ctx.beginPath();
+    ctx.moveTo(mx + r, my);
+    ctx.lineTo(w - mx - r, my);
+    ctx.quadraticCurveTo(w - mx, my, w - mx, my + r);
+    ctx.lineTo(w - mx, h - my - r);
+    ctx.quadraticCurveTo(w - mx, h - my, w - mx - r, h - my);
+    ctx.lineTo(mx + r, h - my);
+    ctx.quadraticCurveTo(mx, h - my, mx, h - my - r);
+    ctx.lineTo(mx, my + r);
+    ctx.quadraticCurveTo(mx, my, mx + r, my);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(180, 130, 200, 0.75)';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Vacuum chamber', mx + 12, my + 16);
+
+    // --- Heated filament (red glow + small coil) ---
+    const filGlow = ctx.createRadialGradient(g.FIL_X, g.TY, 0, g.FIL_X, g.TY, 22);
+    filGlow.addColorStop(0, 'rgba(255, 95, 109, 0.6)');
+    filGlow.addColorStop(1, 'rgba(255, 95, 109, 0)');
+    ctx.fillStyle = filGlow;
+    ctx.beginPath(); ctx.arc(g.FIL_X, g.TY, 22, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#ff5f6d';
+    ctx.lineWidth = 1.6;
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath();
+      ctx.arc(g.FIL_X, g.TY + (i - 1.5) * 4, 5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#ff9aa6';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Heated', g.FIL_X, g.TY - 30);
+    ctx.fillText('filament', g.FIL_X, g.TY - 18);
+
+    // --- Accelerating anode (blue rounded rectangle) ---
+    const ax = g.ANODE_X, ay = g.TY - 14, aw = g.ANODE_W, ah = 28;
+    const anodeGrad = ctx.createLinearGradient(ax, ay, ax, ay + ah);
+    anodeGrad.addColorStop(0, '#4a78a8');
+    anodeGrad.addColorStop(0.5, '#2e4d70');
+    anodeGrad.addColorStop(1, '#1a2840');
+    ctx.fillStyle = anodeGrad;
+    ctx.beginPath();
+    ctx.moveTo(ax + 4, ay);
+    ctx.lineTo(ax + aw - 4, ay);
+    ctx.quadraticCurveTo(ax + aw, ay, ax + aw, ay + 4);
+    ctx.lineTo(ax + aw, ay + ah - 4);
+    ctx.quadraticCurveTo(ax + aw, ay + ah, ax + aw - 4, ay + ah);
+    ctx.lineTo(ax + 4, ay + ah);
+    ctx.quadraticCurveTo(ax, ay + ah, ax, ay + ah - 4);
+    ctx.lineTo(ax, ay + 4);
+    ctx.quadraticCurveTo(ax, ay, ax + 4, ay);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#66d9ef';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.10)';
+    ctx.fillRect(ax + 2, ay + 2, aw - 4, 6);
+    ctx.fillStyle = '#a6c1d4';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Accelerating anode', ax + aw / 2, ay - 6);
+
+    // --- Electron beam (dashed magenta line from anode to target) ---
+    ctx.strokeStyle = 'rgba(255, 100, 200, 0.75)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(ax + aw + 2, g.TY);
+    ctx.lineTo(g.TX - 8, g.TY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ff9aa6';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Electron beam', (ax + aw + g.TX) / 2, g.TY + 18);
+
+    // --- Detector arc (dashed semicircle in upper half) ---
+    ctx.strokeStyle = 'rgba(166, 226, 46, 0.42)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    ctx.arc(g.TX, g.TY, g.R, Math.PI, 2 * Math.PI);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // --- Diffracted beam line ---
+    const t = state.thetaDeg * Math.PI / 180;
+    const dx = g.TX - g.R * Math.cos(t);
+    const dy = g.TY - g.R * Math.sin(t);
+    ctx.strokeStyle = 'rgba(255, 100, 200, 0.85)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(g.TX, g.TY);
+    ctx.lineTo(dx, dy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ff9aa6';
+    ctx.font = '11px ui-monospace, monospace';
+    const labMidX = g.TX - g.R * 0.55 * Math.cos(t);
+    const labMidY = g.TY - g.R * 0.55 * Math.sin(t) - 8;
+    ctx.textAlign = 'center';
+    ctx.fillText('Diffracted beam', labMidX, labMidY);
+
+    // --- Angle θ arc (yellow) at the target ---
+    ctx.strokeStyle = '#ffd166';
+    ctx.lineWidth = 1.5;
+    const arcR = 32;
+    ctx.beginPath();
+    ctx.arc(g.TX, g.TY, arcR, Math.PI - t, Math.PI);
+    ctx.stroke();
+    // dashed extension along -x to make the angle origin obvious
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.45)';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(g.TX, g.TY);
+    ctx.lineTo(g.TX - arcR - 14, g.TY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ffd166';
+    ctx.font = '13px ui-monospace, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('θ = ' + state.thetaDeg.toFixed(0) + '°',
+                 g.TX - arcR - 6, g.TY + 4);
+
+    // --- Nickel target (vertical bar with crystal dots) ---
+    const tw = 14, th = 110;
+    ctx.fillStyle = '#5a6580';
+    ctx.fillRect(g.TX - tw / 2, g.TY - th / 2, tw, th);
+    ctx.strokeStyle = '#aab1c4';
+    ctx.lineWidth = 1.4;
+    ctx.strokeRect(g.TX - tw / 2, g.TY - th / 2, tw, th);
+    ctx.fillStyle = '#aab1c4';
+    for (let i = 0; i < 5; i++) {
+      ctx.beginPath();
+      ctx.arc(g.TX, g.TY - th / 2 + 14 + i * 21, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#cfd3df';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Nickel', g.TX + 14, g.TY - th / 2 + 4);
+    ctx.fillText('target', g.TX + 14, g.TY - th / 2 + 18);
+
+    // --- Animated electrons ---
+    for (const e of electronsBeam) {
+      ctx.fillStyle = '#66d9ef';
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(102,217,239,0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(e.x, e.y);
+      ctx.lineTo(e.x - e.vx * 0.018, e.y - e.vy * 0.018);
+      ctx.stroke();
+    }
+    for (const e of electronsDiff) {
+      ctx.fillStyle = '#a6e22e';
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(166,226,46,0.5)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(e.x, e.y);
+      ctx.lineTo(e.x - e.vx * 0.018, e.y - e.vy * 0.018);
+      ctx.stroke();
+    }
+
+    // --- Movable detector (yellow rounded rectangle, tangent to the arc) ---
+    // Detector long-axis is *tangent* to the dashed arc, i.e. perpendicular
+    // to the radial direction T→detector. In canvas coords:
+    //   radial direction = (-cos θ, -sin θ)
+    //   tangent direction = (-sin θ,  cos θ)   (rotated 90° CCW)
+    // The detector rectangle's local +x axis is its long axis, so we rotate
+    // the canvas to align +x with the tangent direction.
+    ctx.save();
+    ctx.translate(dx, dy);
+    ctx.rotate(Math.atan2(Math.cos(t), -Math.sin(t)));
+    ctx.fillStyle = '#ffd166';
+    ctx.strokeStyle = '#ffe7a8';
+    ctx.lineWidth = 1.5;
+    const dw = 30, dh = 16;
+    ctx.beginPath();
+    const rd = 4;
+    ctx.moveTo(-dw/2 + rd, -dh/2);
+    ctx.lineTo( dw/2 - rd, -dh/2);
+    ctx.quadraticCurveTo(dw/2, -dh/2, dw/2, -dh/2 + rd);
+    ctx.lineTo( dw/2,  dh/2 - rd);
+    ctx.quadraticCurveTo(dw/2,  dh/2, dw/2 - rd,  dh/2);
+    ctx.lineTo(-dw/2 + rd,  dh/2);
+    ctx.quadraticCurveTo(-dw/2,  dh/2, -dw/2,  dh/2 - rd);
+    ctx.lineTo(-dw/2, -dh/2 + rd);
+    ctx.quadraticCurveTo(-dw/2, -dh/2, -dw/2 + rd, -dh/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 240, 200, 0.5)';
+    ctx.fillRect(-dw/2 + 2, -dh/2 + 2, dw - 4, 5);
+    ctx.restore();
+
+    // Detector label (always upright)
+    ctx.fillStyle = '#ffd166';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    const lblOffsetX = (dx > g.TX) ?  20 : -20;
+    const lblY = dy - 24;
+    ctx.fillText('Movable detector', dx, lblY);
+
+    // --- "Drag me" hint near detector when not yet dragged this session ---
+    if (!hintFaded) {
+      const tNow = performance.now();
+      const fade = Math.max(0, 1 - (tNow - createdAt) / 6000);
+      if (fade <= 0) hintFaded = true;
+      else {
+        ctx.fillStyle = 'rgba(255, 209, 102, ' + (fade * 0.85) + ')';
+        ctx.font = 'italic 11px ui-monospace, monospace';
+        ctx.fillText('← drag the yellow detector along the dashed arc', dx, lblY - 14);
+      }
+    }
+  }
+
+  let hintFaded = false;
+  const createdAt = performance.now();
+
+  // ----------------------------------------------------------
+  // Plot drawing (I(θ) curves + brightness strip)
+  // ----------------------------------------------------------
+  function drawPlot() {
+    const { ctx, w, h } = envPlot;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#04060d';
+    ctx.fillRect(0, 0, w, h);
+
+    const padL = 60, padR = 22, padT = 20, padB = 38;
+    const L = padL, R = w - padR;
+    const T = padT, B = h - padB;
+    const pW = R - L, pH = B - T;
+
+    function xOf(d) { return L + (d / 180) * pW; }
+    function yOf(I) { return B - I * pH; }
+
+    // Grid
+    ctx.strokeStyle = '#1a1f2e';
+    ctx.lineWidth = 1;
+    for (let d = 0; d <= 180; d += 30) {
+      const x = xOf(d);
+      ctx.beginPath();
+      ctx.moveTo(x, T); ctx.lineTo(x, B); ctx.stroke();
+    }
+    for (let yy = 0; yy <= 1; yy += 0.25) {
+      const y = yOf(yy);
+      ctx.beginPath();
+      ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = '#5a6276';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(L, B); ctx.lineTo(R, B);
+    ctx.moveTo(L, T); ctx.lineTo(L, B);
+    ctx.stroke();
+
+    // Tick labels
+    ctx.fillStyle = '#cfd3df';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let d = 0; d <= 180; d += 30) {
+      ctx.fillText(d + '°', xOf(d), B + 14);
+    }
+    ctx.fillStyle = '#9aa2b6';
+    ctx.fillText('detector angle θ (from back-along-beam direction)', (L + R) / 2, B + 28);
+
+    ctx.textAlign = 'right';
+    for (let yy = 0; yy <= 1; yy += 0.25) {
+      ctx.fillText(yy.toFixed(2), L - 6, yOf(yy) + 4);
+    }
+    ctx.save();
+    ctx.translate(14, (T + B) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#9aa2b6';
+    ctx.fillText('relative intensity', 0, 0);
+    ctx.restore();
+
+    // Classical curve (red dashed)
+    ctx.strokeStyle = 'rgba(255, 95, 109, 0.85)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    for (let d = 0; d <= 180; d += 1) {
+      const xv = xOf(d), yv = yOf(intensityClassical(d));
+      if (d === 0) ctx.moveTo(xv, yv); else ctx.lineTo(xv, yv);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Wave curve (green solid, filled)
+    ctx.beginPath();
+    for (let d = 0; d <= 180; d += 0.5) {
+      const xv = xOf(d), yv = yOf(intensityWave(d));
+      if (d === 0) ctx.moveTo(xv, yv); else ctx.lineTo(xv, yv);
+    }
+    ctx.lineTo(R, B);
+    ctx.lineTo(L, B);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(166, 226, 46, 0.18)';
+    ctx.fill();
+    ctx.strokeStyle = '#a6e22e';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    for (let d = 0; d <= 180; d += 0.5) {
+      const xv = xOf(d), yv = yOf(intensityWave(d));
+      if (d === 0) ctx.moveTo(xv, yv); else ctx.lineTo(xv, yv);
+    }
+    ctx.stroke();
+
+    // Detector marker
+    const dθ = state.thetaDeg;
+    const xd = xOf(dθ);
+    ctx.strokeStyle = 'rgba(102, 217, 239, 0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(xd, T); ctx.lineTo(xd, B);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    const yd = yOf(intensityWave(dθ));
+    ctx.fillStyle = '#66d9ef';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(xd, yd, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Legend
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    const legX = xOf(110), legY1 = T + 14, legY2 = T + 28;
+    ctx.fillStyle = '#a6e22e';
+    ctx.fillText('— wave (de Broglie, actual)', legX, legY1);
+    ctx.fillStyle = 'rgba(255, 95, 109, 0.95)';
+    ctx.fillText('-- classical (no peak — incorrect)', legX, legY2);
+  }
+
+  function drawStrip() {
+    const { ctx, w, h } = envStrip;
+    ctx.clearRect(0, 0, w, h);
+    // Match plot geometry: same horizontal padding/inner range so the strip
+    // lines up with the plot's x-axis pixel-for-pixel.
+    const padL = 60, padR = 22;
+    const L = padL, R = w - padR;
+    const T = 4, B = h - 18;
+
+    // Background
+    ctx.fillStyle = '#02050a';
+    ctx.fillRect(0, 0, w, h);
+
+    // Brightness map of I_wave(θ) along the arc
+    for (let i = 0; i < (R - L); i++) {
+      const d = (i / (R - L)) * 180;
+      const I = intensityWave(d);
+      const c = Math.round(I * 255);
+      // Tint slightly toward green for "electron" feel
+      const r = Math.round(c * 0.55);
+      const g = Math.round(c);
+      const b = Math.round(c * 0.55);
+      ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+      ctx.fillRect(L + i, T, 1, B - T);
+    }
+    ctx.strokeStyle = '#5a6276';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(L, T, R - L, B - T);
+
+    // Tick labels (matching the plot above)
+    ctx.fillStyle = '#9aa2b6';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let d = 0; d <= 180; d += 30) {
+      const x = L + (d / 180) * (R - L);
+      ctx.fillText(d + '°', x, h - 4);
+    }
+
+    // Detector tick on strip
+    const xd = L + (state.thetaDeg / 180) * (R - L);
+    ctx.strokeStyle = '#66d9ef';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xd, T - 2); ctx.lineTo(xd, B + 2);
+    ctx.stroke();
+    ctx.fillStyle = '#66d9ef';
+    ctx.beginPath();
+    ctx.arc(xd, T, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function updateMeters() {
+    const θ = state.thetaDeg;
+    const Iw = intensityWave(θ);
+    const Ic = intensityClassical(θ);
+    angleEl.textContent  = θ.toFixed(0) + '°';
+    iWaveEl.textContent  = Iw.toFixed(2);
+    iClassEl.textContent = Ic.toFixed(2);
+    let v, vCls;
+    if (Iw > 0.7)        { v = 'STRONG PEAK'; vCls = 'good'; }
+    else if (Iw > 0.25)  { v = 'on the shoulder'; vCls = 'good'; }
+    else                 { v = 'no electrons'; vCls = 'bad'; }
+    verdictEl.textContent = v;
+    verdictEl.classList.remove('good', 'bad');
+    verdictEl.classList.add(vCls);
+  }
+
+  function loop(now) {
+    const t = now / 1000;
+    const dt = Math.min(0.05, t - lastT);
+    lastT = t;
+    update(dt);
+    drawSchematic();
+    drawPlot();
+    drawStrip();
+    updateMeters();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  window.addEventListener('resize', () => {
+    env      = setupCanvas(cv);
+    envPlot  = setupCanvas(cvPlot);
+    envStrip = setupCanvas(cvStrip);
+  });
+})();
+
+// ============================================================
+// Davisson–Germer "screen" comparison — classical dust vs wave peak
+// ============================================================
+//
+// Same idea as the Bragg screen below: two stacked dot strips on the
+// same canvas, populated over time so they expose like a photo plate.
+//   top    = WRONG (classical), Lambertian-ish smooth scatter, no peak
+//   bottom = RIGHT (wave),      sharp pile-up at θ ≈ 50° with side-lobes
+//
+// The wave dot density at angle θ is sampled from the same intensity
+// curve used by the I(θ) plot above (intensityWave / intensityClassical).
+(function () {
+  const cv = document.getElementById('dgScreenCompare');
+  if (!cv) return;
+  let env = setupCanvas(cv);
+
+  // Same intensity model as the D-G plot above (kept in sync by hand).
+  function intensityWave(thetaDeg) {
+    const main  = Math.exp(-Math.pow((thetaDeg - 50)  / 9, 2));
+    const side1 = 0.10 * Math.exp(-Math.pow((thetaDeg - 30)  / 4, 2));
+    const side2 = 0.10 * Math.exp(-Math.pow((thetaDeg - 70)  / 4, 2));
+    const back  = 0.05 * Math.exp(-Math.pow((thetaDeg - 130) / 12, 2));
+    return Math.min(1, main + side1 + side2 + back);
+  }
+  function intensityClassical(thetaDeg) {
+    return 0.55 * Math.sin(thetaDeg * Math.PI / 180);
+  }
+
+  // Persistent dot lists, accumulated over time
+  const classicalDots = [];
+  const waveDots = [];
+  const MAX_DOTS = 1500;
+  const SPAWN_INTERVAL_MS = 50;
+  const DOTS_PER_TICK = 6;
+  let lastSpawn = performance.now();
+
+  // Rejection sampling for the angular distributions
+  function sampleAngle(intensityFn) {
+    for (let i = 0; i < 50; i++) {
+      const θ = Math.random() * 180;
+      if (Math.random() < intensityFn(θ)) return θ;
+    }
+    return 90;   // fallback
+  }
+
+  function geom() {
+    const w = env.w, h = env.h;
+    const padL = 60, padR = 24, padT = 22, padBetween = 14, padBot = 28;
+    const stripH = (h - padT - padBetween - padBot) / 2;
+    return {
+      W: w, H: h,
+      padL: padL, padR: padR,
+      stripW: w - padL - padR,
+      stripH: stripH,
+      classTopY: padT,
+      waveTopY:  padT + stripH + padBetween
+    };
+  }
+
+  function spawnDots(g) {
+    for (let i = 0; i < DOTS_PER_TICK; i++) {
+      const cdeg = sampleAngle(intensityClassical);
+      classicalDots.push({
+        x: g.padL + (cdeg / 180) * g.stripW,
+        y: g.classTopY + Math.random() * g.stripH
+      });
+      const wdeg = sampleAngle(intensityWave);
+      waveDots.push({
+        x: g.padL + (wdeg / 180) * g.stripW,
+        y: g.waveTopY + Math.random() * g.stripH
+      });
+    }
+    while (classicalDots.length > MAX_DOTS) classicalDots.shift();
+    while (waveDots.length     > MAX_DOTS) waveDots.shift();
+  }
+
+  function draw(now) {
+    const { ctx, w, h } = env;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#04060d';
+    ctx.fillRect(0, 0, w, h);
+
+    const g = geom();
+
+    if ((now || performance.now()) - lastSpawn > SPAWN_INTERVAL_MS) {
+      lastSpawn = (now || performance.now());
+      spawnDots(g);
+    }
+
+    // Classical strip background + frame
+    ctx.fillStyle = 'rgba(255, 95, 109, 0.06)';
+    ctx.fillRect(g.padL, g.classTopY, g.stripW, g.stripH);
+    ctx.strokeStyle = 'rgba(255, 95, 109, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(g.padL, g.classTopY, g.stripW, g.stripH);
+    // Wave strip background + frame
+    ctx.fillStyle = 'rgba(166, 226, 46, 0.06)';
+    ctx.fillRect(g.padL, g.waveTopY, g.stripW, g.stripH);
+    ctx.strokeStyle = 'rgba(166, 226, 46, 0.45)';
+    ctx.strokeRect(g.padL, g.waveTopY, g.stripW, g.stripH);
+
+    // Labels
+    ctx.fillStyle = '#ff5f6d';
+    ctx.font = 'bold 11px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('WRONG  •  classical particles', g.padL + 6, g.classTopY - 6);
+    ctx.fillStyle = '#a6e22e';
+    ctx.fillText('RIGHT  •  matter waves (Davisson–Germer)', g.padL + 6, g.waveTopY - 6);
+
+    // Soft vertical guide-stripe at the 50° peak on the wave row
+    const peakX = g.padL + (50 / 180) * g.stripW;
+    const grad = ctx.createLinearGradient(peakX - 14, 0, peakX + 14, 0);
+    grad.addColorStop(0,   'rgba(166, 226, 46, 0)');
+    grad.addColorStop(0.5, 'rgba(166, 226, 46, 0.20)');
+    grad.addColorStop(1,   'rgba(166, 226, 46, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(peakX - 18, g.waveTopY, 36, g.stripH);
+    ctx.fillStyle = '#a6e22e';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('θ ≈ 50°', peakX, g.waveTopY + g.stripH + 12);
+
+    // Dots
+    ctx.fillStyle = 'rgba(255, 154, 166, 0.85)';
+    for (const d of classicalDots) ctx.fillRect(d.x, d.y, 1.6, 1.6);
+    ctx.fillStyle = 'rgba(166, 226, 46, 0.95)';
+    for (const d of waveDots)      ctx.fillRect(d.x, d.y, 1.6, 1.6);
+
+    // X-axis tick labels along the bottom (matches the D-G I(θ) plot)
+    ctx.fillStyle = '#9aa2b6';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let θ = 0; θ <= 180; θ += 30) {
+      const x = g.padL + (θ / 180) * g.stripW;
+      ctx.fillText(θ + '°', x, h - 6);
+    }
+    ctx.textAlign = 'left';
+    ctx.fillText('detector angle θ', g.padL, h - 18);
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { env = setupCanvas(cv); });
+})();
+
+// ============================================================
+// Bragg scene
+// ============================================================
+(function () {
+  const cv = document.getElementById('braggCanvas');
+  let env = setupCanvas(cv);
+
+  const D_OVER_LAMBDA = 2.0;     // visual demo: d / λ — three valid orders
+  const slider  = document.getElementById('thetaSlider');
+  const thetaR  = document.getElementById('thetaReadout');
+  const pathR   = document.getElementById('pathReadout');
+  const stateEl = document.getElementById('braggState');
+  const snapBtns = document.querySelectorAll('button.bragg-snap');
+
+  // Hook up the n=1/2/3 snap buttons.
+  snapBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const n = parseInt(btn.dataset.n, 10);
+      const θ = Math.asin(n / (2 * D_OVER_LAMBDA)) * 180 / Math.PI;
+      slider.value = θ.toFixed(2);
+      update();
+    });
+  });
+
+  function update() {
+    const θdeg = parseFloat(slider.value);
+    const θ = θdeg * Math.PI / 180;
+    const pathLambdas = 2 * D_OVER_LAMBDA * Math.sin(θ);
+    thetaR.textContent = θdeg.toFixed(1) + '°';
+    pathR.textContent  = '2d sin θ = ' + pathLambdas.toFixed(2) + ' λ';
+    // Bragg if pathLambdas is within tol of an integer ≥ 1
+    const nearest = Math.round(pathLambdas);
+    const diff = Math.abs(pathLambdas - nearest);
+    if (nearest >= 1 && diff < 0.06) {
+      stateEl.classList.remove('bad');
+      stateEl.classList.add('good');
+      stateEl.textContent = 'CONSTRUCTIVE  •  n = ' + nearest;
+    } else {
+      stateEl.classList.remove('good');
+      stateEl.classList.add('bad');
+      stateEl.textContent = 'DESTRUCTIVE';
+    }
+  }
+  slider.addEventListener('input', update);
+  update();
+
+  let lastT = performance.now() / 1000;
+
+  function draw(now) {
+    const { ctx, w, h } = env;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#04060d';
+    ctx.fillRect(0, 0, w, h);
+
+    const θdeg = parseFloat(slider.value);
+    const θ    = θdeg * Math.PI / 180;
+    const pathLambdas = 2 * D_OVER_LAMBDA * Math.sin(θ);
+    const nearest = Math.round(pathLambdas);
+    const isBragg = nearest >= 1 && Math.abs(pathLambdas - nearest) < 0.06;
+
+    // Layout
+    const planeY1     = h * 0.34;
+    const dPx         = 90;                          // visual plane separation
+    const planeY2     = planeY1 + dPx;
+    const atomSpacing = 28;                          // matches the lattice-row drawing below
+    const atomFirstX  = 30;
+    // Snap A.x to the nearest real lattice atom so the gold reflector ring
+    // lands ON one of the lattice dots (not between them). A is FIXED in
+    // place; at small θ the colinear B2 (B2.x = A.x + dPx / tan θ) is
+    // simply allowed to go off-canvas to the right.
+    const aTargetX = w * 0.42;
+    const aIdx = Math.max(1, Math.round((aTargetX - atomFirstX) / atomSpacing));
+    const A = { x: atomFirstX + aIdx * atomSpacing, y: planeY1 };
+    // Bragg geometry — flipped horizontally so the outgoing ray exits
+    // toward the upper-LEFT. B sits directly below A (faded reference V).
+    // B2 sits one inter-atom column to the right; in this flipped
+    // orientation B2's outgoing ray (along dirOut) is colinear with the
+    // segment that already passes through A — so a single straight cyan
+    // line from B2 through A out to outA represents both the second
+    // atom's reflection AND the combined leftward-exiting wave.
+    const B  = { x: A.x, y: planeY2 };
+    const B2 = { x: A.x + dPx / Math.tan(θ), y: planeY2 };
+
+    // Ray length on each side
+    const L = 230;
+    const dirIn  = { x: -Math.cos(θ), y:  Math.sin(θ) };  // from upper-RIGHT, going down-left
+    const dirOut = { x: -Math.cos(θ), y: -Math.sin(θ) };  // reflected toward upper-LEFT
+
+    // ---- Faint atom planes (full row of atoms each) ----
+    ctx.strokeStyle = 'rgba(58, 68, 103, 0.85)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(20, planeY1); ctx.lineTo(w - 20, planeY1);
+    ctx.moveTo(20, planeY2); ctx.lineTo(w - 20, planeY2);
+    ctx.stroke();
+    ctx.fillStyle = '#7a8095';
+    for (let i = 0; i < 50; i++) {
+      const x = atomFirstX + i * atomSpacing;
+      if (x > w - 20) break;
+      ctx.beginPath(); ctx.arc(x, planeY1, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, planeY2, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    // Place extra atom dots at B and B2's exact geometric locations so the
+    // gold reflector rings on the bottom plane always land ON atoms.
+    if (B.x >= atomFirstX && B.x <= w - 20) {
+      ctx.beginPath(); ctx.arc(B.x, B.y, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    if (B2.x >= atomFirstX && B2.x <= w - 20) {
+      ctx.beginPath(); ctx.arc(B2.x, B2.y, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    // Highlight A (top plane) and B2 (active second-atom) in solid gold;
+    // B (directly below A) is faded as a reference marker.
+    ctx.fillStyle = '#ffd166';
+    ctx.beginPath(); ctx.arc(A.x,  A.y,  6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(B2.x, B2.y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255, 209, 102, 0.4)';
+    ctx.beginPath(); ctx.arc(B.x,  B.y,  5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#ffd166';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(A.x,  A.y,  8, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(B2.x, B2.y, 8, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(B.x,  B.y,  7, 0, Math.PI * 2); ctx.stroke();
+
+    // ---- d-spacing label between the planes ----
+    ctx.strokeStyle = 'rgba(154, 162, 182, 0.6)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    const xMark = 60;
+    ctx.beginPath();
+    ctx.moveTo(xMark, planeY1); ctx.lineTo(xMark, planeY2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // tick marks
+    ctx.beginPath();
+    ctx.moveTo(xMark - 6, planeY1); ctx.lineTo(xMark + 6, planeY1);
+    ctx.moveTo(xMark - 6, planeY2); ctx.lineTo(xMark + 6, planeY2);
+    ctx.stroke();
+    ctx.fillStyle = '#cfd3df';
+    ctx.font = '12px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('d', xMark + 10, (planeY1 + planeY2) / 2 + 4);
+
+    // ---- Two parallel incoming rays + a single combined outgoing ray ----
+    // Ray 1: incoming from upper-right hits A; reflects toward upper-left.
+    // Ray 2: parallel incoming from upper-right hits B2; reflects along
+    //   dirOut and that line passes exactly through A (geometric
+    //   consequence of B2 = A + (d/tan θ, d) with dirOut = (-cos θ, -sin θ)).
+    // So we draw the outgoing as a single segment B2 → outA passing
+    // through A — this is the leftward-exiting ray the user wants.
+    const inA   = { x: A.x  - L * dirIn.x,  y: A.y  - L * dirIn.y  };
+    const outA  = { x: A.x  + L * dirOut.x, y: A.y  + L * dirOut.y };
+    const inB2  = { x: B2.x - L * dirIn.x,  y: B2.y - L * dirIn.y  };
+
+    function drawRay(p1, p2, col, lw) {
+      ctx.strokeStyle = col;
+      ctx.lineWidth = lw == null ? 2 : lw;
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
+
+    const rayColMain = '#66d9ef';
+    drawRay(inA,  A,    rayColMain);          // ray 1 incoming
+    drawRay(inB2, B2,   rayColMain);          // ray 2 incoming
+    drawRay(B2,   outA, rayColMain);          // combined outgoing (passes through A)
+
+    // ---- Faint reference ray through B (textbook symmetric construction) ----
+    // B sits directly below A. The textbook 2d sin θ derivation projects
+    // perpendiculars from A onto B's incoming and outgoing rays; each
+    // perpendicular foot is offset from B by exactly d sin θ along the ray.
+    // We render this as a faded reference so the |d sin θ| + |d sin θ|
+    // path-difference picture is still visible alongside the new B2 view.
+    const inB  = { x: B.x - L * dirIn.x,  y: B.y - L * dirIn.y  };
+    const outB = { x: B.x + L * dirOut.x, y: B.y + L * dirOut.y };
+    drawRay(inB, B,    'rgba(102, 217, 239, 0.35)', 1.4);
+    drawRay(B,   outB, 'rgba(102, 217, 239, 0.35)', 1.4);
+
+    // ---- d sin θ highlight + perpendicular drops from A ----
+    function project(P, Q, dir) {
+      const dx = P.x - Q.x, dy = P.y - Q.y;
+      const tt = dx * dir.x + dy * dir.y;
+      return { x: Q.x + tt * dir.x, y: Q.y + tt * dir.y };
+    }
+    const Pin  = project(A, B, dirIn);
+    const Pout = project(A, B, dirOut);
+    // Highlight the two d-sin-θ segments along B's faint rays
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.65)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(Pin.x, Pin.y); ctx.lineTo(B.x, B.y);
+    ctx.moveTo(B.x, B.y);     ctx.lineTo(Pout.x, Pout.y);
+    ctx.stroke();
+    // Dashed perpendiculars from A → Pin and A → Pout
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.45)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(A.x, A.y); ctx.lineTo(Pin.x, Pin.y);
+    ctx.moveTo(A.x, A.y); ctx.lineTo(Pout.x, Pout.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // (d sin θ labels are drawn at the END of the frame so they sit on
+    // top of the wave packets — see below, after the packet block.)
+
+    // ---- Faded V + θ labels at B (reference angle) ----
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.45)';
+    ctx.lineWidth = 1.2;
+    const vRb = 16;
+    ctx.beginPath();
+    ctx.arc(B.x, B.y, vRb, Math.PI, Math.PI + θ);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(B.x, B.y, vRb, -θ, 0);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 209, 102, 0.7)';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('θ', B.x - vRb - 8, B.y - 2);
+    ctx.fillText('θ', B.x + vRb + 8, B.y - 2);
+
+    // ---- Prominent V at B2 showing the equal-angle reflection ----
+    // The right-side arc spans the incoming wedge (from upper-right);
+    // the left-side arc spans the outgoing wedge (toward upper-left,
+    // colinear with the leftward-exiting ray that passes through A).
+    ctx.strokeStyle = 'rgba(255, 209, 102, 0.95)';
+    ctx.lineWidth = 1.6;
+    const vR = 20;
+    ctx.beginPath();
+    ctx.arc(B2.x, B2.y, vR, -θ, 0);                 // right/incoming side
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(B2.x, B2.y, vR, Math.PI, Math.PI + θ);  // left/outgoing side
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 209, 102, 0.95)';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('θ', B2.x + vR + 8, B2.y - 2);
+    ctx.fillText('θ', B2.x - vR - 8, B2.y - 2);
+
+
+    // ---- Travelling wave packets along each ray (4 per ray) ----
+    // Pause the wave-packet motion when constructive/destructive transitions, but always animate.
+    const t = (now || performance.now()) / 1000;
+    const packetSpeed = 100;     // px/s
+    const packetLen   = 12;
+    const period = 80;           // px between packet starts
+
+    function packetsOnRay(p1, p2, hueIn, ampPx, lineW) {
+      ampPx = ampPx == null ? 3   : ampPx;
+      lineW = lineW == null ? 2   : lineW;
+      const dx = p2.x - p1.x, dy = p2.y - p1.y;
+      const len = Math.hypot(dx, dy);
+      const ux = dx / len, uy = dy / len;
+      const nx = -uy, ny = ux;        // perpendicular for sine wiggle
+      const offset = ((t * packetSpeed) % period);
+      for (let s = -offset; s < len; s += period) {
+        if (s + packetLen < 0 || s > len) continue;
+        ctx.strokeStyle = hueIn;
+        ctx.lineWidth = lineW;
+        ctx.beginPath();
+        const samples = 14;
+        for (let k = 0; k <= samples; k++) {
+          const ss = s + (k / samples) * packetLen;
+          const env = Math.exp(-Math.pow((k / samples - 0.5) * 2.6, 2));
+          const wig = env * Math.sin(k * 0.9) * ampPx;
+          const x = p1.x + ss * ux + wig * nx;
+          const y = p1.y + ss * uy + wig * ny;
+          if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // packetsOnRay's animation moves wavelets from p2 → p1 (decreasing s).
+    // To make incoming waves travel from "off-canvas right" INTO the
+    // atoms, we pass the atom as p1 and the off-canvas anchor as p2.
+    // Outgoing leg likewise: outA as p1, A as p2 makes the wavelets
+    // travel A → outA (toward the upper-LEFT exit).
+    packetsOnRay(A,  inA,  '#66d9ef');           // ray 1 incoming (down-left)
+    packetsOnRay(B2, inB2, '#66d9ef');           // ray 2 incoming (down-left)
+    // Faint reference ray through B (matches the faint cyan line above)
+    packetsOnRay(B,    inB,  'rgba(102, 217, 239, 0.45)', 2, 1.2);
+    packetsOnRay(outB, B,    'rgba(102, 217, 239, 0.45)', 2, 1.2);
+    // Between-planes leg of ray 2 (travels B2 → A as it heads upper-left)
+    packetsOnRay(A, B2, '#66d9ef');
+    // Combined outgoing leg (A → outA, toward upper-LEFT). Bigger AND
+    // brighter green when constructive Bragg, dim grey otherwise.
+    const outColor = isBragg ? '#a6e22e' : 'rgba(154, 162, 182, 0.85)';
+    const outAmp   = isBragg ? 6.5 : 2.5;
+    const outWidth = isBragg ? 3.0 : 1.6;
+    packetsOnRay(outA, A, outColor, outAmp, outWidth);
+
+    // ---- Equation + path-difference label ----
+    // (precise numeric readout in λ units lives in the slider row below the canvas)
+    ctx.fillStyle = '#ffd166';
+    ctx.font = '12px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('extra path = 2d sin θ', 18, 22);
+    ctx.fillStyle = '#9aa2b6';
+    ctx.fillText('top plane', 18, planeY1 - 8);
+    ctx.fillText('next plane', 18, planeY2 + 18);
+
+    // ---- Outgoing status label (along the leftward-exiting ray) ----
+    // Anchor partway between A and outA, then offset PERPENDICULAR to the
+    // ray (toward upper-right of the ray's travel direction) so the label
+    // floats clear of the line at every θ instead of sitting on top of it.
+    {
+      const mx = A.x + 0.45 * (outA.x - A.x);
+      const my = A.y + 0.45 * (outA.y - A.y);
+      const perpX =  Math.sin(θ);   // unit perpendicular to dirOut, points
+      const perpY = -Math.cos(θ);   //   toward upper-right of the ray
+      const off = 24;
+      const xLabel = mx + off * perpX;
+      const yLabel = my + off * perpY;
+      if (xLabel > 60 && xLabel < w - 8 && yLabel > 14) {
+        ctx.fillStyle = isBragg ? '#a6e22e' : '#ff5f6d';
+        ctx.font = 'bold 13px ui-monospace, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(isBragg ? '✓ in phase' : '✗ out of phase', xLabel, yLabel);
+      }
+    }
+
+    // angle arc at A — drawn on the SAME side as the incoming ray. After
+    // the horizontal flip, that side is upper-RIGHT. Span is from "due
+    // right along the plane" (0) to "back-along-incoming" (-θ).
+    ctx.strokeStyle = '#9fe7f5';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    const arcR = 28;
+    ctx.arc(A.x, A.y, arcR, -θ, 0);
+    ctx.stroke();
+    ctx.fillStyle = '#9fe7f5';
+    ctx.font = '12px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('θ', A.x + arcR + 4, A.y - 6);
+
+    // ---- d sin θ labels (drawn last so they sit on top of the
+    // wave packets and any other geometry).  Each label is placed
+    // perpendicular to its highlighted segment in opposite directions
+    // (incoming label INSIDE the triangle toward A, outgoing label
+    // BELOW its segment) so the two never collide, and each gets a
+    // dark stroke halo for high-contrast readability against the
+    // dark background and overlapping packets.
+    function strokedText(text, x, y, color) {
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(4, 6, 13, 0.9)';
+      ctx.strokeText(text, x, y);
+      ctx.fillStyle = color;
+      ctx.fillText(text, x, y);
+    }
+    {
+      ctx.font = 'bold 12px ui-monospace, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      // Incoming label — inside the triangle, perpendicular toward A
+      const mx1 = (Pin.x + B.x) / 2, my1 = (Pin.y + B.y) / 2;
+      strokedText('d sin θ',
+        mx1 - 24 * Math.sin(θ),
+        my1 - 24 * Math.cos(θ),
+        '#ffd166');
+      // Outgoing label — below its segment, perpendicular AWAY from A
+      const mx2 = (Pout.x + B.x) / 2, my2 = (Pout.y + B.y) / 2;
+      strokedText('d sin θ',
+        mx2 - 24 * Math.sin(θ),
+        my2 + 24 * Math.cos(θ),
+        '#ffd166');
+      ctx.textBaseline = 'alphabetic';
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  window.addEventListener('resize', () => { env = setupCanvas(cv); });
+})();
+
+// ============================================================
+// Bragg "screen" comparison: classical (uniform dust) vs wave (Bragg peaks)
+// ============================================================
+//
+// Yes — for the wrong (classical-particle) assumption the screen would just
+// be a uniform spray of dots, since billiard-ball electrons have no
+// interference and no preferred outgoing angle. For the correct (wave)
+// model, dots pile up at the Bragg-condition angles 2d sin θ = nλ.
+//
+// One canvas, two stacked strips:
+//   top    = WRONG (classical), dots uniformly random along x
+//   bottom = RIGHT (wave),      dots clustered at n = 1/2/3 Bragg angles
+//
+// We accumulate dots over time so the patterns build up like a real photo
+// plate exposing.
+(function () {
+  const cv = document.getElementById('braggScreen');
+  if (!cv) return;
+  let env = setupCanvas(cv);
+
+  const PEAK_DEG  = [14.48, 30.00, 48.59];
+  const PEAK_SIG  = [1.4, 1.6, 2.0];   // stripe width per order (slightly wider as θ grows)
+  const PEAK_W    = [1.0, 0.9, 0.7];   // relative weight per order
+
+  // Persistent dot lists, accumulated over time
+  const classicalDots = [];   // {x, y, alpha}
+  const waveDots = [];
+
+  let lastSpawn = performance.now();
+  const SPAWN_INTERVAL_MS = 50;
+  const DOTS_PER_TICK = 6;
+  const MAX_DOTS = 1500;
+
+  function pickWaveAngle() {
+    if (Math.random() < 0.10) {
+      return Math.random() * 90;             // 10% background dust
+    }
+    // Pick a Bragg order weighted by PEAK_W
+    const totalW = PEAK_W.reduce((a, b) => a + b, 0);
+    let r = Math.random() * totalW;
+    let idx = 0;
+    for (let i = 0; i < PEAK_W.length; i++) {
+      r -= PEAK_W[i];
+      if (r <= 0) { idx = i; break; }
+    }
+    // Box–Muller for a Gaussian sample
+    const u1 = Math.max(1e-6, Math.random()), u2 = Math.random();
+    const g = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    return PEAK_DEG[idx] + g * PEAK_SIG[idx];
+  }
+
+  function spawnDots(geom) {
+    for (let i = 0; i < DOTS_PER_TICK; i++) {
+      // Classical: uniform random across [0, 90°]
+      const cdeg = Math.random() * 90;
+      const cx = geom.padL + (cdeg / 90) * geom.stripW;
+      const cy = geom.classTopY + Math.random() * geom.stripH;
+      classicalDots.push({ x: cx, y: cy, age: 0 });
+
+      // Wave: clustered at Bragg orders
+      const wdeg = pickWaveAngle();
+      if (wdeg < 0 || wdeg > 90) continue;
+      const wx = geom.padL + (wdeg / 90) * geom.stripW;
+      const wy = geom.waveTopY + Math.random() * geom.stripH;
+      waveDots.push({ x: wx, y: wy, age: 0 });
+    }
+    // Cap memory
+    while (classicalDots.length > MAX_DOTS) classicalDots.shift();
+    while (waveDots.length     > MAX_DOTS) waveDots.shift();
+  }
+
+  function geom() {
+    const w = env.w, h = env.h;
+    const padL = 60, padR = 24, padT = 22, padBetween = 14, padBot = 28;
+    const stripH = (h - padT - padBetween - padBot) / 2;
+    return {
+      W: w, H: h,
+      padL: padL, padR: padR,
+      stripW: w - padL - padR,
+      stripH: stripH,
+      classTopY: padT,
+      waveTopY:  padT + stripH + padBetween
+    };
+  }
+
+  function draw(now) {
+    const { ctx, w, h } = env;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#04060d';
+    ctx.fillRect(0, 0, w, h);
+
+    const g = geom();
+
+    // Spawn dots over time
+    if ((now || performance.now()) - lastSpawn > SPAWN_INTERVAL_MS) {
+      lastSpawn = (now || performance.now());
+      spawnDots(g);
+    }
+
+    // Top strip: classical (red label)
+    ctx.fillStyle = 'rgba(255, 95, 109, 0.06)';
+    ctx.fillRect(g.padL, g.classTopY, g.stripW, g.stripH);
+    ctx.strokeStyle = 'rgba(255, 95, 109, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(g.padL, g.classTopY, g.stripW, g.stripH);
+    // Bottom strip: wave (green label)
+    ctx.fillStyle = 'rgba(166, 226, 46, 0.06)';
+    ctx.fillRect(g.padL, g.waveTopY, g.stripW, g.stripH);
+    ctx.strokeStyle = 'rgba(166, 226, 46, 0.45)';
+    ctx.strokeRect(g.padL, g.waveTopY, g.stripW, g.stripH);
+
+    // Labels
+    ctx.fillStyle = '#ff5f6d';
+    ctx.font = 'bold 11px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('WRONG  •  classical particles', g.padL + 6, g.classTopY - 6);
+    ctx.fillStyle = '#a6e22e';
+    ctx.fillText('RIGHT  •  matter waves (Bragg)', g.padL + 6, g.waveTopY  - 6);
+
+    // Vertical guide stripes at Bragg orders (only on the wave strip)
+    PEAK_DEG.forEach((d, i) => {
+      const x = g.padL + (d / 90) * g.stripW;
+      const grad = ctx.createLinearGradient(x - 8, 0, x + 8, 0);
+      grad.addColorStop(0,   'rgba(166, 226, 46, 0)');
+      grad.addColorStop(0.5, 'rgba(166, 226, 46, 0.18)');
+      grad.addColorStop(1,   'rgba(166, 226, 46, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x - 12, g.waveTopY, 24, g.stripH);
+      ctx.fillStyle = '#a6e22e';
+      ctx.font = '10px ui-monospace, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('n=' + (i + 1), x, g.waveTopY + g.stripH + 12);
+    });
+
+    // Draw dots
+    ctx.fillStyle = 'rgba(255, 154, 166, 0.85)';
+    for (const d of classicalDots) {
+      ctx.fillRect(d.x, d.y, 1.6, 1.6);
+    }
+    ctx.fillStyle = 'rgba(166, 226, 46, 0.95)';
+    for (const d of waveDots) {
+      ctx.fillRect(d.x, d.y, 1.6, 1.6);
+    }
+
+    // X-axis tick labels (under classical strip too, for reference)
+    ctx.fillStyle = '#9aa2b6';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let θ = 0; θ <= 90; θ += 15) {
+      const x = g.padL + (θ / 90) * g.stripW;
+      ctx.fillText(θ + '°', x, h - 6);
+    }
+    ctx.textAlign = 'left';
+    ctx.fillText('outgoing angle (Bragg θ)', g.padL, h - 18);
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { env = setupCanvas(cv); });
+})();
+</script>
+</body>
+</html>
