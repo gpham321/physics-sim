@@ -2354,14 +2354,15 @@
 <script>
 /* ================================================================
    BACKGROUND MUSIC (YouTube IFrame API, 30% volume, looped)
-   Video: https://www.youtube.com/watch?v=9EBv8FVa4Pk
-   Exposes window.bgMusic.{play, pause, setVolume} for the main IIFE.
+   Lobby: https://www.youtube.com/watch?v=7d6rzXVlbjg  (starts at 30s)
+   Horse: https://www.youtube.com/watch?v=9EBv8FVa4Pk  (swapped in by modal)
+   Exposes window.bgMusic.{play, pause, setVolume, switchTo, restore}.
    ================================================================ */
 (function () {
   // Lobby (brain-lab) background music. The horse game temporarily swaps in
   // its own track via bgMusic.switchTo() and bgMusic.restore() — see below.
-  var LOBBY_VIDEO_ID = '9EBv8FVa4Pk';
-  var LOBBY_START_AT = 0;
+  var LOBBY_VIDEO_ID = '7d6rzXVlbjg';
+  var LOBBY_START_AT = 30;
   var VOL = 30;
 
   // Currently-playing track (mutated by switchTo/restore).
@@ -3436,9 +3437,9 @@
       if (window.bgMusic && window.bgMusic.pause) window.bgMusic.pause();
       showAd();
     } else {
-      // Horse game gets its own theme (starts 30s in to skip the intro).
+      // Horse game gets its own theme.
       if (window.bgMusic && window.bgMusic.switchTo) {
-        window.bgMusic.switchTo('7d6rzXVlbjg', 30);
+        window.bgMusic.switchTo('9EBv8FVa4Pk', 0);
       }
       showHorse();
     }
