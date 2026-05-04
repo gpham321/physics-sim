@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Particle in a Box — 1D, 2D &amp; 3D</title>
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
+<meta property="og:title" content="Particle in a Box — 1D, 2D & 3D">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/particle_in_a_box.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --magenta: #ff4db8;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    position: relative;
+  }
+  .portrait {
+    position: absolute; top: 22px; right: 28px;
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) {
+    .portrait { width: 52px; height: 52px; top: 12px; right: 14px; }
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; color: var(--accent); font-weight: 600; }
+  h3 { margin: 0 0 12px; color: var(--text); font-weight: 600; }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    margin: 24px 0; box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .panel.compact { padding: 12px 18px; }
+  .grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    margin: 24px 0;
+  }
+  .grid-3 {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  canvas {
+    display: block; width: 100%;
+    background: #04060d;
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  canvas.tall  { height: 460px; }
+  canvas.med   { height: 320px; }
+  canvas.sq    { height: 320px; }
+  canvas.short { height: 220px; }
+  .meters {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+  }
+  .meters.three { grid-template-columns: 1fr 1fr 1fr; }
+  .meter {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .meter-label {
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .meter-val {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 17px; color: var(--accent);
+  }
+  .meter-val.good { color: var(--good); }
+  .meter-val.warn { color: var(--warn); }
+  .slider-grid { display: grid; gap: 18px; }
+  .slider-grid.cols-2 { grid-template-columns: 1fr 1fr; gap: 18px 28px; }
+  .slider-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; gap: 18px 28px; }
+  @media (max-width: 760px) {
+    .slider-grid.cols-2, .slider-grid.cols-3 { grid-template-columns: 1fr; }
+  }
+  .slider-row label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 6px; font-size: 14px;
+  }
+  .slider-row input[type="range"] {
+    width: 100%; accent-color: var(--accent); cursor: pointer;
+  }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--accent); }
+  .demo-tabs {
+    display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .demo-tabs button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 18px; border-radius: 8px;
+    font-family: inherit; font-size: 14px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .demo-tabs button:hover { border-color: var(--accent); }
+  .demo-tabs button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .demo-section { display: none; }
+  .demo-section.active { display: block; }
+  .formula-box {
+    background: rgba(102, 217, 239, 0.06);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px; border-radius: 6px;
+    margin: 12px 0;
+  }
+  .principle-callout {
+    background: rgba(255, 209, 102, 0.08);
+    border-left: 4px solid var(--warn);
+    padding: 14px 18px; border-radius: 6px;
+    margin: 16px 0;
+  }
+  .principle-callout strong { color: var(--warn); }
+  .good-callout {
+    background: rgba(166, 226, 46, 0.06);
+    border-left: 4px solid var(--good);
+    padding: 12px 16px; border-radius: 6px;
+    margin: 12px 0;
+  }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+  .colorbar {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 8px; font-size: 12px; color: var(--muted);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+  .colorbar .swatch {
+    flex: 1; height: 10px; border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .swatch.psi  { background: linear-gradient(90deg, #ff5f6d 0%, #1b1f2c 50%, #66d9ef 100%); }
+  .swatch.psi2 { background: linear-gradient(90deg, #04060d 0%, #2e6ea8 50%, #aaf0ff 100%); }
+  table.lvl {
+    width: 100%; border-collapse: collapse;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+  }
+  table.lvl th, table.lvl td {
+    padding: 6px 10px; text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  table.lvl th {
+    color: var(--muted); font-weight: normal;
+    text-transform: uppercase; letter-spacing: 0.6px; font-size: 11px;
+  }
+  table.lvl tr td:first-child, table.lvl tr th:first-child { text-align: left; }
+  table.lvl tr.active td { color: var(--accent); }
+  .key-takeaway {
+    background: rgba(255, 77, 184, 0.08);
+    border: 1px solid rgba(255, 77, 184, 0.4);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .key-takeaway strong { color: var(--magenta); }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="images/president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Particle in a Box</h1>
+<p class="lead">A quantum particle locked between two infinitely tall walls. The simplest place where energy quantization, wavefunctions, and probability distributions all show up at once — and where you can actually see <em>why</em> nature is built out of standing waves.</p>
+
+<!-- ============================================================ -->
+<!-- BACKGROUND: WHAT IS A WAVEFUNCTION                           -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>What is the wavefunction?</h2>
+  <p>In quantum mechanics, a particle isn't a tiny dot at a definite location. It's described by a <strong>wavefunction</strong> \(\psi(x)\) — a wave-like mathematical object that's spread out over space.</p>
+
+  <p>The wavefunction itself isn't directly observable. What you observe is a <em>probability</em>:</p>
+
+  <div class="formula-box">
+    $$ P(\text{particle in a small region around } x) \;=\; |\psi(x)|^2 \,\Delta x. $$
+  </div>
+
+  <p>So the square of the wavefunction, \(|\psi(x)|^2\), is a <strong>probability density</strong> — like a "cloud" telling you where the particle is likely to be found if you were to measure its position. Tall regions = likely; near-zero regions = unlikely. The total area under \(|\psi|^2\) over all of space equals 1, because the particle has to be <em>somewhere</em>.</p>
+
+  <div class="principle-callout">
+    <strong>Two pictures, one object.</strong> Below you'll see two graphs side by side: the wavefunction \(\psi(x)\) (which can be positive <em>or</em> negative, like an ordinary wave) and \(|\psi(x)|^2\) (always positive — it's a probability density). The first is the wave; the second is what you can actually measure.
+  </div>
+
+  <h3 style="margin-top: 18px;">How does \(\psi\) tell you about momentum and energy?</h3>
+  <p>Here is the key bridge between waves and particles, due to Louis de Broglie (1924):</p>
+
+  <div class="formula-box">
+    $$ p \;=\; \frac{h}{\lambda}, \qquad E_{\text{kin}} \;=\; \frac{p^2}{2m}. $$
+  </div>
+
+  <p>Read this as: <em>look at the wavelength \(\lambda\) of the matter wave, and you've already determined the particle's momentum.</em> Short wavelength = wiggly wave = high momentum. Long wavelength = slow wiggle = low momentum. Then once you have \(p\), the kinetic energy is the usual \(p^2/(2m)\).</p>
+
+  <p>So a wavefunction is doing two jobs at once:</p>
+  <ul>
+    <li>Its <strong>square</strong> tells you where the particle is.</li>
+    <li>Its <strong>wavelength</strong> tells you how fast (momentum) it's moving, and therefore its energy.</li>
+  </ul>
+
+  <p>Now we just need a setup where the wave is forced to fit nicely — and that's the box.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- WHY QUANTIZATION                                             -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>Why energy comes in steps: the standing-wave argument</h2>
+  <p>Consider a particle (say, an electron) trapped in a 1-dimensional box of length \(L\). The walls are infinitely tall, so the particle can never escape — the wavefunction must drop to zero exactly at \(x=0\) and at \(x=L\). This is identical to the boundary condition for a guitar string fixed at both ends.</p>
+
+  <p>A guitar string fixed at both ends only supports certain wavelengths — those that fit a whole number of half-wavelengths into the length:</p>
+
+  <div class="formula-box">
+    $$ n\frac{\lambda_n}{2} \;=\; L \quad\Longrightarrow\quad \lambda_n \;=\; \frac{2L}{n}, \qquad n=1,2,3,\dots $$
+  </div>
+
+  <p>Plug this into de Broglie: \(p_n = h/\lambda_n = nh/(2L)\). And then \(E_n = p_n^2/(2m)\):</p>
+
+  <div class="formula-box">
+    $$ \boxed{\;E_n \;=\; \frac{n^2 h^2}{8mL^2}, \qquad p_n \;=\; \frac{nh}{2L}, \qquad \lambda_n \;=\; \frac{2L}{n}.\;} $$
+  </div>
+
+  <p>The wavefunctions themselves are sine waves that vanish at both walls:</p>
+
+  <div class="formula-box">
+    $$ \psi_n(x) \;=\; \sqrt{\frac{2}{L}}\,\sin\!\left(\frac{n\pi x}{L}\right) \quad\text{for } 0<x<L,\ \text{zero elsewhere.} $$
+  </div>
+
+  <div class="key-takeaway">
+    <strong>Three big takeaways.</strong>
+    <ul style="margin: 8px 0 0;">
+      <li><strong>Quantization is automatic.</strong> Only certain wavelengths fit, so only certain energies are allowed. Quantum numbers \(n=1,2,3,\dots\) drop out of geometry, not by hand.</li>
+      <li><strong>Energy grows as \(n^2\).</strong> Going from \(n=1\) to \(n=2\) quadruples the energy; \(n=3\) means \(9\times\) the ground-state energy.</li>
+      <li><strong>The ground state has nonzero energy.</strong> The minimum is \(E_1 = h^2/(8mL^2)\), not zero. A confined quantum particle <em>must</em> be moving — that's the uncertainty principle.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TABS                                                         -->
+<!-- ============================================================ -->
+<div class="demo-tabs" id="demoTabs">
+  <button type="button" data-demo="1d" class="active">1-D Box</button>
+  <button type="button" data-demo="2d">2-D Box</button>
+  <button type="button" data-demo="3d">3-D Box</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- 1D                                                            -->
+<!-- ============================================================ -->
+<div class="demo-section active" id="demo1d">
+  <div class="panel">
+    <h2>1-D box — the standing-wave picture</h2>
+    <p>One spatial dimension, one quantum number \(n\). Drag \(n\) up and down and watch the wavefunction grow extra nodes. Top graph is \(\psi_n(x)\) — the wave itself, which goes positive and negative. Bottom graph is \(|\psi_n(x)|^2\) — the probability density, always non-negative.</p>
+
+    <div class="slider-grid cols-2">
+      <div class="slider-row">
+        <label for="n1d"><span>Quantum number \(n\)</span><span id="n1dReadout" class="mono">1</span></label>
+        <input type="range" id="n1d" min="1" max="10" step="1" value="1">
+        <div class="hint">There are \(n-1\) interior nodes (zeros), and the wave has \(n\) "lobes" between the walls. \(n=1\) is the ground state; higher \(n\) means more wiggles, shorter wavelength, larger momentum, more energy.</div>
+      </div>
+      <div class="slider-row">
+        <label for="L1d"><span>Box width \(L\)</span><span id="L1dReadout" class="mono">1.00 nm</span></label>
+        <input type="range" id="L1d" min="0.1" max="5" step="0.05" value="1">
+        <div class="hint">In nanometers. Smaller box → shorter wavelengths required → bigger momentum → bigger energies (the \(1/L^2\) factor in \(E_n\)).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Wavefunction \(\psi_n(x)\) and probability density \(|\psi_n(x)|^2\)</h3>
+    <canvas id="cv1d" class="tall"></canvas>
+    <div class="colorbar">
+      <span>−</span><div class="swatch psi"></div><span>+</span>
+      <span style="margin-left: 12px;">ψ&nbsp;sign</span>
+    </div>
+    <p class="hint" style="margin-top: 10px;">The wavefunction (upper graph) crosses zero \(n-1\) times between the walls. Wherever it crosses zero, the probability density (lower graph) also touches zero — meaning the particle is <em>never</em> found at those special interior positions, even though it has a finite chance of being on either side. That's an entirely non-classical feature.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Live numbers</h3>
+      <div class="meters">
+        <div class="meter">
+          <span class="meter-label">Wavelength λₙ = 2L/n</span>
+          <span class="meter-val" id="lam1dMeter">2.00 nm</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Momentum pₙ = h/λₙ</span>
+          <span class="meter-val" id="p1dMeter">3.31 × 10⁻²⁵ kg·m/s</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Energy Eₙ = n²h²/(8mL²)</span>
+          <span class="meter-val good" id="E1dMeter">0.376 eV</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Ratio Eₙ / E₁</span>
+          <span class="meter-val" id="ratio1dMeter">1× (= n²)</span>
+        </div>
+      </div>
+      <p class="hint" style="margin-top: 10px;">Mass is set to one electron. Notice: cut \(L\) in half and \(E_1\) jumps by a factor of 4 — confining a particle costs energy.</p>
+    </div>
+    <div class="card">
+      <h3>Energy ladder</h3>
+      <canvas id="ladder1d" class="med"></canvas>
+      <p class="hint" style="margin-top: 10px;">The horizontal lines are the allowed energies \(E_n = n^2 E_1\). The current state is highlighted. Notice the gaps grow with \(n\) — \(E_2 - E_1\) is small, but \(E_5 - E_4\) is much larger. Atomic spectra come from electrons hopping between these levels.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 2D                                                            -->
+<!-- ============================================================ -->
+<div class="demo-section" id="demo2d">
+  <div class="panel">
+    <h2>2-D box — two quantum numbers</h2>
+    <p>Two dimensions = two boundary conditions = two quantum numbers \((n_x, n_y)\). The wavefunction is just the 1-D answer in \(x\) multiplied by the 1-D answer in \(y\):</p>
+
+    <div class="formula-box">
+      $$ \psi_{n_x,n_y}(x,y) \;=\; \frac{2}{\sqrt{L_x L_y}}\,\sin\!\left(\tfrac{n_x \pi x}{L_x}\right)\sin\!\left(\tfrac{n_y \pi y}{L_y}\right). $$
+    </div>
+
+    <p>Energies just add too:</p>
+
+    <div class="formula-box">
+      $$ E_{n_x,n_y} \;=\; \frac{h^2}{8m}\!\left(\frac{n_x^2}{L_x^2} + \frac{n_y^2}{L_y^2}\right). $$
+    </div>
+
+    <p>If \(L_x = L_y\) (a square box) you get something new called <strong>degeneracy</strong>: states like \((1,2)\) and \((2,1)\) have <em>the same</em> energy but different wavefunctions. Squash the box (\(L_x \neq L_y\)) and the degeneracy lifts.</p>
+
+    <div class="slider-grid cols-3">
+      <div class="slider-row">
+        <label for="nx2d"><span>\(n_x\)</span><span id="nx2dReadout" class="mono">1</span></label>
+        <input type="range" id="nx2d" min="1" max="6" step="1" value="1">
+        <div class="hint">Half-waves along \(x\).</div>
+      </div>
+      <div class="slider-row">
+        <label for="ny2d"><span>\(n_y\)</span><span id="ny2dReadout" class="mono">1</span></label>
+        <input type="range" id="ny2d" min="1" max="6" step="1" value="1">
+        <div class="hint">Half-waves along \(y\).</div>
+      </div>
+      <div class="slider-row">
+        <label for="L2dRatio"><span>Aspect ratio \(L_y/L_x\)</span><span id="L2dRatioReadout" class="mono">1.00</span></label>
+        <input type="range" id="L2dRatio" min="0.4" max="2.5" step="0.02" value="1">
+        <div class="hint">1.0 = square box. Move it away from 1 and watch \((n_x,n_y)\) and \((n_y,n_x)\) separate in energy.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Wavefunction \(\psi_{n_x,n_y}(x,y)\)</h3>
+      <canvas id="cv2dPsi" class="sq"></canvas>
+      <div class="colorbar">
+        <span>−</span><div class="swatch psi"></div><span>+</span>
+        <span style="margin-left: 12px;">ψ&nbsp;sign</span>
+      </div>
+      <p class="hint" style="margin-top: 10px;">Red = positive, blue = negative, dark = zero. The grid of nodal lines (where ψ = 0) divides the box into a checkerboard of \(n_x \times n_y\) cells with alternating signs.</p>
+    </div>
+    <div class="card">
+      <h3>Probability density \(|\psi_{n_x,n_y}(x,y)|^2\)</h3>
+      <canvas id="cv2dProb" class="sq"></canvas>
+      <div class="colorbar">
+        <span>0</span><div class="swatch psi2"></div><span>max</span>
+        <span style="margin-left: 12px;">|ψ|²</span>
+      </div>
+      <p class="hint" style="margin-top: 10px;">The signed wavefunction's nodes survive in the squared version (you can never find the particle exactly on a nodal line), and there are \(n_x \times n_y\) bright probability bumps where the particle is most likely to be found.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Live numbers</h3>
+    <div class="meters three">
+      <div class="meter">
+        <span class="meter-label">(nₓ, n_y)</span>
+        <span class="meter-val" id="state2dMeter">(1, 1)</span>
+      </div>
+      <div class="meter">
+        <span class="meter-label">Energy E (units of E₁,₁ for square box)</span>
+        <span class="meter-val good" id="E2dMeter">1.00</span>
+      </div>
+      <div class="meter">
+        <span class="meter-label">Energy (eV, electron, L = 1 nm)</span>
+        <span class="meter-val" id="E2dEvMeter">0.752 eV</span>
+      </div>
+    </div>
+    <p class="hint" style="margin-top: 10px;">For a square box, swapping \(n_x\) and \(n_y\) gives the same energy. The aspect-ratio slider breaks that symmetry and the two states fall apart in energy.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 3D                                                            -->
+<!-- ============================================================ -->
+<div class="demo-section" id="demo3d">
+  <div class="panel">
+    <h2>3-D box — three quantum numbers</h2>
+    <p>Three dimensions = three quantum numbers \((n_x, n_y, n_z)\). Same product structure, same additive energies:</p>
+
+    <div class="formula-box">
+      $$ \psi_{n_x,n_y,n_z}(x,y,z) \;=\; \sqrt{\frac{8}{L_x L_y L_z}}\,\sin\!\left(\tfrac{n_x \pi x}{L_x}\right)\sin\!\left(\tfrac{n_y \pi y}{L_y}\right)\sin\!\left(\tfrac{n_z \pi z}{L_z}\right). $$
+      $$ E_{n_x,n_y,n_z} \;=\; \frac{h^2}{8m}\!\left(\frac{n_x^2}{L_x^2} + \frac{n_y^2}{L_y^2} + \frac{n_z^2}{L_z^2}\right). $$
+    </div>
+
+    <p>For a cubic box (all sides equal), states like \((1,1,2)\), \((1,2,1)\), \((2,1,1)\) are <strong>triply degenerate</strong> — same energy, three different wavefunctions. This degeneracy structure is the seed of why elements come in groups in the periodic table.</p>
+
+    <p>Visualizing a 3-D wavefunction is awkward on a flat screen, so we slice it: pick a value of \(z\) and plot \(|\psi|^2\) on the \(xy\)-plane at that height. Drag the slice slider to move up and down through the box.</p>
+
+    <div class="slider-grid cols-3">
+      <div class="slider-row">
+        <label for="nx3d"><span>\(n_x\)</span><span id="nx3dReadout" class="mono">1</span></label>
+        <input type="range" id="nx3d" min="1" max="5" step="1" value="1">
+      </div>
+      <div class="slider-row">
+        <label for="ny3d"><span>\(n_y\)</span><span id="ny3dReadout" class="mono">1</span></label>
+        <input type="range" id="ny3d" min="1" max="5" step="1" value="1">
+      </div>
+      <div class="slider-row">
+        <label for="nz3d"><span>\(n_z\)</span><span id="nz3dReadout" class="mono">1</span></label>
+        <input type="range" id="nz3d" min="1" max="5" step="1" value="1">
+      </div>
+    </div>
+
+    <div class="slider-grid cols-3" style="margin-top: 12px;">
+      <div class="slider-row">
+        <label for="zSlice"><span>\(xy\)-slice height \(z/L\)</span><span id="zSliceReadout" class="mono">0.50</span></label>
+        <input type="range" id="zSlice" min="0.02" max="0.98" step="0.01" value="0.5">
+      </div>
+      <div class="slider-row">
+        <label for="ySlice"><span>\(xz\)-slice height \(y/L\)</span><span id="ySliceReadout" class="mono">0.50</span></label>
+        <input type="range" id="ySlice" min="0.02" max="0.98" step="0.01" value="0.5">
+      </div>
+      <div class="slider-row">
+        <label for="xSlice"><span>\(yz\)-slice height \(x/L\)</span><span id="xSliceReadout" class="mono">0.50</span></label>
+        <input type="range" id="xSlice" min="0.02" max="0.98" step="0.01" value="0.5">
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>\(|\psi|^2\) on \(xy\)-plane</h3>
+      <canvas id="cv3dXY" class="sq"></canvas>
+      <p class="hint" style="margin-top: 8px;">Slice at height \(z\). At \(z\)-nodes the whole slice is dark — the particle is never found at that height for those quantum numbers.</p>
+    </div>
+    <div class="card">
+      <h3>\(|\psi|^2\) on \(xz\)-plane</h3>
+      <canvas id="cv3dXZ" class="sq"></canvas>
+      <p class="hint" style="margin-top: 8px;">Slice at depth \(y\). Same idea, looking into the box from the front.</p>
+    </div>
+    <div class="card">
+      <h3>\(|\psi|^2\) on \(yz\)-plane</h3>
+      <canvas id="cv3dYZ" class="sq"></canvas>
+      <p class="hint" style="margin-top: 8px;">Slice at depth \(x\). Looking in from the side.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Live numbers</h3>
+    <div class="meters three">
+      <div class="meter">
+        <span class="meter-label">(nₓ, n_y, n_z)</span>
+        <span class="meter-val" id="state3dMeter">(1, 1, 1)</span>
+      </div>
+      <div class="meter">
+        <span class="meter-label">nₓ² + n_y² + n_z²</span>
+        <span class="meter-val" id="sum3dMeter">3</span>
+      </div>
+      <div class="meter">
+        <span class="meter-label">Energy (cube, electron, L = 1 nm)</span>
+        <span class="meter-val good" id="E3dMeter">1.13 eV</span>
+      </div>
+    </div>
+    <p class="hint" style="margin-top: 10px;">For a cubic box, the energy depends only on the sum of squares — that's why states like \((1,1,2)\), \((1,2,1)\), \((2,1,1)\) all share the same energy (here, sum = 6).</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BIG PICTURE                                                  -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>What the wavefunction lets you compute</h2>
+  <p>The whole point of all these sine waves is that, given \(\psi(x)\), every measurable property of the particle is just a few steps away. For algebra-based intuition (no calculus needed):</p>
+
+  <ul>
+    <li><strong>Where is the particle?</strong> Look at \(|\psi(x)|^2\). High values = likely; zeros = forbidden. This is the only thing you can <em>directly</em> measure as a position experiment.</li>
+    <li><strong>Most likely position?</strong> The peaks of \(|\psi(x)|^2\). For \(n=1\) in a 1-D box, the peak is at the center; for \(n=2\), the center is forbidden and there are two peaks at \(L/4\) and \(3L/4\); for higher \(n\), \(n\) evenly spaced peaks.</li>
+    <li><strong>Wavelength → momentum.</strong> Read the wavelength of the standing wave: \(\lambda_n = 2L/n\). Then \(p_n = h/\lambda_n = nh/(2L)\). The bigger \(n\) is (more wiggles), the bigger \(p\) is.</li>
+    <li><strong>Momentum → kinetic energy.</strong> Apply \(E = p^2/(2m)\). For our box this gives \(E_n = n^2 h^2/(8 m L^2)\).</li>
+    <li><strong>Energy gaps → photon spectra.</strong> If a particle drops from level \(n\) to level \(n'\), it emits a photon of energy \(E_n - E_{n'}\) and frequency \(f = (E_n - E_{n'})/h\). This is exactly how atomic spectra work, just with a more complicated potential than a flat box.</li>
+  </ul>
+
+  <div class="good-callout">
+    <strong>Why this toy model matters.</strong> Real systems aren't perfect boxes, but the box gives the scaling right: confine a particle in a region of size \(L\) and its kinetic energy must be at least of order \(h^2/(mL^2)\). This is why electrons confined to atomic-sized regions (\(L \sim 0.1\) nm) sit at electron-volt energies, why nucleons confined to a nucleus (\(L \sim 1\) fm) sit at MeV energies, and why quantum-dot LEDs glow different colors when you change the dot size. The rule is universal: <strong>smaller box, bigger energies, bigger gaps</strong>.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Things to try</h2>
+  <ul>
+    <li>Sit on the 1-D tab and slide \(n\) from 1 up to 10. Count the peaks of \(|\psi|^2\) — there are exactly \(n\) of them. Notice that classically (a ball bouncing back and forth) you'd expect equal probability everywhere, and quantum mechanics matches this for huge \(n\) (the <em>correspondence principle</em>).</li>
+    <li>Halve the box width \(L\). The energy quadruples. The wavelengths halve. Confining things costs energy — period.</li>
+    <li>On the 2-D tab, set \((n_x, n_y) = (2,1)\) and then \((1,2)\). Same energy in a square box, different probability cloud (rotated 90°). Slide the aspect ratio away from 1 — the energies separate.</li>
+    <li>On the 3-D tab, set \((n_x, n_y, n_z) = (2,1,1)\) and then move the slice slider to \(z/L = 0.5\). The slice through the middle has its full \(xy\) structure. Now move the slice toward 0 or 1 — it fades to zero (the \(z=0\) and \(z=L\) walls are nodes for any \(n_z\)).</li>
+    <li>For \((n_x, n_y, n_z) = (1,1,2)\) with the \(xy\)-slice at \(z = 0.5\): the slice is dark! Because \(\sin(2\pi \cdot 0.5) = 0\). Move the slice off-center to see the bump come back.</li>
+  </ul>
+</div>
+
+<script>
+//----------------------------------------------------------
+// Constants & shared helpers
+//----------------------------------------------------------
+const HBAR = 1.0545718e-34;     // J s
+const HPL  = 6.62607015e-34;    // J s
+const ME   = 9.1093837e-31;     // kg
+const EV   = 1.602176634e-19;   // J/eV
+
+function fmtSci(x, sig=3) {
+  if (x === 0) return '0';
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  const m = x / Math.pow(10, e);
+  return `${m.toFixed(sig - 1)} × 10${supExp(e)}`;
+}
+function supExp(e) {
+  const map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(e).split('').map(c => map[c] || c).join('');
+}
+function fmtNum(x, sig=3) {
+  if (Math.abs(x) >= 1000 || (Math.abs(x) < 0.01 && x !== 0)) return fmtSci(x, sig);
+  return x.toPrecision(sig);
+}
+function setupHiDPI(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = Math.round(rect.width  * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+//----------------------------------------------------------
+// Tab switching
+//----------------------------------------------------------
+document.getElementById('demoTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-demo]');
+  if (!btn) return;
+  document.querySelectorAll('#demoTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  const id = btn.dataset.demo;
+  document.querySelectorAll('.demo-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('demo' + id).classList.add('active');
+  // Force redraw because hidden canvases can have weird sizes
+  setTimeout(() => {
+    if (id === '1d') { draw1D(); drawLadder(); }
+    if (id === '2d') { draw2D(); }
+    if (id === '3d') { draw3D(); }
+  }, 30);
+});
+
+//----------------------------------------------------------
+// 1-D simulation
+//----------------------------------------------------------
+const n1d = document.getElementById('n1d');
+const L1d = document.getElementById('L1d');
+const cv1d = document.getElementById('cv1d');
+const ladder = document.getElementById('ladder1d');
+
+function draw1D() {
+  const { ctx, w, h } = setupHiDPI(cv1d);
+  ctx.clearRect(0, 0, w, h);
+
+  const n = +n1d.value;
+  // Layout: top half = psi, bottom half = |psi|^2
+  const padX = 36, padY = 24;
+  const innerW = w - 2*padX;
+  const midY = h / 2;
+  const topRange = midY - padY;     // half-height for psi (positive AND negative)
+  const botRange = (h - midY) - padY;
+
+  // Background bands
+  ctx.fillStyle = 'rgba(102,217,239,0.04)';
+  ctx.fillRect(padX, padY, innerW, midY - padY);
+  ctx.fillStyle = 'rgba(166,226,46,0.04)';
+  ctx.fillRect(padX, midY + 6, innerW, h - midY - padY);
+
+  // Walls
+  ctx.strokeStyle = '#aab1c4';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padX, padY - 8);
+  ctx.lineTo(padX, h - padY + 8);
+  ctx.moveTo(padX + innerW, padY - 8);
+  ctx.lineTo(padX + innerW, h - padY + 8);
+  ctx.stroke();
+  ctx.lineWidth = 1;
+
+  // Mid axes
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath();
+  ctx.moveTo(padX, midY - topRange);
+  ctx.lineTo(padX + innerW, midY - topRange);
+  ctx.moveTo(padX, midY);
+  ctx.lineTo(padX + innerW, midY);
+  ctx.moveTo(padX, h - padY);
+  ctx.lineTo(padX + innerW, h - padY);
+  ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '12px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('ψₙ(x)', padX + 6, padY + 14);
+  ctx.fillText('|ψₙ(x)|²', padX + 6, midY + 22);
+  ctx.textAlign = 'center';
+  ctx.fillText('x = 0', padX, h - 4);
+  ctx.fillText('x = L', padX + innerW, h - 4);
+  ctx.fillText(`n = ${n}`, padX + innerW/2, padY + 14);
+
+  // Compute & draw psi (filled with sign-colored gradient strokes)
+  const N = 600;
+  const psiVals = new Float64Array(N + 1);
+  let psiMax = 0;
+  for (let i = 0; i <= N; i++) {
+    const u = i / N; // 0..1
+    const v = Math.sin(n * Math.PI * u);
+    psiVals[i] = v;
+    if (Math.abs(v) > psiMax) psiMax = Math.abs(v);
+  }
+
+  // Fill psi
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const x = padX + (i / N) * innerW;
+    const y = midY - (psiVals[i] / psiMax) * topRange;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(padX + innerW, midY);
+  ctx.lineTo(padX, midY);
+  ctx.closePath();
+  // gradient based on sign
+  const grad = ctx.createLinearGradient(0, midY - topRange, 0, midY + topRange);
+  grad.addColorStop(0,    'rgba(102,217,239,0.55)');
+  grad.addColorStop(0.5,  'rgba(102,217,239,0.05)');
+  grad.addColorStop(0.5,  'rgba(255,95,109,0.05)');
+  grad.addColorStop(1,    'rgba(255,95,109,0.55)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Stroke psi
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const x = padX + (i / N) * innerW;
+    const y = midY - (psiVals[i] / psiMax) * topRange;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#9fd4e6';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Compute & draw |psi|^2
+  const probMax = 1; // sin^2 max is 1
+  ctx.beginPath();
+  ctx.moveTo(padX, h - padY);
+  for (let i = 0; i <= N; i++) {
+    const x = padX + (i / N) * innerW;
+    const v = psiVals[i] * psiVals[i];
+    const y = (h - padY) - (v / probMax) * botRange;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(padX + innerW, h - padY);
+  ctx.closePath();
+  const grad2 = ctx.createLinearGradient(0, midY, 0, h - padY);
+  grad2.addColorStop(0,   'rgba(170,240,255,0.85)');
+  grad2.addColorStop(1,   'rgba(46,110,168,0.15)');
+  ctx.fillStyle = grad2;
+  ctx.fill();
+
+  // Stroke |psi|^2
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const x = padX + (i / N) * innerW;
+    const v = psiVals[i] * psiVals[i];
+    const y = (h - padY) - (v / probMax) * botRange;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#aaf0ff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Mark interior nodes
+  for (let k = 1; k < n; k++) {
+    const u = k / n;
+    const x = padX + u * innerW;
+    ctx.strokeStyle = 'rgba(255,209,102,0.6)';
+    ctx.setLineDash([3,4]);
+    ctx.beginPath();
+    ctx.moveTo(x, padY);
+    ctx.lineTo(x, h - padY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#ffd166';
+    ctx.beginPath();
+    ctx.arc(x, midY, 3, 0, 2*Math.PI);
+    ctx.fill();
+  }
+}
+
+function update1D() {
+  const n = +n1d.value;
+  const L = +L1d.value; // nm
+  document.getElementById('n1dReadout').textContent = n;
+  document.getElementById('L1dReadout').textContent = L.toFixed(2) + ' nm';
+
+  // Physics
+  const Lm = L * 1e-9;
+  const lam = 2 * Lm / n;          // m
+  const p   = HPL / lam;            // kg m/s
+  const E_J = n*n * HPL*HPL / (8 * ME * Lm*Lm);
+  const E_eV = E_J / EV;
+
+  document.getElementById('lam1dMeter').textContent = (lam * 1e9).toFixed(3) + ' nm';
+  document.getElementById('p1dMeter').textContent  = fmtSci(p, 3) + ' kg·m/s';
+  document.getElementById('E1dMeter').textContent  = (E_eV >= 1 ? E_eV.toFixed(3) : E_eV.toPrecision(3)) + ' eV';
+  document.getElementById('ratio1dMeter').textContent = `${n*n}× (= n²)`;
+
+  draw1D();
+  drawLadder();
+}
+
+function drawLadder() {
+  const { ctx, w, h } = setupHiDPI(ladder);
+  ctx.clearRect(0, 0, w, h);
+  const n = +n1d.value;
+  const padL = 50, padR = 16, padT = 18, padB = 22;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  // We show n=1..8 levels at heights n²
+  const nMax = 8;
+  const eMax = nMax * nMax;
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '12px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText('Eₙ / E₁', padL - 6, padT + 6);
+
+  for (let k = 1; k <= nMax; k++) {
+    const e = k*k;
+    const y = padT + plotH - (e / eMax) * plotH;
+    const isActive = (k === n);
+    ctx.strokeStyle = isActive ? '#66d9ef' : 'rgba(154,162,182,0.45)';
+    ctx.lineWidth = isActive ? 2.5 : 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y);
+    ctx.stroke();
+    ctx.fillStyle = isActive ? '#66d9ef' : '#9aa2b6';
+    ctx.textAlign = 'right';
+    ctx.fillText(`n=${k}`, padL - 6, y + 4);
+    ctx.textAlign = 'left';
+    ctx.fillText(`${e}`, padL + plotW + 4, y + 4);
+  }
+  ctx.lineWidth = 1;
+}
+
+n1d.addEventListener('input', update1D);
+L1d.addEventListener('input', update1D);
+
+//----------------------------------------------------------
+// 2-D simulation
+//----------------------------------------------------------
+const nx2d = document.getElementById('nx2d');
+const ny2d = document.getElementById('ny2d');
+const L2dRatio = document.getElementById('L2dRatio');
+const cv2dPsi  = document.getElementById('cv2dPsi');
+const cv2dProb = document.getElementById('cv2dProb');
+
+function lerpColor(a, b, t) {
+  return [a[0] + (b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];
+}
+function colormapDiverging(v) {
+  // v in [-1,1] -> red(neg) → dark(0) → cyan(pos)
+  const dark = [27, 31, 44];
+  const red  = [255, 95, 109];
+  const cyan = [102, 217, 239];
+  let c;
+  if (v >= 0) c = lerpColor(dark, cyan, Math.min(1, v));
+  else        c = lerpColor(dark, red,  Math.min(1, -v));
+  return c;
+}
+function colormapSeq(v) {
+  // v in [0,1] -> black → blue → cyan
+  const stops = [
+    [0.00, [4, 6, 13]],
+    [0.30, [16, 32, 64]],
+    [0.60, [46, 110, 168]],
+    [0.85, [102, 217, 239]],
+    [1.00, [200, 245, 255]]
+  ];
+  v = Math.max(0, Math.min(1, v));
+  for (let i = 0; i < stops.length-1; i++) {
+    if (v <= stops[i+1][0]) {
+      const t = (v - stops[i][0]) / (stops[i+1][0] - stops[i][0]);
+      return lerpColor(stops[i][1], stops[i+1][1], t);
+    }
+  }
+  return stops[stops.length-1][1];
+}
+
+function draw2DOne(canvas, mode) {
+  const { ctx, w, h } = setupHiDPI(canvas);
+  const nx = +nx2d.value, ny = +ny2d.value;
+  const ratio = +L2dRatio.value; // Ly/Lx
+  // Square plot area
+  const pad = 18;
+  const plotSize = Math.min(w, h) - 2*pad;
+  const plotX = (w - plotSize) / 2;
+  const plotY = (h - plotSize) / 2;
+  // The box itself fills the plot area, but if Ly/Lx != 1 we make the box rectangular inside
+  let boxW, boxH;
+  if (ratio >= 1) { boxH = plotSize; boxW = plotSize / ratio; }
+  else            { boxW = plotSize; boxH = plotSize * ratio; }
+  const boxX = plotX + (plotSize - boxW)/2;
+  const boxY = plotY + (plotSize - boxH)/2;
+
+  ctx.fillStyle = '#04060d';
+  ctx.fillRect(0, 0, w, h);
+
+  // Render via ImageData for speed
+  const res = 220;
+  const off = document.createElement('canvas');
+  off.width = res; off.height = res;
+  const offCtx = off.getContext('2d');
+  const img = offCtx.createImageData(res, res);
+
+  for (let j = 0; j < res; j++) {
+    const v_ = (j + 0.5) / res; // y in [0,1]
+    for (let i = 0; i < res; i++) {
+      const u_ = (i + 0.5) / res; // x in [0,1]
+      const psi = Math.sin(nx * Math.PI * u_) * Math.sin(ny * Math.PI * v_);
+      let c;
+      if (mode === 'psi') {
+        c = colormapDiverging(psi); // psi in [-1,1]
+      } else {
+        c = colormapSeq(psi*psi);
+      }
+      // y: top of canvas should be y=L (top of box). Flip j.
+      const idx = ((res - 1 - j) * res + i) * 4;
+      img.data[idx]   = c[0];
+      img.data[idx+1] = c[1];
+      img.data[idx+2] = c[2];
+      img.data[idx+3] = 255;
+    }
+  }
+  offCtx.putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(off, boxX, boxY, boxW, boxH);
+
+  // Box outline
+  ctx.strokeStyle = '#aab1c4';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+  // Labels
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '12px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`(nₓ, n_y) = (${nx}, ${ny})`, w/2, h - 4);
+}
+
+function draw2D() {
+  draw2DOne(cv2dPsi,  'psi');
+  draw2DOne(cv2dProb, 'prob');
+}
+
+function update2D() {
+  const nx = +nx2d.value, ny = +ny2d.value;
+  const ratio = +L2dRatio.value;
+  document.getElementById('nx2dReadout').textContent = nx;
+  document.getElementById('ny2dReadout').textContent = ny;
+  document.getElementById('L2dRatioReadout').textContent = ratio.toFixed(2);
+  document.getElementById('state2dMeter').textContent = `(${nx}, ${ny})`;
+
+  // Energy: in units of E_(1,1) at given Lx, Ly
+  // E ∝ nx^2/Lx^2 + ny^2/Ly^2.  Take Lx = 1, Ly = ratio.
+  const Lx = 1, Ly = ratio;
+  const Eunits = (nx*nx) / (Lx*Lx) + (ny*ny) / (Ly*Ly);
+  const E11 = 1/(Lx*Lx) + 1/(Ly*Ly);
+  document.getElementById('E2dMeter').textContent = (Eunits / E11).toFixed(3);
+
+  // Absolute energy: take Lx = 1 nm physically, Ly = ratio * 1 nm
+  const Lx_m = 1e-9, Ly_m = ratio * 1e-9;
+  const E_J = (HPL*HPL/(8*ME)) * ((nx*nx)/(Lx_m*Lx_m) + (ny*ny)/(Ly_m*Ly_m));
+  const E_eV = E_J / EV;
+  document.getElementById('E2dEvMeter').textContent =
+    (E_eV >= 1 ? E_eV.toFixed(3) : E_eV.toPrecision(3)) + ' eV';
+
+  draw2D();
+}
+
+nx2d.addEventListener('input', update2D);
+ny2d.addEventListener('input', update2D);
+L2dRatio.addEventListener('input', update2D);
+
+//----------------------------------------------------------
+// 3-D simulation: three slices
+//----------------------------------------------------------
+const nx3d = document.getElementById('nx3d');
+const ny3d = document.getElementById('ny3d');
+const nz3d = document.getElementById('nz3d');
+const xS = document.getElementById('xSlice');
+const yS = document.getElementById('ySlice');
+const zS = document.getElementById('zSlice');
+const cvXY = document.getElementById('cv3dXY');
+const cvXZ = document.getElementById('cv3dXZ');
+const cvYZ = document.getElementById('cv3dYZ');
+
+function drawSlice(canvas, fn, title) {
+  const { ctx, w, h } = setupHiDPI(canvas);
+  ctx.fillStyle = '#04060d';
+  ctx.fillRect(0, 0, w, h);
+  const pad = 18;
+  const plotSize = Math.min(w, h) - 2*pad;
+  const plotX = (w - plotSize) / 2;
+  const plotY = (h - plotSize) / 2;
+
+  // First pass: find max so we don't waste contrast when slice is mostly dark
+  const res = 160;
+  const data = new Float32Array(res * res);
+  let maxV = 0;
+  for (let j = 0; j < res; j++) {
+    const v = (j + 0.5) / res;
+    for (let i = 0; i < res; i++) {
+      const u = (i + 0.5) / res;
+      const val = fn(u, v); // already squared
+      data[j * res + i] = val;
+      if (val > maxV) maxV = val;
+    }
+  }
+  if (maxV < 1e-12) maxV = 1; // avoid divide-by-zero on a node slice
+
+  const off = document.createElement('canvas');
+  off.width = res; off.height = res;
+  const offCtx = off.getContext('2d');
+  const img = offCtx.createImageData(res, res);
+  for (let j = 0; j < res; j++) {
+    for (let i = 0; i < res; i++) {
+      const val = data[j * res + i] / maxV;
+      const c = colormapSeq(val);
+      const idx = ((res - 1 - j) * res + i) * 4;
+      img.data[idx]   = c[0];
+      img.data[idx+1] = c[1];
+      img.data[idx+2] = c[2];
+      img.data[idx+3] = 255;
+    }
+  }
+  offCtx.putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(off, plotX, plotY, plotSize, plotSize);
+  ctx.strokeStyle = '#aab1c4';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(plotX, plotY, plotSize, plotSize);
+
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(title, w/2, h - 4);
+}
+
+function draw3D() {
+  const Nx = +nx3d.value, Ny = +ny3d.value, Nz = +nz3d.value;
+  const x0 = +xS.value, y0 = +yS.value, z0 = +zS.value;
+  const sx = (u) => Math.sin(Nx * Math.PI * u);
+  const sy = (v) => Math.sin(Ny * Math.PI * v);
+  const sz = (w) => Math.sin(Nz * Math.PI * w);
+  // psi^2(x,y,z) = (sin nx pi x)^2 (sin ny pi y)^2 (sin nz pi z)^2
+  // (overall normalization absorbed by per-slice rescaling)
+
+  drawSlice(cvXY, (u, v) => {
+    const a = sx(u), b = sy(v), c = sz(z0);
+    return a*a * b*b * c*c;
+  }, `xy-plane at z/L = ${z0.toFixed(2)}`);
+
+  drawSlice(cvXZ, (u, w) => {
+    const a = sx(u), b = sy(y0), c = sz(w);
+    return a*a * b*b * c*c;
+  }, `xz-plane at y/L = ${y0.toFixed(2)}`);
+
+  drawSlice(cvYZ, (v, w) => {
+    const a = sx(x0), b = sy(v), c = sz(w);
+    return a*a * b*b * c*c;
+  }, `yz-plane at x/L = ${x0.toFixed(2)}`);
+}
+
+function update3D() {
+  const Nx = +nx3d.value, Ny = +ny3d.value, Nz = +nz3d.value;
+  const x0 = +xS.value, y0 = +yS.value, z0 = +zS.value;
+  document.getElementById('nx3dReadout').textContent = Nx;
+  document.getElementById('ny3dReadout').textContent = Ny;
+  document.getElementById('nz3dReadout').textContent = Nz;
+  document.getElementById('xSliceReadout').textContent = x0.toFixed(2);
+  document.getElementById('ySliceReadout').textContent = y0.toFixed(2);
+  document.getElementById('zSliceReadout').textContent = z0.toFixed(2);
+
+  const sumSq = Nx*Nx + Ny*Ny + Nz*Nz;
+  document.getElementById('state3dMeter').textContent = `(${Nx}, ${Ny}, ${Nz})`;
+  document.getElementById('sum3dMeter').textContent = sumSq;
+
+  // Cubic box of L = 1 nm, electron mass
+  const L = 1e-9;
+  const E_J = (HPL*HPL/(8*ME)) * sumSq / (L*L);
+  const E_eV = E_J / EV;
+  document.getElementById('E3dMeter').textContent =
+    (E_eV >= 1 ? E_eV.toFixed(3) : E_eV.toPrecision(3)) + ' eV';
+
+  draw3D();
+}
+
+[nx3d, ny3d, nz3d, xS, yS, zS].forEach(el => el.addEventListener('input', update3D));
+
+//----------------------------------------------------------
+// Initial render & resize handling
+//----------------------------------------------------------
+function redrawAll() {
+  update1D();
+  update2D();
+  update3D();
+}
+window.addEventListener('resize', redrawAll);
+redrawAll();
+</script>
+
+</div>
+</body>
+</html>
