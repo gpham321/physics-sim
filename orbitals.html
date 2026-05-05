@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Atomic Orbitals &amp; Electron Configuration</title>
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
+<meta property="og:title" content="Atomic Orbitals & Electron Configuration">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/orbitals.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016;
+    --panel: #161924;
+    --panel-2: #1d2130;
+    --text: #e6e8ef;
+    --muted: #9aa2b6;
+    --accent: #66d9ef;
+    --good: #a6e22e;
+    --bad: #ff5f6d;
+    --warn: #ffd166;
+    --magenta: #ff4db8;
+    --purple: #c084f7;
+    --border: #2a2f43;
+    --s-block: #ff7b8a;
+    --p-block: #66d9ef;
+    --d-block: #a6e22e;
+    --f-block: #c084f7;
+    --g-block: #ffd166;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    position: relative;
+  }
+  .portrait {
+    position: absolute; top: 22px; right: 28px;
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    z-index: 10;
+  }
+  @media (max-width: 760px) { .portrait { width: 52px; height: 52px; top: 12px; right: 14px; } }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; color: var(--accent); font-weight: 600; }
+  h3 { margin: 0 0 12px; color: var(--text); font-weight: 600; }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    margin: 24px 0; box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .panel.compact { padding: 12px 18px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .card.compact { padding: 12px 16px; }
+  .formula-box {
+    background: rgba(102, 217, 239, 0.06);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px; border-radius: 6px;
+    margin: 12px 0;
+  }
+  .principle-callout {
+    background: rgba(255, 209, 102, 0.08);
+    border-left: 4px solid var(--warn);
+    padding: 14px 18px; border-radius: 6px;
+    margin: 16px 0;
+  }
+  .principle-callout strong { color: var(--warn); }
+  .key-takeaway {
+    background: rgba(255, 77, 184, 0.08);
+    border: 1px solid rgba(255, 77, 184, 0.4);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .key-takeaway strong { color: var(--magenta); }
+  .good-callout {
+    background: rgba(166, 226, 46, 0.06);
+    border-left: 4px solid var(--good);
+    padding: 12px 16px; border-radius: 6px;
+    margin: 12px 0;
+  }
+  ul { margin-top: 6px; }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+  .demo-tabs {
+    display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .demo-tabs button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 18px; border-radius: 8px;
+    font-family: inherit; font-size: 14px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .demo-tabs button:hover { border-color: var(--accent); }
+  .demo-tabs button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .demo-section { display: none; }
+  .demo-section.active { display: block; }
+
+  /* Quantum number picker */
+  .qn-picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  @media (max-width: 760px) { .qn-picker { grid-template-columns: 1fr 1fr; } }
+  .qn-card {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+  }
+  .qn-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+  .qn-card .value { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 22px; color: var(--accent); margin: 4px 0 8px; }
+  .qn-card input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .qn-card .desc { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .qn-card .ms-toggle { display: flex; gap: 6px; margin-top: 6px; }
+  .qn-card .ms-toggle button {
+    flex: 1; padding: 6px 8px; background: var(--panel); border: 1px solid var(--border);
+    color: var(--text); border-radius: 5px; cursor: pointer;
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
+  }
+  .qn-card .ms-toggle button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .qn-summary {
+    background: rgba(102, 217, 239, 0.08);
+    border: 1px solid rgba(102, 217, 239, 0.3);
+    padding: 14px 18px; border-radius: 8px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .qn-summary .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+  .qn-summary .row:last-child { border-bottom: none; }
+  .qn-summary .label { color: var(--muted); }
+  .qn-summary .val { color: var(--accent); }
+
+  /* Capacity tables */
+  table.cap {
+    width: 100%; border-collapse: collapse;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px; margin-top: 8px;
+  }
+  table.cap th, table.cap td {
+    padding: 8px 12px; text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  table.cap th {
+    color: var(--muted); font-weight: normal;
+    text-transform: uppercase; letter-spacing: 0.6px; font-size: 11px;
+    background: rgba(102, 217, 239, 0.04);
+  }
+  table.cap td.name { text-align: left; color: var(--accent); }
+
+  /* Subshell shape gallery */
+  .shape-row {
+    display: grid; grid-template-columns: 220px 1fr; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+  }
+  .shape-row:last-child { border-bottom: none; }
+  @media (max-width: 760px) { .shape-row { grid-template-columns: 1fr; } }
+  .shape-info h3 { margin: 0 0 4px; }
+  .shape-info .meta { color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .shape-info p { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+  .shape-grid { display: grid; gap: 10px; grid-auto-rows: 1fr; }
+  .shape-grid.s { grid-template-columns: 130px; }
+  .shape-grid.p { grid-template-columns: repeat(3, 130px); }
+  .shape-grid.d { grid-template-columns: repeat(5, 130px); }
+  .shape-grid.f { grid-template-columns: repeat(7, 110px); }
+  .shape-grid.g { grid-template-columns: repeat(9, 95px); }
+  @media (max-width: 1080px) {
+    .shape-grid.f { grid-template-columns: repeat(4, 110px); }
+    .shape-grid.g { grid-template-columns: repeat(5, 95px); }
+  }
+  @media (max-width: 760px) {
+    .shape-grid.p { grid-template-columns: repeat(3, 1fr); }
+    .shape-grid.d { grid-template-columns: repeat(3, 1fr); }
+    .shape-grid.f { grid-template-columns: repeat(3, 1fr); }
+    .shape-grid.g { grid-template-columns: repeat(3, 1fr); }
+  }
+  .shape-card {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .shape-card svg { width: 100%; height: auto; aspect-ratio: 1; }
+  .shape-card .lbl {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px; color: var(--muted); margin-top: 4px;
+    text-align: center;
+  }
+
+  /* Madelung diagonal diagram */
+  .madelung {
+    display: grid; grid-template-columns: repeat(5, minmax(72px, 110px));
+    gap: 6px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    margin: 12px 0;
+    position: relative;
+  }
+  .madelung .cell {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 10px;
+    text-align: center; position: relative;
+  }
+  .madelung .cell.empty { background: transparent; border: none; }
+  .madelung .cell .sub { font-size: 16px; color: var(--accent); }
+  .madelung .cell .ord { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* Box diagram */
+  .box-diagram {
+    display: flex; flex-direction: column; gap: 8px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+  }
+  .box-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .box-row .row-lbl { color: var(--accent); width: 38px; flex-shrink: 0; }
+  .box-row .row-cnt { color: var(--muted); font-size: 11px; margin-left: 4px; }
+  .orb-box {
+    width: 28px; height: 28px; border: 1.5px solid var(--accent);
+    border-radius: 4px; position: relative;
+    background: rgba(102, 217, 239, 0.05);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .orb-box .arr {
+    position: absolute; font-size: 13px; line-height: 1;
+    font-family: ui-monospace, Menlo, monospace;
+  }
+  .orb-box .arr.up { color: var(--accent); left: 4px; top: 4px; }
+  .orb-box .arr.dn { color: var(--magenta); right: 4px; bottom: 4px; }
+
+  /* Energy level diagram */
+  .energy-diagram {
+    border: 1px solid var(--border); border-radius: 8px;
+    background: #04060d;
+    padding: 12px;
+    height: 320px; overflow-y: auto;
+    position: relative;
+  }
+  .energy-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 6px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+  }
+  .energy-row .e-lbl { color: var(--accent); width: 38px; }
+  .energy-row .e-line {
+    flex: 1; height: 2px; background: var(--accent); opacity: 0.5;
+    position: relative;
+  }
+  .energy-row .e-mini { display: flex; gap: 3px; }
+  .e-mini .mini-box {
+    width: 14px; height: 14px; border: 1px solid var(--accent);
+    border-radius: 2px; background: rgba(102,217,239,0.07);
+    position: relative;
+  }
+  .e-mini .mini-box .ma { position: absolute; font-size: 8px; line-height: 1; }
+  .e-mini .mini-box .ma.up { color: var(--accent); left: 1px; top: 1px; }
+  .e-mini .mini-box .ma.dn { color: var(--magenta); right: 1px; bottom: 1px; }
+
+  /* Periodic table */
+  .ptable-wrap {
+    overflow-x: auto;
+    margin: 0 -8px; padding: 6px 8px 14px;
+    display: flex;
+    justify-content: center;
+  }
+  .ptable {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(36px, 52px));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    gap: 3px;
+    min-width: 720px;
+    flex-shrink: 0;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+  .el {
+    aspect-ratio: 1 / 1;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 9px;
+    line-height: 1.05;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2px;
+    transition: transform 0.1s, border-color 0.1s, background 0.1s;
+    color: var(--text);
+  }
+  .el:hover {
+    border-color: var(--accent);
+    transform: scale(1.06);
+    z-index: 3;
+  }
+  .el.selected {
+    background: rgba(102, 217, 239, 0.3) !important;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(102, 217, 239, 0.4);
+  }
+  .el .num { color: var(--muted); font-size: 7.5px; }
+  .el .sym { color: var(--text); font-weight: bold; font-size: 13px; margin: 1px 0; }
+  .el .nm  { color: var(--muted); font-size: 7.5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .el.bk-s { background: rgba(255, 123, 138, 0.18); }
+  .el.bk-p { background: rgba(102, 217, 239, 0.15); }
+  .el.bk-d { background: rgba(166, 226, 46, 0.15); }
+  .el.bk-f { background: rgba(192, 132, 247, 0.18); }
+  .el.placeholder {
+    background: transparent; border: 1px dashed var(--border);
+    color: var(--muted);
+    cursor: default;
+  }
+  .el.placeholder:hover { transform: none; border-color: var(--border); }
+
+  .pt-legend {
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    justify-content: center;
+    margin-top: 12px; font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+    color: var(--muted);
+  }
+  .pt-legend .swatch {
+    display: inline-block; width: 14px; height: 14px;
+    border-radius: 3px; vertical-align: -3px; margin-right: 5px;
+    border: 1px solid var(--border);
+  }
+  .swatch.bk-s { background: rgba(255, 123, 138, 0.4); }
+  .swatch.bk-p { background: rgba(102, 217, 239, 0.4); }
+  .swatch.bk-d { background: rgba(166, 226, 46, 0.4); }
+  .swatch.bk-f { background: rgba(192, 132, 247, 0.4); }
+
+  /* Element info panel */
+  .el-info { margin-top: 18px; }
+  .el-info .top {
+    display: grid; grid-template-columns: 120px 1fr; gap: 18px;
+    align-items: center;
+  }
+  @media (max-width: 720px) { .el-info .top { grid-template-columns: 1fr; } }
+  .el-bigsym {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 10px;
+    text-align: center; aspect-ratio: 1 / 1;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .el-bigsym .num { color: var(--muted); font-size: 12px; }
+  .el-bigsym .sym { color: var(--accent); font-size: 36px; font-weight: 700; line-height: 1; margin: 4px 0; font-family: ui-monospace, Menlo, monospace; }
+  .el-bigsym .nm { color: var(--text); font-size: 13px; }
+
+  .el-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
+  }
+  .el-meta .key { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .el-meta .val { color: var(--accent); }
+  .el-meta .row { display: flex; flex-direction: column; }
+
+  .config-text {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 16px; line-height: 1.7;
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px;
+    word-break: break-word;
+  }
+  .config-text .sub-tag { color: var(--accent); }
+  .config-text .core { color: var(--magenta); }
+
+  .diagram-section {
+    margin-top: 16px;
+  }
+  .diagram-section h3 { color: var(--accent); font-size: 14px; margin: 14px 0 8px; }
+
+  /* Filling rules */
+  .rule-block {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px;
+    margin: 10px 0;
+  }
+  .rule-block .rule-name {
+    color: var(--accent); font-weight: 600; margin-bottom: 6px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 14px;
+  }
+  .rule-block p { margin: 6px 0; }
+
+  /* Hund's rule mini demo */
+  .hund-demo {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin: 14px 0;
+  }
+  @media (max-width: 760px) { .hund-demo { grid-template-columns: 1fr; } }
+  .hund-demo .case {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+  }
+  .hund-demo .case .ttl { font-size: 13px; margin-bottom: 8px; font-family: ui-monospace, Menlo, monospace; }
+  .hund-demo .case.right .ttl { color: var(--good); }
+  .hund-demo .case.wrong .ttl { color: var(--bad); }
+
+  /* Madelung interactive */
+  .madelung-arrows {
+    position: relative;
+    overflow: hidden;
+  }
+  .madelung svg.arrows {
+    position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* Filler */
+  .filler-controls {
+    display: flex; gap: 8px; margin: 12px 0;
+    align-items: center; flex-wrap: wrap;
+  }
+  .filler-controls input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+  .filler-controls .ze { font-family: ui-monospace, Menlo, monospace; min-width: 80px; color: var(--accent); font-size: 16px; }
+  .filler-controls .pretty { color: var(--text); font-family: ui-monospace, Menlo, monospace; font-size: 14px; }
+
+  .filler-config {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 14px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 14px;
+    margin-top: 8px;
+  }
+
+  /* Deep-dive explanation panel */
+  .qn-deep h3 {
+    color: var(--accent);
+    margin: 22px 0 8px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 14.5px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+  .qn-deep h3:first-of-type { margin-top: 0; }
+  .qn-deep .symbol { color: var(--magenta); }
+
+  .orient-demo, .spin-demo {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin: 14px 0;
+    justify-content: center;
+  }
+  .orient-card, .spin-card {
+    flex: 0 0 auto;
+    width: 140px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 8px 12px;
+    text-align: center;
+  }
+  .orient-card svg, .spin-card svg {
+    width: 100%; height: auto; aspect-ratio: 1;
+  }
+  .orient-card .ttl, .spin-card .ttl {
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
+    color: var(--accent); margin-top: 6px;
+    font-weight: 600;
+  }
+  .spin-card.down .ttl { color: var(--magenta); }
+  .orient-card .sub, .spin-card .sub {
+    font-family: ui-monospace, Menlo, monospace; font-size: 11px;
+    color: var(--muted); margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="images/president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Atomic Orbitals &amp; Electron Configuration</h1>
+<p class="lead">Where electrons live, what their addresses look like, and how to write down the electron configuration of any element on the periodic table.</p>
+
+<!-- ============================================================ -->
+<!-- WHAT IS AN ORBITAL                                           -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>What is an atomic orbital?</h2>
+  <p>An <strong>atomic orbital</strong> is a 3-D region around the nucleus where an electron is most likely to be found. It is <em>not</em> a planet-like orbit — the electron doesn't trace out a circle. Instead, the orbital is a probability cloud described by a wavefunction \(\psi(x,y,z)\), and \(|\psi|^2\) tells you how likely you are to find the electron at any given point.</p>
+
+  <p>Each orbital can hold <strong>at most two electrons</strong> (one spin-up, one spin-down — that's the Pauli exclusion principle). Orbitals come in different shapes and sizes, and we label each one with a set of four numbers called <strong>quantum numbers</strong>.</p>
+
+  <div class="principle-callout">
+    <strong>Address analogy.</strong> Think of the four quantum numbers as the electron's "address":
+    <ul style="margin: 6px 0 0;">
+      <li>\(n\) — which floor of the building (energy level / shell)</li>
+      <li>\(\ell\) — which wing on that floor (subshell shape)</li>
+      <li>\(m_\ell\) — which apartment in that wing (orbital orientation)</li>
+      <li>\(m_s\) — which of the two beds in the apartment (spin direction)</li>
+    </ul>
+    No two electrons in the same atom can share all four numbers.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- THE FOUR QUANTUM NUMBERS                                     -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>The four quantum numbers</h2>
+  <p>Drag the sliders to build a valid electron address. Notice how each number constrains the next: \(\ell\) is capped by \(n\), and \(m_\ell\) is capped by \(\ell\).</p>
+
+  <div class="qn-picker">
+    <div class="qn-card">
+      <div class="label">Principal n</div>
+      <div class="value" id="qnN">2</div>
+      <input type="range" id="qnNSlider" min="1" max="6" step="1" value="2">
+      <div class="desc">Energy level / shell. \(n = 1, 2, 3, \dots\). Bigger \(n\) = farther from nucleus, higher energy. The \(K, L, M, N\dots\) shells correspond to \(n=1, 2, 3, 4\dots\).</div>
+    </div>
+    <div class="qn-card">
+      <div class="label">Angular ℓ</div>
+      <div class="value" id="qnL">1 (p)</div>
+      <input type="range" id="qnLSlider" min="0" max="1" step="1" value="1">
+      <div class="desc">Subshell. \(\ell = 0, 1, \dots, n-1\). Each value gets a letter: \(0=s\), \(1=p\), \(2=d\), \(3=f\), \(4=g\). Sets the <em>shape</em> of the orbital.</div>
+    </div>
+    <div class="qn-card">
+      <div class="label">Magnetic m_ℓ</div>
+      <div class="value" id="qnML">0</div>
+      <input type="range" id="qnMLSlider" min="-1" max="1" step="1" value="0">
+      <div class="desc">Orbital orientation. \(m_\ell = -\ell, -\ell+1, \dots, +\ell\). For a \(p\) subshell (\(\ell=1\)) you get three orientations: \(m_\ell = -1, 0, +1\), conventionally drawn as \(p_x, p_y, p_z\).</div>
+    </div>
+    <div class="qn-card">
+      <div class="label">Spin m_s</div>
+      <div class="value" id="qnMS">+½</div>
+      <div class="ms-toggle" id="qnMSToggle">
+        <button type="button" data-ms="0.5" class="active">+½ ↑</button>
+        <button type="button" data-ms="-0.5">−½ ↓</button>
+      </div>
+      <div class="desc">Intrinsic spin direction. Always \(\pm 1/2\) for an electron — the only two-valued quantum number. Two electrons in the <em>same</em> orbital must have <em>opposite</em> spins.</div>
+    </div>
+  </div>
+
+  <div class="qn-summary" id="qnSummary"></div>
+
+  <h3 style="margin-top: 18px;">Counting orbitals and electrons</h3>
+  <p>Once you fix \(n\) and \(\ell\), the number of orbitals in that subshell is \(2\ell + 1\) (one for each value of \(m_\ell\)), and each orbital holds 2 electrons (Pauli), so each subshell holds \(2(2\ell+1) = 4\ell + 2\) electrons.</p>
+
+  <table class="cap">
+    <thead><tr><th>ℓ</th><th>letter</th><th>orbitals (2ℓ+1)</th><th>capacity (4ℓ+2)</th><th>shape</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td class="name">s</td><td>1</td><td>2</td><td>spherical</td></tr>
+      <tr><td>1</td><td class="name">p</td><td>3</td><td>6</td><td>dumbbell</td></tr>
+      <tr><td>2</td><td class="name">d</td><td>5</td><td>10</td><td>cloverleaf (4 lobes) or donut+dumbbell</td></tr>
+      <tr><td>3</td><td class="name">f</td><td>7</td><td>14</td><td>complex 6-/8-lobed shapes</td></tr>
+      <tr><td>4</td><td class="name">g</td><td>9</td><td>18</td><td>even more complex (rare in ground states)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top: 22px;">Counting orbitals at a whole shell</h3>
+  <p>Adding up over all subshells of shell \(n\): the total number of orbitals is \(n^2\), and the maximum number of electrons is \(2n^2\).</p>
+
+  <table class="cap">
+    <thead><tr><th>n</th><th>shell</th><th>subshells available</th><th># orbitals (n²)</th><th>max electrons (2n²)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="name">K</td><td>1s</td><td>1</td><td>2</td></tr>
+      <tr><td>2</td><td class="name">L</td><td>2s, 2p</td><td>4</td><td>8</td></tr>
+      <tr><td>3</td><td class="name">M</td><td>3s, 3p, 3d</td><td>9</td><td>18</td></tr>
+      <tr><td>4</td><td class="name">N</td><td>4s, 4p, 4d, 4f</td><td>16</td><td>32</td></tr>
+      <tr><td>5</td><td class="name">O</td><td>5s, 5p, 5d, 5f, 5g</td><td>25</td><td>50</td></tr>
+      <tr><td>6</td><td class="name">P</td><td>6s, 6p, 6d, 6f, 6g, …</td><td>36</td><td>72</td></tr>
+      <tr><td>7</td><td class="name">Q</td><td>7s, 7p, 7d, 7f, …</td><td>49</td><td>98</td></tr>
+    </tbody>
+  </table>
+  <div class="hint" style="font-size: 13px; color: var(--muted); margin-top: 6px;">No known element has any electrons in 5g, 6f, 6g, 7f, … in its ground state — those subshells exist mathematically but lie above the highest filled state in real atoms.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- GOING DEEPER — what each quantum number actually represents  -->
+<!-- ============================================================ -->
+<div class="panel qn-deep">
+  <h2>Going deeper — what each quantum number actually means</h2>
+  <p>Each of these numbers labels a specific physical property of the electron. Here's what's actually going on with each one — especially "orbital orientation" and "spin direction," which sound abstract but have very concrete meanings.</p>
+
+  <h3><span class="symbol">n</span> — principal quantum number (energy level / shell)</h3>
+  <p><strong>Physical meaning:</strong> sets the electron's overall energy and roughly how far from the nucleus it sits, on average. Bigger \(n\) → higher energy → larger average distance.</p>
+  <p><strong>Allowed values:</strong> any positive integer, \(n = 1, 2, 3, 4, \dots\)</p>
+  <p><strong>Mental picture:</strong> floors of a building. Floor 1 (\(n=1\), the \(K\) shell) is closest to the nucleus and lowest energy; each higher floor is farther out and higher energy. Each floor has multiple "rooms" (subshells), labeled by \(\ell\).</p>
+  <p>For hydrogen (one electron), the energy depends <em>only</em> on \(n\): \(E_n = -13.6\,\text{eV}/n^2\). For multi-electron atoms it depends on both \(n\) and \(\ell\), which is why \(4s\) (\(n=4, \ell=0\)) actually fills before \(3d\) (\(n=3, \ell=2\)).</p>
+
+  <h3><span class="symbol">ℓ</span> — angular momentum quantum number (subshell shape)</h3>
+  <p><strong>Physical meaning:</strong> how much orbital angular momentum the electron carries — i.e. how vigorously it is "swirling around" the nucleus. \(\ell = 0\) means none at all (so the orbital is a featureless sphere); larger \(\ell\) means more swirl, which produces directional lobes.</p>
+  <p><strong>Allowed values:</strong> \(\ell = 0, 1, 2, \dots, n-1\). Each shell \(n\) has \(n\) possible subshells.</p>
+  <p><strong>Letter codes:</strong> \(\ell = 0 \to s\), \(1 \to p\), \(2 \to d\), \(3 \to f\), \(4 \to g\). The letters are leftover from old spectroscopy — sharp, principal, diffuse, fundamental — and have stuck.</p>
+  <p>The shape of the orbital (sphere, dumbbell, cloverleaf, …) follows directly from \(\ell\). The exact mathematical statement: the magnitude of the orbital angular momentum is \(L = \sqrt{\ell(\ell+1)}\,\hbar\). For our purposes, just remember: <strong>\(\ell\) sets the shape</strong>.</p>
+
+  <h3><span class="symbol">m_ℓ</span> — magnetic quantum number (orbital orientation)</h3>
+  <p><strong>Physical meaning:</strong> within a subshell, the orbitals all have the <em>same</em> shape but can point in different <em>directions</em> in space. \(m_\ell\) is the label that tells them apart.</p>
+  <p><strong>Allowed values:</strong> \(m_\ell = -\ell, -\ell+1, \dots, -1, 0, 1, \dots, \ell-1, \ell\) — a total of \(2\ell + 1\) values.</p>
+
+  <p><strong>What "orbital orientation" actually means.</strong> Take the three \(p\) orbitals (\(\ell = 1\)). They all look like dumbbells, and they all have the <em>same</em> energy. The only difference is which axis the dumbbell points along — \(x\), \(y\), or \(z\):</p>
+
+  <div class="orient-demo">
+    <div class="orient-card">
+      <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#5a6276" stroke-width="0.8" fill="none">
+          <line x1="0" y1="0" x2="0" y2="-38"/>
+          <line x1="0" y1="0" x2="34" y2="20"/>
+          <line x1="0" y1="0" x2="-34" y2="20"/>
+        </g>
+        <text x="3" y="-36" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10">z</text>
+        <text x="36" y="22" fill="#aaf0ff" font-family="ui-monospace, monospace" font-size="10">x</text>
+        <text x="-42" y="22" fill="#ffd166" font-family="ui-monospace, monospace" font-size="10">y</text>
+        <g transform="rotate(32)">
+          <ellipse cx="-22" cy="0" rx="14" ry="9" fill="rgba(102,217,239,0.65)"/>
+          <ellipse cx="22"  cy="0" rx="14" ry="9" fill="rgba(255,95,109,0.65)"/>
+        </g>
+        <circle cx="0" cy="0" r="3" fill="#fff"/>
+      </svg>
+      <div class="ttl">p_x</div>
+      <div class="sub">m_ℓ = +1<br>dumbbell along x</div>
+    </div>
+    <div class="orient-card">
+      <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#5a6276" stroke-width="0.8" fill="none">
+          <line x1="0" y1="0" x2="0" y2="-38"/>
+          <line x1="0" y1="0" x2="34" y2="20"/>
+          <line x1="0" y1="0" x2="-34" y2="20"/>
+        </g>
+        <text x="3" y="-36" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10">z</text>
+        <text x="36" y="22" fill="#aaf0ff" font-family="ui-monospace, monospace" font-size="10">x</text>
+        <text x="-42" y="22" fill="#ffd166" font-family="ui-monospace, monospace" font-size="10">y</text>
+        <g transform="rotate(-32)">
+          <ellipse cx="-22" cy="0" rx="14" ry="9" fill="rgba(102,217,239,0.65)"/>
+          <ellipse cx="22"  cy="0" rx="14" ry="9" fill="rgba(255,95,109,0.65)"/>
+        </g>
+        <circle cx="0" cy="0" r="3" fill="#fff"/>
+      </svg>
+      <div class="ttl">p_y</div>
+      <div class="sub">m_ℓ = −1<br>dumbbell along y</div>
+    </div>
+    <div class="orient-card">
+      <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#5a6276" stroke-width="0.8" fill="none">
+          <line x1="0" y1="0" x2="0" y2="-38"/>
+          <line x1="0" y1="0" x2="34" y2="20"/>
+          <line x1="0" y1="0" x2="-34" y2="20"/>
+        </g>
+        <text x="3" y="-36" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10">z</text>
+        <text x="36" y="22" fill="#aaf0ff" font-family="ui-monospace, monospace" font-size="10">x</text>
+        <text x="-42" y="22" fill="#ffd166" font-family="ui-monospace, monospace" font-size="10">y</text>
+        <ellipse cx="0" cy="-22" rx="9" ry="14" fill="rgba(102,217,239,0.65)"/>
+        <ellipse cx="0" cy="22"  rx="9" ry="14" fill="rgba(255,95,109,0.65)"/>
+        <circle cx="0" cy="0" r="3" fill="#fff"/>
+      </svg>
+      <div class="ttl">p_z</div>
+      <div class="sub">m_ℓ = 0<br>dumbbell along z</div>
+    </div>
+  </div>
+
+  <p>Same shape, three perpendicular orientations, three values of \(m_\ell\). For the \(d\) subshell (\(\ell = 2\)) there are five orientations (\(m_\ell = -2, -1, 0, +1, +2\)), corresponding to the five \(d\) shapes (\(d_{xy}, d_{yz}, d_{xz}, d_{x^2-y^2}, d_{z^2}\)). For \(f\) there are seven, and so on.</p>
+
+  <p><strong>Why "magnetic"?</strong> In an external magnetic field, orbitals with different \(m_\ell\) acquire slightly different energies — that's the <strong>Zeeman effect</strong>. With no magnetic field, all \(2\ell+1\) orientations have the <em>same</em> energy and you can't distinguish them. Switch on a magnetic field, and a single spectral line splits into \(2\ell+1\) lines, one per orientation. That's where the name comes from.</p>
+
+  <h3><span class="symbol">s</span> — spin quantum number (intrinsic angular momentum)</h3>
+  <p><strong>Physical meaning:</strong> beyond moving through space, an electron has a built-in property called <strong>spin</strong>. Spin behaves mathematically like angular momentum, even though the electron is a point particle and isn't actually rotating. Spin is just a feature of what an electron <em>is</em> — like its mass or charge.</p>
+  <p><strong>Allowed values:</strong> for an electron, \(s = 1/2\) — always. It's a fixed property; you can't change it. Different particles have different fixed values: photons have \(s = 1\), the Higgs boson has \(s = 0\), pions have \(s = 0\). Electrons, protons, and neutrons all have \(s = 1/2\) (they're all "spin-½ particles").</p>
+  <p>Because \(s\) is fixed for electrons, it usually drops out of the listed quantum numbers — only \(m_s\) varies. The "four quantum numbers" you'll be asked about are \(n\), \(\ell\), \(m_\ell\), and \(m_s\).</p>
+
+  <h3><span class="symbol">m_s</span> — spin magnetic quantum number (spin direction)</h3>
+  <p><strong>Physical meaning:</strong> the \(z\)-component of the spin — i.e. which way the electron's intrinsic angular momentum vector is pointing along whatever axis you choose to measure.</p>
+  <p><strong>Allowed values:</strong> \(m_s = +1/2\) ("spin up", ↑) or \(m_s = -1/2\) ("spin down", ↓). Only those two — there is no in-between.</p>
+
+  <p><strong>What "spin direction" actually means.</strong> Picture the electron as a tiny bar magnet. The magnet has a north pole and a south pole, and the line connecting them defines a direction. <strong>That direction is the spin direction.</strong></p>
+
+  <div class="spin-demo">
+    <div class="spin-card">
+      <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="0" cy="0" r="22" fill="rgba(102,217,239,0.18)" stroke="#66d9ef" stroke-width="1.5"/>
+        <line x1="0" y1="20" x2="0" y2="-32" stroke="#66d9ef" stroke-width="3"/>
+        <polyline points="-7,-24 0,-32 7,-24" fill="none" stroke="#66d9ef" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        <text x="0" y="4" fill="#fff" font-family="ui-monospace, monospace" font-size="13" text-anchor="middle">e⁻</text>
+        <text x="-15" y="-12" fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10" text-anchor="end">N</text>
+        <text x="-15" y="22"  fill="#ff7b8a" font-family="ui-monospace, monospace" font-size="10" text-anchor="end">S</text>
+      </svg>
+      <div class="ttl">spin up ↑</div>
+      <div class="sub">m_s = +½<br>magnet points along +z</div>
+    </div>
+    <div class="spin-card down">
+      <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="0" cy="0" r="22" fill="rgba(255,77,184,0.18)" stroke="#ff4db8" stroke-width="1.5"/>
+        <line x1="0" y1="-20" x2="0" y2="32" stroke="#ff4db8" stroke-width="3"/>
+        <polyline points="-7,24 0,32 7,24" fill="none" stroke="#ff4db8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        <text x="0" y="4" fill="#fff" font-family="ui-monospace, monospace" font-size="13" text-anchor="middle">e⁻</text>
+        <text x="-15" y="-12" fill="#ff7b8a" font-family="ui-monospace, monospace" font-size="10" text-anchor="end">S</text>
+        <text x="-15" y="22"  fill="#a6e22e" font-family="ui-monospace, monospace" font-size="10" text-anchor="end">N</text>
+      </svg>
+      <div class="ttl">spin down ↓</div>
+      <div class="sub">m_s = −½<br>magnet points along −z</div>
+    </div>
+  </div>
+
+  <p>Crucially: when you measure the electron's spin along <em>any</em> axis you choose, you only ever get one of those two outcomes — never "tilted at 45°," never "halfway up." This discreteness is one of the most non-classical things in physics. A classical bar magnet could point any direction; the electron's spin can only be parallel or anti-parallel to the measurement axis.</p>
+
+  <p>Spin direction is what doubles every orbital's capacity. Each spatial orbital — one combination of \((n, \ell, m_\ell)\) — holds <em>two</em> electrons, one with each spin direction. That's the <strong>Pauli exclusion principle</strong>: two electrons in the same orbital must have opposite spins so that all four quantum numbers don't match.</p>
+
+  <p>The first experimental evidence for spin came from the <strong>Stern–Gerlach experiment</strong> (1922): a beam of silver atoms passed through a non-uniform magnetic field and split into <em>exactly</em> two beams, not a continuous spread. Two beams = two values of \(m_s\) = quantized spin. Classical physics predicted a continuous spray; reality gave a sharp split. That was the first hard evidence that angular momentum at the atomic scale comes in fundamentally discrete packets.</p>
+
+  <div class="key-takeaway">
+    <strong>The four-number summary, with physical meaning.</strong>
+    <ul style="margin: 8px 0 0;">
+      <li><strong>\(n\)</strong> sets the electron's energy and average distance from the nucleus.</li>
+      <li><strong>\(\ell\)</strong> sets the orbital's shape (sphere, dumbbell, cloverleaf, …).</li>
+      <li><strong>\(m_\ell\)</strong> sets the orbital's orientation in space (which axis the lobes point along).</li>
+      <li><strong>\(m_s\)</strong> sets the electron's intrinsic spin direction (up or down along z).</li>
+    </ul>
+    No two electrons in the same atom can share all four — that's why each orbital holds at most two electrons, and why everything in chemistry from periodicity to bonding flows from this single rule.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TABS                                                          -->
+<!-- ============================================================ -->
+<div class="demo-tabs" id="demoTabs">
+  <button type="button" data-demo="shapes" class="active">Subshell shapes</button>
+  <button type="button" data-demo="filling">Filling rules &amp; ordering</button>
+  <button type="button" data-demo="ptable">Interactive periodic table</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- SHAPES TAB                                                    -->
+<!-- ============================================================ -->
+<div class="demo-section active" id="demoshapes">
+  <div class="panel">
+    <h2>The shapes of s, p, d, f, g orbitals</h2>
+    <p>These are 2-D cross-section schematics of the actual 3-D orbitals. Cyan and red lobes mark regions where the wavefunction \(\psi\) has opposite sign — but remember, the probability density is \(|\psi|^2\), so both colors are equally likely places to find the electron. The sign matters for chemistry (it tells you how orbitals add when atoms bond), not for "where is the electron."</p>
+
+    <div id="shapeGallery"></div>
+
+    <div class="key-takeaway" style="margin-top: 18px;">
+      <strong>Quick mnemonic.</strong> The number of <em>angular nodes</em> (flat planes where \(\psi=0\)) equals \(\ell\). \(s\) has 0, \(p\) has 1, \(d\) has 2, \(f\) has 3, \(g\) has 4. The number of <em>radial nodes</em> (spherical shells where \(\psi=0\)) is \(n - \ell - 1\). So a \(2s\) orbital has 1 radial node and 0 angular nodes; a \(3p\) has 1 radial and 1 angular; a \(3d\) has 0 radial and 2 angular.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FILLING TAB                                                   -->
+<!-- ============================================================ -->
+<div class="demo-section" id="demofilling">
+  <div class="panel">
+    <h2>How electrons fill orbitals — three rules</h2>
+
+    <div class="rule-block">
+      <div class="rule-name">1. Aufbau principle</div>
+      <p>Electrons fill the <em>lowest</em>-energy orbital first. We work from the bottom up.</p>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-name">2. Pauli exclusion principle</div>
+      <p>No two electrons in the same atom can have all four quantum numbers identical. Practically: each orbital holds at most two electrons, and they must have opposite spins (one \(m_s = +½\), one \(-½\)).</p>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-name">3. Hund's rule</div>
+      <p>When filling a subshell with multiple equal-energy orbitals (like the three \(p\) orbitals), put one electron in each empty orbital — all with parallel spins — <em>before</em> any orbital gets a second electron. Singly-occupied first, then double up.</p>
+    </div>
+
+    <div class="hund-demo">
+      <div class="case right">
+        <div class="ttl">✓ Carbon, Hund's rule applied</div>
+        <div class="box-diagram">
+          <div class="box-row">
+            <span class="row-lbl">2p</span>
+            <div class="orb-box"><span class="arr up">↑</span></div>
+            <div class="orb-box"><span class="arr up">↑</span></div>
+            <div class="orb-box"></div>
+          </div>
+        </div>
+        <div class="hint" style="font-size: 12px; color: var(--muted); margin-top: 8px;">Two unpaired electrons in different \(p\) orbitals, both spin-up. Lowest energy state.</div>
+      </div>
+      <div class="case wrong">
+        <div class="ttl">✗ Carbon, Hund's rule violated</div>
+        <div class="box-diagram">
+          <div class="box-row">
+            <span class="row-lbl">2p</span>
+            <div class="orb-box"><span class="arr up">↑</span><span class="arr dn">↓</span></div>
+            <div class="orb-box"></div>
+            <div class="orb-box"></div>
+          </div>
+        </div>
+        <div class="hint" style="font-size: 12px; color: var(--muted); margin-top: 8px;">Pairing up too early. Higher energy because of electron-electron repulsion in the same orbital.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Madelung's rule — the order of filling</h2>
+    <p>The orbitals don't fill in the order \(1s, 2s, 2p, 3s, 3p, 3d, 4s\dots\) — instead, \(4s\) sneaks in <em>before</em> \(3d\). The pattern is captured by the <strong>Madelung rule</strong> (also called the \((n+\ell)\) rule):</p>
+
+    <div class="formula-box">
+      Fill subshells in order of increasing \(n + \ell\). For ties, fill the smaller \(n\) first.
+    </div>
+
+    <p>The standard sequence the rule produces is:</p>
+    <div class="config-text" style="font-size: 15px;">
+      1s → 2s → 2p → 3s → 3p → <span style="color: var(--warn);">4s</span> → 3d → 4p → 5s → 4d → 5p → 6s → 4f → 5d → 6p → 7s → 5f → 6d → 7p
+    </div>
+
+    <p>A common visual is the "diagonal arrows" diagram:</p>
+    <div id="madelungDiagonal"></div>
+
+    <div class="principle-callout">
+      <strong>Exceptions exist.</strong> A handful of elements (Cr, Cu, Mo, Ag, Au, Pt, Pd, La, Gd, Ac, Th, …) actually rearrange one electron away from what Madelung predicts, because half-filled or fully-filled \(d\) and \(f\) subshells are unusually stable. We list these in the periodic-table tab — for a first pass, just memorize the Madelung sequence above.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Build it yourself — fill an atom electron by electron</h2>
+    <p>Drag the slider to add electrons one at a time. Watch the orbitals fill in Madelung order, with Hund's rule and Pauli's exclusion respected automatically.</p>
+
+    <div class="filler-controls">
+      <span class="ze" id="fillerZ">Z = 6</span>
+      <input type="range" id="fillerSlider" min="0" max="118" step="1" value="6">
+      <span class="pretty" id="fillerName">Carbon</span>
+    </div>
+    <div class="filler-config" id="fillerConfig"></div>
+    <div class="diagram-section">
+      <h3>Box diagram (Madelung order)</h3>
+      <div id="fillerBoxes"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PTABLE TAB                                                    -->
+<!-- ============================================================ -->
+<div class="demo-section" id="demoptable">
+  <div class="panel">
+    <h2>Interactive periodic table</h2>
+    <p>Click any element to see its electron configuration, noble-gas shorthand, block, period, group, valence count, and several different orbital diagrams. Cells are colored by which block (\(s\), \(p\), \(d\), \(f\)) the last electron lands in.</p>
+
+    <div class="ptable-wrap">
+      <div class="ptable" id="ptable"></div>
+    </div>
+
+    <div class="pt-legend">
+      <span><span class="swatch bk-s"></span>s-block (groups 1, 2 + He)</span>
+      <span><span class="swatch bk-p"></span>p-block (groups 13–18)</span>
+      <span><span class="swatch bk-d"></span>d-block (transition metals)</span>
+      <span><span class="swatch bk-f"></span>f-block (lanthanides + actinides)</span>
+    </div>
+  </div>
+
+  <div class="panel" id="elInfoPanel">
+    <h2 id="elTitle">Click an element above</h2>
+    <div class="el-info" id="elInfo"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BIG-PICTURE END                                               -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>Why this matters</h2>
+  <ul>
+    <li><strong>Chemistry rests on the outermost shell.</strong> Two elements with the same valence-electron count (like all the alkali metals: 1 valence \(s\) electron) react in nearly identical ways. The whole periodic table is just a graphical bookkeeping device for orbital filling.</li>
+    <li><strong>Color and light come from energy gaps.</strong> An atom emits light when an electron drops from one orbital to a lower one. The energy difference \(E_i - E_f\) sets the photon's frequency \(f = (E_i - E_f)/h\).</li>
+    <li><strong>Spin makes magnetism.</strong> Atoms with unpaired electrons (Hund's rule!) act like tiny bar magnets — that's the origin of paramagnetism, ferromagnetism, and ultimately all magnetic technology from MRI to disk drives.</li>
+    <li><strong>The shape of the periodic table is the shape of orbitals.</strong> The two-column \(s\)-block on the left, the six-column \(p\)-block on the right, the ten-column \(d\)-block in the middle, the fourteen-column \(f\)-block at the bottom — those numbers (\(2, 6, 10, 14\)) are the capacities \(2(2\ell+1)\) for \(\ell = 0, 1, 2, 3\). The periodic table is literally a map of orbital subshells.</li>
+  </ul>
+</div>
+
+<script>
+//==========================================================
+// Element data: 118 elements
+//==========================================================
+const ELEMENTS = [
+  ['H','Hydrogen'],['He','Helium'],['Li','Lithium'],['Be','Beryllium'],['B','Boron'],
+  ['C','Carbon'],['N','Nitrogen'],['O','Oxygen'],['F','Fluorine'],['Ne','Neon'],
+  ['Na','Sodium'],['Mg','Magnesium'],['Al','Aluminum'],['Si','Silicon'],['P','Phosphorus'],
+  ['S','Sulfur'],['Cl','Chlorine'],['Ar','Argon'],['K','Potassium'],['Ca','Calcium'],
+  ['Sc','Scandium'],['Ti','Titanium'],['V','Vanadium'],['Cr','Chromium'],['Mn','Manganese'],
+  ['Fe','Iron'],['Co','Cobalt'],['Ni','Nickel'],['Cu','Copper'],['Zn','Zinc'],
+  ['Ga','Gallium'],['Ge','Germanium'],['As','Arsenic'],['Se','Selenium'],['Br','Bromine'],
+  ['Kr','Krypton'],['Rb','Rubidium'],['Sr','Strontium'],['Y','Yttrium'],['Zr','Zirconium'],
+  ['Nb','Niobium'],['Mo','Molybdenum'],['Tc','Technetium'],['Ru','Ruthenium'],['Rh','Rhodium'],
+  ['Pd','Palladium'],['Ag','Silver'],['Cd','Cadmium'],['In','Indium'],['Sn','Tin'],
+  ['Sb','Antimony'],['Te','Tellurium'],['I','Iodine'],['Xe','Xenon'],['Cs','Cesium'],
+  ['Ba','Barium'],['La','Lanthanum'],['Ce','Cerium'],['Pr','Praseodymium'],['Nd','Neodymium'],
+  ['Pm','Promethium'],['Sm','Samarium'],['Eu','Europium'],['Gd','Gadolinium'],['Tb','Terbium'],
+  ['Dy','Dysprosium'],['Ho','Holmium'],['Er','Erbium'],['Tm','Thulium'],['Yb','Ytterbium'],
+  ['Lu','Lutetium'],['Hf','Hafnium'],['Ta','Tantalum'],['W','Tungsten'],['Re','Rhenium'],
+  ['Os','Osmium'],['Ir','Iridium'],['Pt','Platinum'],['Au','Gold'],['Hg','Mercury'],
+  ['Tl','Thallium'],['Pb','Lead'],['Bi','Bismuth'],['Po','Polonium'],['At','Astatine'],
+  ['Rn','Radon'],['Fr','Francium'],['Ra','Radium'],['Ac','Actinium'],['Th','Thorium'],
+  ['Pa','Protactinium'],['U','Uranium'],['Np','Neptunium'],['Pu','Plutonium'],['Am','Americium'],
+  ['Cm','Curium'],['Bk','Berkelium'],['Cf','Californium'],['Es','Einsteinium'],['Fm','Fermium'],
+  ['Md','Mendelevium'],['No','Nobelium'],['Lr','Lawrencium'],['Rf','Rutherfordium'],['Db','Dubnium'],
+  ['Sg','Seaborgium'],['Bh','Bohrium'],['Hs','Hassium'],['Mt','Meitnerium'],['Ds','Darmstadtium'],
+  ['Rg','Roentgenium'],['Cn','Copernicium'],['Nh','Nihonium'],['Fl','Flerovium'],['Mc','Moscovium'],
+  ['Lv','Livermorium'],['Ts','Tennessine'],['Og','Oganesson']
+];
+
+// Subshell-letter map
+const LMAP = ['s','p','d','f','g','h'];
+
+// Madelung order, computed once: array of [n, l] in fill order
+function madelungOrder(maxN = 8) {
+  const order = [];
+  for (let s = 1; s <= maxN; s++) {
+    const lMax = Math.floor((s - 1) / 2);
+    for (let l = lMax; l >= 0; l--) {
+      const n = s - l;
+      if (l < 5) order.push([n, l]); // we won't need anything past 4f/5g for known elements
+    }
+  }
+  return order;
+}
+const MADELUNG = madelungOrder(8);
+
+// Known exceptions: full configs as [[n,l,count], ...]
+const EXCEPTIONS = {
+  // Cr: 1s2 2s2 2p6 3s2 3p6 4s1 3d5
+  24: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[4,0,1],[3,2,5]],
+  // Cu: 1s2 2s2 2p6 3s2 3p6 4s1 3d10
+  29: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[4,0,1],[3,2,10]],
+  // Nb: [Kr] 5s1 4d4
+  41: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[5,0,1],[4,2,4]],
+  // Mo: [Kr] 5s1 4d5
+  42: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[5,0,1],[4,2,5]],
+  // Ru: [Kr] 5s1 4d7
+  44: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[5,0,1],[4,2,7]],
+  // Rh: [Kr] 5s1 4d8
+  45: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[5,0,1],[4,2,8]],
+  // Pd: [Kr] 4d10 (no 5s)
+  46: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10]],
+  // Ag: [Kr] 5s1 4d10
+  47: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[5,0,1],[4,2,10]],
+  // La: [Xe] 6s2 5d1 (no 4f1 in ground state)
+  57: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[5,0,2],[5,1,6],[6,0,2],[5,2,1]],
+  // Ce: [Xe] 6s2 4f1 5d1
+  58: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[5,0,2],[5,1,6],[6,0,2],[4,3,1],[5,2,1]],
+  // Gd: [Xe] 6s2 4f7 5d1
+  64: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[5,0,2],[5,1,6],[6,0,2],[4,3,7],[5,2,1]],
+  // Pt: [Xe] 4f14 5d9 6s1
+  78: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[5,0,2],[5,1,6],[4,3,14],[6,0,1],[5,2,9]],
+  // Au: [Xe] 4f14 5d10 6s1
+  79: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[5,0,2],[5,1,6],[4,3,14],[6,0,1],[5,2,10]],
+  // Ac: [Rn] 7s2 6d1
+  89: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[6,2,1]],
+  // Th: [Rn] 7s2 6d2
+  90: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[6,2,2]],
+  // Pa: [Rn] 7s2 5f2 6d1
+  91: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[5,3,2],[6,2,1]],
+  // U: [Rn] 7s2 5f3 6d1
+  92: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[5,3,3],[6,2,1]],
+  // Np: [Rn] 7s2 5f4 6d1
+  93: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[5,3,4],[6,2,1]],
+  // Cm: [Rn] 7s2 5f7 6d1
+  96: [[1,0,2],[2,0,2],[2,1,6],[3,0,2],[3,1,6],[3,2,10],[4,0,2],[4,1,6],[4,2,10],[4,3,14],[5,0,2],[5,1,6],[5,2,10],[6,0,2],[6,1,6],[7,0,2],[5,3,7],[6,2,1]]
+};
+
+// Generate Madelung config for atomic number Z
+function generateConfig(Z) {
+  if (EXCEPTIONS[Z]) return EXCEPTIONS[Z];
+  const cfg = [];
+  let rem = Z;
+  for (const [n, l] of MADELUNG) {
+    if (rem <= 0) break;
+    const cap = 4 * l + 2;
+    const fill = Math.min(rem, cap);
+    cfg.push([n, l, fill]);
+    rem -= fill;
+  }
+  return cfg;
+}
+
+// Format config in Madelung order (the way it filled)
+function formatConfigPretty(cfg, withColor = true) {
+  return cfg.map(([n, l, c]) => {
+    return withColor
+      ? `<span class="sub-tag">${n}${LMAP[l]}<sup>${c}</sup></span>`
+      : `${n}${LMAP[l]}${supNum(c)}`;
+  }).join(' ');
+}
+function supNum(n) {
+  const map = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(n).split('').map(c => map[c] || c).join('');
+}
+
+// Sort config in standard "shell-then-subshell" order
+function sortByShell(cfg) {
+  return [...cfg].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+}
+
+// Find nearest noble gas core
+const NOBLE = [2, 10, 18, 36, 54, 86];
+function nobleCore(Z) {
+  for (let i = NOBLE.length - 1; i >= 0; i--) {
+    if (NOBLE[i] < Z) return NOBLE[i];
+  }
+  return null;
+}
+function configMinusCore(fullCfg, coreZ) {
+  if (!coreZ) return fullCfg;
+  const coreCfg = generateConfig(coreZ);
+  const remove = new Map();
+  for (const [n, l, c] of coreCfg) remove.set(`${n}.${l}`, c);
+  const out = [];
+  for (const [n, l, c] of fullCfg) {
+    const key = `${n}.${l}`;
+    if (remove.has(key)) {
+      const cv = c - remove.get(key);
+      if (cv > 0) out.push([n, l, cv]);
+    } else {
+      out.push([n, l, c]);
+    }
+  }
+  return out;
+}
+
+// Determine block letter from last filled subshell (Madelung order)
+function blockOf(Z) {
+  const cfg = generateConfig(Z);
+  // Skip 1s2 → He is sometimes called s-block but visually grouped with noble-gas p-column
+  const last = cfg[cfg.length - 1];
+  return LMAP[last[1]];
+}
+
+// Period and group
+function periodGroup(Z) {
+  // Periods by atomic number ranges
+  const periodEnds = [2, 10, 18, 36, 54, 86, 118];
+  let period = 1;
+  for (let i = 0; i < periodEnds.length; i++) {
+    if (Z <= periodEnds[i]) { period = i + 1; break; }
+  }
+  // Group from periodic-table column
+  const pos = ptablePosition(Z);
+  let group = '—';
+  if (pos.row >= 1 && pos.row <= 7) {
+    if (pos.col === 1) group = '1';
+    else if (pos.col === 2) group = '2';
+    else if (pos.col >= 3 && pos.col <= 18) {
+      if ((pos.row >= 4 && pos.col >= 3 && pos.col <= 12)) group = String(pos.col);
+      else if (pos.col >= 13) group = String(pos.col);
+      else if (pos.col === 3) group = '3';
+    }
+  } else {
+    group = '(f-block)';
+  }
+  return [period, group];
+}
+
+// Periodic table position [row, col]
+function ptablePosition(Z) {
+  if (Z === 1) return { row: 1, col: 1 };
+  if (Z === 2) return { row: 1, col: 18 };
+  if (Z >= 3 && Z <= 4) return { row: 2, col: Z - 2 };
+  if (Z >= 5 && Z <= 10) return { row: 2, col: Z + 8 };
+  if (Z >= 11 && Z <= 12) return { row: 3, col: Z - 10 };
+  if (Z >= 13 && Z <= 18) return { row: 3, col: Z };
+  if (Z >= 19 && Z <= 36) return { row: 4, col: Z - 18 };
+  if (Z >= 37 && Z <= 54) return { row: 5, col: Z - 36 };
+  if (Z === 55) return { row: 6, col: 1 };
+  if (Z === 56) return { row: 6, col: 2 };
+  if (Z === 57) return { row: 6, col: 3 };
+  if (Z >= 58 && Z <= 71) return { row: 9, col: Z - 54 }; // Ce..Lu in row 9 cols 4..17
+  if (Z >= 72 && Z <= 86) return { row: 6, col: Z - 68 };
+  if (Z === 87) return { row: 7, col: 1 };
+  if (Z === 88) return { row: 7, col: 2 };
+  if (Z === 89) return { row: 7, col: 3 };
+  if (Z >= 90 && Z <= 103) return { row: 10, col: Z - 86 };
+  if (Z >= 104 && Z <= 118) return { row: 7, col: Z - 100 };
+  return { row: 1, col: 1 };
+}
+
+// Quantum numbers of the last electron (in Madelung order)
+function lastElectronQN(Z) {
+  if (Z < 1) return null;
+  const cfg = generateConfig(Z);
+  const last = cfg[cfg.length - 1];
+  const [n, l, count] = last;
+  // Hund: m_l from -l up; the count-th electron lands accordingly.
+  // First (2l+1) electrons go single (each m_l, spin +1/2),
+  // next (2l+1) electrons pair them (spin -1/2).
+  const idx = count - 1; // 0-indexed
+  const orbCount = 2 * l + 1;
+  const ms = idx < orbCount ? 0.5 : -0.5;
+  const m_l = (idx % orbCount) - l;
+  return { n, l, m_l, ms };
+}
+
+//==========================================================
+// QN Picker
+//==========================================================
+const qnNSlider  = document.getElementById('qnNSlider');
+const qnLSlider  = document.getElementById('qnLSlider');
+const qnMLSlider = document.getElementById('qnMLSlider');
+const qnNVal  = document.getElementById('qnN');
+const qnLVal  = document.getElementById('qnL');
+const qnMLVal = document.getElementById('qnML');
+const qnMSVal = document.getElementById('qnMS');
+const qnSummary = document.getElementById('qnSummary');
+const qnMSToggle = document.getElementById('qnMSToggle');
+let qnMs = 0.5;
+
+function updateQN() {
+  let n = +qnNSlider.value;
+  qnLSlider.max = n - 1;
+  let l = Math.min(+qnLSlider.value, n - 1);
+  qnLSlider.value = l;
+  qnMLSlider.min = -l;
+  qnMLSlider.max = l;
+  let ml = Math.max(-l, Math.min(l, +qnMLSlider.value));
+  qnMLSlider.value = ml;
+
+  qnNVal.textContent = n;
+  qnLVal.textContent = `${l} (${LMAP[l]})`;
+  qnMLVal.textContent = ml;
+  qnMSVal.textContent = qnMs > 0 ? '+½' : '−½';
+
+  const sub = `${n}${LMAP[l]}`;
+  const orient = orbitalOrientation(l, ml);
+  const subOrbs = 2*l + 1;
+  const subCap  = 4*l + 2;
+  qnSummary.innerHTML = `
+    <div class="row"><span class="label">Subshell</span><span class="val">${sub}</span></div>
+    <div class="row"><span class="label">Orbital orientation (m_ℓ = ${ml})</span><span class="val">${orient}</span></div>
+    <div class="row"><span class="label">Orbitals in this subshell</span><span class="val">${subOrbs}</span></div>
+    <div class="row"><span class="label">Electron capacity of this subshell</span><span class="val">${subCap}</span></div>
+    <div class="row"><span class="label">Electron capacity of shell n=${n}</span><span class="val">${2*n*n}</span></div>
+    <div class="row"><span class="label">Address</span><span class="val">(n=${n}, ℓ=${l}, m_ℓ=${ml}, m_s=${qnMs > 0 ? '+½' : '−½'})</span></div>
+  `;
+}
+function orbitalOrientation(l, ml) {
+  if (l === 0) return 's (spherical)';
+  if (l === 1) return ml === 0 ? 'p_z' : (ml === 1 ? 'p_x' : 'p_y');
+  if (l === 2) {
+    return [{m:-2, n:'d_xy'},{m:-1,n:'d_yz'},{m:0,n:'d_z²'},{m:1,n:'d_xz'},{m:2,n:'d_x²−y²'}]
+           .find(x=>x.m===ml).n;
+  }
+  if (l === 3) return `f orbital (m_ℓ=${ml}; one of 7 cubic-set f shapes)`;
+  if (l === 4) return `g orbital (m_ℓ=${ml}; one of 9 g shapes — not occupied in ground states)`;
+  return `m_ℓ = ${ml}`;
+}
+
+qnNSlider.addEventListener('input', updateQN);
+qnLSlider.addEventListener('input', updateQN);
+qnMLSlider.addEventListener('input', updateQN);
+qnMSToggle.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-ms]');
+  if (!btn) return;
+  qnMs = +btn.dataset.ms;
+  qnMSToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+  updateQN();
+});
+updateQN();
+
+//==========================================================
+// Tab switching
+//==========================================================
+document.getElementById('demoTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-demo]');
+  if (!btn) return;
+  document.querySelectorAll('#demoTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.demo-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('demo' + btn.dataset.demo).classList.add('active');
+});
+
+//==========================================================
+// Subshell shape gallery
+//==========================================================
+const SHAPE_GALLERY = [
+  { l: 0, name: 's', orbCount: 1, cap: 2, blurb:
+      'Spherically symmetric. The wavefunction depends only on distance from the nucleus, not direction.',
+    orbitals: [ { lbl: 's',  draw: drawS } ] },
+  { l: 1, name: 'p', orbCount: 3, cap: 6, blurb:
+      'Three perpendicular dumbbells along the x, y, and z axes. Two lobes per orbital, with opposite sign of ψ; the nucleus sits at a node.',
+    orbitals: [
+      { lbl: 'p_x',  draw: () => drawDumbbell('x') },
+      { lbl: 'p_y',  draw: () => drawDumbbell('y') },
+      { lbl: 'p_z',  draw: () => drawDumbbell('z') }
+    ]},
+  { l: 2, name: 'd', orbCount: 5, cap: 10, blurb:
+      'Four cloverleaf orbitals plus the unique d_z² (a vertical dumbbell wrapped by an equatorial ring).',
+    orbitals: [
+      { lbl: 'd_xy',     draw: () => drawCloverleaf(0) },
+      { lbl: 'd_xz',     draw: () => drawCloverleafXZ() },
+      { lbl: 'd_yz',     draw: () => drawCloverleafYZ() },
+      { lbl: 'd_x²−y²',  draw: () => drawCloverleafAxial() },
+      { lbl: 'd_z²',     draw: drawDz2 }
+    ]},
+  { l: 3, name: 'f', orbCount: 7, cap: 14, blurb:
+      'Seven f orbitals with 6- and 8-lobe shapes. Filling these lobes is what produces the lanthanide row.',
+    orbitals: [
+      { lbl: 'f_z³',         draw: () => drawF6Z() },
+      { lbl: 'f_xz²',        draw: () => drawF6Other(0) },
+      { lbl: 'f_yz²',        draw: () => drawF6Other(90) },
+      { lbl: 'f_xyz',        draw: () => drawF8(0) },
+      { lbl: 'f_z(x²−y²)',   draw: () => drawF8(45) },
+      { lbl: 'f_x(x²−3y²)',  draw: () => drawF6Hex(0) },
+      { lbl: 'f_y(3x²−y²)',  draw: () => drawF6Hex(30) }
+    ]},
+  { l: 4, name: 'g', orbCount: 9, cap: 18, blurb:
+      'g orbitals exist mathematically (ℓ=4) but no element in its ground state has any g-electrons. Sketches below are schematic only.',
+    orbitals: [
+      { lbl: 'g₁', draw: () => drawGAng(2) },
+      { lbl: 'g₂', draw: () => drawGAng(3) },
+      { lbl: 'g₃', draw: () => drawGAng(4) },
+      { lbl: 'g₄', draw: () => drawGAng(5) },
+      { lbl: 'g₅', draw: () => drawGAng(6) },
+      { lbl: 'g₆', draw: () => drawGAng(7) },
+      { lbl: 'g₇', draw: () => drawGAng(8) },
+      { lbl: 'g₈', draw: () => drawGAng(2.5) },
+      { lbl: 'g₉', draw: () => drawGAng(3.5) }
+    ]}
+];
+
+function drawS() {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="s-${Math.random().toString(36).slice(2,7)}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#66d9ef" stop-opacity="0.85"/>
+        <stop offset="60%" stop-color="#66d9ef" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#66d9ef" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="0" cy="0" r="40" fill="rgba(102,217,239,0.25)"/>
+    <circle cx="0" cy="0" r="22" fill="rgba(102,217,239,0.55)"/>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawDumbbell(axis) {
+  // axis: 'x' (horizontal), 'y' (depth - draw as small circle since we view from front), 'z' (vertical)
+  if (axis === 'y') {
+    // py orbital: dumbbell is into/out of page; cross-section is just two overlapping circles
+    return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="0" cy="0" r="28" fill="rgba(102,217,239,0.45)"/>
+      <circle cx="0" cy="0" r="5" fill="#fff"/>
+      <text x="0" y="-30" fill="#9aa2b6" font-family="ui-monospace" font-size="9" text-anchor="middle">⊙ y-axis (out of page)</text>
+    </svg>`;
+  }
+  const rotate = axis === 'x' ? 90 : 0;
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(${rotate})">
+      <ellipse cx="0" cy="-22" rx="14" ry="22" fill="rgba(102,217,239,0.55)"/>
+      <ellipse cx="0" cy="22"  rx="14" ry="22" fill="rgba(255,95,109,0.55)"/>
+    </g>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawCloverleaf(rot) {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(${rot + 45})">
+      <ellipse cx="22" cy="0"  rx="18" ry="9" fill="rgba(102,217,239,0.55)"/>
+      <ellipse cx="-22" cy="0" rx="18" ry="9" fill="rgba(102,217,239,0.55)"/>
+    </g>
+    <g transform="rotate(${rot - 45})">
+      <ellipse cx="22" cy="0"  rx="18" ry="9" fill="rgba(255,95,109,0.55)"/>
+      <ellipse cx="-22" cy="0" rx="18" ry="9" fill="rgba(255,95,109,0.55)"/>
+    </g>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawCloverleafXZ() {
+  // d_xz: lobes in xz plane (so visible cross-section through xz plane)
+  return drawCloverleaf(0);
+}
+function drawCloverleafYZ() {
+  // d_yz: lobes in yz plane (the y dimension into page; we just rotate label)
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(45)">
+      <ellipse cx="22" cy="0"  rx="14" ry="9" fill="rgba(102,217,239,0.45)"/>
+      <ellipse cx="-22" cy="0" rx="14" ry="9" fill="rgba(102,217,239,0.45)"/>
+    </g>
+    <g transform="rotate(-45)">
+      <ellipse cx="22" cy="0"  rx="14" ry="9" fill="rgba(255,95,109,0.45)"/>
+      <ellipse cx="-22" cy="0" rx="14" ry="9" fill="rgba(255,95,109,0.45)"/>
+    </g>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+    <text x="0" y="42" fill="#9aa2b6" font-family="ui-monospace" font-size="8" text-anchor="middle">y into page</text>
+  </svg>`;
+}
+function drawCloverleafAxial() {
+  // d_x²−y²: lobes along ±x and ±y (in plane of page)
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="26" cy="0"  rx="18" ry="9" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="-26" cy="0" rx="18" ry="9" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="0" cy="26"  rx="9" ry="18" fill="rgba(255,95,109,0.55)"/>
+    <ellipse cx="0" cy="-26" rx="9" ry="18" fill="rgba(255,95,109,0.55)"/>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawDz2() {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="0" cy="-22" rx="11" ry="20" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="0" cy="22"  rx="11" ry="20" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="0" cy="0"   rx="26" ry="7"  fill="rgba(255,95,109,0.55)"/>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+// f orbitals: 6-lobed and 8-lobed schematic
+function drawF6Z() {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="0" cy="-30" rx="9" ry="14" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="0" cy="30"  rx="9" ry="14" fill="rgba(102,217,239,0.55)"/>
+    <ellipse cx="0" cy="-12" rx="20" ry="6" fill="rgba(255,95,109,0.4)"/>
+    <ellipse cx="0" cy="12"  rx="20" ry="6" fill="rgba(255,95,109,0.4)"/>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawF6Other(rot) {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(${rot})">
+      <ellipse cx="-25" cy="-12" rx="10" ry="8" fill="rgba(102,217,239,0.5)"/>
+      <ellipse cx="-25" cy="12" rx="10" ry="8"  fill="rgba(255,95,109,0.5)"/>
+      <ellipse cx="25" cy="-12" rx="10" ry="8"  fill="rgba(255,95,109,0.5)"/>
+      <ellipse cx="25" cy="12" rx="10" ry="8"   fill="rgba(102,217,239,0.5)"/>
+      <ellipse cx="0" cy="-26" rx="9" ry="11"   fill="rgba(102,217,239,0.4)"/>
+      <ellipse cx="0" cy="26" rx="9" ry="11"    fill="rgba(255,95,109,0.4)"/>
+    </g>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawF8(rot) {
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(${rot})">
+      <ellipse cx="22" cy="22" rx="10" ry="10" fill="rgba(102,217,239,0.5)"/>
+      <ellipse cx="-22" cy="22" rx="10" ry="10" fill="rgba(255,95,109,0.5)"/>
+      <ellipse cx="22" cy="-22" rx="10" ry="10" fill="rgba(255,95,109,0.5)"/>
+      <ellipse cx="-22" cy="-22" rx="10" ry="10" fill="rgba(102,217,239,0.5)"/>
+      <ellipse cx="0" cy="32" rx="6" ry="9"  fill="rgba(102,217,239,0.35)"/>
+      <ellipse cx="0" cy="-32" rx="6" ry="9" fill="rgba(255,95,109,0.35)"/>
+      <ellipse cx="32" cy="0" rx="9" ry="6"  fill="rgba(255,95,109,0.35)"/>
+      <ellipse cx="-32" cy="0" rx="9" ry="6" fill="rgba(102,217,239,0.35)"/>
+    </g>
+    <circle cx="0" cy="0" r="3" fill="#fff"/>
+  </svg>`;
+}
+function drawF6Hex(rot) {
+  let lobes = '';
+  for (let i = 0; i < 6; i++) {
+    const ang = rot + i*60;
+    const fill = i % 2 === 0 ? 'rgba(102,217,239,0.55)' : 'rgba(255,95,109,0.55)';
+    lobes += `<g transform="rotate(${ang})"><ellipse cx="26" cy="0" rx="11" ry="6" fill="${fill}"/></g>`;
+  }
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">${lobes}<circle cx="0" cy="0" r="3" fill="#fff"/></svg>`;
+}
+function drawGAng(petals) {
+  // Schematic g orbital — multiple alternating-sign petals
+  let n = Math.max(2, Math.round(petals));
+  let lobes = '';
+  for (let i = 0; i < n; i++) {
+    const ang = i * (360 / n);
+    const fill = i % 2 === 0 ? 'rgba(102,217,239,0.5)' : 'rgba(255,95,109,0.5)';
+    lobes += `<g transform="rotate(${ang})"><ellipse cx="22" cy="0" rx="11" ry="6" fill="${fill}"/></g>`;
+  }
+  return `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">${lobes}<circle cx="0" cy="0" r="3" fill="#fff"/></svg>`;
+}
+
+function renderShapeGallery() {
+  const html = SHAPE_GALLERY.map(group => {
+    const cards = group.orbitals.map(o => `
+      <div class="shape-card">
+        ${o.draw()}
+        <div class="lbl">${o.lbl}</div>
+      </div>
+    `).join('');
+    return `
+      <div class="shape-row">
+        <div class="shape-info">
+          <h3>${group.name} subshell <span style="color: var(--muted); font-size: 13px;">(ℓ=${group.l})</span></h3>
+          <div class="meta">${group.orbCount} orbitals · capacity ${group.cap} electrons</div>
+          <p>${group.blurb}</p>
+        </div>
+        <div class="shape-grid ${group.name}">${cards}</div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('shapeGallery').innerHTML = html;
+}
+renderShapeGallery();
+
+//==========================================================
+// Madelung diagonal diagram
+//==========================================================
+function renderMadelung() {
+  // Build a triangular grid: rows are n=1..7, columns are l=0..4 (s..g)
+  const cells = [];
+  let cellsHtml = '<div class="madelung" style="grid-template-columns: repeat(5, minmax(72px, 110px));">';
+  // Header row
+  cellsHtml += `<div class="cell" style="border:none; background:transparent; color: var(--muted);">s (ℓ=0)</div>`;
+  cellsHtml += `<div class="cell" style="border:none; background:transparent; color: var(--muted);">p (ℓ=1)</div>`;
+  cellsHtml += `<div class="cell" style="border:none; background:transparent; color: var(--muted);">d (ℓ=2)</div>`;
+  cellsHtml += `<div class="cell" style="border:none; background:transparent; color: var(--muted);">f (ℓ=3)</div>`;
+  cellsHtml += `<div class="cell" style="border:none; background:transparent; color: var(--muted);">g (ℓ=4)</div>`;
+  // Build rows for n=1..7
+  // Order in MADELUNG, find ordinals
+  const ordMap = new Map();
+  MADELUNG.forEach(([n, l], i) => ordMap.set(`${n}.${l}`, i + 1));
+  for (let n = 1; n <= 7; n++) {
+    for (let l = 0; l <= 4; l++) {
+      if (l > n - 1) {
+        cellsHtml += `<div class="cell empty"></div>`;
+      } else {
+        const ord = ordMap.get(`${n}.${l}`);
+        cellsHtml += `<div class="cell"><div class="sub">${n}${LMAP[l]}</div><div class="ord">#${ord || '–'}</div></div>`;
+      }
+    }
+  }
+  cellsHtml += '</div>';
+  document.getElementById('madelungDiagonal').innerHTML = cellsHtml + `
+    <div class="hint" style="font-size: 13px; color: var(--muted); margin-top: 8px;">
+      Each cell shows the subshell and the order in which it fills (#). Read along the diagonals from top-right to bottom-left and you'll see the Madelung sequence: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, ...
+    </div>
+  `;
+}
+renderMadelung();
+
+//==========================================================
+// Filler (interactive electron-by-electron filler in Madelung order)
+//==========================================================
+const fillerSlider = document.getElementById('fillerSlider');
+const fillerZ = document.getElementById('fillerZ');
+const fillerName = document.getElementById('fillerName');
+const fillerConfig = document.getElementById('fillerConfig');
+const fillerBoxes = document.getElementById('fillerBoxes');
+
+function renderBoxDiagramFromCfg(cfg) {
+  if (!cfg.length) return '<div class="hint" style="color: var(--muted); font-size: 13px;">No electrons.</div>';
+  const rows = cfg.map(([n, l, c]) => {
+    const orbs = 2*l + 1;
+    let boxes = '';
+    for (let i = 0; i < orbs; i++) {
+      const single = i < c && c <= orbs;
+      const paired = i < (c - orbs);
+      const hasUp = (c <= orbs && i < c) || (c > orbs && i < orbs);
+      const hasDown = c > orbs && i < (c - orbs);
+      let inner = '';
+      if (hasUp) inner += '<span class="arr up">↑</span>';
+      if (hasDown) inner += '<span class="arr dn">↓</span>';
+      boxes += `<div class="orb-box">${inner}</div>`;
+    }
+    return `<div class="box-row"><span class="row-lbl">${n}${LMAP[l]}</span>${boxes}<span class="row-cnt">${c}e⁻</span></div>`;
+  }).join('');
+  return `<div class="box-diagram">${rows}</div>`;
+}
+
+function updateFiller() {
+  const Z = +fillerSlider.value;
+  fillerZ.textContent = `Z = ${Z}`;
+  if (Z === 0) {
+    fillerName.textContent = '(no atom yet)';
+    fillerConfig.textContent = '—';
+    fillerBoxes.innerHTML = renderBoxDiagramFromCfg([]);
+    return;
+  }
+  const [sym, name] = ELEMENTS[Z - 1];
+  fillerName.textContent = `${sym} — ${name}`;
+  const cfg = generateConfig(Z);
+  fillerConfig.innerHTML = formatConfigPretty(cfg, true);
+  fillerBoxes.innerHTML = renderBoxDiagramFromCfg(cfg);
+}
+fillerSlider.addEventListener('input', updateFiller);
+updateFiller();
+
+//==========================================================
+// Periodic table
+//==========================================================
+const ptable = document.getElementById('ptable');
+
+function renderPTable() {
+  // Add cells for all 118 elements
+  let html = '';
+  for (let z = 1; z <= ELEMENTS.length; z++) {
+    const [sym, name] = ELEMENTS[z - 1];
+    const pos = ptablePosition(z);
+    const blk = blockOf(z);
+    // Override block for He (it's 1s2 but visually s-block — color it s-block)
+    // But Helium sits in p-block column visually. Both treatments are common; we use s-block coloring.
+    let bkClass = 'bk-' + (z === 2 ? 's' : blk);
+    html += `
+      <button class="el ${bkClass}" data-z="${z}" style="grid-row:${pos.row}; grid-column:${pos.col};">
+        <div class="num">${z}</div>
+        <div class="sym">${sym}</div>
+        <div class="nm">${name}</div>
+      </button>
+    `;
+  }
+  // Placeholders for La/Ac slots in the f-block split row
+  html += `
+    <div class="el placeholder" style="grid-row:9; grid-column:3;">
+      <div class="num">57</div><div class="sym">La</div><div class="nm">↑</div>
+    </div>
+    <div class="el placeholder" style="grid-row:10; grid-column:3;">
+      <div class="num">89</div><div class="sym">Ac</div><div class="nm">↑</div>
+    </div>
+  `;
+  ptable.innerHTML = html;
+  ptable.addEventListener('click', (e) => {
+    const btn = e.target.closest('button.el');
+    if (!btn) return;
+    const z = +btn.dataset.z;
+    selectElement(z);
+  });
+}
+
+function selectElement(z) {
+  document.querySelectorAll('.ptable .el').forEach(b => b.classList.toggle('selected', +b.dataset?.z === z));
+  renderElementInfo(z);
+  // Scroll info panel into view on small screens
+  const panel = document.getElementById('elInfoPanel');
+  if (window.innerWidth < 760) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderElementInfo(z) {
+  const [sym, name] = ELEMENTS[z - 1];
+  const cfg = generateConfig(z);
+  const sortedCfg = sortByShell(cfg);
+  const isException = !!EXCEPTIONS[z];
+
+  const block = blockOf(z);
+  const [period, group] = periodGroup(z);
+  const core = nobleCore(z);
+  const coreSym = core ? ELEMENTS[core - 1][0] : null;
+  const trimmed = configMinusCore(sortedCfg, core);
+
+  // Last electron QN
+  const qn = lastElectronQN(z);
+  const ml = qn.m_l;
+  const ms = qn.ms > 0 ? '+½' : '−½';
+
+  // Valence electrons (rough): all electrons in highest n-shell
+  const maxN = Math.max(...sortedCfg.map(c => c[0]));
+  const valence = sortedCfg.filter(c => c[0] === maxN).reduce((s, c) => s + c[2], 0);
+
+  document.getElementById('elTitle').textContent = `${sym} — ${name} (Z = ${z})`;
+
+  const html = `
+    <div class="top">
+      <div class="el-bigsym">
+        <div class="num">${z}</div>
+        <div class="sym">${sym}</div>
+        <div class="nm">${name}</div>
+      </div>
+      <div class="el-meta">
+        <div class="row"><span class="key">Period</span><span class="val">${period}</span></div>
+        <div class="row"><span class="key">Group</span><span class="val">${group}</span></div>
+        <div class="row"><span class="key">Block</span><span class="val">${block}-block</span></div>
+        <div class="row"><span class="key">Valence electrons (n=${maxN} shell)</span><span class="val">${valence}</span></div>
+        <div class="row"><span class="key">Last electron quantum numbers</span><span class="val">n=${qn.n}, ℓ=${qn.l}, m_ℓ=${ml}, m_s=${ms}</span></div>
+        <div class="row"><span class="key">Subshell of last electron</span><span class="val">${qn.n}${LMAP[qn.l]}</span></div>
+      </div>
+    </div>
+
+    <div class="diagram-section">
+      <h3>1. spdf notation (in shell-and-subshell order)</h3>
+      <div class="config-text">${formatConfigPretty(sortedCfg, true)}</div>
+    </div>
+
+    <div class="diagram-section">
+      <h3>2. Noble-gas shorthand</h3>
+      <div class="config-text">
+        ${coreSym ? `<span class="core">[${coreSym}]</span> ` : ''}${formatConfigPretty(trimmed, true) || '<span style="color: var(--muted);">(no extra electrons beyond core)</span>'}
+      </div>
+    </div>
+
+    <div class="diagram-section">
+      <h3>3. Madelung-order configuration <span style="color: var(--muted); font-size: 12px;">(the order they actually filled)</span></h3>
+      <div class="config-text">${formatConfigPretty(cfg, true)}</div>
+      ${isException ? `<div class="principle-callout" style="margin-top: 10px;"><strong>Exception to Madelung's rule.</strong> The actual ground-state configuration of ${sym} has electrons rearranged from what the simple <em>(n+ℓ)</em> rule predicts (a half-filled or fully-filled <em>d</em> or <em>f</em> subshell costs less energy).</div>` : ''}
+    </div>
+
+    <div class="diagram-section">
+      <h3>4. Box (orbital) diagram</h3>
+      ${renderBoxDiagramFromCfg(sortedCfg)}
+      <div class="hint" style="font-size: 12px; color: var(--muted); margin-top: 8px;">Each box is one orbital; each arrow is one electron. Up = m_s=+½, down = m_s=−½. Hund's rule: fill singly first, then pair up.</div>
+    </div>
+
+    <div class="diagram-section">
+      <h3>5. Energy-level diagram (filling order, low to high)</h3>
+      ${renderEnergyDiagram(cfg)}
+      <div class="hint" style="font-size: 12px; color: var(--muted); margin-top: 8px;">Each row is a subshell, drawn at its filling energy. The little boxes show how electrons are arranged inside.</div>
+    </div>
+  `;
+  document.getElementById('elInfo').innerHTML = html;
+}
+
+function renderEnergyDiagram(cfg) {
+  // Plot subshells by Madelung-order index
+  const rows = cfg.map(([n, l, c], idx) => {
+    const orbs = 2*l + 1;
+    let mini = '';
+    for (let i = 0; i < orbs; i++) {
+      const hasUp = (c <= orbs && i < c) || (c > orbs && i < orbs);
+      const hasDown = c > orbs && i < (c - orbs);
+      let inner = '';
+      if (hasUp) inner += '<span class="ma up">↑</span>';
+      if (hasDown) inner += '<span class="ma dn">↓</span>';
+      mini += `<div class="mini-box">${inner}</div>`;
+    }
+    return `<div class="energy-row" style="margin-top:${idx===0?0:Math.min(20, 4 + (n+l)*1.5)}px">
+      <span class="e-lbl">${n}${LMAP[l]}</span>
+      <span class="e-line"></span>
+      <span class="e-mini">${mini}</span>
+    </div>`;
+  }).reverse(); // higher energy on top
+  return `<div class="energy-diagram">${rows.join('')}</div>`;
+}
+
+renderPTable();
+selectElement(6); // start with carbon
+</script>
+
+</div>
+</body>
+</html>
