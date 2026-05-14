@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Light and Matter, Lasers</title>
+<link rel="icon" type="image/jpeg" href="images/president_giuse.jpg">
+<meta property="og:title" content="Light and Matter, Lasers">
+<meta property="og:image" content="https://gpham321.github.io/physics-sim/images/president_giuse.jpg">
+<meta property="og:url" content="https://gpham321.github.io/physics-sim/light_and_matter.html">
+<meta property="og:type" content="website">
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #0e1016; --panel: #161924; --panel-2: #1d2130;
+    --text: #e6e8ef; --muted: #9aa2b6;
+    --accent: #66d9ef; --good: #a6e22e; --bad: #ff5f6d;
+    --warn: #ffd166; --magenta: #ff4db8; --purple: #c084f7;
+    --border: #2a2f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 80px;
+    background: radial-gradient(1200px 800px at 20% -10%, #1b2030 0%, var(--bg) 60%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55; position: relative;
+  }
+  .portrait {
+    position: absolute; top: 22px; right: 28px;
+    width: 72px; height: 72px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45); z-index: 10;
+  }
+  @media (max-width: 760px) { .portrait { width: 52px; height: 52px; top: 12px; right: 14px; } }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+  h2 { margin-top: 0; color: var(--accent); font-weight: 600; }
+  h3 { margin: 0 0 12px; color: var(--text); font-weight: 600; }
+  .lead { color: var(--muted); margin-top: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    margin: 24px 0; box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .formula-box {
+    background: rgba(102, 217, 239, 0.06);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px; border-radius: 6px; margin: 12px 0;
+  }
+  .principle-callout {
+    background: rgba(255, 209, 102, 0.08);
+    border-left: 4px solid var(--warn);
+    padding: 14px 18px; border-radius: 6px; margin: 16px 0;
+  }
+  .principle-callout strong { color: var(--warn); }
+  .key-takeaway {
+    background: rgba(255, 77, 184, 0.08);
+    border: 1px solid rgba(255, 77, 184, 0.4);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0;
+  }
+  .key-takeaway strong { color: var(--magenta); }
+  .good-callout {
+    background: rgba(166, 226, 46, 0.06);
+    border-left: 4px solid var(--good);
+    padding: 12px 16px; border-radius: 6px; margin: 12px 0;
+  }
+  .bad-callout {
+    background: rgba(255, 95, 109, 0.06);
+    border-left: 4px solid var(--bad);
+    padding: 12px 16px; border-radius: 6px; margin: 12px 0;
+  }
+  ul li { margin-bottom: 4px; }
+  mjx-container { color: var(--text) !important; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--accent); }
+
+  /* Tabs (matching orbitals.html style) */
+  .demo-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .demo-tabs button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 11px 16px; border-radius: 8px;
+    font-family: inherit; font-size: 14px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .demo-tabs button:hover { border-color: var(--accent); }
+  .demo-tabs button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  .demo-section { display: none; }
+  .demo-section.active { display: block; }
+
+  /* Process picker on top panel */
+  .proc-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .proc-tabs button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 14px; border-radius: 8px;
+    font-family: inherit; font-size: 13.5px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .proc-tabs button:hover { border-color: var(--accent); }
+  .proc-tabs button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  canvas { display: block; width: 100%; background: #04060d; border: 1px solid var(--border); border-radius: 8px; }
+  canvas.tall { height: 420px; }
+  canvas.med { height: 320px; }
+  canvas.short { height: 220px; }
+  canvas.proc { height: 280px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px;
+  }
+  .slider-grid { display: grid; gap: 14px; margin: 12px 0; }
+  .slider-grid.cols-2 { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+  .slider-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; gap: 14px 28px; }
+  @media (max-width: 760px) {
+    .slider-grid.cols-2, .slider-grid.cols-3 { grid-template-columns: 1fr; }
+  }
+  .slider-row label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; font-size: 13.5px; }
+  .slider-row input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .meters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px; }
+  @media (max-width: 720px) { .meters { grid-template-columns: 1fr 1fr; } }
+  .meter {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+  }
+  .meter .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+  .meter .val { font-family: ui-monospace, monospace; font-size: 15px; color: var(--accent); margin-top: 4px; }
+  .meter .val.good { color: var(--good); }
+  .meter .val.bad { color: var(--bad); }
+  .btn-row { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+  .btn-row button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 14px; border-radius: 6px;
+    font-family: inherit; font-size: 13px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-row button:hover { border-color: var(--accent); }
+  .btn-row button.active {
+    background: var(--accent); color: var(--bg); border-color: var(--accent);
+  }
+  .gas-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .gas-btns button {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 16px; border-radius: 8px;
+    font-family: inherit; font-size: 13.5px; cursor: pointer; transition: all .15s;
+  }
+  .gas-btns button:hover { border-color: var(--accent); }
+  .gas-btns button.active {
+    background: linear-gradient(180deg, #1b2c4a 0%, #112038 100%);
+    border-color: var(--accent); color: var(--accent);
+  }
+  table.lt { width: 100%; border-collapse: collapse; font-family: ui-monospace, monospace; font-size: 12.5px; }
+  table.lt th, table.lt td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.lt th { color: var(--muted); font-weight: normal; text-transform: uppercase; letter-spacing: .5px; font-size: 11px; background: rgba(102,217,239,.04); }
+  table.lt td.h { color: var(--accent); }
+  .proc-explain { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .proc-explain { grid-template-columns: 1fr; } }
+  .proc-bullet {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;
+  }
+  .proc-bullet .ttl { color: var(--accent); font-weight: 600; font-family: ui-monospace, monospace; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<a href="index.html"><img src="images/president_giuse.jpg" alt="President Giuse" class="portrait"></a>
+<div class="wrap">
+
+<h1>Light and Matter, Lasers</h1>
+<p class="lead">Where does light come from? The short answer: electrons jumping between energy levels in atoms — but the <em>how</em> determines whether you get a warm tungsten glow, a sodium-yellow streetlight, a UV-driven fluorescent tube, glow-in-the-dark paint, or a laser. Same physics, very different light.</p>
+
+<!-- ============================================================ -->
+<!-- FOUNDATION 1: THREE PROCESSES                                 -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>The three fundamental light-matter processes</h2>
+  <p>Every light source below boils down to combinations of three elementary events between a photon and an atom. <strong>Click each one</strong> to see what happens.</p>
+
+  <div class="proc-tabs" id="procTabs">
+    <button type="button" data-proc="abs"  class="active">1. Absorption</button>
+    <button type="button" data-proc="spo">2. Spontaneous emission</button>
+    <button type="button" data-proc="sti">3. Stimulated emission</button>
+  </div>
+
+  <canvas id="procCanvas" class="proc"></canvas>
+
+  <div id="procExplain" class="proc-explain" style="margin-top: 16px;"></div>
+
+  <div class="formula-box" style="margin-top: 18px;">
+    The photon energy that participates in any of these processes has to match the level gap exactly:
+    $$ E_{\text{photon}} \;=\; h f \;=\; E_2 - E_1. $$
+    Photons with the wrong energy just fly past — the atom doesn't see them.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOUNDATION 2: THERMAL VS LINES                                -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>Thermal (broadband) vs. line emission</h2>
+  <p>When you heat <em>anything</em> hot enough, its constituents — atoms vibrating, jostling, colliding — emit photons across an enormous range of energies. The result is a <strong>broadband blackbody</strong> spectrum that depends only on temperature. The Sun, a fire, a glowing iron, an incandescent bulb filament — all the same physics.</p>
+  <p>When you instead let isolated atoms (a low-pressure gas) drop from one definite quantum level to another, each transition emits a photon at <em>exactly</em> the matching energy gap. The spectrum is a forest of sharp <strong>lines</strong>, unique to the element. Sodium yellow, neon red, hydrogen Balmer red/blue — all signatures of specific atomic transitions.</p>
+  <div class="key-takeaway">
+    <strong>Why broadband sources are inefficient.</strong> A thermal source dumps most of its energy into infrared (heat you can't see). Only a small slice lands in the visible window (380–780 nm). Line sources can place all their output right in the visible if the transitions are chosen well — that's why fluorescent and LED bulbs use a tenth of the power for the same brightness as an old incandescent.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOUNDATION 3: LIFETIMES                                       -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>Lifetimes, metastable states, and linewidth</h2>
+  <p>An excited atom doesn't sit in its upper level forever — it has a <strong>lifetime</strong> \(\Delta t\) characteristic of that transition. After roughly \(\Delta t\) seconds on average, the electron drops and emits its photon. Typical optical transitions: \(\sim 10\) ns. Some transitions are special: a <strong>metastable state</strong> has a much longer lifetime (μs to seconds) because the obvious decay is "forbidden" by quantum selection rules.</p>
+  <p>Metastable states are what make lasers and phosphorescent (glow-in-the-dark) materials work — they let electrons pile up in an upper level before falling.</p>
+  <h3 style="margin-top: 14px;">Heisenberg: lifetime ↔ linewidth</h3>
+  <div class="formula-box">
+    $$ \Delta E \cdot \Delta t \;\geq\; \frac{\hbar}{2}, \qquad \Delta E_{\min} \;=\; \frac{\hbar}{2\,\Delta t}. $$
+  </div>
+  <p>From Worksheet 14: \(\Delta t = 1\) μs (metastable) → \(\Delta E_{\min} \approx 3\times 10^{-10}\) eV (very narrow). \(\Delta t = 1\) ns → \(3\times 10^{-7}\) eV (1000× broader).</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB NAV                                                        -->
+<!-- ============================================================ -->
+<h2 style="color: var(--accent); margin: 30px 0 12px;">Light source explorer</h2>
+<p style="color: var(--muted); margin-top: 0;">Six common light sources, each driven by a different combination of the processes above. Click any tab to dive into a dedicated simulation.</p>
+
+<div class="demo-tabs" id="srcTabs">
+  <button type="button" data-tab="inc" class="active">Incandescent</button>
+  <button type="button" data-tab="dis">Discharge lamp</button>
+  <button type="button" data-tab="flu">Fluorescent</button>
+  <button type="button" data-tab="pho">Phosphorescent</button>
+  <button type="button" data-tab="las">Laser</button>
+  <button type="button" data-tab="led">LED</button>
+  <button type="button" data-tab="sum">Summary: broadband vs lines</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB: INCANDESCENT                                              -->
+<!-- ============================================================ -->
+<div class="demo-section active" id="tab-inc">
+
+<div class="panel">
+  <h2>Incandescent — thermal radiation</h2>
+  <p>A tungsten filament heated to ~2700 K glows because any hot object radiates electromagnetic waves — the same physics as the Sun, just at a cooler temperature. Most of the energy comes out as invisible infrared, which is why incandescent bulbs are so inefficient.</p>
+  <div class="formula-box">
+    <strong>Stefan–Boltzmann:</strong> total radiated power per unit area $$ P/A \;=\; \sigma T^4, \qquad \sigma = 5.67 \times 10^{-8}\ \text{W/m²/K⁴}. $$
+    <strong>Wien displacement:</strong> peak wavelength $$ \lambda_{\max} \;=\; b/T, \qquad b = 2.898 \times 10^{-3}\ \text{m·K}. $$
+  </div>
+  <p>For tungsten at 2700 K: \(\lambda_{\max} \approx 1070\) nm — well into the infrared. The visible window (380–780 nm) catches only the short-wavelength tail.</p>
+  <div class="key-takeaway">
+    <strong>Why it's fundamentally inefficient.</strong> To make the peak land in the visible, you'd need \(T \approx 5800\) K (the Sun's surface). But tungsten melts at 3695 K, so you can't get there without vaporizing the filament. Result: ~5% of input power becomes visible light; the rest is wasted as IR heat.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Temperature → spectrum → efficiency</h2>
+  <div class="slider-row">
+    <label for="inc_T"><span>Filament temperature</span><span id="inc_TRead" class="mono">2700 K</span></label>
+    <input type="range" id="inc_T" min="1000" max="5800" step="50" value="2700">
+    <div class="hint">Real incandescent: 2400–3000 K. Tungsten melts at 3695 K. Sun: 5800 K.</div>
+  </div>
+  <canvas id="inc_cv" class="tall"></canvas>
+  <div class="meters">
+    <div class="meter"><div class="lbl">Peak wavelength λ_max</div><div class="val" id="inc_lamPeak">1073 nm (IR)</div></div>
+    <div class="meter"><div class="lbl">Total power (relative)</div><div class="val" id="inc_ptot">1.00 ×</div></div>
+    <div class="meter"><div class="lbl">Fraction in visible band</div><div class="val good" id="inc_fracVis">8.6%</div></div>
+    <div class="meter"><div class="lbl">Color appearance</div><div class="val" id="inc_color">warm yellow</div></div>
+    <div class="meter"><div class="lbl">Wall-plug efficiency</div><div class="val bad" id="inc_eff">~5%</div></div>
+    <div class="meter"><div class="lbl">Visible : IR ratio</div><div class="val" id="inc_ratio">1 : 11</div></div>
+  </div>
+</div>
+
+</div><!-- /tab-inc -->
+
+<!-- ============================================================ -->
+<!-- TAB: DISCHARGE                                                 -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-dis">
+
+<div class="panel">
+  <h2>Discharge lamps — gas atoms emit lines</h2>
+  <p>A tube full of low-pressure gas. Run current through it; the gas atoms get excited by collisions with fast-moving electrons; as they relax they emit photons at <em>specific</em> wavelengths set by the atomic energy levels. Each gas has its own fingerprint spectrum.</p>
+  <ol>
+    <li><strong>Apply high voltage.</strong> A few free electrons get accelerated.</li>
+    <li><strong>Electron-atom collisions.</strong> Each fast electron slams into an atom and kicks one of its electrons up to a higher level — "electron-impact excitation."</li>
+    <li><strong>Avalanche.</strong> Some collisions <em>ionize</em> the atom, releasing more free electrons. The discharge sustains itself.</li>
+    <li><strong>Spontaneous emission.</strong> Excited atoms drop down, emitting photons of energy \(hf = E_\text{upper} - E_\text{lower}\). Because levels are discrete, the photons come out as sharp <em>lines</em>.</li>
+  </ol>
+  <div class="formula-box">
+    $$ \lambda \;=\; \frac{hc}{E_{\text{upper}} - E_{\text{lower}}}. $$
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Pick a gas — see its spectrum</h2>
+  <div class="gas-btns" id="dis_gasBtns">
+    <button type="button" data-gas="H"  class="active">Hydrogen</button>
+    <button type="button" data-gas="He">Helium</button>
+    <button type="button" data-gas="Ne">Neon</button>
+    <button type="button" data-gas="Ar">Argon</button>
+    <button type="button" data-gas="Na">Sodium</button>
+    <button type="button" data-gas="Hg">Mercury</button>
+    <button type="button" data-gas="Xe">Xenon</button>
+  </div>
+  <canvas id="dis_cv" class="tall"></canvas>
+  <div class="meters">
+    <div class="meter"><div class="lbl">Strongest visible line</div><div class="val" id="dis_strong">656 nm (red)</div></div>
+    <div class="meter"><div class="lbl">Eye color</div><div class="val" id="dis_color">pink-red</div></div>
+    <div class="meter"><div class="lbl">Used for</div><div class="val" id="dis_use">Spectroscopy reference</div></div>
+    <div class="meter"><div class="lbl">Efficiency (low-pressure)</div><div class="val" id="dis_eff">~5%</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Real-world discharge lamps</h2>
+  <table class="lt">
+    <thead><tr><th>Lamp</th><th>Gas</th><th>Color</th><th>Where you see it</th></tr></thead>
+    <tbody>
+      <tr><td class="h">LP sodium streetlight</td><td>Na vapor</td><td>Pure yellow 589 nm</td><td>Old freeway lighting; ~25% efficient</td></tr>
+      <tr><td class="h">Mercury vapor</td><td>Hg</td><td>Pale blue + invisible UV</td><td>Drives every fluorescent tube</td></tr>
+      <tr><td class="h">Metal halide</td><td>Hg + iodides</td><td>White, high CRI</td><td>Stadium lights, projectors</td></tr>
+      <tr><td class="h">Neon sign</td><td>Ne (or noble mix)</td><td>Iconic orange-red</td><td>Signs; Ar+Hg → blue, He → pink</td></tr>
+      <tr><td class="h">Xenon flash</td><td>Xe</td><td>Bluish-white pulses</td><td>Camera flashes, HID headlights</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /tab-dis -->
+
+<!-- ============================================================ -->
+<!-- TAB: FLUORESCENT                                               -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-flu">
+
+<div class="panel">
+  <h2>Fluorescent — UV cascades to visible</h2>
+  <p>A fluorescent bulb takes one high-energy UV photon and breaks it into multiple visible photons by cascading down through intermediate atomic levels:</p>
+  <ol>
+    <li><strong>Discharge.</strong> Voltage drives current through mercury vapor inside the tube.</li>
+    <li><strong>Mercury emits UV.</strong> Excited Hg atoms relax by emitting 254 nm photons (invisible UV, ≈ 4.9 eV).</li>
+    <li><strong>Phosphor cascades UV → visible.</strong> The tube's inner phosphor coating absorbs each UV photon, the electron cascades through intermediate levels, and multiple visible photons come out.</li>
+  </ol>
+  <div class="key-takeaway">
+    <strong>The whole point:</strong> convert one invisible high-energy photon into several visible photons. Same total energy, but now where your eye can use it — ~4× more efficient than incandescent.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>The 3-level cascade — Worksheet 13's example</h2>
+  <p>From Worksheet 13, an atom with three levels:</p>
+  <div class="formula-box">
+    $$ E_1 = -6.5\ \text{eV}, \quad E_2 = -4.5\ \text{eV}, \quad E_3 = -2\ \text{eV} $$
+  </div>
+  <p>A 4.5 eV UV photon is absorbed (matches \(E_3 - E_1\)), kicking the electron to \(E_3\). What happens next depends entirely on which decay path is faster:</p>
+
+  <div class="slider-grid cols-2">
+    <div class="slider-row">
+      <label for="flu_ratio"><span>Decay preference</span><span id="flu_ratioRead" class="mono">cascade (fluorescent)</span></label>
+      <input type="range" id="flu_ratio" min="0" max="100" step="1" value="85">
+      <div class="hint">Left = E₃→E₁ direct (one UV out, no fluorescence). Right = E₃→E₂ cascade (two visible photons — fluorescence).</div>
+    </div>
+    <div class="meters" style="margin-top: 0;">
+      <div class="meter"><div class="lbl">Branching to E₂ (cascade)</div><div class="val" id="flu_b2">85%</div></div>
+      <div class="meter"><div class="lbl">Branching to E₁ (direct)</div><div class="val" id="flu_b1">15%</div></div>
+      <div class="meter"><div class="lbl">Avg photons per UV in</div><div class="val good" id="flu_avg">1.85</div></div>
+    </div>
+  </div>
+
+  <canvas id="flu_cv" class="tall"></canvas>
+
+  <div class="grid-2" style="margin-top: 14px;">
+    <div class="card">
+      <h3>Direct path (no fluorescence)</h3>
+      <p style="font-size: 13.5px;">If \(E_3 \to E_1\) is faster, the electron skips \(E_2\) and drops straight back to ground. <strong>One photon out, same 4.5 eV UV.</strong></p>
+    </div>
+    <div class="card">
+      <h3>Cascade path (fluorescence!)</h3>
+      <p style="font-size: 13.5px;">If \(E_3 \to E_2\) is faster: electron drops to \(E_2\) first (emits 2.5 eV cyan), then to \(E_1\) (emits 2.0 eV orange). <strong>Two visible photons per UV in.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Decay times and step-downs</h2>
+  <p>Each excited state has its own lifetime \(\Delta t_{i \to j}\). The probability of taking a particular decay path is set by the rate \(1/\Delta t_{i\to j}\) compared to all other rates leaving level \(i\):</p>
+  <div class="formula-box">
+    $$ P(i \to j) \;=\; \frac{1/\Delta t_{i\to j}}{\sum_{k} 1/\Delta t_{i\to k}}. $$
+  </div>
+  <p>If \(\Delta t_{3 \to 2} \ll \Delta t_{3 \to 1}\), the atom almost always cascades through E₂. That's the regime fluorescent bulbs are engineered to be in. For multi-level phosphors, the atom marches down step by step in ~ns, total emission practically instantaneous to your eye.</p>
+  <p>If one of the intermediate levels happens to be <em>metastable</em>, the atom gets stuck for microseconds or longer — that's phosphorescence (next tab).</p>
+</div>
+
+<div class="panel">
+  <h2>How engineers control the decay paths</h2>
+  <p>A phosphor's color and efficiency depend entirely on which decay paths it favors. Decay rates aren't fixed by physics alone — they can be engineered. The main levers:</p>
+
+  <h3 style="margin-top: 16px;">1. Choice of host material and dopant</h3>
+  <p>A phosphor is usually a transparent host crystal lightly doped with a small percentage of an emitting ion. The dopant sets emission energies and lifetimes; the host's role is to be transparent and hold the dopant in a particular geometry.</p>
+  <ul>
+    <li><strong>Eu³⁺ (europium):</strong> sharp red at 610 nm. Used in red TV phosphors and warm fluorescents.</li>
+    <li><strong>Tb³⁺ (terbium):</strong> sharp green near 545 nm.</li>
+    <li><strong>Ce³⁺ in YAG:</strong> broad yellow. The phosphor that makes "white" LEDs by absorbing blue.</li>
+    <li><strong>Mn²⁺:</strong> green-to-orange depending on host.</li>
+  </ul>
+
+  <h3 style="margin-top: 16px;">2. Selection rules — "allowed" vs. "forbidden" transitions</h3>
+  <p>QM says some transitions are <strong>allowed</strong> (fast, ns lifetime) and others <strong>forbidden</strong> (slow, μs–s lifetime). "Forbidden" doesn't mean impossible — it means the transition violates a symmetry rule and proceeds much more slowly. Tune the rules and you tune the decay rate.</p>
+  <div class="formula-box">
+    $$ \Delta \ell = \pm 1, \qquad \Delta m_\ell = 0, \pm 1, \qquad \Delta s = 0. $$
+  </div>
+  <p>Transitions that satisfy these (e.g. \(s \to p\), \(p \to d\)) are allowed. Transitions that violate them (any spin flip, \(s \to s\)) are forbidden.</p>
+
+  <h3 style="margin-top: 16px;">3. The heavy-atom effect</h3>
+  <p>One way to "turn on" a forbidden transition is to introduce a heavy atom nearby. Heavy nuclei have strong spin-orbit coupling that mixes states of different spin — and once states are mixed, even spin-forbidden transitions can happen at a respectable rate. Phosphors deliberately use heavy host ions (Y³⁺, Eu³⁺, La³⁺) for this reason.</p>
+  <p><strong>Practical consequence:</strong> heavy-atom doping shortens lifetimes of normally forbidden transitions, speeding up phosphorescence into ordinary fluorescence. Light-bulb designers use this trick to avoid long afterglow — they want the bulb to turn off when you flip the switch.</p>
+
+  <h3 style="margin-top: 16px;">4. Crystal field splitting</h3>
+  <p>When an emitting ion sits in a host crystal, the surrounding charges break the spherical symmetry of the free ion. This splits otherwise degenerate levels and shifts their energies. Depends on:</p>
+  <ul>
+    <li><strong>Site symmetry</strong> — octahedral vs. tetrahedral vs. trigonal coordination.</li>
+    <li><strong>Bond length</strong> — closer ligands give stronger splitting.</li>
+    <li><strong>Covalency</strong> — electron sharing softens the levels (nephelauxetic effect).</li>
+  </ul>
+  <p>Same ion, different surroundings, different color. Ce³⁺ in YAG glows yellow; in a different garnet it glows green.</p>
+
+  <h3 style="margin-top: 16px;">5. Phonon coupling (lattice vibrations)</h3>
+  <p>The emitting ion is embedded in a vibrating crystal. Lattice vibrations (<em>phonons</em>) can absorb energy from the excited electron, providing a non-radiative decay pathway. Too much phonon coupling and emission efficiency drops. The competition between radiative decay (photon) and non-radiative decay (phonons) sets the <strong>quantum yield</strong> — fraction of absorbed photons that produce an emitted photon.</p>
+  <ul>
+    <li>Cooling the phosphor → fewer phonons → less non-radiative loss → brighter, longer-lived emission.</li>
+    <li>Choosing a host with low phonon energies → reduces phonon-assisted decay; makes forbidden transitions sharper.</li>
+  </ul>
+
+  <h3 style="margin-top: 16px;">6. Concentration quenching</h3>
+  <p>Doping <em>more</em> emitter ions doesn't just produce more light. Above a critical concentration, neighboring excited ions transfer energy to each other and dissipate it non-radiatively. Phosphor designers find a sweet spot (typically 1–10% dopant) for maximum brightness without quenching.</p>
+
+  <h3 style="margin-top: 16px;">7. Co-doping for energy transfer</h3>
+  <p>Use two dopants: one that absorbs strongly (the <em>sensitizer</em>) and one that emits at the desired wavelength (the <em>activator</em>). Energy transfers from sensitizer to activator radiationlessly, then the activator emits. Decouples absorption color from emission color — that's how "tri-phosphor" fluorescent tubes hit specific R/G/B ratios.</p>
+
+  <div class="good-callout">
+    <strong>Real example.</strong> A modern "cool white" fluorescent uses a tri-phosphor blend: Eu³⁺:Y₂O₃ (red 611 nm), Tb³⁺:CeMgAl₁₁O₁₉ (green 543 nm), Eu²⁺:BaMgAl₁₀O₁₇ (blue 450 nm). Each absorbs 254 nm Hg UV, cascades, and emits its assigned narrow line. The three peaks look "white" to your eye.
+  </div>
+</div>
+
+</div><!-- /tab-flu -->
+
+<!-- ============================================================ -->
+<!-- TAB: PHOSPHORESCENT                                            -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-pho">
+
+<div class="panel">
+  <h2>Phosphorescent — fluorescence with one slow step</h2>
+  <p>Same physics as fluorescence (UV absorbed, cascades to visible) — but one of the intermediate levels is <strong>metastable</strong>. Electrons get trapped there for seconds, minutes, even hours before they finally decay. That's why a glow-in-the-dark sticker keeps shining long after the lights go out.</p>
+  <p>A metastable state is one where the obvious downward transition is <em>spin-forbidden</em>. The selection rule \(\Delta s = 0\) makes the transition 10⁵–10¹⁰ times slower than the corresponding allowed transition.</p>
+  <div class="formula-box">
+    Typical lifetimes:
+    <ul style="margin: 8px 0 0;">
+      <li>Fluorescent (allowed): \(\tau \sim 10^{-9}\) s (1 ns)</li>
+      <li>Phosphorescent (forbidden metastable): \(\tau \sim 10^{-3}\) s to \(10^4\) s (1 ms to 3 hours)</li>
+    </ul>
+  </div>
+
+  <canvas id="pho_diag" class="tall"></canvas>
+
+  <div class="btn-row">
+    <button type="button" data-mode="fluor" id="pho_btnF" class="active">Fluorescence (fast intermediate)</button>
+    <button type="button" data-mode="phos"  id="pho_btnP">Phosphorescence (metastable)</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Afterglow decay curve</h2>
+  <p>After you remove the excitation source, the number of trapped electrons (and so the brightness) decays exponentially with the metastable lifetime \(\tau\):</p>
+  <div class="formula-box">
+    $$ N(t) \;=\; N_0\,e^{-t/\tau}, \qquad I(t) \;\propto\; N(t)/\tau. $$
+  </div>
+  <div class="slider-row">
+    <label for="pho_tau"><span>Metastable lifetime \(\tau\)</span><span id="pho_tauRead" class="mono">10 ms</span></label>
+    <input type="range" id="pho_tau" min="-9" max="4" step="0.05" value="-2">
+    <div class="hint">Log scale: 1 ns (fluorescent dye) to 10⁴ s (~3 hours, premium glow-in-the-dark).</div>
+  </div>
+  <canvas id="pho_dcv" class="med"></canvas>
+  <div class="meters">
+    <div class="meter"><div class="lbl">Lifetime τ</div><div class="val" id="pho_v1">10 ms</div></div>
+    <div class="meter"><div class="lbl">50% in</div><div class="val" id="pho_v2">6.9 ms</div></div>
+    <div class="meter"><div class="lbl">1% in</div><div class="val" id="pho_v3">46 ms</div></div>
+    <div class="meter"><div class="lbl">Linewidth</div><div class="val" id="pho_v4">3e-14 eV</div></div>
+    <div class="meter"><div class="lbl">Type</div><div class="val" id="pho_v5">phosphorescence</div></div>
+    <div class="meter"><div class="lbl">Practical example</div><div class="val" id="pho_v6">glow paint</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Real phosphors in the world</h2>
+  <ul>
+    <li><strong>Strontium aluminate (SrAl₂O₄:Eu,Dy)</strong> — bright green-yellow glow-in-the-dark stars, watch hands, exit signs. Holds a charge for several hours.</li>
+    <li><strong>Zinc sulfide (ZnS:Cu)</strong> — vintage "spooky green" plastic. Less bright, shorter afterglow (minutes).</li>
+    <li><strong>Tritium watches.</strong> Radioactive material continuously excites a phosphor. Glows for decades.</li>
+    <li><strong>PhOLEDs.</strong> Phosphorescent OLEDs use heavy-metal complexes; emit from triplet excited states. 100% internal quantum yield vs. 25% for normal OLEDs. Why your phone screen is bright at low power.</li>
+    <li><strong>Old CRT phosphors.</strong> Long-persistence phosphors made green CRT radar where the line lingered after the beam swept past.</li>
+  </ul>
+</div>
+
+</div><!-- /tab-pho -->
+
+<!-- ============================================================ -->
+<!-- TAB: LASER                                                     -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-las">
+
+<div class="panel">
+  <h2>Lasers — light amplification by stimulated emission</h2>
+  <p>A laser takes one photon, copies it, copies the copies, and spits out millions of <em>identical</em> photons — same frequency, same phase, same direction. The trick is forcing stimulated emission to win over absorption, and that takes a clever multi-level scheme.</p>
+  <div class="grid-3">
+    <div class="card">
+      <h3 style="color: var(--warn);">Absorption</h3>
+      <p style="font-size: 13px;">Photon disappears; electron up. Rate \(\propto N_1\).</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--accent);">Spontaneous emission</h3>
+      <p style="font-size: 13px;">Excited atom decays on its own. Random direction/phase. Rate \(\propto N_2/\tau\).</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--magenta);">Stimulated emission</h3>
+      <p style="font-size: 13px;">Passing photon clones itself off an excited atom. Same direction/phase. Rate \(\propto N_2\) × flux.</p>
+    </div>
+  </div>
+  <p style="margin-top: 12px;">Einstein 1917 showed that absorption and stimulated emission share <em>identical</em> rate coefficients. They differ only in which level the electron starts in. That symmetry is the central problem the laser has to overcome.</p>
+</div>
+
+<div class="panel">
+  <h2>Why a two-level laser is impossible</h2>
+  <p>Blast a two-level atom with photons at \(hf = E_2 - E_1\). Each photon is equally likely to be absorbed (driving an atom up) or to stimulate emission (driving an atom down):</p>
+  <div class="formula-box">
+    $$ \text{Net stimulated emission} \;\propto\; (N_2 - N_1) \cdot \text{(photon flux)}. $$
+  </div>
+  <p>Pump harder and \(N_2\) rises — but as soon as \(N_2 = N_1\), absorption and stimulated emission balance. <strong>You cannot get past 50/50.</strong></p>
+  <canvas id="las_2lvl" class="med"></canvas>
+  <div class="slider-row" style="margin-top: 12px;">
+    <label for="las_pump2"><span>Pump intensity</span><span id="las_pump2Read" class="mono">Medium</span></label>
+    <input type="range" id="las_pump2" min="0" max="100" step="1" value="50">
+  </div>
+  <div class="meters">
+    <div class="meter"><div class="lbl">N₁ (lower)</div><div class="val" id="las_n1_2">50%</div></div>
+    <div class="meter"><div class="lbl">N₂ (upper)</div><div class="val" id="las_n2_2">50%</div></div>
+    <div class="meter"><div class="lbl">Net gain</div><div class="val bad" id="las_net2">0 — saturated</div></div>
+  </div>
+  <div class="bad-callout" style="margin-top: 14px;">
+    <strong>Conclusion (Worksheet 14, problem 3):</strong> No matter how brightly Eve pumps a 2-level system, she will never get \(N_2 > N_1\). The pump that excites atoms also stimulates them right back down. <em>Two-level lasers don't work.</em>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>The three-level fix (Ruby laser, 1960)</h2>
+  <p>Add a third level <em>above</em> the lasing transition. Pump runs between \(E_1\) and the high \(E_3\), not between the lasing levels. Atoms in \(E_3\) decay quickly to the upper lasing level \(E_2\) — and stay there, because \(E_2 \to E_1\) is metastable.</p>
+  <canvas id="las_3lvl" class="tall"></canvas>
+  <h3 style="margin-top: 14px;">The four steps:</h3>
+  <ol>
+    <li><strong>Pump.</strong> Shine photons of \(f_{\text{pump}} = (E_3 - E_1)/h\). Atoms absorb, jumping \(E_1 \to E_3\).</li>
+    <li><strong>Fast non-radiative \(E_3 \to E_2\).</strong> High level dumps energy into vibrations in picoseconds. Atoms accumulate in \(E_2\).</li>
+    <li><strong>Population inversion built.</strong> \(E_2 \to E_1\) is slow (metastable, μs–ms), so atoms pile up faster than they leave.</li>
+    <li><strong>Lasing!</strong> Any stray photon of \(f_{\text{laser}} = (E_2 - E_1)/h\) triggers a cascade of stimulated emission.</li>
+  </ol>
+  <h3 style="margin-top: 14px;">Lifetime conditions (Worksheet 14, problem 5):</h3>
+  <div class="formula-box">
+    $$ \boxed{\;\Delta t_{2\to 1} \;\gg\; \Delta t_{3\to 2}\;} \quad\text{(metastable upper lasing level)} $$
+    $$ \boxed{\;\Delta t_{3\to 1} \;>\; \Delta t_{3\to 2}\;} \quad\text{(pump prefers landing in } E_2\text{, not falling back to } E_1\text{)} $$
+  </div>
+
+  <div class="slider-grid cols-3">
+    <div class="slider-row">
+      <label for="las_t32"><span>\(\Delta t_{3\to 2}\) (fast decay into lasing level)</span><span id="las_t32Read" class="mono">0.1 μs</span></label>
+      <input type="range" id="las_t32" min="-2" max="1" step="0.05" value="-1">
+    </div>
+    <div class="slider-row">
+      <label for="las_t21"><span>\(\Delta t_{2\to 1}\) (slow decay from metastable)</span><span id="las_t21Read" class="mono">1000 μs</span></label>
+      <input type="range" id="las_t21" min="0" max="4" step="0.05" value="3">
+    </div>
+    <div class="slider-row">
+      <label for="las_t31"><span>\(\Delta t_{3\to 1}\) (loss path)</span><span id="las_t31Read" class="mono">10 μs</span></label>
+      <input type="range" id="las_t31" min="-1" max="3" step="0.05" value="1">
+    </div>
+    <div class="slider-row">
+      <label for="las_pump3"><span>Pump rate</span><span id="las_pump3Read" class="mono">Medium</span></label>
+      <input type="range" id="las_pump3" min="0" max="100" step="1" value="50">
+    </div>
+  </div>
+  <canvas id="las_pops" class="med" style="margin-top: 12px;"></canvas>
+  <div class="meters">
+    <div class="meter"><div class="lbl">N₁</div><div class="val" id="las_n1_3">—</div></div>
+    <div class="meter"><div class="lbl">N₂</div><div class="val" id="las_n2_3">—</div></div>
+    <div class="meter"><div class="lbl">N₃</div><div class="val" id="las_n3_3">—</div></div>
+    <div class="meter"><div class="lbl">ΔN = N₂ − N₁</div><div class="val" id="las_dn_3">—</div></div>
+    <div class="meter"><div class="lbl">Lasing condition</div><div class="val" id="las_lase">—</div></div>
+    <div class="meter"><div class="lbl">Branching to E₂</div><div class="val" id="las_eff">—</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>The four-level scheme — even better</h2>
+  <p>A 3-level laser's lower lasing level <em>is</em> the ground state. To get inversion you need to depopulate more than half of all ground-state atoms — that takes serious pumping. A 4-level scheme adds a fourth level just above ground:</p>
+  <canvas id="las_4lvl" class="med"></canvas>
+  <ol>
+    <li>Pump \(E_1 \to E_4\) (top).</li>
+    <li>Fast non-radiative \(E_4 \to E_3\) (metastable upper lasing).</li>
+    <li><strong>Lase on \(E_3 \to E_2\).</strong> Lower lasing level \(E_2\) starts empty.</li>
+    <li>Fast non-radiative \(E_2 \to E_1\) keeps \(E_2\) empty.</li>
+  </ol>
+  <p>Because \(E_2\) is empty, <strong>any</strong> atom in \(E_3\) creates inversion immediately. Much lower pump-power threshold. Nd:YAG (1064 nm) and He-Ne (633 nm) are 4-level. The ruby laser (3-level) needs an intense flashlamp; He-Ne lases continuously on milliwatts.</p>
+</div>
+
+<div class="panel">
+  <h2>The optical cavity — why a laser is a beam, not a glow</h2>
+  <p>Stimulated emission alone gives amplification, but for a coherent beam you need <strong>feedback</strong>. Two parallel mirrors bounce the photons back and forth through the gain medium, picking up more clones with each pass. One mirror is fully reflective; the <em>output coupler</em> is partially transmissive — a beam leaks out.</p>
+  <canvas id="las_cavity" class="tall"></canvas>
+  <div class="slider-grid cols-2" style="margin-top: 12px;">
+    <div class="slider-row">
+      <label for="las_gain"><span>Gain per pass</span><span id="las_gainRead" class="mono">15%</span></label>
+      <input type="range" id="las_gain" min="0" max="80" step="1" value="15">
+    </div>
+    <div class="slider-row">
+      <label for="las_outR"><span>Output coupler reflectivity</span><span id="las_outRRead" class="mono">95%</span></label>
+      <input type="range" id="las_outR" min="50" max="99" step="1" value="95">
+    </div>
+  </div>
+  <h3 style="margin-top: 14px;">Cavity modes</h3>
+  <p>For a standing wave between mirrors at separation \(L\), the cavity must equal an integer number of half-wavelengths:</p>
+  <div class="formula-box">
+    $$ L = \frac{m\lambda}{2}, \qquad m = 1, 2, 3, \dots $$
+  </div>
+  <p>This selects discrete modes. Lasing happens at cavity modes that fall within the gain medium's linewidth. Fewer modes = purer laser line.</p>
+</div>
+
+<div class="panel">
+  <h2>Coherent light vs. everything else</h2>
+  <p>Stimulated emission produces photons <strong>identical</strong> to the trigger. After many cavity round trips, the beam is a vast number of phase-locked photons marching in step. A flashlight, by contrast, runs on spontaneous emission — each atom decays independently, giving a tangled mess of waves.</p>
+  <canvas id="las_coh" class="med"></canvas>
+  <div class="key-takeaway">
+    <strong>Why coherence matters:</strong>
+    <ul style="margin: 8px 0 0;">
+      <li><strong>Tight beam:</strong> coherent waves don't spread; focus to a near-diffraction-limited spot 100 m away.</li>
+      <li><strong>Monochromatic:</strong> single frequency → spectroscopy, atomic clocks, metrology.</li>
+      <li><strong>High intensity:</strong> all energy in one beam, not spread 4π steradians.</li>
+      <li><strong>Interference is usable:</strong> holograms, interferometers, LIGO.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Linewidth ↔ pulse duration</h2>
+  <p>From Worksheet 14: \(\Delta E_{\min} = \hbar / (2 \Delta t)\). A short-lived emission has a broad line; a long-lived (metastable) emission has a sharp one.</p>
+  <ul>
+    <li><strong>CW laser:</strong> long emission time → razor-sharp line. Stabilized He-Ne: \(\Delta f \sim 1\) kHz.</li>
+    <li><strong>Femtosecond pulse:</strong> short emission → deliberately broad spectrum. 10 fs Ti:sapphire: \(\Delta f \sim 50\) THz, spans hundreds of nm.</li>
+  </ul>
+  <div class="slider-grid cols-2">
+    <div class="slider-row">
+      <label for="las_pulseT"><span>Pulse / coherence time</span><span id="las_pulseTRead" class="mono">1 ns</span></label>
+      <input type="range" id="las_pulseT" min="-6" max="3" step="0.05" value="0">
+      <div class="hint">Log scale: 1 fs to 1000 s.</div>
+    </div>
+    <div class="meters" style="margin-top: 0;">
+      <div class="meter"><div class="lbl">ΔE_min</div><div class="val" id="las_lwE">3 × 10⁻⁷ eV</div></div>
+      <div class="meter"><div class="lbl">Δf_min</div><div class="val" id="las_lwF">80 MHz</div></div>
+      <div class="meter"><div class="lbl">Δλ at 633 nm</div><div class="val" id="las_lwL">10⁻⁴ nm</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Q-switching, mode-locking, gain media</h2>
+  <h3>CW vs Q-switched vs mode-locked</h3>
+  <table class="lt" style="margin-top: 8px;">
+    <thead><tr><th>Mode</th><th>Pulse length</th><th>Peak power</th><th>Typical use</th></tr></thead>
+    <tbody>
+      <tr><td class="h">Continuous wave</td><td>—</td><td>mW – kW</td><td>Pointers, cutting, telecom</td></tr>
+      <tr><td class="h">Q-switched</td><td>1–100 ns</td><td>MW – GW</td><td>LIDAR, marking, eye surgery</td></tr>
+      <tr><td class="h">Mode-locked</td><td>fs – ps</td><td>kW – PW</td><td>Ultrafast spectroscopy, attosecond pulses</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 12px;"><strong>Q-switching:</strong> insert a fast shutter; while closed, the gain medium pumps but can't lase, so atoms pile up to abnormal levels. Open suddenly → all stored population dumps in one giant pulse.</p>
+  <p><strong>Mode-locking:</strong> force many cavity modes to share a fixed phase. A sum of many sinusoids of different frequencies, all in phase, is a sharp temporal spike. Pulses as short as a few femtoseconds.</p>
+
+  <h3 style="margin-top: 16px;">Common gain media</h3>
+  <table class="lt">
+    <thead><tr><th>Type</th><th>Example</th><th>λ</th><th>Pump</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="h">Gas</td><td>He-Ne</td><td>633 nm</td><td>Discharge</td><td>Lab alignment, barcode readers</td></tr>
+      <tr><td class="h">Gas</td><td>CO₂</td><td>10.6 μm</td><td>Discharge</td><td>Cutting, welding, surgery</td></tr>
+      <tr><td class="h">Solid-state</td><td>Ruby</td><td>694 nm</td><td>Flashlamp</td><td>The original (1960); tattoo removal</td></tr>
+      <tr><td class="h">Solid-state</td><td>Nd:YAG</td><td>1064 nm</td><td>Diode</td><td>Workhorse: machining, range-finding, medicine</td></tr>
+      <tr><td class="h">Semiconductor</td><td>InGaN diode</td><td>405–520 nm</td><td>Electrical</td><td>Blu-ray, projectors</td></tr>
+      <tr><td class="h">Semiconductor</td><td>AlGaAs diode</td><td>780 nm</td><td>Electrical</td><td>CD/DVD, pointers</td></tr>
+      <tr><td class="h">Fiber</td><td>Er-doped silica</td><td>1550 nm</td><td>Diode</td><td>Telecom amplifiers (run the internet)</td></tr>
+      <tr><td class="h">Excimer</td><td>ArF, KrF</td><td>193–248 nm</td><td>Discharge</td><td>LASIK, photolithography</td></tr>
+      <tr><td class="h">Free-electron</td><td>X-ray FEL (SLAC LCLS)</td><td>0.1 nm – mm</td><td>Accelerator</td><td>Atomic-scale imaging</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel">
+  <h2>Why photons can do this at all — bosons vs fermions</h2>
+  <p>From Worksheet 14 problem 9: stimulated emission piles many photons into the same quantum state. Photons are <strong>bosons</strong> (spin 1) — any number can share one state. Electrons (spin ½) are <strong>fermions</strong>; Pauli exclusion forbids them from sharing a state.</p>
+  <p>If photons were fermions, you literally could not build a laser — only one photon would fit in each cavity mode. Bose–Einstein statistics is the deep reason stimulated emission cascades the way it does: adding a photon to an already-occupied mode is statistically favored for bosons.</p>
+</div>
+
+<div class="panel">
+  <h2>Where lasers are everywhere</h2>
+  <ul>
+    <li><strong>Communications:</strong> 1550 nm fiber pulses carry every bit of the internet.</li>
+    <li><strong>Manufacturing:</strong> CO₂ and fiber lasers cut metal, weld cars, etch boards.</li>
+    <li><strong>Medicine:</strong> LASIK (excimer), tumor ablation, dermatology.</li>
+    <li><strong>Sensing:</strong> LIDAR, gravitational-wave detection (LIGO is a 4 km laser interferometer), atomic clocks.</li>
+    <li><strong>Storage and display:</strong> Blu-ray (blue), DVD (red), holography, projectors.</li>
+    <li><strong>Fundamental research:</strong> Atom cooling, attosecond pulses, inertial-confinement fusion (NIF: 192 lasers).</li>
+  </ul>
+</div>
+
+</div><!-- /tab-las -->
+
+<!-- ============================================================ -->
+<!-- TAB: LED                                                       -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-led">
+
+<div class="panel">
+  <h2>LED — recombination across a semiconductor band gap</h2>
+  <p>A p-n junction: one region (n-type) has extra electrons, the other (p-type) has extra "holes" (missing electrons in the valence band). Apply forward bias and electrons flow into the junction, drop into holes, and release the energy difference as photons.</p>
+  <div class="formula-box">
+    $$ hf \;=\; E_g \quad\Longrightarrow\quad \lambda \;=\; \frac{hc}{E_g}. $$
+  </div>
+  <p>Band-gap energy directly sets the color:</p>
+  <ul>
+    <li>InGaAs (\(E_g \approx 0.7\) eV) — IR, 1500 nm</li>
+    <li>GaAs (\(E_g \approx 1.4\) eV) — NIR, 870 nm</li>
+    <li>AlGaInP (\(E_g \approx 1.9\) eV) — red, 650 nm</li>
+    <li>GaP (\(E_g \approx 2.2\) eV) — yellow-green, 565 nm</li>
+    <li>InGaN (\(E_g \approx 2.7\) eV) — blue, 460 nm</li>
+    <li>AlGaN (\(E_g \approx 3.4\) eV) — UV, 365 nm</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Tune the band gap, see the color</h2>
+  <div class="slider-row">
+    <label for="led_Eg"><span>Band gap \(E_g\)</span><span id="led_EgRead" class="mono">1.9 eV (red)</span></label>
+    <input type="range" id="led_Eg" min="1.0" max="3.5" step="0.01" value="1.9">
+  </div>
+  <canvas id="led_cv" class="tall"></canvas>
+  <div class="meters">
+    <div class="meter"><div class="lbl">Wavelength</div><div class="val" id="led_lam">653 nm (red)</div></div>
+    <div class="meter"><div class="lbl">Material</div><div class="val" id="led_mat">AlGaInP</div></div>
+    <div class="meter"><div class="lbl">Color</div><div class="val" id="led_col">red</div></div>
+    <div class="meter"><div class="lbl">Forward voltage</div><div class="val" id="led_vf">≈ 1.9 V</div></div>
+    <div class="meter"><div class="lbl">Spectrum region</div><div class="val" id="led_reg">visible</div></div>
+    <div class="meter"><div class="lbl">Used for</div><div class="val" id="led_use">indicators, signs</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Why LEDs are so efficient</h2>
+  <ul>
+    <li><strong>No thermal waste.</strong> The chip isn't hot — it's just shuttling electrons across a gap. Almost all energy becomes photons (~40–60% wall-plug vs ~5% for incandescent).</li>
+    <li><strong>Narrow band emission.</strong> Every recombination drops the same \(E_g\), so the spectrum is a ~20 nm-wide band right at the design wavelength.</li>
+    <li><strong>Long lifetime.</strong> No filament to burn, no Hg to leak. 25,000–50,000 hours typical.</li>
+  </ul>
+  <h3 style="margin-top: 14px;">How do you make white from one band gap?</h3>
+  <ol>
+    <li><strong>Phosphor-converted.</strong> Blue (or UV) LED + yellow phosphor (Ce:YAG). Phosphor absorbs some blue, re-emits broad yellow via fluorescence. Blue + yellow ≈ white. Dominant type.</li>
+    <li><strong>RGB mix.</strong> Three LEDs (red, green, blue). Better color rendering, more expensive. Used in displays.</li>
+  </ol>
+  <div class="good-callout">
+    <strong>Nobel 2014:</strong> Akasaki, Amano, Nakamura. Red and green LEDs existed for decades, but blue LEDs needed InGaN, cracked in the 1990s. With blue LEDs, the phosphor trick suddenly worked and white-LED bulbs became possible.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>LED ↔ laser diode — the only difference</h2>
+  <table class="lt">
+    <thead><tr><th>Source</th><th>How it emits</th><th>Coherence</th></tr></thead>
+    <tbody>
+      <tr><td class="h">Discharge atom</td><td>Spontaneous emission</td><td>None</td></tr>
+      <tr><td class="h">LED</td><td>Spontaneous recombination across band gap</td><td>None</td></tr>
+      <tr><td class="h">Laser diode</td><td>Same as LED + optical cavity → stimulated emission</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+  <p>A laser diode is literally an LED with mirrored ends and enough current to enter stimulated emission. The same chip can run as either, depending on current.</p>
+</div>
+
+</div><!-- /tab-led -->
+
+<!-- ============================================================ -->
+<!-- TAB: SUMMARY — BROADBAND VS LINES                              -->
+<!-- ============================================================ -->
+<div class="demo-section" id="tab-sum">
+
+<div class="panel">
+  <h2>Quick rule: is a source broadband or lines?</h2>
+  <p>Every source on the previous tabs is one of two types. <strong>Broadband</strong> means the light contains a continuous range of wavelengths — like a sweep of every colour. <strong>Line</strong> means the light is concentrated at a few specific wavelengths, leaving the rest dark. The distinction tells you what's making the light:</p>
+
+  <div class="key-takeaway">
+    <strong>Broadband ⇔ atoms aren't isolated.</strong> Either they're packed together (hot solid, hot dense gas) and bumping into each other so often that their energy levels smear out, or they're constrained to a band of states (semiconductor). Either way, the emission covers a continuous range. Examples: <strong>incandescent, LED (narrow but still a band)</strong>.<br><br>
+    <strong>Lines ⇔ atoms are isolated.</strong> A low-pressure gas, a solid-state phosphor where each ion sits alone in a host, or a single atomic transition in a laser. Each electron drops a definite energy gap and emits a sharp wavelength. Examples: <strong>discharge, fluorescent (sharp lines broadened slightly by the phosphor host), phosphorescent, laser</strong>.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>All six side-by-side spectra</h2>
+  <p>Each row shows one type's typical spectrum on the same wavelength axis (200–800 nm). Compare the <em>shape</em> of each — that's the visual signature.</p>
+  <canvas id="sum_cv" class="tall"></canvas>
+</div>
+
+<div class="panel">
+  <h2>Detailed comparison</h2>
+  <table class="lt">
+    <thead>
+      <tr><th>Source</th><th>Spectrum type</th><th>Why</th><th>What it looks like</th><th>Eyeball test</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="h">Incandescent</td>
+        <td><span style="color: var(--warn);">Broadband (blackbody)</span></td>
+        <td>Hot dense matter → all wavelengths emitted thermally; Planck curve depends only on T.</td>
+        <td>Smooth bell curve peaked in IR; visible band is the short-wavelength tail.</td>
+        <td>Warm yellow-white, smooth glow, gets dim/orange when cool, blue-white when very hot.</td>
+      </tr>
+      <tr>
+        <td class="h">Discharge lamp</td>
+        <td><span style="color: var(--accent);">Lines</span></td>
+        <td>Isolated gas atoms; each electronic transition gives one exact wavelength.</td>
+        <td>Mostly dark with a few sharp vertical lines at element-specific wavelengths.</td>
+        <td>Distinctive colour (sodium yellow, neon red); split it with a prism and you see distinct bright lines, not a rainbow.</td>
+      </tr>
+      <tr>
+        <td class="h">Fluorescent</td>
+        <td><span style="color: var(--accent);">Lines (slightly broadened)</span></td>
+        <td>UV from Hg discharge excites phosphors; each phosphor emits a few characteristic lines that get a little broadened by the host crystal.</td>
+        <td>3–6 narrow peaks across the visible — typically a blue, green, and red phosphor + a few Hg lines.</td>
+        <td>Looks white but feels "spiky"; photos under a fluorescent tube often have green-tinted shadows because the green spike dominates.</td>
+      </tr>
+      <tr>
+        <td class="h">Phosphorescent</td>
+        <td><span style="color: var(--accent);">Lines (same as fluorescent)</span></td>
+        <td>Same emission mechanism as fluorescent, but one intermediate level is metastable. <em>Spectrum is the same shape as fluorescent</em> — only the time signature differs.</td>
+        <td>Narrow lines clustered around the activator dopant's transitions (most commonly green for ZnS:Cu or SrAl₂O₄:Eu).</td>
+        <td>Glows in the dark after exposure. Take a picture immediately after the lights go out — it's still there.</td>
+      </tr>
+      <tr>
+        <td class="h">Laser</td>
+        <td><span style="color: var(--magenta);">Single line (extremely narrow)</span></td>
+        <td>Coherent stimulated emission from one transition, narrowed further by the cavity. Linewidth set by ℏ/(2 Δt).</td>
+        <td>One ultra-sharp peak at exactly the lasing wavelength; rest of the spectrum perfectly dark.</td>
+        <td>Beam stays a tight spot at long distance; passes through a prism as a single bright dot of one pure colour.</td>
+      </tr>
+      <tr>
+        <td class="h">LED</td>
+        <td><span style="color: var(--warn);">Narrow band (~20 nm wide)</span></td>
+        <td>Semiconductor band gap. Many electrons recombine across the gap but with thermal spread, giving a hump rather than a single line.</td>
+        <td>One bell-shaped band ~20 nm wide centred on \(hc/E_g\). White LEDs add a phosphor for a broader yellow hump.</td>
+        <td>Looks single-colour like a discharge lamp but a prism shows a tight band — not a perfect line and not a full rainbow.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel">
+  <h2>Decision tree — "what type of source is this?"</h2>
+  <p>Split white light with a prism (or look at it through a diffraction grating, like a CD reflection). What do you see?</p>
+  <ol style="margin-top: 8px;">
+    <li><strong>Smooth full rainbow</strong> (every colour present continuously) → <span style="color: var(--warn);">broadband thermal source</span> (incandescent, the Sun, fire, a glowing piece of iron). If the rainbow looks balanced and warm-yellow-tinted, ~2700 K incandescent. Bluer → hotter.</li>
+    <li><strong>A few bright lines on a black background</strong> → <span style="color: var(--accent);">line source (discharge / fluorescent / phosphorescent)</span>.
+      <ul>
+        <li>Three obvious peaks (blue + green + red) on otherwise dark spectrum → <strong>tri-phosphor fluorescent</strong>.</li>
+        <li>One sharp doublet at 589 nm and almost nothing else → <strong>low-pressure sodium</strong>.</li>
+        <li>Cluster of red/orange lines → <strong>neon discharge</strong>.</li>
+        <li>Visible-region lines plus invisible UV → <strong>mercury vapour</strong>.</li>
+        <li>Visible lines that <em>persist after lights out</em> → <strong>phosphorescent</strong>.</li>
+      </ul>
+    </li>
+    <li><strong>One single pure wavelength</strong>, beam stays tight at long distances → <span style="color: var(--magenta);">laser</span>.</li>
+    <li><strong>One narrow band ~20 nm wide</strong>, single colour but a band not a line → <span style="color: var(--warn);">LED</span>.</li>
+  </ol>
+</div>
+
+<div class="panel">
+  <h2>The deep reason behind the rule</h2>
+  <p>An atom in isolation has a discrete set of energy levels, so its emission spectrum is a set of sharp lines — one per transition. Bring many atoms together at high density and several things smear those lines out:</p>
+  <ul>
+    <li><strong>Pressure broadening.</strong> Atoms collide so often that each one's energy levels are perturbed by neighbours during emission. Each line gets wider.</li>
+    <li><strong>Doppler broadening.</strong> Thermal motion shifts the emitted wavelength up or down depending on atom velocity. Lines widen proportional to \(\sqrt{T/m}\).</li>
+    <li><strong>Coupling to neighbours.</strong> In a solid, electron states aren't isolated — they overlap with neighbours to form continuous <em>bands</em>. This is the whole story behind metals and semiconductors.</li>
+  </ul>
+  <p>So the spectrum tells you about the matter:</p>
+  <div class="formula-box">
+    <strong>Hot dense matter</strong> (filament, dense plasma like the Sun's photosphere, lava) → all of the above happen at once → smooth broadband.<br><br>
+    <strong>Thin, isolated atoms</strong> (low-pressure gas tube, a star's tenuous outer atmosphere, an excited dopant ion in a glass host) → minimal broadening → sharp lines.<br><br>
+    <strong>Semiconductors</strong> → electrons sit in bands of allowed states, not discrete atomic levels → narrow-band emission instead of either lines or a full thermal sweep.
+  </div>
+  <p>That's why looking at a light source's spectrum tells you almost everything you need to know about how it generates light.</p>
+</div>
+
+</div><!-- /tab-sum -->
+
+<!-- ============================================================ -->
+<!-- COMPARISON                                                    -->
+<!-- ============================================================ -->
+<div class="panel">
+  <h2>All six side by side</h2>
+  <table class="lt">
+    <thead><tr><th>Source</th><th>Mechanism</th><th>Spectrum</th><th>Efficiency</th><th>Excited-state lifetime</th></tr></thead>
+    <tbody>
+      <tr><td class="h">Incandescent</td><td>Thermal (blackbody)</td><td>Broadband, peaks IR at 2700 K</td><td>~2%</td><td>—</td></tr>
+      <tr><td class="h">Discharge</td><td>Electron impact + spontaneous emission</td><td>Sharp lines (gas-specific)</td><td>5–25%</td><td>~10 ns</td></tr>
+      <tr><td class="h">Fluorescent</td><td>UV pump + phosphor cascade</td><td>Multi-line, broadened by phosphor</td><td>10–15%</td><td>~10 ns (in phosphor)</td></tr>
+      <tr><td class="h">Phosphorescent</td><td>UV pump + metastable trap</td><td>Lines, decays slowly in time</td><td>Low (slow trickle)</td><td>ms – hours</td></tr>
+      <tr><td class="h">Laser</td><td>Pump + stimulated emission from metastable</td><td>Single line, coherent</td><td>0.01–50%</td><td>μs – ms (metastable)</td></tr>
+      <tr><td class="h">LED</td><td>Electron-hole recombination across band gap</td><td>Narrow band (~20 nm)</td><td>40–60%</td><td>~ns</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+//==========================================================
+// SHARED helpers
+//==========================================================
+function setup(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: rect.width, h: rect.height };
+}
+function wlToColor(lambda, alpha = 1) {
+  if (lambda < 380) return `rgba(140,80,200,${alpha})`;
+  if (lambda > 750) return `rgba(120,0,0,${alpha})`;
+  let r,g,b;
+  if (lambda < 440) { r = -(lambda-440)/60; g = 0; b = 1; }
+  else if (lambda < 490) { r = 0; g = (lambda-440)/50; b = 1; }
+  else if (lambda < 510) { r = 0; g = 1; b = -(lambda-510)/20; }
+  else if (lambda < 580) { r = (lambda-510)/70; g = 1; b = 0; }
+  else if (lambda < 645) { r = 1; g = -(lambda-645)/65; b = 0; }
+  else { r = 1; g = 0; b = 0; }
+  let f = 1;
+  if (lambda < 420) f = 0.3 + 0.7*(lambda-380)/40;
+  else if (lambda > 700) f = 0.3 + 0.7*(750-lambda)/50;
+  r = Math.round(255*Math.pow(Math.max(0,r)*f, 0.8));
+  g = Math.round(255*Math.pow(Math.max(0,g)*f, 0.8));
+  b = Math.round(255*Math.pow(Math.max(0,b)*f, 0.8));
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function isVisible(el) {
+  while (el) {
+    if (getComputedStyle(el).display === 'none') return false;
+    el = el.parentElement;
+  }
+  return true;
+}
+
+//==========================================================
+// TAB SWITCHING
+//==========================================================
+let currentTab = 'inc';
+document.getElementById('srcTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-tab]');
+  if (!btn) return;
+  document.querySelectorAll('#srcTabs button').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.demo-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  currentTab = btn.dataset.tab;
+  // Re-render after browser layouts the now-visible section
+  setTimeout(() => { redrawCurrent(); }, 30);
+});
+function redrawCurrent() {
+  if (currentTab === 'inc') inc_update();
+  if (currentTab === 'dis') dis_draw();
+  if (currentTab === 'flu') flu_updateRatio();
+  if (currentTab === 'pho') { pho_drawDiag(); pho_drawDecay(); }
+  if (currentTab === 'las') { las_draw2(); las_draw3(); las_updateLasing(); las_draw4(); las_updateLW(); }
+  if (currentTab === 'led') {}
+  if (currentTab === 'sum') sum_draw();
+}
+
+//==========================================================
+// FOUNDATIONS: three processes animation
+//==========================================================
+const procCanvas = document.getElementById('procCanvas');
+const procExplain = document.getElementById('procExplain');
+const procTabs = document.getElementById('procTabs');
+let currentProc = 'abs';
+let procStart = performance.now();
+let spoAngle = -0.3;
+
+const PROC_INFO = {
+  abs: {
+    title: 'Absorption',
+    bullets: [
+      { ttl: 'Before', text: 'Atom in ground state \\(E_1\\). A photon flies in carrying \\(hf = E_2 - E_1\\) — exactly the gap.' },
+      { ttl: 'During', text: 'The atom absorbs the photon. The photon disappears, electron kicked to \\(E_2\\).' },
+      { ttl: 'After', text: 'No photon present. Atom now excited. To return to \\(E_1\\), spontaneous or stimulated emission must occur.' },
+      { ttl: 'Where it dominates', text: 'Every dark, cold material lit from outside: a window, a leaf, paper. Photons not absorbed are reflected or transmitted.' }
+    ]
+  },
+  spo: {
+    title: 'Spontaneous emission',
+    bullets: [
+      { ttl: 'Before', text: 'Atom in excited state \\(E_2\\). No external photon needed.' },
+      { ttl: 'During', text: 'At a random time set by lifetime \\(\\tau\\), electron drops to \\(E_1\\) and emits a photon of \\(hf = E_2 - E_1\\). Direction and phase random.' },
+      { ttl: 'After', text: 'Atom in ground state; photon flying off in some random direction.' },
+      { ttl: 'Where it dominates', text: 'Discharge lamps, fluorescent tubes, the Sun, any excited atom left alone. Light goes in all directions — sources are <em>incoherent</em>.' }
+    ]
+  },
+  sti: {
+    title: 'Stimulated emission',
+    bullets: [
+      { ttl: 'Before', text: 'Atom already in \\(E_2\\). A photon of \\(hf = E_2 - E_1\\) flies past.' },
+      { ttl: 'During', text: 'The incoming photon triggers the electron to drop. A <strong>second photon</strong> is emitted with the exact same energy, direction, phase, polarization.' },
+      { ttl: 'After', text: 'Atom in ground state, two identical photons flying off together. One photon in, two out — light has been amplified.' },
+      { ttl: 'Where it dominates', text: 'The entire basis of a laser. Einstein 1917, demonstrated 1960. Requires more atoms in \\(E_2\\) than \\(E_1\\) (population inversion) — which needs three or more levels.' }
+    ]
+  }
+};
+function renderProcText() {
+  const info = PROC_INFO[currentProc];
+  procExplain.innerHTML = `
+    <div>
+      <h3>${info.title}</h3>
+      ${info.bullets.slice(0, 2).map(b => `<div class="proc-bullet"><div class="ttl">${b.ttl}</div><div>${b.text}</div></div>`).join('')}
+    </div>
+    <div>
+      ${info.bullets.slice(2).map(b => `<div class="proc-bullet"><div class="ttl">${b.ttl}</div><div>${b.text}</div></div>`).join('')}
+    </div>
+  `;
+  if (window.MathJax) MathJax.typesetPromise([procExplain]);
+}
+function drawAtomLevels(ctx, w, h, atomX, atomY, atE2) {
+  const lvlX1 = atomX + 50, lvlX2 = atomX + 130;
+  const e1Y = atomY + 40, e2Y = atomY - 40;
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(lvlX1, e1Y); ctx.lineTo(lvlX2, e1Y);
+  ctx.moveTo(lvlX1, e2Y); ctx.lineTo(lvlX2, e2Y);
+  ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace';
+  ctx.fillText('E₂', lvlX2 + 8, e2Y + 4);
+  ctx.fillText('E₁', lvlX2 + 8, e1Y + 4);
+  ctx.strokeStyle = '#5a6276'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(atomX, atomY, 30, 0, 2*Math.PI); ctx.stroke();
+  ctx.fillStyle = 'rgba(102,217,239,0.08)'; ctx.fill();
+  ctx.fillStyle = '#ffcc66';
+  ctx.beginPath(); ctx.arc(atomX, atomY, 5, 0, 2*Math.PI); ctx.fill();
+  const eY = atE2 ? e2Y : e1Y;
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(lvlX1 + 18, eY, 6, 0, 2*Math.PI); ctx.fill();
+  ctx.strokeStyle = '#aaf0ff';
+  ctx.beginPath(); ctx.arc(lvlX1 + 18, eY, 6, 0, 2*Math.PI); ctx.stroke();
+}
+function drawPhotonWave(ctx, x, y, wavelength, amplitude, color, dir) {
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath();
+  const n = 22;
+  const phase = performance.now() / 1000 * 14 * dir;  // traveling-wave phase
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const px = x + dir * (t * wavelength * 3 - wavelength * 1.5);
+    const py = y + amplitude * Math.sin(t * 6 * Math.PI - phase);
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+}
+function procAnimate() {
+  const elapsed = (performance.now() - procStart) / 1000;
+  const t = (elapsed % 4) / 4;
+  const { ctx, w, h } = setup(procCanvas);
+  ctx.clearRect(0,0,w,h);
+  if (currentProc === 'abs') {
+    const atomX = w * 0.65, atomY = h * 0.5;
+    if (t < 0.5) { const px = 30 + (atomX - 65) * (t / 0.5); drawPhotonWave(ctx, px, atomY, 14, 7, '#ffd166', 1); }
+    else if (t < 0.55) { ctx.fillStyle = `rgba(255,209,102,${(0.55-t)/0.05*0.7})`; ctx.beginPath(); ctx.arc(atomX, atomY, 38, 0, 2*Math.PI); ctx.fill(); }
+    drawAtomLevels(ctx, w, h, atomX, atomY, t >= 0.5);
+    ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+    ctx.fillText('Photon (hf = E₂ − E₁)', 30, 30);
+    ctx.fillText(t < 0.5 ? 'Photon flying toward atom...' : 'Absorbed; electron now in E₂', 30, h - 16);
+  } else if (currentProc === 'spo') {
+    const atomX = w * 0.4, atomY = h * 0.5;
+    drawAtomLevels(ctx, w, h, atomX, atomY, t < 0.4);
+    if (t >= 0.4) {
+      const dist = (t - 0.4) / 0.6 * 240;
+      const px = atomX + Math.cos(spoAngle) * dist;
+      const py = atomY + Math.sin(spoAngle) * dist;
+      drawPhotonWave(ctx, px, py, 14, 7, '#ffd166', 1);
+    }
+    ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+    ctx.fillText('Excited atom, random decay direction', 30, 30);
+    ctx.fillText(t < 0.4 ? 'Atom in E₂, waiting...' : 'Photon emitted in random direction', 30, h - 16);
+  } else if (currentProc === 'sti') {
+    const atomX = w * 0.6, atomY = h * 0.5;
+    if (t < 0.4) { const px = 30 + (atomX - 65) * (t / 0.4); drawPhotonWave(ctx, px, atomY, 14, 7, '#ffd166', 1); }
+    else if (t < 0.45) { ctx.fillStyle = `rgba(166,226,46,${(0.45-t)/0.05*0.7})`; ctx.beginPath(); ctx.arc(atomX, atomY, 38, 0, 2*Math.PI); ctx.fill(); }
+    else {
+      const dist = (t - 0.45) / 0.55 * 200;
+      const px = atomX + 35 + dist;
+      drawPhotonWave(ctx, px, atomY - 8, 14, 5, '#ffd166', 1);
+      drawPhotonWave(ctx, px, atomY + 8, 14, 5, '#ffd166', 1);
+    }
+    drawAtomLevels(ctx, w, h, atomX, atomY, t < 0.4);
+    ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+    ctx.fillText('1 photon in → 2 identical photons out', 30, 30);
+    ctx.fillText(t < 0.4 ? 'Photon arriving, atom in E₂...' : t < 0.45 ? 'Stimulated transition!' : 'Two photons together (same dir, phase)', 30, h - 16);
+  }
+  requestAnimationFrame(procAnimate);
+}
+procTabs.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-proc]'); if (!btn) return;
+  procTabs.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+  currentProc = btn.dataset.proc;
+  procStart = performance.now();
+  if (currentProc === 'spo') spoAngle = (Math.random() - 0.5) * 1.4;
+  renderProcText();
+});
+renderProcText();
+requestAnimationFrame(procAnimate);
+
+//==========================================================
+// INC: incandescent
+//==========================================================
+const HC = 1.986e-25, KB = 1.381e-23;
+function planck(lambda, T) {
+  const x = HC / (lambda * KB * T);
+  return (1 / Math.pow(lambda, 5)) / (Math.exp(x) - 1);
+}
+function tungstenColor(T) {
+  if (T < 1500) return 'dim red';
+  if (T < 2000) return 'orange-red';
+  if (T < 2500) return 'warm orange';
+  if (T < 2900) return 'warm yellow';
+  if (T < 3500) return 'bright yellow';
+  if (T < 4500) return 'near-white';
+  return 'bluish-white';
+}
+function inc_update() {
+  const T = +document.getElementById('inc_T').value;
+  document.getElementById('inc_TRead').textContent = T + ' K';
+  const cv = document.getElementById('inc_cv');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const padL=58, padR=22, padT=22, padB=42;
+  const plotW = w-padL-padR, plotH = h-padT-padB;
+  const lmin = 100e-9, lmax = 3000e-9;
+  const N = 600;
+  const lambdas = [], ints = [];
+  let maxI = 0;
+  for (let i = 0; i <= N; i++) {
+    const lam = lmin + (lmax - lmin) * i / N;
+    const I = planck(lam, T);
+    lambdas.push(lam); ints.push(I);
+    if (I > maxI) maxI = I;
+  }
+  const vis1 = 380e-9, vis2 = 780e-9;
+  for (let i = 0; i < N; i++) {
+    const lam = lambdas[i];
+    if (lam < vis1 || lam > vis2) continue;
+    const xL = padL + (lambdas[i] - lmin) / (lmax - lmin) * plotW;
+    const xR = padL + (lambdas[i+1] - lmin) / (lmax - lmin) * plotW;
+    ctx.fillStyle = wlToColor(lam * 1e9, 0.16);
+    ctx.fillRect(xL, padT, xR - xL + 1, plotH);
+  }
+  ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2.2;
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const x = padL + (lambdas[i] - lmin)/(lmax - lmin) * plotW;
+    const y = padT + plotH - (ints[i] / maxI) * plotH * 0.95;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  // Fill visible
+  const xVis1 = padL + (vis1 - lmin)/(lmax - lmin) * plotW;
+  const xVis2 = padL + (vis2 - lmin)/(lmax - lmin) * plotW;
+  ctx.fillStyle = 'rgba(166,226,46,0.2)';
+  ctx.beginPath();
+  let started = false;
+  for (let i = 0; i <= N; i++) {
+    const lam = lambdas[i];
+    if (lam < vis1 || lam > vis2) continue;
+    const x = padL + (lam - lmin)/(lmax - lmin) * plotW;
+    const y = padT + plotH - (ints[i] / maxI) * plotH * 0.95;
+    if (!started) { ctx.moveTo(x, padT + plotH); ctx.lineTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(xVis2, padT + plotH); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH); ctx.moveTo(padL, padT+plotH); ctx.lineTo(padL+plotW, padT+plotH); ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  [200, 500, 1000, 1500, 2000, 2500, 3000].forEach(nm => {
+    const lam = nm * 1e-9;
+    if (lam < lmin || lam > lmax) return;
+    const x = padL + (lam - lmin)/(lmax - lmin) * plotW;
+    ctx.beginPath(); ctx.moveTo(x, padT+plotH); ctx.lineTo(x, padT+plotH+4); ctx.stroke();
+    ctx.fillText(nm, x - 14, padT+plotH+16);
+  });
+  ctx.fillText('Wavelength (nm)', padL + plotW/2 - 50, padT+plotH+32);
+  const peakLam = 2.898e-3 / T;
+  if (peakLam > lmin && peakLam < lmax) {
+    const x = padL + (peakLam - lmin)/(lmax - lmin) * plotW;
+    ctx.strokeStyle = '#66d9ef'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT+plotH); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#66d9ef';
+    ctx.fillText(`λ_max = ${Math.round(peakLam*1e9)} nm`, x + 4, padT + 38);
+  }
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  ctx.fillText('← UV', padL + 4, padT + 14);
+  ctx.fillText('visible', (xVis1 + xVis2)/2 - 18, padT + 14);
+  ctx.fillText('infrared →', xVis2 + 6, padT + 14);
+  // Stats
+  document.getElementById('inc_lamPeak').textContent = `${Math.round(peakLam*1e9)} nm ${peakLam > vis2 ? '(IR)' : peakLam < vis1 ? '(UV)' : '(visible)'}`;
+  const pT = Math.pow(T/2700, 4);
+  document.getElementById('inc_ptot').textContent = pT < 0.01 ? pT.toExponential(2) + ' ×' : pT.toFixed(2) + ' ×';
+  let total = 0, vis = 0;
+  for (let i = 0; i < N; i++) {
+    const lam = lambdas[i];
+    const dlam = (lambdas[i+1] || lam) - lam;
+    total += ints[i] * dlam;
+    if (lam >= vis1 && lam <= vis2) vis += ints[i] * dlam;
+  }
+  const frac = vis / total;
+  const fv = document.getElementById('inc_fracVis');
+  fv.textContent = (frac * 100).toFixed(1) + '%';
+  fv.className = 'val ' + (frac > 0.2 ? 'good' : frac > 0.1 ? '' : 'bad');
+  document.getElementById('inc_color').textContent = tungstenColor(T);
+  const ef = document.getElementById('inc_eff');
+  ef.textContent = T < 2500 ? '~2%' : T < 3000 ? '~5%' : T < 3500 ? '~3% (halogen)' : 'melts tungsten!';
+  ef.className = 'val bad';
+  document.getElementById('inc_ratio').textContent = `1 : ${((total-vis)/vis).toFixed(1)}`;
+}
+document.getElementById('inc_T').addEventListener('input', inc_update);
+
+//==========================================================
+// DIS: discharge
+//==========================================================
+const GASES = {
+  H:  { name:'Hydrogen', lines:[{lam:410.2,i:0.2},{lam:434.0,i:0.4},{lam:486.1,i:0.7},{lam:656.3,i:1.0}], strongest:'656 nm (Hα red)', color:'pink-red', use:'Spectroscopy; Balmer series', eff:'~5%' },
+  He: { name:'Helium', lines:[{lam:388.9,i:0.3},{lam:447.1,i:0.4},{lam:471.3,i:0.3},{lam:501.6,i:0.5},{lam:587.6,i:1.0},{lam:667.8,i:0.6},{lam:706.5,i:0.5}], strongest:'587 nm (yellow)', color:'pale yellow-pink', use:'First detected in the Sun', eff:'~5%' },
+  Ne: { name:'Neon', lines:[{lam:585.2,i:0.6},{lam:614.3,i:0.8},{lam:626.6,i:0.9},{lam:633.4,i:1.0},{lam:640.2,i:0.9},{lam:650.6,i:0.7},{lam:692.9,i:0.5},{lam:703.2,i:0.4}], strongest:'633 nm', color:'iconic orange-red', use:'Neon signs; HeNe laser', eff:'~5–8%' },
+  Ar: { name:'Argon', lines:[{lam:415.9,i:0.6},{lam:419.8,i:0.5},{lam:451.1,i:0.7},{lam:696.5,i:0.9},{lam:706.7,i:0.7},{lam:738.4,i:0.8},{lam:750.4,i:1.0},{lam:763.5,i:0.9}], strongest:'750 nm (deep red)', color:'lavender / pinkish', use:'Often mixed with Hg in fluorescents', eff:'~5%' },
+  Na: { name:'Sodium', lines:[{lam:589.0,i:1.0},{lam:589.6,i:0.95}], strongest:'589 nm Na D-doublet', color:'monochromatic yellow', use:'Street lights (LPS)', eff:'~25%' },
+  Hg: { name:'Mercury', lines:[{lam:253.7,i:1.0,uv:true},{lam:365.0,i:0.6,uv:true},{lam:404.7,i:0.4},{lam:435.8,i:0.8},{lam:546.1,i:0.9},{lam:578.0,i:0.5}], strongest:'254 nm UV (invisible)', color:'pale blue-green', use:'Drives fluorescent tubes', eff:'~10–15%' },
+  Xe: { name:'Xenon', lines:[{lam:467.1,i:0.4},{lam:484.3,i:0.6},{lam:529.2,i:0.5},{lam:541.9,i:0.4},{lam:758.8,i:0.5},{lam:823.2,i:0.7},{lam:881.9,i:1.0}], strongest:'882 nm IR', color:'bluish-white', use:'Camera flashes, HID', eff:'~20–30%' }
+};
+let dis_currentGas = 'H';
+function dis_draw() {
+  const cv = document.getElementById('dis_cv');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const padX = 50, padY = 30;
+  const plotW = w - 2*padX, plotH = h - 2*padY;
+  const lmin = 200, lmax = 800;
+  for (let x = 0; x < plotW; x++) {
+    const lam = lmin + (x/plotW)*(lmax-lmin);
+    ctx.fillStyle = wlToColor(lam, 0.12);
+    ctx.fillRect(padX + x, padY, 1, plotH);
+  }
+  const gas = GASES[dis_currentGas];
+  gas.lines.forEach(line => {
+    const x = padX + (line.lam - lmin)/(lmax - lmin) * plotW;
+    if (x < padX || x > padX + plotW) return;
+    ctx.strokeStyle = line.uv ? `rgba(200,120,255,${line.i})` : wlToColor(line.lam, Math.min(1, line.i));
+    ctx.lineWidth = 1.5 + line.i * 2;
+    ctx.beginPath();
+    ctx.moveTo(x, padY + plotH * (1 - line.i)); ctx.lineTo(x, padY + plotH);
+    ctx.stroke();
+    if (line.i > 0.4) {
+      ctx.fillStyle = line.uv ? '#c084f7' : wlToColor(line.lam);
+      ctx.font = '10px ui-monospace';
+      ctx.save();
+      ctx.translate(x, padY + plotH * (1 - line.i) - 6);
+      ctx.rotate(-Math.PI/2);
+      ctx.fillText(Math.round(line.lam) + ' nm', 0, 4);
+      ctx.restore();
+    }
+  });
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath(); ctx.moveTo(padX, padY); ctx.lineTo(padX, padY+plotH); ctx.moveTo(padX, padY+plotH); ctx.lineTo(padX+plotW, padY+plotH); ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  [250, 350, 450, 550, 650, 750].forEach(lam => {
+    const x = padX + (lam - lmin)/(lmax - lmin) * plotW;
+    ctx.beginPath(); ctx.moveTo(x, padY+plotH); ctx.lineTo(x, padY+plotH+4); ctx.stroke();
+    ctx.fillText(lam, x-12, padY+plotH+16);
+  });
+  ctx.fillText('Wavelength (nm)', padX, padY+plotH+32);
+  const visX1 = padX + (380 - lmin)/(lmax - lmin)*plotW;
+  const visX2 = padX + (780 - lmin)/(lmax - lmin)*plotW;
+  ctx.strokeStyle = '#5a6276'; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(visX1, padY); ctx.lineTo(visX1, padY+plotH); ctx.moveTo(visX2, padY); ctx.lineTo(visX2, padY+plotH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#aaf0ff'; ctx.font = 'bold 14px ui-monospace';
+  ctx.fillText(`${gas.name} emission spectrum`, padX, 18);
+  document.getElementById('dis_strong').textContent = gas.strongest;
+  document.getElementById('dis_color').textContent = gas.color;
+  document.getElementById('dis_use').textContent = gas.use;
+  document.getElementById('dis_eff').textContent = gas.eff;
+}
+document.getElementById('dis_gasBtns').addEventListener('click', e => {
+  const b = e.target.closest('button[data-gas]'); if (!b) return;
+  dis_currentGas = b.dataset.gas;
+  document.querySelectorAll('#dis_gasBtns button').forEach(x => x.classList.toggle('active', x === b));
+  dis_draw();
+});
+
+//==========================================================
+// FLU: fluorescent cascade
+//==========================================================
+let flu_t0 = performance.now();
+let flu_path = 'cascade';
+function drawArrow(ctx, x1, y1, x2, y2, color, lw) {
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len, uy = dy / len;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - 8*ux + 5*(-uy), y2 - 8*uy + 5*ux);
+  ctx.lineTo(x2 - 8*ux - 5*(-uy), y2 - 8*uy - 5*ux);
+  ctx.closePath(); ctx.fill();
+}
+function drawPhotonShort(ctx, x, y, color, wavelength, amplitude, dir) {
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath();
+  const n = 20;
+  const phase = performance.now() / 1000 * 14 * dir;  // traveling wave
+  for (let i = 0; i < n; i++) {
+    const tt = i / (n - 1);
+    const px = x + dir * (tt * wavelength * 2 - wavelength);
+    const py = y + amplitude * Math.sin(tt * 5 * Math.PI - phase);
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+}
+function flu_drawCascade() {
+  const cv = document.getElementById('flu_cv');
+  if (!isVisible(cv)) { requestAnimationFrame(flu_drawCascade); return; }
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const padT = 40, padB = 50;
+  const E3v = -2, E2v = -4.5, E1v = -6.5;
+  const plotH = h - padT - padB;
+  const yOfE = (E) => padT + (E3v - E) / (E3v - E1v) * plotH;
+  const lvlX1 = w * 0.4, lvlX2 = w * 0.9;
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 1.8;
+  [E1v, E2v, E3v].forEach(E => {
+    const y = yOfE(E);
+    ctx.beginPath(); ctx.moveTo(lvlX1, y); ctx.lineTo(lvlX2, y); ctx.stroke();
+  });
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace';
+  ctx.fillText('E₃ = −2 eV', lvlX2 + 10, yOfE(E3v) + 4);
+  ctx.fillText('E₂ = −4.5 eV', lvlX2 + 10, yOfE(E2v) + 4);
+  ctx.fillText('E₁ = −6.5 eV', lvlX2 + 10, yOfE(E1v) + 4);
+  const tot = 5;
+  const t = ((performance.now() - flu_t0) / 1000) % tot / tot;
+  const atomX = w * 0.18, atomY = h / 2;
+  ctx.strokeStyle = '#5a6276'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(atomX, atomY, 30, 0, 2*Math.PI); ctx.stroke();
+  ctx.fillStyle = 'rgba(102,217,239,0.06)'; ctx.fill();
+  ctx.fillStyle = '#ffcc66';
+  ctx.beginPath(); ctx.arc(atomX, atomY, 4, 0, 2*Math.PI); ctx.fill();
+  if (t < 0.2) {
+    const px = 20 + (atomX - 35 - 20) * (t / 0.2);
+    drawPhotonShort(ctx, px, atomY, '#bd57ff', 12, 5, 1);
+    ctx.fillStyle = '#bd57ff'; ctx.font = '11px ui-monospace';
+    ctx.fillText('UV 4.5 eV', 20, atomY - 22);
+  }
+  if (t >= 0.2 && t < 0.25) {
+    const alpha = 1 - (t - 0.2) / 0.05;
+    ctx.fillStyle = `rgba(189,87,255,${alpha * 0.6})`;
+    ctx.beginPath(); ctx.arc(atomX, atomY, 38, 0, 2*Math.PI); ctx.fill();
+  }
+  let eY;
+  let eX = lvlX1 + 30;
+  if (t < 0.2) eY = yOfE(E1v);
+  else if (t < 0.25) eY = yOfE(E3v) + (yOfE(E1v) - yOfE(E3v)) * (1 - (t - 0.2)/0.05);
+  else if (t < 0.55) eY = yOfE(E3v);
+  else if (t < 0.6) { const tgt = flu_path === 'cascade' ? yOfE(E2v) : yOfE(E1v); eY = yOfE(E3v) + (tgt - yOfE(E3v)) * (t - 0.55) / 0.05; }
+  else if (t < 0.85) eY = flu_path === 'cascade' ? yOfE(E2v) : yOfE(E1v);
+  else if (t < 0.9 && flu_path === 'cascade') eY = yOfE(E2v) + (yOfE(E1v) - yOfE(E2v)) * (t - 0.85) / 0.05;
+  else eY = yOfE(E1v);
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(eX, eY, 6, 0, 2*Math.PI); ctx.fill();
+  if (flu_path === 'direct' && t >= 0.55) {
+    const phT = (t - 0.55) / 0.45;
+    const px = eX + 20 + phT * (w - eX - 40);
+    const py = (yOfE(E3v) + yOfE(E1v)) / 2;
+    drawPhotonShort(ctx, px, py, '#bd57ff', 12, 5, 1);
+  }
+  if (flu_path === 'cascade' && t >= 0.55) {
+    if (t < 0.85) {
+      const phT = (t - 0.55) / 0.3;
+      const px = eX + 20 + phT * 180;
+      const py = (yOfE(E3v) + yOfE(E2v)) / 2;
+      drawPhotonShort(ctx, px, py, '#66d9ef', 14, 6, 1);
+    } else {
+      const px = eX + 20 + 180 + (t - 0.85) / 0.15 * 100;
+      const py = (yOfE(E3v) + yOfE(E2v)) / 2;
+      drawPhotonShort(ctx, px, py, '#66d9ef', 14, 6, 1);
+      const phT2 = (t - 0.85) / 0.15;
+      const px2 = eX + 20 + phT2 * 180;
+      const py2 = (yOfE(E2v) + yOfE(E1v)) / 2;
+      drawPhotonShort(ctx, px2, py2, '#ff9a4d', 16, 6, 1);
+    }
+  }
+  if (flu_path === 'cascade') {
+    drawArrow(ctx, eX + 70, yOfE(E3v), eX + 70, yOfE(E2v), '#66d9ef', 2);
+    drawArrow(ctx, eX + 70, yOfE(E2v), eX + 70, yOfE(E1v), '#ff9a4d', 2);
+    ctx.fillStyle = '#66d9ef'; ctx.font = '11px ui-monospace';
+    ctx.fillText('① 2.5 eV cyan', eX + 80, (yOfE(E3v) + yOfE(E2v))/2 + 4);
+    ctx.fillStyle = '#ff9a4d';
+    ctx.fillText('② 2.0 eV orange', eX + 80, (yOfE(E2v) + yOfE(E1v))/2 + 4);
+  } else {
+    drawArrow(ctx, eX + 70, yOfE(E3v), eX + 70, yOfE(E1v), '#bd57ff', 2);
+    ctx.fillStyle = '#bd57ff'; ctx.font = '11px ui-monospace';
+    ctx.fillText('4.5 eV UV back', eX + 80, (yOfE(E3v) + yOfE(E1v))/2);
+  }
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+  ctx.fillText(flu_path === 'cascade' ? 'Cascade — TWO visible photons emerge' : 'Direct — one UV photon back out', 12, 22);
+  requestAnimationFrame(flu_drawCascade);
+}
+function flu_updateRatio() {
+  const p = +document.getElementById('flu_ratio').value / 100;
+  document.getElementById('flu_ratioRead').textContent = p < 0.2 ? 'mostly direct' : p < 0.6 ? 'mixed' : p < 0.9 ? 'cascade' : 'strongly cascade';
+  document.getElementById('flu_b2').textContent = (p * 100).toFixed(0) + '%';
+  document.getElementById('flu_b1').textContent = ((1 - p) * 100).toFixed(0) + '%';
+  document.getElementById('flu_avg').textContent = (2 * p + 1 * (1 - p)).toFixed(2);
+  flu_path = p > 0.5 ? 'cascade' : 'direct';
+  flu_t0 = performance.now();
+}
+document.getElementById('flu_ratio').addEventListener('input', flu_updateRatio);
+flu_updateRatio();
+requestAnimationFrame(flu_drawCascade);
+
+//==========================================================
+// PHO: phosphorescent
+//==========================================================
+let pho_mode = 'fluor';
+function pho_drawLevels(ctx, x1, x2, h, type, highlighted) {
+  const padT = 36, padB = 44;
+  const E1y = h - padB;
+  const E3y = padT;
+  const E2y = padT + (h - padT - padB) * 0.5;
+  const atomX = x1 + 60;
+
+  // Cycle: fluorescence is fast (~2s), phosphorescence is slow (~8s) — the visual contrast IS the lesson
+  const cycle = type === 'fluor' ? 2.0 : 8.0;
+  const t = (performance.now() / 1000) % cycle / cycle;
+
+  // Title
+  ctx.fillStyle = highlighted ? '#aaf0ff' : '#9aa2b6';
+  ctx.font = 'bold 13px ui-monospace';
+  ctx.fillText(type === 'fluor' ? 'Fluorescence (fast)' : 'Phosphorescence (slow)', x1, 18);
+
+  // Energy levels
+  ctx.strokeStyle = highlighted ? '#aab1c4' : '#5a6276';
+  ctx.lineWidth = 1.8;
+  [E1y, E2y, E3y].forEach(y => {
+    ctx.beginPath(); ctx.moveTo(x1 + 18, y); ctx.lineTo(x2 - 38, y); ctx.stroke();
+  });
+  ctx.fillStyle = highlighted ? '#9aa2b6' : '#5a6276';
+  ctx.font = '10.5px ui-monospace';
+  ctx.fillText('E₃', x2 - 32, E3y + 4);
+  ctx.fillText('E₂', x2 - 32, E2y + 4);
+  ctx.fillText('E₁', x2 - 32, E1y + 4);
+
+  // Highlight metastable box for phosphorescence
+  if (type === 'phos') {
+    const inv = highlighted ? '#ffd166' : '#7a6a3a';
+    ctx.strokeStyle = inv;
+    ctx.setLineDash([3,3]);
+    ctx.strokeRect(x1 + 14, E2y - 12, x2 - 38 - x1 - 14 + 6, 24);
+    ctx.setLineDash([]);
+    ctx.fillStyle = inv;
+    ctx.font = '9.5px ui-monospace';
+    ctx.fillText('metastable', x1 + 14, E2y - 14);
+  }
+
+  // ===== Animation by phase =====
+  let eY;
+  if (type === 'fluor') {
+    // 0.00-0.15  UV in
+    // 0.15-0.20  absorption flash
+    // 0.20-0.32  fast E3→E2 squiggle
+    // 0.32-0.45  brief E2
+    // 0.45-0.55  fast E2→E1
+    // 0.55-0.85  visible photon flies out
+    // 0.85-1.00  reset
+    if (t < 0.15) {
+      const px = x1 + 5 + (atomX - x1 - 10) * (t / 0.15);
+      drawPhotonShort(ctx, px, (E3y + E1y) / 2, '#bd57ff', 10, 4, 1);
+      eY = E1y;
+    } else if (t < 0.20) {
+      const a = (0.20 - t) / 0.05;
+      ctx.fillStyle = `rgba(189,87,255,${a * 0.55})`;
+      ctx.beginPath(); ctx.arc(atomX, E3y, 16, 0, 2*Math.PI); ctx.fill();
+      eY = E3y;
+    } else if (t < 0.32) {
+      drawSquiggleArrow(ctx, atomX, E3y, atomX, E2y, '#a6e22e');
+      eY = E3y + (E2y - E3y) * (t - 0.20) / 0.12;
+    } else if (t < 0.45) {
+      eY = E2y;
+    } else if (t < 0.55) {
+      drawSquiggleArrow(ctx, atomX, E2y, atomX, E1y, '#a6e22e');
+      eY = E2y + (E1y - E2y) * (t - 0.45) / 0.10;
+    } else if (t < 0.85) {
+      const localT = (t - 0.55) / 0.30;
+      const px = atomX + 18 + localT * (x2 - atomX - 30);
+      drawPhotonShort(ctx, px, (E2y + E1y) / 2, '#66d9ef', 10, 4, 1);
+      eY = E1y;
+    } else {
+      eY = E1y;
+    }
+  } else {
+    // PHOSPHORESCENCE (8s total — long because of metastable wait)
+    // 0.00-0.04  UV in
+    // 0.04-0.06  absorption flash
+    // 0.06-0.10  fast E3→E2 squiggle
+    // 0.10-0.85  STUCK in metastable (75% of the cycle!)
+    // 0.85-0.92  slow forbidden E2→E1 emission
+    // 0.92-0.99  visible photon flies out
+    // 0.99-1.00  reset
+    if (t < 0.04) {
+      const px = x1 + 5 + (atomX - x1 - 10) * (t / 0.04);
+      drawPhotonShort(ctx, px, (E3y + E1y) / 2, '#bd57ff', 10, 4, 1);
+      eY = E1y;
+    } else if (t < 0.06) {
+      const a = (0.06 - t) / 0.02;
+      ctx.fillStyle = `rgba(189,87,255,${a * 0.55})`;
+      ctx.beginPath(); ctx.arc(atomX, E3y, 16, 0, 2*Math.PI); ctx.fill();
+      eY = E3y;
+    } else if (t < 0.10) {
+      drawSquiggleArrow(ctx, atomX, E3y, atomX, E2y, '#a6e22e');
+      eY = E3y + (E2y - E3y) * (t - 0.06) / 0.04;
+    } else if (t < 0.85) {
+      // STUCK — most of the cycle
+      eY = E2y;
+      const pulse = 0.4 + 0.4 * Math.sin(performance.now() / 250);
+      ctx.fillStyle = `rgba(255,209,102,${pulse * 0.8})`;
+      ctx.font = 'bold 10.5px ui-monospace';
+      ctx.fillText('⏳ TRAPPED', atomX + 18, E2y - 4);
+      // progress bar showing how long the wait is
+      const heldFrac = (t - 0.10) / 0.75;
+      ctx.strokeStyle = 'rgba(255,209,102,0.5)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(atomX + 16, E2y + 6, 100, 4);
+      ctx.fillStyle = 'rgba(255,209,102,0.8)';
+      ctx.fillRect(atomX + 16, E2y + 6, 100 * heldFrac, 4);
+    } else if (t < 0.92) {
+      drawArrow(ctx, atomX, E2y, atomX, E1y, '#ffd166', 2);
+      eY = E2y + (E1y - E2y) * (t - 0.85) / 0.07;
+    } else if (t < 0.99) {
+      const localT = (t - 0.92) / 0.07;
+      const px = atomX + 18 + localT * (x2 - atomX - 30);
+      drawPhotonShort(ctx, px, (E2y + E1y) / 2, '#a6e22e', 10, 4, 1);
+      eY = E1y;
+    } else {
+      eY = E1y;
+    }
+  }
+
+  // Electron dot
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.fill();
+  ctx.strokeStyle = '#aaf0ff'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.stroke();
+
+  // Bottom status line — tells you the timescale
+  ctx.fillStyle = highlighted ? '#aaf0ff' : '#5a6276';
+  ctx.font = '10.5px ui-monospace';
+  const status = type === 'fluor'
+    ? `cycle: ${cycle.toFixed(1)} s · emission within ~ns of absorption`
+    : `cycle: ${cycle.toFixed(1)} s · emission delayed by ms to hours`;
+  ctx.fillText(status, x1 + 4, h - 8);
+}
+function pho_drawDiag() {
+  const cv = document.getElementById('pho_diag');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const splitX = w/2;
+  pho_drawLevels(ctx, 10, splitX - 10, h, 'fluor', pho_mode === 'fluor');
+  pho_drawLevels(ctx, splitX + 10, w - 10, h, 'phos', pho_mode === 'phos');
+  ctx.strokeStyle = '#2a2f43'; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, h - 10); ctx.stroke();
+  ctx.setLineDash([]);
+}
+function fmtTime(t) {
+  if (t < 1e-6) return (t*1e9).toFixed(1) + ' ns';
+  if (t < 1e-3) return (t*1e6).toFixed(1) + ' μs';
+  if (t < 1) return (t*1e3).toFixed(1) + ' ms';
+  if (t < 60) return t.toFixed(2) + ' s';
+  if (t < 3600) return (t/60).toFixed(1) + ' min';
+  return (t/3600).toFixed(2) + ' hr';
+}
+function pho_drawDecay() {
+  const cv = document.getElementById('pho_dcv');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const padL = 60, padR = 30, padT = 28, padB = 48;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const tauS = Math.pow(10, +document.getElementById('pho_tau').value);
+  // Log time axis: 10^-9 s to 10^5 s (spans 14 decades, matches slider range)
+  const logMin = -9, logMax = 5;
+  const N = 400;
+  // Axes
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath();
+  ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH);
+  ctx.moveTo(padL, padT+plotH); ctx.lineTo(padL+plotW, padT+plotH);
+  ctx.stroke();
+  // Tick marks at each decade
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '10px ui-monospace';
+  const decadeLabels = {'-9':'1 ns', '-6':'1 μs', '-3':'1 ms', '0':'1 s', '3':'1000 s', '5':'10⁵ s'};
+  for (let p = logMin; p <= logMax; p++) {
+    const x = padL + (p - logMin) / (logMax - logMin) * plotW;
+    ctx.strokeStyle = '#2a2f43';
+    ctx.beginPath(); ctx.moveTo(x, padT+plotH); ctx.lineTo(x, padT+plotH+4); ctx.stroke();
+    if (decadeLabels[String(p)]) {
+      ctx.textAlign = 'center';
+      ctx.fillText(decadeLabels[String(p)], x, padT+plotH+16);
+    }
+  }
+  ctx.textAlign = 'center';
+  ctx.fillText('Time (log scale)', padL + plotW/2, padT+plotH+34);
+  ctx.textAlign = 'left';
+  // y-axis labels
+  ctx.font = '10px ui-monospace';
+  ctx.textAlign = 'right';
+  ['100%','50%','0%'].forEach((lbl, i) => {
+    const y = padT + (i * plotH / 2);
+    ctx.fillText(lbl, padL - 6, y + 4);
+    ctx.strokeStyle = '#2a2f43';
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+  });
+  ctx.textAlign = 'left';
+  ctx.save();
+  ctx.translate(16, padT + plotH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#9aa2b6';
+  ctx.font = '11px ui-monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('Brightness I(t) = exp(−t/τ)', 0, 0);
+  ctx.restore();
+  ctx.textAlign = 'left';
+  // Decay curve in log-t: I(t) = exp(-t/tau)
+  // Map x → log10(t); for each x compute t and I(t)
+  ctx.strokeStyle = '#a6e22e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const tx = i / N;
+    const logT = logMin + tx * (logMax - logMin);
+    const t = Math.pow(10, logT);
+    const I = Math.exp(-t / tauS);
+    const x = padL + tx * plotW;
+    const y = padT + plotH - I * plotH;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  // Fill below curve
+  ctx.fillStyle = 'rgba(166,226,46,0.12)';
+  ctx.beginPath();
+  ctx.moveTo(padL, padT + plotH);
+  for (let i = 0; i <= N; i++) {
+    const tx = i / N;
+    const logT = logMin + tx * (logMax - logMin);
+    const t = Math.pow(10, logT);
+    const I = Math.exp(-t / tauS);
+    const x = padL + tx * plotW;
+    const y = padT + plotH - I * plotH;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.closePath();
+  ctx.fill();
+  // Mark τ on the time axis (vertical line where t = τ)
+  const logTau = Math.log10(tauS);
+  if (logTau >= logMin && logTau <= logMax) {
+    const xTau = padL + (logTau - logMin) / (logMax - logMin) * plotW;
+    ctx.strokeStyle = '#66d9ef'; ctx.setLineDash([5,4]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(xTau, padT); ctx.lineTo(xTau, padT + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#66d9ef'; ctx.font = '11px ui-monospace';
+    ctx.fillText(`τ = ${fmtTime(tauS)}`, xTau + 6, padT + 14);
+    // Brightness at t=τ is 1/e ≈ 37%
+    const ye = padT + plotH - Math.exp(-1) * plotH;
+    ctx.fillStyle = '#66d9ef';
+    ctx.beginPath(); ctx.arc(xTau, ye, 4, 0, 2*Math.PI); ctx.fill();
+    ctx.fillText('1/e (37%)', xTau + 8, ye + 4);
+  }
+  // Title
+  ctx.fillStyle = '#aaf0ff'; ctx.font = 'bold 12px ui-monospace';
+  ctx.fillText('Brightness vs time (log axis) — drag τ to shift the curve', padL, 18);
+  // Update meter readouts
+  document.getElementById('pho_v1').textContent = fmtTime(tauS);
+  document.getElementById('pho_v2').textContent = fmtTime(tauS * Math.LN2);
+  document.getElementById('pho_v3').textContent = fmtTime(tauS * Math.log(100));
+  const HBAR = 1.0546e-34, EV = 1.602e-19;
+  const dE = HBAR / (2 * tauS);
+  document.getElementById('pho_v4').textContent = (dE / EV).toExponential(1).replace('e', ' × 10^') + ' eV';
+  const kind = tauS < 1e-7 ? 'fluorescence' : tauS < 1e-3 ? 'delayed fluorescence' : tauS < 1 ? 'short-glow' : 'phosphorescence';
+  document.getElementById('pho_v5').textContent = kind;
+  document.getElementById('pho_v6').textContent =
+    tauS < 1e-7 ? 'fluorescent dye' :
+    tauS < 1e-3 ? 'PhOLED screen' :
+    tauS < 1 ? 'old CRT phosphor' :
+    tauS < 600 ? 'glow paint (ZnS:Cu)' :
+    tauS < 36000 ? 'glow stars (SrAl₂O₄)' :
+    'tritium watch';
+  document.getElementById('pho_tauRead').textContent = fmtTime(tauS);
+}
+document.getElementById('pho_tau').addEventListener('input', pho_drawDecay);
+document.getElementById('pho_btnF').addEventListener('click', () => { pho_mode='fluor'; document.getElementById('pho_btnF').classList.add('active'); document.getElementById('pho_btnP').classList.remove('active'); pho_drawDiag(); });
+document.getElementById('pho_btnP').addEventListener('click', () => { pho_mode='phos'; document.getElementById('pho_btnP').classList.add('active'); document.getElementById('pho_btnF').classList.remove('active'); pho_drawDiag(); });
+
+//==========================================================
+// LAS: laser
+//==========================================================
+function las_draw2() {
+  const cv = document.getElementById('las_2lvl');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const p = +document.getElementById('las_pump2').value / 100;
+  const N2 = 0.5 * p / (p + 0.3);
+  const N1 = 1 - N2;
+  const atomX1 = w * 0.3, atomX2 = w * 0.7, midY = h * 0.5;
+  const lvlGap = 80;
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 1.5;
+  [atomX1, atomX2].forEach(ax => {
+    ctx.beginPath();
+    ctx.moveTo(ax - 60, midY - lvlGap/2); ctx.lineTo(ax + 60, midY - lvlGap/2);
+    ctx.moveTo(ax - 60, midY + lvlGap/2); ctx.lineTo(ax + 60, midY + lvlGap/2);
+    ctx.stroke();
+    ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace';
+    ctx.fillText('E₂', ax + 66, midY - lvlGap/2 + 4);
+    ctx.fillText('E₁', ax + 66, midY + lvlGap/2 + 4);
+  });
+  function popBar(ax, y, frac, color) {
+    const wMax = 50;
+    ctx.fillStyle = color;
+    ctx.fillRect(ax - wMax/2, y - 8, wMax * frac, 16);
+    ctx.strokeStyle = color;
+    ctx.strokeRect(ax - wMax/2, y - 8, wMax, 16);
+  }
+  popBar(atomX1, midY - lvlGap/2, N2, '#66d9ef');
+  popBar(atomX1, midY + lvlGap/2, N1, '#ff5f6d');
+  popBar(atomX2, midY - lvlGap/2, N2, '#66d9ef');
+  popBar(atomX2, midY + lvlGap/2, N1, '#ff5f6d');
+  ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2;
+  const absRate = N1 * p;
+  if (absRate > 0.01) {
+    drawArrow(ctx, atomX1 - 25, midY + lvlGap/2 - 8, atomX1 - 25, midY - lvlGap/2 + 8, '#ffd166');
+    ctx.fillStyle = '#ffd166'; ctx.font = '10px ui-monospace';
+    ctx.fillText('Abs.', atomX1 - 45, midY - 4);
+  }
+  const stimRate = N2 * p;
+  if (stimRate > 0.01) {
+    drawArrow(ctx, atomX2 + 25, midY - lvlGap/2 + 8, atomX2 + 25, midY + lvlGap/2 - 8, '#ff4db8');
+    ctx.fillStyle = '#ff4db8'; ctx.font = '10px ui-monospace';
+    ctx.fillText('Stim.', atomX2 + 30, midY - 4);
+  }
+  ctx.fillStyle = '#e6e8ef'; ctx.font = '14px ui-monospace';
+  const txt = N2 < N1 ? 'N₂ < N₁ — net absorption' : Math.abs(N2 - N1) < 0.02 ? 'N₂ = N₁ — saturated, NO net gain' : 'N₂ > N₁ — gain (impossible in 2-level!)';
+  ctx.textAlign = 'center'; ctx.fillText(txt, w/2, 26); ctx.textAlign = 'left';
+  document.getElementById('las_pump2Read').textContent = p < 0.1 ? 'Low' : p < 0.5 ? 'Medium' : p < 0.9 ? 'High' : 'Max';
+  document.getElementById('las_n1_2').textContent = (N1 * 100).toFixed(1) + '%';
+  document.getElementById('las_n2_2').textContent = (N2 * 100).toFixed(1) + '%';
+  const dn = N2 - N1;
+  document.getElementById('las_net2').textContent = dn < -0.01 ? `${(dn*100).toFixed(1)}% net abs.` : Math.abs(dn) < 0.01 ? '0 — saturated' : `${(dn*100).toFixed(1)}% (unreachable)`;
+}
+document.getElementById('las_pump2').addEventListener('input', las_draw2);
+
+function drawSquiggleArrow(ctx, x1, y1, x2, y2, color) {
+  const dy = y2 - y1;
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath();
+  const ph1 = performance.now() / 1000 * 6;
+  for (let i = 0; i <= 20; i++) {
+    const t = i / 20;
+    const cx = x1 + 4 * Math.sin(t * 8 * Math.PI - ph1);
+    const cy = y1 + dy * t;
+    if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+  }
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2); ctx.lineTo(x2 + 4, y2 - 8); ctx.lineTo(x2 - 4, y2 - 8);
+  ctx.closePath(); ctx.fill();
+}
+function drawWavyArrow(ctx, x1, y1, x2, y2, color) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  const n = 14;
+  ctx.strokeStyle = color; ctx.lineWidth = 3;
+  ctx.beginPath();
+  const ph2 = performance.now() / 1000 * 10;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    const cx = x1 + dx * t + (i > 0 && i < n ? 5 * Math.sin(t * 6 * Math.PI - ph2) : 0);
+    const cy = y1 + dy * t;
+    if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+  }
+  ctx.stroke();
+  ctx.fillStyle = color;
+  const ux = dx / len, uy = dy / len;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - 8 * ux + 5 * (-uy), y2 - 8 * uy + 5 * ux);
+  ctx.lineTo(x2 - 8 * ux - 5 * (-uy), y2 - 8 * uy - 5 * ux);
+  ctx.closePath(); ctx.fill();
+}
+function las_draw3() {
+  const cv = document.getElementById('las_3lvl');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+
+  // ===== Cycle timing =====
+  // Total cycle: 7 seconds. Phases (as fractions of cycle):
+  //   0.00-0.13  pump photon flies in
+  //   0.13-0.18  absorption flash; electron at E3
+  //   0.18-0.28  fast non-radiative E3→E2 (squiggle visible)
+  //   0.28-0.58  electron metastable in E2 (dots accumulate)
+  //   0.58-0.70  stimulating photon flies in
+  //   0.70-0.75  stimulated emission flash
+  //   0.75-0.97  TWO photons fly out together
+  //   0.97-1.00  reset
+  const cycle = 7.0;
+  const t = (performance.now() / 1000) % cycle / cycle;
+
+  const padTop = 30, padBot = 36;
+  const E3y = padTop + 24;
+  const E1y = h - padBot - 14;
+  const E2y = padTop + (h - padTop - padBot) * 0.55;
+  const lvlX1 = w * 0.22, lvlX2 = w * 0.66;
+  const atomX = lvlX1 + 70;
+
+  // Energy levels
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 2;
+  [E1y, E2y, E3y].forEach(y => { ctx.beginPath(); ctx.moveTo(lvlX1, y); ctx.lineTo(lvlX2, y); ctx.stroke(); });
+
+  // Level labels (right of levels with clear spacing)
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace';
+  ctx.fillText('E₃ — pump level', lvlX2 + 12, E3y - 6);
+  ctx.fillText('E₂ — metastable upper lasing', lvlX2 + 12, E2y - 6);
+  ctx.fillText('E₁ — ground state', lvlX2 + 12, E1y - 6);
+
+  // Highlight box around E2 (metastable)
+  ctx.strokeStyle = 'rgba(102,217,239,0.5)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+  ctx.strokeRect(lvlX1 - 8, E2y - 14, lvlX2 - lvlX1 + 16, 28);
+  ctx.setLineDash([]);
+
+  // ===== Phase 1: pump photon flying in =====
+  if (t < 0.13) {
+    const px = -30 + (atomX + 20) * (t / 0.13);
+    drawPhotonWave(ctx, px, E1y - 4, 12, 6, '#ffd166', 1);
+  }
+
+  // Phase 2: absorption flash at E3
+  if (t >= 0.13 && t < 0.18) {
+    const a = (0.18 - t) / 0.05;
+    ctx.fillStyle = `rgba(255,209,102,${a * 0.55})`;
+    ctx.beginPath(); ctx.arc(atomX, E3y, 22, 0, 2*Math.PI); ctx.fill();
+  }
+
+  // Phase 3: fast non-radiative E3 → E2 (squiggle visible)
+  if (t >= 0.18 && t < 0.28) {
+    drawSquiggleArrow(ctx, atomX, E3y, atomX, E2y, '#a6e22e');
+  }
+
+  // Phase 5: stimulating photon flying in
+  if (t >= 0.58 && t < 0.70) {
+    const localT = (t - 0.58) / 0.12;
+    const px = -30 + (atomX + 20) * localT;
+    drawPhotonWave(ctx, px, E2y - 4, 12, 6, '#ff4db8', 1);
+  }
+
+  // Phase 6: stimulated emission flash
+  if (t >= 0.70 && t < 0.75) {
+    const a = (0.75 - t) / 0.05;
+    ctx.fillStyle = `rgba(255,77,184,${a * 0.55})`;
+    ctx.beginPath(); ctx.arc(atomX, E2y, 22, 0, 2*Math.PI); ctx.fill();
+  }
+
+  // Phase 7: TWO photons flying out together
+  if (t >= 0.75 && t < 0.97) {
+    const localT = (t - 0.75) / 0.22;
+    const px = atomX + 25 + localT * (w - atomX - 50);
+    drawPhotonWave(ctx, px, E1y - 8, 12, 5, '#ff4db8', 1);
+    drawPhotonWave(ctx, px, E1y + 4, 12, 5, '#ff4db8', 1);
+  }
+
+  // Electron position (follows the cycle)
+  let eY;
+  if (t < 0.13) eY = E1y;
+  else if (t < 0.18) eY = E1y + (E3y - E1y) * (t - 0.13) / 0.05;
+  else if (t < 0.28) eY = E3y + (E2y - E3y) * (t - 0.18) / 0.10;
+  else if (t < 0.70) eY = E2y;
+  else if (t < 0.75) eY = E2y + (E1y - E2y) * (t - 0.70) / 0.05;
+  else eY = E1y;
+
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.fill();
+  ctx.strokeStyle = '#aaf0ff';
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.stroke();
+
+  // Population accumulating in E2 — visible during the metastable wait
+  if (t >= 0.28 && t < 0.70) {
+    const fill = Math.min(1, (t - 0.28) / 0.22);
+    const nDots = Math.floor(fill * 7);
+    for (let i = 0; i < nDots; i++) {
+      ctx.fillStyle = 'rgba(102,217,239,0.7)';
+      ctx.beginPath();
+      ctx.arc(atomX + 26 + i * 13, E2y - 8, 3.5, 0, 2*Math.PI);
+      ctx.fill();
+    }
+  }
+
+  // Phase label at bottom (single line, easy to read)
+  let phase = '';
+  if (t < 0.13)      phase = '① Pump photon hf_p = (E₃ − E₁)/h approaching atom';
+  else if (t < 0.18) phase = '② Absorbed — electron jumps to E₃';
+  else if (t < 0.28) phase = '③ Fast non-radiative decay E₃ → E₂  (~ ps, energy → heat)';
+  else if (t < 0.58) phase = '④ Atom waits in metastable E₂ (μs – ms)';
+  else if (t < 0.70) phase = '⑤ Stimulating photon hf_L = (E₂ − E₁)/h approaching';
+  else if (t < 0.75) phase = '⑥ Stimulated emission';
+  else if (t < 0.97) phase = '⑦ TWO identical photons fly off together — light amplified!';
+  else               phase = 'Cycle resets...';
+  ctx.fillStyle = '#aaf0ff'; ctx.font = 'bold 12px ui-monospace';
+  ctx.fillText(phase, 10, h - 12);
+}
+function las_updateLasing() {
+  const tau32 = Math.pow(10, +document.getElementById('las_t32').value);
+  const tau21 = Math.pow(10, +document.getElementById('las_t21').value);
+  const tau31 = Math.pow(10, +document.getElementById('las_t31').value);
+  const P = +document.getElementById('las_pump3').value / 100;
+  document.getElementById('las_t32Read').textContent = formatTimeUs(tau32);
+  document.getElementById('las_t21Read').textContent = formatTimeUs(tau21);
+  document.getElementById('las_t31Read').textContent = formatTimeUs(tau31);
+  document.getElementById('las_pump3Read').textContent = P < 0.1 ? 'Low' : P < 0.5 ? 'Medium' : P < 0.9 ? 'High' : 'Max';
+  const k3decay = 1/tau32 + 1/tau31;
+  const pumpRate = P * 5;
+  const a3 = pumpRate / k3decay;
+  const a2 = (a3 / tau32) * tau21;
+  const N1 = 1 / (1 + a2 + a3);
+  const N2 = a2 * N1;
+  const N3 = a3 * N1;
+  document.getElementById('las_n1_3').textContent = (N1 * 100).toFixed(1) + '%';
+  document.getElementById('las_n2_3').textContent = (N2 * 100).toFixed(1) + '%';
+  document.getElementById('las_n3_3').textContent = (N3 * 100).toFixed(1) + '%';
+  const dn = N2 - N1;
+  const dnEl = document.getElementById('las_dn_3');
+  dnEl.textContent = dn >= 0 ? `+${(dn*100).toFixed(1)}%` : `${(dn*100).toFixed(1)}%`;
+  dnEl.className = 'val ' + (dn > 0 ? 'good' : 'bad');
+  const laseEl = document.getElementById('las_lase');
+  laseEl.textContent = dn > 0.02 ? '✓ LASING' : dn > 0 ? '~ marginal' : '✗ no inversion';
+  laseEl.className = 'val ' + (dn > 0.02 ? 'good' : 'bad');
+  const branchToE2 = (1/tau32) / k3decay;
+  const effEl = document.getElementById('las_eff');
+  effEl.textContent = `${(branchToE2 * 100).toFixed(1)}% to E₂`;
+  effEl.className = 'val ' + (branchToE2 > 0.6 ? 'good' : 'bad');
+  las_drawPops(N1, N2, N3);
+}
+function formatTimeUs(us) {
+  if (us < 0.01) return (us * 1000).toFixed(2) + ' ns';
+  if (us < 1) return (us * 1000).toFixed(0) + ' ns';
+  if (us < 1000) return us.toPrecision(2) + ' μs';
+  if (us < 1e6) return (us/1000).toFixed(1) + ' ms';
+  return (us/1e6).toFixed(1) + ' s';
+}
+function las_drawPops(N1, N2, N3) {
+  const cv = document.getElementById('las_pops');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const padX = 60, padY = 30;
+  const plotW = w - 2 * padX, plotH = h - 2 * padY;
+  const barW = plotW / 4;
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath(); ctx.moveTo(padX, padY); ctx.lineTo(padX, padY + plotH); ctx.lineTo(padX + plotW, padY + plotH); ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+  ctx.textAlign = 'center'; ctx.fillText('Population in each level (steady state)', w/2, 18); ctx.textAlign = 'left';
+  const pops = [
+    {l:'N₁', v:N1, c:'#ff5f6d'},
+    {l:'N₂', v:N2, c:'#66d9ef'},
+    {l:'N₃', v:N3, c:'#ffd166'}
+  ];
+  pops.forEach((p, i) => {
+    const x = padX + (i + 0.5) * (plotW / 3) - barW / 2;
+    const barH = p.v * plotH;
+    ctx.fillStyle = p.c;
+    ctx.fillRect(x, padY + plotH - barH, barW, barH);
+    ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace'; ctx.textAlign = 'center';
+    ctx.fillText(p.l, x + barW/2, padY + plotH + 16);
+    ctx.fillText((p.v * 100).toFixed(1) + '%', x + barW/2, padY + plotH - barH - 6);
+    ctx.textAlign = 'left';
+  });
+  ctx.fillStyle = N2 > N1 ? '#a6e22e' : '#ff5f6d';
+  ctx.font = '12px ui-monospace'; ctx.textAlign = 'right';
+  ctx.fillText(N2 > N1 ? '✓ inverted (N₂ > N₁)' : '✗ not inverted', w - 8, 18);
+  ctx.textAlign = 'left';
+}
+['las_t32','las_t21','las_t31','las_pump3'].forEach(id => document.getElementById(id).addEventListener('input', las_updateLasing));
+
+function las_draw4() {
+  const cv = document.getElementById('las_4lvl');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+
+  // 4-level cycle, 8s. Phases:
+  //   0.00-0.10  pump photon flies in
+  //   0.10-0.14  absorption flash; electron at E4
+  //   0.14-0.22  fast E4 → E3 squiggle
+  //   0.22-0.55  electron metastable in E3 (dots accumulate)
+  //   0.55-0.65  stimulating photon flies in
+  //   0.65-0.70  stimulated emission flash
+  //   0.70-0.85  TWO photons fly out together
+  //   0.85-0.92  fast E2 → E1 squiggle (level drains)
+  //   0.92-1.00  reset
+  const cycle = 8.0;
+  const t = (performance.now() / 1000) % cycle / cycle;
+
+  const padT = 28, padB = 36;
+  const E4y = padT + 12;
+  const E1y = h - padB - 12;
+  const E3y = padT + (h - padT - padB) * 0.42;
+  const E2y = E1y - 30;
+  const lvlX1 = w * 0.22, lvlX2 = w * 0.62;
+  const atomX = lvlX1 + 70;
+
+  // Energy levels
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 2;
+  [E1y, E2y, E3y, E4y].forEach(y => { ctx.beginPath(); ctx.moveTo(lvlX1, y); ctx.lineTo(lvlX2, y); ctx.stroke(); });
+
+  // Labels — right side, clear spacing
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11.5px ui-monospace';
+  ctx.fillText('E₄ — pump level', lvlX2 + 12, E4y - 6);
+  ctx.fillText('E₃ — upper lasing (metastable)', lvlX2 + 12, E3y - 6);
+  ctx.fillText('E₂ — lower lasing (drains fast)', lvlX2 + 12, E2y - 6);
+  ctx.fillText('E₁ — ground state', lvlX2 + 12, E1y - 6);
+
+  // Highlight box around E3
+  ctx.strokeStyle = 'rgba(102,217,239,0.5)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+  ctx.strokeRect(lvlX1 - 8, E3y - 14, lvlX2 - lvlX1 + 16, 28);
+  ctx.setLineDash([]);
+
+  // Phase 1: pump photon flying in
+  if (t < 0.10) {
+    const px = -30 + (atomX + 20) * (t / 0.10);
+    drawPhotonWave(ctx, px, E1y - 4, 12, 6, '#ffd166', 1);
+  }
+  // Phase 2: absorption flash
+  if (t >= 0.10 && t < 0.14) {
+    const a = (0.14 - t) / 0.04;
+    ctx.fillStyle = `rgba(255,209,102,${a * 0.55})`;
+    ctx.beginPath(); ctx.arc(atomX, E4y, 18, 0, 2*Math.PI); ctx.fill();
+  }
+  // Phase 3: fast E4 → E3
+  if (t >= 0.14 && t < 0.22) {
+    drawSquiggleArrow(ctx, atomX, E4y, atomX, E3y, '#a6e22e');
+  }
+  // Phase 5: stimulating photon arrives
+  if (t >= 0.55 && t < 0.65) {
+    const localT = (t - 0.55) / 0.10;
+    const px = -30 + (atomX + 20) * localT;
+    drawPhotonWave(ctx, px, E3y - 4, 12, 6, '#ff4db8', 1);
+  }
+  // Phase 6: stimulated emission flash
+  if (t >= 0.65 && t < 0.70) {
+    const a = (0.70 - t) / 0.05;
+    ctx.fillStyle = `rgba(255,77,184,${a * 0.55})`;
+    ctx.beginPath(); ctx.arc(atomX, E3y, 18, 0, 2*Math.PI); ctx.fill();
+  }
+  // Phase 7: TWO photons fly out
+  if (t >= 0.70 && t < 0.85) {
+    const localT = (t - 0.70) / 0.15;
+    const px = atomX + 25 + localT * (w - atomX - 50);
+    drawPhotonWave(ctx, px, E2y - 8, 12, 5, '#ff4db8', 1);
+    drawPhotonWave(ctx, px, E2y + 4, 12, 5, '#ff4db8', 1);
+  }
+  // Phase 8: fast E2 → E1 squiggle
+  if (t >= 0.85 && t < 0.92) {
+    drawSquiggleArrow(ctx, atomX, E2y, atomX, E1y, '#a6e22e');
+  }
+
+  // Electron position
+  let eY;
+  if (t < 0.10)      eY = E1y;
+  else if (t < 0.14) eY = E1y + (E4y - E1y) * (t - 0.10) / 0.04;
+  else if (t < 0.22) eY = E4y + (E3y - E4y) * (t - 0.14) / 0.08;
+  else if (t < 0.65) eY = E3y;
+  else if (t < 0.70) eY = E3y + (E2y - E3y) * (t - 0.65) / 0.05;
+  else if (t < 0.85) eY = E2y;
+  else if (t < 0.92) eY = E2y + (E1y - E2y) * (t - 0.85) / 0.07;
+  else eY = E1y;
+  ctx.fillStyle = '#66d9ef';
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.fill();
+  ctx.strokeStyle = '#aaf0ff';
+  ctx.beginPath(); ctx.arc(atomX, eY, 6, 0, 2*Math.PI); ctx.stroke();
+
+  // Atoms accumulating in E3
+  if (t >= 0.22 && t < 0.65) {
+    const fill = Math.min(1, (t - 0.22) / 0.25);
+    const nDots = Math.floor(fill * 7);
+    for (let i = 0; i < nDots; i++) {
+      ctx.fillStyle = 'rgba(102,217,239,0.7)';
+      ctx.beginPath();
+      ctx.arc(atomX + 26 + i * 13, E3y - 8, 3.5, 0, 2*Math.PI);
+      ctx.fill();
+    }
+  }
+
+  // E2 stays empty (key feature of 4-level) — show small "empty" indicator
+  if (t < 0.65 || t >= 0.92) {
+    ctx.fillStyle = 'rgba(255,95,109,0.5)'; ctx.font = '10px ui-monospace';
+    ctx.fillText('(E₂ stays empty)', atomX + 30, E2y + 16);
+  }
+
+  // Phase label
+  let phase = '';
+  if (t < 0.10)      phase = '① Pump  E₁ → E₄';
+  else if (t < 0.14) phase = '② Absorbed at E₄';
+  else if (t < 0.22) phase = '③ Fast non-radiative E₄ → E₃';
+  else if (t < 0.55) phase = '④ Atom waits in metastable E₃';
+  else if (t < 0.65) phase = '⑤ Stimulating photon hf_L = (E₃ − E₂)/h arrives';
+  else if (t < 0.70) phase = '⑥ Stimulated emission';
+  else if (t < 0.85) phase = '⑦ TWO photons emerge — and E₂ is empty, so inversion is automatic!';
+  else if (t < 0.92) phase = '⑧ Fast drain E₂ → E₁ — ready for next cycle';
+  else               phase = 'Cycle resets...';
+  ctx.fillStyle = '#aaf0ff'; ctx.font = 'bold 12px ui-monospace';
+  ctx.fillText(phase, 10, h - 12);
+}
+
+// Cavity animation
+let las_cavity = { x: 0.2, dir: 1, count: 1 };
+let las_cavityFirst = true;
+function las_drawCavity() {
+  const cv = document.getElementById('las_cavity');
+  if (!isVisible(cv)) { requestAnimationFrame(las_drawCavity); return; }
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const cavityX1 = w * 0.12, cavityX2 = w * 0.78;
+  const cavityY = h * 0.5;
+  const gainX1 = w * 0.22, gainX2 = w * 0.7;
+  ctx.fillStyle = 'rgba(255,77,184,0.05)';
+  ctx.fillRect(gainX1, cavityY - 28, gainX2 - gainX1, 56);
+  ctx.strokeStyle = '#ff4db8'; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
+  ctx.strokeRect(gainX1, cavityY - 28, gainX2 - gainX1, 56);
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#ff4db8'; ctx.font = '11px ui-monospace'; ctx.textAlign = 'center';
+  ctx.fillText('gain medium (inverted)', (gainX1 + gainX2)/2, cavityY - 36);
+  ctx.textAlign = 'left';
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(cavityX1, cavityY - 40); ctx.lineTo(cavityX1, cavityY + 40);
+  ctx.moveTo(cavityX2, cavityY - 40); ctx.lineTo(cavityX2, cavityY + 40);
+  ctx.stroke();
+  ctx.fillStyle = '#aab1c4'; ctx.font = '11px ui-monospace';
+  ctx.fillText('100%', cavityX1 - 15, cavityY - 48);
+  ctx.fillText(`${document.getElementById('las_outR').value}%`, cavityX2 - 12, cavityY - 48);
+  ctx.fillText('mirror', cavityX1 - 15, cavityY + 56);
+  ctx.fillText('output coupler', cavityX2 - 30, cavityY + 56);
+  const ph = las_cavity;
+  const px = cavityX1 + ph.x * (cavityX2 - cavityX1);
+  drawPhotonShort(ctx, px, cavityY, '#ff4db8', 12, 5, ph.dir);
+  if (ph.count > 1) {
+    ctx.fillStyle = '#ff4db8'; ctx.font = '9px ui-monospace';
+    ctx.fillText(`×${Math.round(ph.count)}`, px + 8, cavityY - 8);
+  }
+  if (!las_cavityFirst) {
+    ctx.strokeStyle = '#ff4db8'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cavityX2, cavityY); ctx.lineTo(w - 10, cavityY); ctx.stroke();
+    ctx.fillStyle = '#ff4db8'; ctx.font = '11px ui-monospace';
+    ctx.fillText('coherent beam →', w - 130, cavityY - 8);
+  }
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '12px ui-monospace';
+  ctx.fillText(`Photons in cavity: ${Math.round(ph.count)}`, 12, 18);
+  // step
+  const dt = 0.005;
+  const gainPerPass = +document.getElementById('las_gain').value / 100;
+  const reflR = +document.getElementById('las_outR').value / 100;
+  ph.x += ph.dir * dt * 0.5;
+  if (ph.x <= 0.05 && ph.dir < 0) {
+    ph.x = 0.05; ph.dir = 1;
+    ph.count = Math.min(ph.count * (1 + gainPerPass * Math.random() * 0.4), 9999);
+    las_cavityFirst = false;
+  }
+  if (ph.x >= 0.95 && ph.dir > 0) {
+    ph.x = 0.95;
+    ph.count = Math.min(ph.count * (1 + gainPerPass * Math.random() * 0.4), 9999);
+    ph.count = ph.count * reflR;
+    ph.dir = -1;
+    las_cavityFirst = false;
+  }
+  if (ph.count > 5000) ph.count = 5000;
+  requestAnimationFrame(las_drawCavity);
+}
+document.getElementById('las_gain').addEventListener('input', () => { document.getElementById('las_gainRead').textContent = document.getElementById('las_gain').value + '%'; });
+document.getElementById('las_outR').addEventListener('input', () => { document.getElementById('las_outRRead').textContent = document.getElementById('las_outR').value + '%'; });
+
+// Coherence
+function las_drawCoh() {
+  const cv = document.getElementById('las_coh');
+  if (!isVisible(cv)) { requestAnimationFrame(las_drawCoh); return; }
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '13px ui-monospace';
+  ctx.fillText('Laser (coherent)', 12, 18);
+  ctx.fillText('Flashlight (incoherent)', 12, h/2 + 18);
+  const midTop = h * 0.25, midBot = h * 0.75;
+  const N = 5;
+  for (let i = 0; i < N; i++) {
+    ctx.strokeStyle = `rgba(255,77,184,${0.3 + i * 0.14})`;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (let x = 50; x <= w - 20; x++) {
+      const y = midTop + (i - N/2) * 2 + 14 * Math.sin(x * 0.18);
+      if (x === 50) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.strokeStyle = '#ff4db8'; ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  for (let x = 50; x <= w - 20; x++) {
+    const y = midTop + 36 * Math.sin(x * 0.18);
+    if (x === 50) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#ff4db8'; ctx.font = '11px ui-monospace';
+  ctx.fillText('sum: tall, focused', w - 140, midTop - 36);
+  for (let i = 0; i < N; i++) {
+    ctx.strokeStyle = `rgba(255,209,102,${0.3 + i * 0.1})`;
+    ctx.lineWidth = 1.4;
+    const phase = i * 1.3;
+    const k = 0.14 + i * 0.03;
+    ctx.beginPath();
+    for (let x = 50; x <= w - 20; x++) {
+      const y = midBot + (i - N/2) * 2 + 10 * Math.sin(x * k + phase);
+      if (x === 50) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  for (let x = 50; x <= w - 20; x++) {
+    let s = 0;
+    for (let i = 0; i < N; i++) {
+      const phase = i * 1.3, k = 0.14 + i * 0.03;
+      s += 8 * Math.sin(x * k + phase);
+    }
+    const y = midBot + s / 2;
+    if (x === 50) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#ffd166';
+  ctx.fillText('sum: messy, broad', w - 140, midBot + 36);
+}
+
+function las_updateLW() {
+  const T = Math.pow(10, +document.getElementById('las_pulseT').value) * 1e-6;
+  const HBAR = 1.0546e-34, EV = 1.602e-19, C = 3e8;
+  const dE = HBAR / (2 * T);
+  const dE_eV = dE / EV;
+  const df = dE / 6.626e-34;
+  const lambda = 633e-9;
+  const dlambda = lambda * lambda / C * df;
+  document.getElementById('las_pulseTRead').textContent = formatTimeUs(T * 1e6);
+  document.getElementById('las_lwE').textContent = fmtSci(dE_eV) + ' eV';
+  document.getElementById('las_lwF').textContent = fmtSci(df) + ' Hz';
+  document.getElementById('las_lwL').textContent = fmtSci(dlambda * 1e9) + ' nm';
+}
+function fmtSci(x) {
+  if (x === 0) return '0';
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  const m = x / Math.pow(10, e);
+  return `${m.toFixed(2)} × 10${supE(e)}`;
+}
+function supE(e) {
+  const map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(e).split('').map(c => map[c] || c).join('');
+}
+document.getElementById('las_pulseT').addEventListener('input', las_updateLW);
+
+requestAnimationFrame(las_drawCavity);
+requestAnimationFrame(las_drawCoh);
+
+// Master animation loop for the laser tab — keeps the 3-level and 4-level cycles drawing
+function las_animLoop() {
+  if (currentTab === 'las') {
+    las_draw3();
+    las_draw4();
+    las_draw2();
+  }
+  requestAnimationFrame(las_animLoop);
+}
+requestAnimationFrame(las_animLoop);
+
+// Master animation loop for the phosphorescent tab
+function pho_animLoop() {
+  if (currentTab === 'pho') {
+    pho_drawDiag();
+  }
+  requestAnimationFrame(pho_animLoop);
+}
+requestAnimationFrame(pho_animLoop);
+
+//==========================================================
+// LED: band-gap
+//==========================================================
+const HC_NM_EV = 1240;
+function matFor(eg) {
+  if (eg < 1.0) return 'InGaAs (IR)';
+  if (eg < 1.6) return 'GaAs (near-IR)';
+  if (eg < 2.0) return 'AlGaInP';
+  if (eg < 2.3) return 'GaP';
+  if (eg < 2.5) return 'GaN/InGaN (green)';
+  if (eg < 2.9) return 'InGaN (blue)';
+  return 'AlGaN (UV)';
+}
+function colorName(lam) {
+  if (lam > 750) return 'infrared';
+  if (lam > 645) return 'red';
+  if (lam > 580) return 'orange';
+  if (lam > 540) return 'yellow';
+  if (lam > 495) return 'green';
+  if (lam > 450) return 'blue';
+  if (lam > 380) return 'violet';
+  return 'ultraviolet';
+}
+function useFor(lam) {
+  if (lam > 750) return 'remotes, fiber data, biometrics';
+  if (lam > 645) return 'indicators, signs, traffic lights';
+  if (lam > 580) return 'turn signals, calculators';
+  if (lam > 540) return 'walk signals, green';
+  if (lam > 495) return 'plant grow lights, signals';
+  if (lam > 450) return 'Blu-ray, screen backlight';
+  if (lam > 380) return 'cure UV resins; black-light';
+  return 'sterilization, photolithography';
+}
+function led_update() {
+  const eg = +document.getElementById('led_Eg').value;
+  const lam = HC_NM_EV / eg;
+  const col = wlToColor(lam, 1);
+  document.getElementById('led_EgRead').textContent = `${eg.toFixed(2)} eV (${colorName(lam)})`;
+  document.getElementById('led_lam').textContent = `${lam.toFixed(0)} nm (${colorName(lam)})`;
+  document.getElementById('led_mat').textContent = matFor(eg);
+  document.getElementById('led_col').textContent = colorName(lam);
+  document.getElementById('led_vf').textContent = `≈ ${eg.toFixed(1)} V`;
+  document.getElementById('led_reg').textContent = lam > 780 ? 'IR' : lam < 380 ? 'UV' : 'visible';
+  document.getElementById('led_use').textContent = useFor(lam);
+  const cv = document.getElementById('led_cv');
+  if (!isVisible(cv)) { requestAnimationFrame(led_update); return; }
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+  const midY = h * 0.5;
+  const leftX = w * 0.1, rightX = w * 0.9;
+  const jx = (leftX + rightX) / 2;
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(leftX, midY - 60);
+  ctx.lineTo(jx - 30, midY - 60);
+  ctx.lineTo(jx + 30, midY - 60 + eg * 12);
+  ctx.lineTo(rightX, midY - 60 + eg * 12);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(leftX, midY + 60);
+  ctx.lineTo(jx - 30, midY + 60);
+  ctx.lineTo(jx + 30, midY + 60 + eg * 12);
+  ctx.lineTo(rightX, midY + 60 + eg * 12);
+  ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  ctx.fillText('Conduction band', leftX + 4, midY - 66);
+  ctx.fillText('Valence band', leftX + 4, midY + 78);
+  ctx.fillText('n-side (extra e⁻)', leftX + 4, midY + 18);
+  ctx.fillText('p-side (extra holes)', rightX - 130, midY + 18);
+  ctx.strokeStyle = '#66d9ef';
+  ctx.beginPath(); ctx.moveTo(jx - 20, midY - 60); ctx.lineTo(jx - 20, midY + 60); ctx.stroke();
+  ctx.fillStyle = '#66d9ef'; ctx.font = '12px ui-monospace';
+  ctx.fillText(`E_g = ${eg.toFixed(2)} eV`, jx - 60, midY + 4);
+  ctx.fillStyle = '#66d9ef';
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath(); ctx.arc(leftX + 30 + i * 20, midY - 60, 4, 0, 2*Math.PI); ctx.fill();
+  }
+  ctx.strokeStyle = '#ff5f6d';
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath(); ctx.arc(rightX - 30 - i * 20, midY + 60 + eg * 12, 4, 0, 2*Math.PI); ctx.stroke();
+  }
+  const tcycle = (performance.now() / 1000) % 2;
+  if (tcycle < 1) {
+    const y = midY - 60 + tcycle * (120 + eg * 12);
+    ctx.fillStyle = '#66d9ef';
+    ctx.beginPath(); ctx.arc(jx, y, 5, 0, 2*Math.PI); ctx.fill();
+  } else {
+    const t2 = tcycle - 1;
+    const px = jx + t2 * 120, py = midY + Math.sin(t2 * 6) * 6;
+    ctx.strokeStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath();
+    const ledPh = performance.now() / 1000 * 14;
+    for (let i = 0; i < 18; i++) {
+      const tt = i / 17;
+      const wx = px + tt * 30 - 15;
+      const wy = py + 6 * Math.sin(tt * 5 * Math.PI - ledPh);
+      if (i === 0) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
+    }
+    ctx.stroke();
+  }
+  ctx.fillStyle = col;
+  ctx.fillRect(w - 80, 14, 60, 24);
+  ctx.strokeStyle = '#aab1c4'; ctx.lineWidth = 1;
+  ctx.strokeRect(w - 80, 14, 60, 24);
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  ctx.fillText('color', w - 80, 12);
+  requestAnimationFrame(led_update);
+}
+document.getElementById('led_Eg').addEventListener('input', () => { /* animation loop */ });
+requestAnimationFrame(led_update);
+
+//==========================================================
+// SUMMARY: side-by-side comparison spectra
+//==========================================================
+function sum_draw() {
+  const cv = document.getElementById('sum_cv');
+  if (!isVisible(cv)) return;
+  const { ctx, w, h } = setup(cv);
+  ctx.clearRect(0,0,w,h);
+
+  const rows = [
+    {
+      label: 'Incandescent',
+      type: 'BROADBAND',
+      color: '#ffd166',
+      draw: (ctx, x, y, ww, hh) => {
+        // Planck blackbody-ish curve peaking in IR with visible tail
+        ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          // Plot Planck for T=2700K, normalize to fit
+          const x_ = HC / (lam * 1e-9 * KB * 2700);
+          const I = (1 / Math.pow(lam * 1e-9, 5)) / (Math.exp(x_) - 1);
+          const Imax = 5e23;  // approximate normalization for 2700 K
+          const norm = Math.min(1, I / Imax);
+          ctx.lineTo(x + i, y + hh - norm * hh * 0.9);
+        }
+        ctx.stroke();
+        // Fill under curve in visible band with color
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          if (lam < 380 || lam > 780) continue;
+          ctx.fillStyle = wlToColor(lam, 0.4);
+          const x_ = HC / (lam * 1e-9 * KB * 2700);
+          const I = (1 / Math.pow(lam * 1e-9, 5)) / (Math.exp(x_) - 1);
+          const Imax = 5e23;
+          const norm = Math.min(1, I / Imax);
+          ctx.fillRect(x + i, y + hh - norm * hh * 0.9, 1, norm * hh * 0.9);
+        }
+      }
+    },
+    {
+      label: 'Discharge (Hg)',
+      type: 'LINES',
+      color: '#66d9ef',
+      draw: (ctx, x, y, ww, hh) => {
+        const hgLines = [{lam:254, i:1.0, uv:true},{lam:365,i:0.7,uv:true},{lam:405,i:0.5},{lam:436,i:0.85},{lam:546,i:0.95},{lam:578,i:0.6}];
+        hgLines.forEach(line => {
+          const xx = x + (line.lam - 200) / 600 * ww;
+          if (xx < x || xx > x + ww) return;
+          ctx.strokeStyle = line.uv ? `rgba(189,87,255,${line.i})` : wlToColor(line.lam, Math.min(1, line.i));
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(xx, y + hh * (1 - line.i));
+          ctx.lineTo(xx, y + hh);
+          ctx.stroke();
+        });
+      }
+    },
+    {
+      label: 'Fluorescent',
+      type: 'LINES (broadened)',
+      color: '#a6e22e',
+      draw: (ctx, x, y, ww, hh) => {
+        // Tri-phosphor blend: Hg lines + Eu²⁺ blue + Tb³⁺ green + Eu³⁺ red
+        const peaks = [
+          { lam: 254, fwhm: 4, height: 0.3, uv: true },
+          { lam: 405, fwhm: 6, height: 0.3 },
+          { lam: 436, fwhm: 6, height: 0.4 },
+          { lam: 450, fwhm: 28, height: 0.65 },  // Eu²⁺ blue
+          { lam: 543, fwhm: 18, height: 0.9 },   // Tb³⁺ green
+          { lam: 546, fwhm: 6, height: 0.5 },
+          { lam: 578, fwhm: 8, height: 0.5 },
+          { lam: 611, fwhm: 16, height: 1.0 }    // Eu³⁺ red
+        ];
+        ctx.strokeStyle = '#aaf0ff'; ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          let I = 0;
+          peaks.forEach(p => {
+            const sigma = p.fwhm / 2.355;
+            I += p.height * Math.exp(-0.5 * Math.pow((lam - p.lam) / sigma, 2));
+          });
+          ctx.lineTo(x + i, y + hh - I * hh * 0.9);
+        }
+        ctx.stroke();
+      }
+    },
+    {
+      label: 'Phosphorescent',
+      type: 'LINES (same as fluor, slow)',
+      color: '#ffd166',
+      draw: (ctx, x, y, ww, hh) => {
+        // ZnS:Cu type — green band around 530 nm, plus minor blue
+        const peaks = [
+          { lam: 450, fwhm: 40, height: 0.3 },
+          { lam: 525, fwhm: 50, height: 1.0 },
+          { lam: 575, fwhm: 35, height: 0.4 }
+        ];
+        ctx.strokeStyle = '#a6e22e'; ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          let I = 0;
+          peaks.forEach(p => {
+            const sigma = p.fwhm / 2.355;
+            I += p.height * Math.exp(-0.5 * Math.pow((lam - p.lam) / sigma, 2));
+          });
+          ctx.lineTo(x + i, y + hh - I * hh * 0.9);
+        }
+        ctx.stroke();
+        // tiny clock symbol to suggest "slow"
+        ctx.fillStyle = '#ffd166'; ctx.font = '10px ui-monospace';
+        ctx.fillText('⏳ slow emission (ms–hours after excitation)', x + ww - 280, y + 10);
+      }
+    },
+    {
+      label: 'Laser (HeNe)',
+      type: 'SINGLE LINE',
+      color: '#ff4db8',
+      draw: (ctx, x, y, ww, hh) => {
+        const lam = 632.8;
+        const xx = x + (lam - 200) / 600 * ww;
+        // Ultra-narrow line
+        ctx.strokeStyle = '#ff4db8'; ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(xx, y + hh * 0.05);
+        ctx.lineTo(xx, y + hh);
+        ctx.stroke();
+        ctx.fillStyle = '#ff4db8'; ctx.font = '10px ui-monospace';
+        ctx.fillText('633 nm', xx + 6, y + 14);
+      }
+    },
+    {
+      label: 'LED (red)',
+      type: 'NARROW BAND',
+      color: '#ff5f6d',
+      draw: (ctx, x, y, ww, hh) => {
+        const center = 660, fwhm = 22;
+        const sigma = fwhm / 2.355;
+        ctx.strokeStyle = '#ff5f6d'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          const I = Math.exp(-0.5 * Math.pow((lam - center) / sigma, 2));
+          ctx.lineTo(x + i, y + hh - I * hh * 0.9);
+        }
+        ctx.stroke();
+        // Fill with red
+        for (let i = 0; i <= ww; i++) {
+          const lam = 200 + (i / ww) * 600;
+          const I = Math.exp(-0.5 * Math.pow((lam - center) / sigma, 2));
+          if (I < 0.05) continue;
+          ctx.fillStyle = wlToColor(lam, 0.3 * I);
+          ctx.fillRect(x + i, y + hh - I * hh * 0.9, 1, I * hh * 0.9);
+        }
+      }
+    }
+  ];
+
+  // Layout
+  const padL = 140, padR = 50, padT = 18, padB = 50;
+  const plotW = w - padL - padR;
+  const rowH = (h - padT - padB) / rows.length;
+
+  // Wavelength scale background (visible band stripe along all rows)
+  for (let i = 0; i < plotW; i++) {
+    const lam = 200 + (i / plotW) * 600;
+    if (lam < 380 || lam > 780) continue;
+    ctx.fillStyle = wlToColor(lam, 0.06);
+    ctx.fillRect(padL + i, padT, 1, h - padT - padB);
+  }
+
+  // Vertical reference at visible boundaries
+  const xVis1 = padL + (380 - 200) / 600 * plotW;
+  const xVis2 = padL + (780 - 200) / 600 * plotW;
+  ctx.strokeStyle = 'rgba(154,162,182,0.3)'; ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(xVis1, padT); ctx.lineTo(xVis1, h - padB);
+  ctx.moveTo(xVis2, padT); ctx.lineTo(xVis2, h - padB);
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Rows
+  rows.forEach((row, idx) => {
+    const y = padT + idx * rowH;
+    // Row separator
+    ctx.strokeStyle = '#2a2f43';
+    ctx.beginPath();
+    ctx.moveTo(0, y); ctx.lineTo(w, y);
+    ctx.stroke();
+    // Label column
+    ctx.fillStyle = '#e6e8ef'; ctx.font = 'bold 12px ui-monospace';
+    ctx.fillText(row.label, 8, y + 16);
+    ctx.fillStyle = row.color; ctx.font = '10px ui-monospace';
+    ctx.fillText(row.type, 8, y + 30);
+    // Plot area
+    const innerH = rowH - 8;
+    row.draw(ctx, padL, y + 4, plotW, innerH);
+  });
+
+  // X-axis at bottom
+  ctx.strokeStyle = '#2a2f43';
+  ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(padL + plotW, h - padB); ctx.stroke();
+  ctx.fillStyle = '#9aa2b6'; ctx.font = '11px ui-monospace';
+  [250, 350, 450, 550, 650, 750].forEach(lam => {
+    const xx = padL + (lam - 200) / 600 * plotW;
+    ctx.beginPath(); ctx.moveTo(xx, h - padB); ctx.lineTo(xx, h - padB + 4); ctx.stroke();
+    ctx.fillText(lam, xx - 12, h - padB + 18);
+  });
+  ctx.fillText('Wavelength (nm)  ←  UV [200] ⋯ visible [380–780] ⋯ IR →', padL, h - padB + 36);
+}
+
+//==========================================================
+// INITIAL RENDER
+//==========================================================
+inc_update();
+dis_draw();
+flu_updateRatio();
+pho_drawDiag();
+pho_drawDecay();
+las_draw2();
+las_draw3();
+las_updateLasing();
+las_draw4();
+las_updateLW();
+window.addEventListener('resize', () => { redrawCurrent(); });
+</script>
+
+</div>
+</body>
+</html>
